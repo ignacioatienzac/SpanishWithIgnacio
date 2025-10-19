@@ -68,15 +68,18 @@
     --color-c2: #e67e22; /* Naranja oscuro */
 }
 
-.level-a1 { background-color: var(--color-a1); }
-.level-a2 { background-color: var(--color-a2); }
-.level-b1 { background-color: var(--color-b1); }
-.level-b2 { background-color: var(--color-b2); }
-.level-c1 { background-color: var(--color-c1); }
-.level-c2 { background-color: var(--color-c2); }
+/* ########## REGLAS CORREGIDAS AQUÍ ########## */
+/* Estas reglas ahora solo se aplican a los botones */
+
+.level-button.level-a1 { background-color: var(--color-a1); }
+.level-button.level-a2 { background-color: var(--color-a2); }
+.level-button.level-b1 { background-color: var(--color-b1); }
+.level-button.level-b2 { background-color: var(--color-b2); }
+.level-button.level-c1 { background-color: var(--color-c1); }
+.level-button.level-c2 { background-color: var(--color-c2); }
 
 
-/* ########## REGLAS ACTUALIZADAS PARA LA LISTA ########## */
+/* ########## REGLAS PARA LA LISTA (SIN CAMBIOS) ########## */
 
 /* Estilos para la lista de descripción de niveles */
 .level-list {
@@ -96,6 +99,7 @@
 }
 
 /* Clases de color para el texto de la lista */
+/* Estas reglas SÍ se aplican a la lista, pero solo cambian el color del TEXTO */
 .level-list .level-a1 { color: var(--color-a1); }
 .level-list .level-a2 { color: var(--color-a2); }
 .level-list .level-b1 { color: var(--color-b1); }

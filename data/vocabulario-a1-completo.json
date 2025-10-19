@@ -1,0 +1,402 @@
+{
+  "nivel": "A1",
+  "fuente": "Basado en los inventarios del Plan Curricular del Instituto Cervantes (PCIC)",
+  "categorias_generales": [
+    {
+      "categoria_general": "Gramática Esencial",
+      "subcategorias": [
+        {
+          "subcategoria": "Pronombres Personales",
+          "vocabulario": [
+            {"es": "yo", "en": "I"},
+            {"es": "tú", "en": "you (informal singular)"},
+            {"es": "él", "en": "he"},
+            {"es": "ella", "en": "she"},
+            {"es": "usted", "en": "you (formal singular)"},
+            {"es": "nosotros / nosotras", "en": "we"},
+            {"es": "vosotros / vosotras", "en": "you (informal plural)"},
+            {"es": "ellos / ellas", "en": "they"},
+            {"es": "ustedes", "en": "you (formal plural)"}
+          ]
+        },
+        {
+          "subcategoria": "Verbos Básicos (Infinitivo)",
+          "vocabulario": [
+            {"es": "ser", "en": "to be (essence)"},
+            {"es": "estar", "en": "to be (state, location)"},
+            {"es": "tener", "en": "to have"},
+            {"es": "haber (hay)", "en": "there is / there are"},
+            {"es": "ir", "en": "to go"},
+            {"es": "venir", "en": "to come"},
+            {"es": "hacer", "en": "to do / to make"},
+            {"es": "querer", "en": "to want"},
+            {"es": "poder", "en": "to be able to / can"},
+            {"es": "hablar", "en": "to speak"},
+            {"es": "comer", "en": "to eat"},
+            {"es": "beber", "en": "to drink"},
+            {"es": "vivir", "en": "to live"},
+            {"es": "trabajar", "en": "to work"},
+            {"es": "estudiar", "en": "to study"},
+            {"es": "escribir", "en": "to write"},
+            {"es": "leer", "en": "to read"},
+            {"es": "escuchar", "en": "to listen"},
+            {"es": "ver", "en": "to see / to watch"},
+            {"es": "mirar", "en": "to look at"},
+            {"es": "comprar", "en": "to buy"},
+            {"es": "necesitar", "en": "to need"},
+            {"es": "gustar", "en": "to like"},
+            {"es": "llamarse", "en": "to be called"},
+            {"es": "levantarse", "en": "to get up"},
+            {"es": "acostarse", "en": "to go to bed"}
+          ]
+        },
+        {
+          "subcategoria": "Conectores Básicos",
+          "vocabulario": [
+            {"es": "y", "en": "and"},
+            {"es": "o", "en": "or"},
+            {"es": "pero", "en": "but"},
+            {"es": "porque", "en": "because"},
+            {"es": "también", "en": "also / too"},
+            {"es": "tampoco", "en": "neither / either"},
+            {"es": "entonces", "en": "so / then"}
+          ]
+        }
+      ]
+    },
+    {
+      "categoria_general": "Presentaciones y Relaciones Personales",
+      "subcategorias": [
+        {
+          "subcategoria": "Saludos, Presentaciones y Despedidas",
+          "vocabulario": [
+            {"es": "hola", "en": "hello"},
+            {"es": "adiós", "en": "goodbye"},
+            {"es": "buenos días", "en": "good morning"},
+            {"es": "buenas tardes", "en": "good afternoon"},
+            {"es": "buenas noches", "en": "good night"},
+            {"es": "hasta luego", "en": "see you later"},
+            {"es": "hasta pronto", "en": "see you soon"},
+            {"es": "hasta mañana", "en": "see you tomorrow"},
+            {"es": "¿qué tal?", "en": "how are you? / what's up?"},
+            {"es": "¿cómo estás?", "en": "how are you?"},
+            {"es": "estoy bien", "en": "I'm fine"},
+            {"es": "mal", "en": "bad"},
+            {"es": "regular", "en": "so-so"},
+            {"es": "gracias", "en": "thank you"},
+            {"es": "de nada", "en": "you're welcome"},
+            {"es": "por favor", "en": "please"},
+            {"es": "lo siento", "en": "I'm sorry"},
+            {"es": "perdón", "en": "excuse me / sorry"},
+            {"es": "me llamo...", "en": "my name is..."},
+            {"es": "soy...", "en": "I am..."},
+            {"es": "¿cómo te llamas?", "en": "what is your name?"},
+            {"es": "encantado / encantada", "en": "pleased to meet you"},
+            {"es": "mucho gusto", "en": "nice to meet you"}
+          ]
+        },
+        {
+          "subcategoria": "Información Personal",
+          "vocabulario": [
+            {"es": "nombre", "en": "name"},
+            {"es": "apellido", "en": "surname"},
+            {"es": "edad", "en": "age"},
+            {"es": "años", "en": "years"},
+            {"es": "¿cuántos años tienes?", "en": "how old are you?"},
+            {"es": "tengo ... años", "en": "I am ... years old"},
+            {"es": "número de teléfono", "en": "phone number"},
+            {"es": "correo electrónico", "en": "email address"},
+            {"es": "dirección", "en": "address"},
+            {"es": "país", "en": "country"},
+            {"es": "ciudad", "en": "city"},
+            {"es": "nacionalidad", "en": "nationality"},
+            {"es": "¿de dónde eres?", "en": "where are you from?"},
+            {"es": "ser de...", "en": "to be from..."},
+            {"es": "vivir en...", "en": "to live in..."}
+          ]
+        },
+        {
+          "subcategoria": "La Familia",
+          "vocabulario": [
+            {"es": "la familia", "en": "the family"},
+            {"es": "el padre / la madre", "en": "father / mother"},
+            {"es": "los padres", "en": "the parents"},
+            {"es": "el hijo / la hija", "en": "son / daughter"},
+            {"es": "el hermano / la hermana", "en": "brother / sister"},
+            {"es": "el abuelo / la abuela", "en": "grandfather / grandmother"},
+            {"es": "el nieto / la nieta", "en": "grandson / granddaughter"},
+            {"es": "el tío / la tía", "en": "uncle / aunt"},
+            {"es": "el primo / la prima", "en": "cousin"},
+            {"es": "el marido / el esposo", "en": "husband"},
+            {"es": "la mujer / la esposa", "en": "wife"}
+          ]
+        },
+        {
+          "subcategoria": "Adjetivos de Carácter y Físico",
+          "vocabulario": [
+            {"es": "alto / alta", "en": "tall"},
+            {"es": "bajo / baja", "en": "short (height)"},
+            {"es": "gordo / gorda", "en": "fat"},
+            {"es": "delgado / delgada", "en": "thin"},
+            {"es": "joven", "en": "young"},
+            {"es": "mayor", "en": "old"},
+            {"es": "guapo / guapa", "en": "handsome / beautiful"},
+            {"es": "feo / fea", "en": "ugly"},
+            {"es": "rubio / rubia", "en": "blonde"},
+            {"es": "moreno / morena", "en": "dark-haired"},
+            {"es": "simpático / simpática", "en": "nice / friendly"},
+            {"es": "antipático / antipática", "en": "unfriendly"},
+            {"es": "inteligente", "en": "intelligent"},
+            {"es": "trabajador / trabajadora", "en": "hard-working"}
+          ]
+        }
+      ]
+    },
+    {
+      "categoria_general": "El Mundo y sus Gentes",
+      "subcategorias": [
+        {
+          "subcategoria": "Países, Nacionalidades y Lenguas",
+          "vocabulario": [
+            {"es": "España / español(a)", "en": "Spain / Spanish"},
+            {"es": "Francia / francés(a)", "en": "France / French"},
+            {"es": "Alemania / alemán(a)", "en": "Germany / German"},
+            {"es": "Italia / italiano(a)", "en": "Italy / Italian"},
+            {"es": "Portugal / portugués(a)", "en": "Portugal / Portuguese"},
+            {"es": "Reino Unido / británico(a)", "en": "United Kingdom / British"},
+            {"es": "Estados Unidos / estadounidense", "en": "United States / American"},
+            {"es": "China / chino(a)", "en": "China / Chinese"},
+            {"es": "Japón / japonés(a)", "en": "Japan / Japanese"},
+            {"es": "Rusia / ruso(a)", "en": "Russia / Russian"},
+            {"es": "México / mexicano(a)", "en": "Mexico / Mexican"},
+            {"es": "Argentina / argentino(a)", "en": "Argentina / Argentinian"},
+            {"es": "idioma / lengua", "en": "language"}
+          ]
+        }
+      ]
+    },
+    {
+      "categoria_general": "Vida Cotidiana",
+      "subcategorias": [
+        {
+          "subcategoria": "Profesiones y Lugares de Trabajo",
+          "vocabulario": [
+            {"es": "profesor / profesora", "en": "teacher"},
+            {"es": "estudiante", "en": "student"},
+            {"es": "médico / médica", "en": "doctor"},
+            {"es": "camarero / camarera", "en": "waiter / waitress"},
+            {"es": "cocinero / cocinera", "en": "cook / chef"},
+            {"es": "dependiente / dependienta", "en": "shop assistant"},
+            {"es": "periodista", "en": "journalist"},
+            {"es": "oficina", "en": "office"},
+            {"es": "escuela / colegio / universidad", "en": "school / college / university"},
+            {"es": "hospital", "en": "hospital"},
+            {"es": "restaurante", "en": "restaurant"},
+            {"es": "tienda", "en": "shop"},
+            {"es": "fábrica", "en": "factory"}
+          ]
+        },
+        {
+          "subcategoria": "Acciones Diarias",
+          "vocabulario": [
+            {"es": "despertarse", "en": "to wake up"},
+            {"es": "levantarse", "en": "to get up"},
+            {"es": "ducharse / bañarse", "en": "to have a shower / to have a bath"},
+            {"es": "vestirse", "en": "to get dressed"},
+            {"es": "desayunar", "en": "to have breakfast"},
+            {"es": "ir a trabajar / a clase", "en": "to go to work / to class"},
+            {"es": "empezar", "en": "to start"},
+            {"es": "terminar", "en": "to finish"},
+            {"es": "comer / almorzar", "en": "to eat / to have lunch"},
+            {"es": "volver a casa", "en": "to go back home"},
+            {"es": "cenar", "en": "to have dinner"},
+            {"es": "acostarse", "en": "to go to bed"},
+            {"es": "dormir", "en": "to sleep"}
+          ]
+        },
+        {
+          "subcategoria": "La Ropa",
+          "vocabulario": [
+            {"es": "la ropa", "en": "clothes"},
+            {"es": "la camiseta", "en": "t-shirt"},
+            {"es": "la camisa", "en": "shirt"},
+            {"es": "los pantalones", "en": "trousers / pants"},
+            {"es": "la falda", "en": "skirt"},
+            {"es": "el vestido", "en": "dress"},
+            {"es": "el jersey", "en": "sweater / jumper"},
+            {"es": "la chaqueta", "en": "jacket"},
+            {"es": "el abrigo", "en": "coat"},
+            {"es": "los zapatos", "en": "shoes"},
+            {"es": "los calcetines", "en": "socks"},
+            {"es": "el sombrero", "en": "hat"}
+          ]
+        },
+        {
+          "subcategoria": "Adjetivos para Ropa y Objetos",
+          "vocabulario": [
+            {"es": "bonito / bonita", "en": "pretty"},
+            {"es": "feo / fea", "en": "ugly"},
+            {"es": "nuevo / nueva", "en": "new"},
+            {"es": "viejo / vieja", "en": "old"},
+            {"es": "grande", "en": "big"},
+            {"es": "pequeño / pequeña", "en": "small"},
+            {"es": "largo / larga", "en": "long"},
+            {"es": "corto / corta", "en": "short (length)"},
+            {"es": "caro / cara", "en": "expensive"},
+            {"es": "barato / barata", "en": "cheap"},
+            {"es": "cómodo / cómoda", "en": "comfortable"}
+          ]
+        },
+        {
+          "subcategoria": "Comida y Bebida",
+          "vocabulario": [
+            {"es": "el desayuno", "en": "breakfast"},
+            {"es": "el almuerzo / la comida", "en": "lunch"},
+            {"es": "la cena", "en": "dinner"},
+            {"es": "el agua", "en": "water"},
+            {"es": "el vino (tinto/blanco)", "en": "wine (red/white)"},
+            {"es": "la cerveza", "en": "beer"},
+            {"es": "el café", "en": "coffee"},
+            {"es": "la leche", "en": "milk"},
+            {"es": "el zumo / el jugo", "en": "juice"},
+            {"es": "el pan", "en": "bread"},
+            {"es": "el queso", "en": "cheese"},
+            {"es": "la fruta", "en": "fruit"},
+            {"es": "la verdura", "en": "vegetable"},
+            {"es": "la carne", "en": "meat"},
+            {"es": "el pollo", "en": "chicken"},
+            {"es": "el pescado", "en": "fish"},
+            {"es": "el huevo", "en": "egg"},
+            {"es": "el arroz", "en": "rice"}
+          ]
+        }
+      ]
+    },
+    {
+      "categoria_general": "Tiempo y Ocio",
+      "subcategorias": [
+        {
+          "subcategoria": "Días, Meses y Estaciones",
+          "vocabulario": [
+            {"es": "lunes", "en": "Monday"},
+            {"es": "martes", "en": "Tuesday"},
+            {"es": "miércoles", "en": "Wednesday"},
+            {"es": "jueves", "en": "Thursday"},
+            {"es": "viernes", "en": "Friday"},
+            {"es": "sábado", "en": "Saturday"},
+            {"es": "domingo", "en": "Sunday"},
+            {"es": "enero", "en": "January"},
+            {"es": "febrero", "en": "February"},
+            {"es": "marzo", "en": "March"},
+            {"es": "abril", "en": "April"},
+            {"es": "mayo", "en": "May"},
+            {"es": "junio", "en": "June"},
+            {"es": "julio", "en": "July"},
+            {"es": "agosto", "en": "August"},
+            {"es": "septiembre", "en": "September"},
+            {"es": "octubre", "en": "October"},
+            {"es": "noviembre", "en": "November"},
+            {"es": "diciembre", "en": "December"},
+            {"es": "la primavera", "en": "spring"},
+            {"es": "el verano", "en": "summer"},
+            {"es": "el otoño", "en": "autumn / fall"},
+            {"es": "el invierno", "en": "winter"}
+          ]
+        },
+        {
+          "subcategoria": "El Tiempo Atmosférico",
+          "vocabulario": [
+            {"es": "¿qué tiempo hace?", "en": "what's the weather like?"},
+            {"es": "hace buen tiempo", "en": "the weather is good"},
+            {"es": "hace mal tiempo", "en": "the weather is bad"},
+            {"es": "hace sol", "en": "it's sunny"},
+            {"es": "hace calor", "en": "it's hot"},
+            {"es": "hace frío", "en": "it's cold"},
+            {"es": "hace viento", "en": "it's windy"},
+            {"es": "llueve", "en": "it's raining"},
+            {"es": "nieva", "en": "it's snowing"},
+            {"es": "está nublado", "en": "it's cloudy"}
+          ]
+        },
+        {
+          "subcategoria": "Actividades de Tiempo Libre",
+          "vocabulario": [
+            {"es": "escuchar música", "en": "to listen to music"},
+            {"es": "leer un libro", "en": "to read a book"},
+            {"es": "ver la televisión / una película", "en": "to watch television / a movie"},
+            {"es": "ir al cine", "en": "to go to the cinema"},
+            {"es": "salir con amigos", "en": "to go out with friends"},
+            {"es": "hacer deporte", "en": "to do sport"},
+            {"es": "jugar al fútbol / al tenis", "en": "to play football / tennis"},
+            {"es": "pasear", "en": "to go for a walk"},
+            {"es": "viajar", "en": "to travel"},
+            {"es": "cocinar", "en": "to cook"}
+          ]
+        }
+      ]
+    },
+    {
+      "categoria_general": "Números y Cantidades",
+      "subcategorias": [
+        {
+          "subcategoria": "Números Cardinales (0-1.000.000)",
+          "vocabulario": [
+            {"es": "cero", "en": "zero"},
+            {"es": "uno", "en": "one"},
+            {"es": "dos", "en": "two"},
+            {"es": "tres", "en": "three"},
+            {"es": "cuatro", "en": "four"},
+            {"es": "cinco", "en": "five"},
+            {"es": "seis", "en": "six"},
+            {"es": "siete", "en": "seven"},
+            {"es": "ocho", "en": "eight"},
+            {"es": "nueve", "en": "nine"},
+            {"es": "diez", "en": "ten"},
+            {"es": "once", "en": "eleven"},
+            {"es": "doce", "en": "twelve"},
+            {"es": "trece", "en": "thirteen"},
+            {"es": "catorce", "en": "fourteen"},
+            {"es": "quince", "en": "fifteen"},
+            {"es": "veinte", "en": "twenty"},
+            {"es": "treinta", "en": "thirty"},
+            {"es": "cuarenta", "en": "forty"},
+            {"es": "cincuenta", "en": "fifty"},
+            {"es": "sesenta", "en": "sixty"},
+            {"es": "setenta", "en": "seventy"},
+            {"es": "ochenta", "en": "eighty"},
+            {"es": "noventa", "en": "ninety"},
+            {"es": "cien", "en": "one hundred"},
+            {"es": "doscientos/as", "en": "two hundred"},
+            {"es": "trescientos/as", "en": "three hundred"},
+            {"es": "cuatrocientos/as", "en": "four hundred"},
+            {"es": "quinientos/as", "en": "five hundred"},
+            {"es": "seiscientos/as", "en": "six hundred"},
+            {"es": "setecientos/as", "en": "seven hundred"},
+            {"es": "ochocientos/as", "en": "eight hundred"},
+            {"es": "novecientos/as", "en": "nine hundred"},
+            {"es": "mil", "en": "one thousand"},
+            {"es": "dos mil", "en": "two thousand"},
+            {"es": "diez mil", "en": "ten thousand"},
+            {"es": "cien mil", "en": "one hundred thousand"},
+            {"es": "un millón", "en": "one million"}
+          ]
+        },
+        {
+          "subcategoria": "Números Ordinales Básicos",
+          "vocabulario": [
+            {"es": "primero / primera", "en": "first"},
+            {"es": "segundo / segunda", "en": "second"},
+            {"es": "tercero / tercera", "en": "third"},
+            {"es": "cuarto / cuarta", "en": "fourth"},
+            {"es": "quinto / quinta", "en": "fifth"},
+            {"es": "sexto / sexta", "en": "sixth"},
+            {"es": "séptimo / séptima", "en": "seventh"},
+            {"es": "octavo / octava", "en": "eighth"},
+            {"es": "noveno / novena", "en": "ninth"},
+            {"es": "décimo / décima", "en": "tenth"}
+          ]
+        }
+      ]
+    }
+  ]
+}

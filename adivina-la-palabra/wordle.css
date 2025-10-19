@@ -68,7 +68,6 @@
     --color-c2: #e67e22; /* Naranja oscuro */
 }
 
-/* ########## REGLAS CORREGIDAS AQUÍ ########## */
 /* Estas reglas ahora solo se aplican a los botones */
 
 .level-button.level-a1 { background-color: var(--color-a1); }
@@ -79,17 +78,15 @@
 .level-button.level-c2 { background-color: var(--color-c2); }
 
 
-/* ########## REGLAS PARA LA LISTA (SIN CAMBIOS) ########## */
+/* ########## REGLAS CORREGIDAS PARA LA SANGRÍA ########## */
 
 /* Estilos para la lista de descripción de niveles */
 .level-list {
     list-style-type: none; /* Quita los puntos de la lista */
     padding: 0;
     margin-top: 1rem;
-    max-width: 350px; /* Ancho máximo para la lista */
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left; /* Mantenemos esto para que la lista no se justifique (se ve mejor) */
+    text-align: left; 
+    padding-left: 2rem; /* <-- SANGRÍA AÑADIDA AQUÍ */
 }
 
 .level-list li {
@@ -99,7 +96,6 @@
 }
 
 /* Clases de color para el texto de la lista */
-/* Estas reglas SÍ se aplican a la lista, pero solo cambian el color del TEXTO */
 .level-list .level-a1 { color: var(--color-a1); }
 .level-list .level-a2 { color: var(--color-a2); }
 .level-list .level-b1 { color: var(--color-b1); }

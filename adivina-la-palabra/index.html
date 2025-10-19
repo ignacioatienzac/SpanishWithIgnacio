@@ -34,9 +34,9 @@
     </header>
 
     <main class="wordle-main">
+        
         <section class="game-intro">
             <h1>Guess the Word</h1>
-            
             <div class="game-description">
                 <p>
                     Welcome to Guess The Word, a Wordle-like game aimed at improving your vocabulary! Pick your level and guess the secret word. You've got 6 tries. After each guess, the tile colors will show you how close you are.
@@ -44,7 +44,6 @@
                 <p>
                     The 6 levels of the Common European Framework (CEFR) are:
                 </p>
-
                 <ul class="level-list">
                     <li class="level-a1">A1: Beginner Level</li>
                     <li class="level-a2">A2: Elementary Level</li>
@@ -54,15 +53,94 @@
                     <li class="level-c2">C2: Mastery Level</li>
                 </ul>
             </div>
+
             <div class="level-selector">
-                <button class="level-button level-a1">A1</button>
-                <button class="level-button level-a2">A2</button>
-                <button class="level-button level-b1">B1</button>
-                <button class="level-button level-b2">B2</button>
-                <button class="level-button level-c1">C1</button>
-                <button class="level-button level-c2">C2</button>
+                <button class="level-button level-a1" data-level="A1">A1</button>
+                <button class="level-button level-a2" data-level="A2">A2</button>
+                <button class="level-button level-b1" data-level="B1">B1</button>
+                <button class="level-button level-b2" data-level="B2">B2</button>
+                <button class="level-button level-c1" data-level="C1">C1</button>
+                <button class="level-button level-c2" data-level="C2">C2</button>
             </div>
         </section>
+
+        <section class="game-container" hidden>
+            
+            <div class="toast-container"></div>
+            
+            <div class="game-grid">
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+                <div class="grid-tile"></div>
+            </div>
+            
+            <div class="game-keyboard">
+                <div class="keyboard-row">
+                    <button class="keyboard-key" data-key="Q">Q</button>
+                    <button class="keyboard-key" data-key="W">W</button>
+                    <button class="keyboard-key" data-key="E">E</button>
+                    <button class="keyboard-key" data-key="R">R</button>
+                    <button class="keyboard-key" data-key="T">T</button>
+                    <button class="keyboard-key" data-key="Y">Y</button>
+                    <button class="keyboard-key" data-key="U">U</button>
+                    <button class="keyboard-key" data-key="I">I</button>
+                    <button class="keyboard-key" data-key="O">O</button>
+                    <button class="keyboard-key" data-key="P">P</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-key" data-key="A">A</button>
+                    <button class="keyboard-key" data-key="S">S</button>
+                    <button class="keyboard-key" data-key="D">D</button>
+                    <button class="keyboard-key" data-key="F">F</button>
+                    <button class="keyboard-key" data-key="G">G</button>
+                    <button class="keyboard-key" data-key="H">H</button>
+                    <button class="keyboard-key" data-key="J">J</button>
+                    <button class="keyboard-key" data-key="K">K</button>
+                    <button class="keyboard-key" data-key="L">L</button>
+                    <button class="keyboard-key" data-key="Ñ">Ñ</button>
+                </div>
+                <div class="keyboard-row">
+                    <button class="keyboard-key large" data-key="ENTER">ENTER</button>
+                    <button class="keyboard-key" data-key="Z">Z</button>
+                    <button class="keyboard-key" data-key="X">X</button>
+                    <button class="keyboard-key" data-key="C">C</button>
+                    <button class="keyboard-key" data-key="V">V</button>
+                    <button class="keyboard-key" data-key="B">B</button>
+                    <button class="keyboard-key" data-key="N">N</button>
+                    <button class="keyboard-key" data-key="M">M</button>
+                    <button class="keyboard-key large" data-key="BACKSPACE">⌫</button>
+                </div>
+            </div>
+            
+        </section>
+
     </main>
 
 </body>

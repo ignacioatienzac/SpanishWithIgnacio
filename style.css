@@ -33,41 +33,44 @@ body {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    flex-wrap: wrap; /* Para mejor adaptabilidad */
 }
 
 /* Logo with different fonts */
 .logo {
-    font-size: 1.5em; /* 1.5 times the default font size */
-    font-weight: bold;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap; /* Allows text to wrap on smaller screens */
+    align-items: baseline; /* Alinea la base de las dos fuentes */
+    flex-wrap: wrap; /* Permite que se ajuste en pantallas pequeñas */
+    gap: 0.5rem; /* Espacio entre 'Spanish with' e 'Ignacio' */
+    margin: 0.5rem 0; /* Margen para pantallas pequeñas */
 }
 
-.logo span {
-    margin-right: 2px; /* Small space between letters */
+.logo .logo-main {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; /* Esto es "Black" */
+    font-size: 1.6em; /* Tamaño ajustado */
+    color: var(--secondary-color); /* Color oscuro que ya usabas */
 }
 
-.logo .font-1 { font-family: 'Montserrat', sans-serif; }
-.logo .font-2 { font-family: 'Oswald', sans-serif; }
-.logo .font-3 { font-family: 'Roboto', sans-serif; }
-.logo .font-4 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-
-.logo .ignacio-cursive {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.5em; /* Make "Ignacio" bigger */
+.logo .logo-script {
+    font-family: 'Dancing Script', cursive; /* Usamos Dancing Script */
+    font-size: 2.4em; /* Hacemos "Ignacio" más grande */
     color: var(--primary-color);
-    margin-left: 0.5rem;
+    line-height: 1; /* Ajuste para mejor alineación */
 }
 
 /* Navigation Buttons */
 .main-nav ul {
     list-style-type: none;
     display: flex;
+    flex-wrap: wrap; /* Para que los botones se reajusten */
+    justify-content: center; /* Centra los botones si se parten en dos líneas */
 }
 
 .main-nav ul li {
     margin-left: 25px;
+    margin-top: 5px; /* Pequeño margen para botones en varias líneas */
+    margin-bottom: 5px;
 }
 
 .main-nav ul li a {
@@ -97,11 +100,13 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     gap: 3rem; /* Space between image and text */
+    flex-wrap: wrap; /* Para que se adapte a pantallas pequeñas */
 }
 
 .hero-image-container {
     flex: 1; /* Takes 1 part of the available space */
     max-width: 300px;
+    min-width: 250px; /* Para que no se haga muy pequeño */
 }
 
 .hero-image-container img {
@@ -114,6 +119,7 @@ body {
 
 .hero-text-container {
     flex: 2; /* Takes 2 parts of the available space */
+    text-align: center; /* Centrado para modo responsive */
 }
 
 .hero-text-container h2 {

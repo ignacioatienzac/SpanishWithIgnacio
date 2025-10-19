@@ -13,7 +13,20 @@
     flex-direction: column;
     align-items: center;
     gap: 2rem; /* Espacio entre título, descripción y botones */
+    
+    /* Transición para ocultar la intro */
+    transition: opacity 0.5s ease-out;
 }
+
+/* Clase para ocultar la intro */
+.game-intro.hidden {
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
 
 .game-intro h1 {
     font-size: 3rem;
@@ -25,7 +38,7 @@
     line-height: 1.7;
     max-width: 650px;
     color: var(--text-color);
-    text-align: justify; /* TEXTO JUSTIFICADO */
+    text-align: justify; 
 }
 
 .game-description p {
@@ -35,14 +48,14 @@
 .level-selector {
     display: flex;
     justify-content: center;
-    gap: 1.5rem; /* Espacio entre los botones */
-    flex-wrap: wrap; /* Para que se adapte a pantallas pequeñas */
+    gap: 1.5rem; 
+    flex-wrap: wrap; 
 }
 
 .level-button {
     width: 100px;
     height: 100px;
-    border-radius: 50%; /* Forma de círculo */
+    border-radius: 50%; 
     border: 4px solid #ffffff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     font-size: 2rem;
@@ -66,9 +79,12 @@
     --color-b2: #27ae60; /* Verde oscuro */
     --color-c1: #f39c12; /* Naranja */
     --color-c2: #e67e22; /* Naranja oscuro */
-}
 
-/* Estas reglas ahora solo se aplican a los botones */
+    /* Colores del juego Wordle */
+    --color-correct: #27ae60; /* Verde (B2) */
+    --color-present: #f39c12; /* Naranja (C1) */
+    --color-absent: #7f8c8d;  /* Gris */
+}
 
 .level-button.level-a1 { background-color: var(--color-a1); }
 .level-button.level-a2 { background-color: var(--color-a2); }
@@ -78,15 +94,12 @@
 .level-button.level-c2 { background-color: var(--color-c2); }
 
 
-/* ########## REGLAS CORREGIDAS PARA LA SANGRÍA ########## */
-
-/* Estilos para la lista de descripción de niveles */
 .level-list {
-    list-style-type: none; /* Quita los puntos de la lista */
+    list-style-type: none; 
     padding: 0;
     margin-top: 1rem;
     text-align: left; 
-    padding-left: 2rem; /* <-- SANGRÍA AÑADIDA AQUÍ */
+    padding-left: 2rem; 
 }
 
 .level-list li {
@@ -95,10 +108,191 @@
     font-weight: bold;
 }
 
-/* Clases de color para el texto de la lista */
 .level-list .level-a1 { color: var(--color-a1); }
 .level-list .level-a2 { color: var(--color-a2); }
 .level-list .level-b1 { color: var(--color-b1); }
 .level-list .level-b2 { color: var(--color-b2); }
 .level-list .level-c1 { color: var(--color-c1); }
 .level-list .level-c2 { color: var(--color-c2); }
+
+
+/* ####################################################
+NUEVOS ESTILOS PARA EL JUEGO
+####################################################
+*/
+
+.game-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* --- Rejilla del Juego --- */
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 5px;
+    width: 350px;
+    height: 420px;
+}
+
+.grid-tile {
+    width: 100%;
+    height: 100%;
+    border: 2px solid #bdc3c7;
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: 'Oswald', sans-serif;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+    transform-style: preserve-3d;
+}
+
+/* Estado: Letra escrita (aún no enviada) */
+.grid-tile.filled {
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* Estado: Animación de volteo */
+.grid-tile.flip {
+    animation: flip 0.5s ease;
+}
+
+@keyframes flip {
+    0% { transform: rotateX(0deg); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+/* Estado: Animación de error (palabra no válida) */
+.game-grid.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+
+
+/* Colores de resultado */
+.grid-tile.correct,
+.grid-tile.present,
+.grid-tile.absent {
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.grid-tile.correct {
+    background-color: var(--color-correct);
+}
+.grid-tile.present {
+    background-color: var(--color-present);
+}
+.grid-tile.absent {
+    background-color: var(--color-absent);
+}
+
+
+/* --- Teclado Virtual --- */
+
+.game-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.keyboard-key {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    height: 50px;
+    flex: 1;
+    max-width: 45px;
+    padding: 0;
+    border: none;
+    background-color: #d3d6da;
+    color: var(--secondary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.keyboard-key:hover {
+    background-color: #bdc3c7;
+}
+
+.keyboard-key.large {
+    flex: 1.5;
+    max-width: 75px;
+    font-size: 0.9rem;
+}
+
+/* Colores del teclado después de usar */
+.keyboard-key.correct {
+    background-color: var(--color-correct);
+    color: #ffffff;
+}
+.keyboard-key.present {
+    background-color: var(--color-present);
+    color: #ffffff;
+}
+.keyboard-key.absent {
+    background-color: var(--color-absent);
+    color: #ffffff;
+}
+
+
+/* --- Notificaciones (Toast) --- */
+
+.toast-container {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

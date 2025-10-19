@@ -25,6 +25,7 @@
     line-height: 1.7;
     max-width: 650px;
     color: var(--text-color);
+    text-align: justify; /* TEXTO JUSTIFICADO */
 }
 
 .game-description p {
@@ -73,3 +74,31 @@
 .level-b2 { background-color: var(--color-b2); }
 .level-c1 { background-color: var(--color-c1); }
 .level-c2 { background-color: var(--color-c2); }
+
+
+/* ########## REGLAS ACTUALIZADAS PARA LA LISTA ########## */
+
+/* Estilos para la lista de descripción de niveles */
+.level-list {
+    list-style-type: none; /* Quita los puntos de la lista */
+    padding: 0;
+    margin-top: 1rem;
+    max-width: 350px; /* Ancho máximo para la lista */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left; /* Mantenemos esto para que la lista no se justifique (se ve mejor) */
+}
+
+.level-list li {
+    padding: 0.25rem 0;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
+/* Clases de color para el texto de la lista */
+.level-list .level-a1 { color: var(--color-a1); }
+.level-list .level-a2 { color: var(--color-a2); }
+.level-list .level-b1 { color: var(--color-b1); }
+.level-list .level-b2 { color: var(--color-b2); }
+.level-list .level-c1 { color: var(--color-c1); }
+.level-list .level-c2 { color: var(--color-c2); }

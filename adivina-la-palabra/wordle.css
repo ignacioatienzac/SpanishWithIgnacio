@@ -84,10 +84,11 @@
     --color-correct: #538d4e;
     --color-present: #b59f3b;
     --color-absent: #3a3a3c;
-    --tile-border-idle: #3a3a3c;
-    --tile-border-active: #565758;
-    --text-color-light: #ffffff; /* Color de texto para casillas con fondo */
-    --text-color-dark: #ffffff; /* Color de texto inicial */
+    --tile-border-idle: #d3d6da; /* Borde gris claro */
+    --tile-border-active: #86888a; /* Borde gris medio */
+    --text-color-light: #ffffff; /* Color de texto para casillas con fondo de color */
+    /* === CAMBIO DE COLOR DE TEXTO INICIAL === */
+    --text-color-dark: #000000; /* Color de texto inicial NEGRO */
 }
 
 .level-button.level-a1 { background-color: var(--color-a1); }
@@ -121,7 +122,7 @@
 
 
 /* ####################################################
-ESTILOS PARA EL JUEGO (Con animación @keyframes refinada)
+ESTILOS PARA EL JUEGO (Colores ajustados)
 ####################################################
 */
 
@@ -143,30 +144,31 @@ ESTILOS PARA EL JUEGO (Con animación @keyframes refinada)
     gap: 5px;
     width: 320px;
     height: 380px;
-    perspective: 1000px; /* Mejora la percepción 3D */
+    perspective: 1000px;
 }
 
 .grid-tile {
     width: 100%;
     height: 100%;
-    border: 2px solid var(--tile-border-idle);
+    border: 2px solid var(--tile-border-idle); /* Borde gris claro */
     font-size: 2rem;
     font-weight: bold;
     font-family: 'Oswald', sans-serif;
-    color: var(--text-color-dark); /* Color inicial */
+    color: var(--text-color-dark); /* Texto inicial NEGRO */
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-    background-color: transparent;
-    backface-visibility: hidden; /* Oculta el reverso durante el giro */
+    /* === CAMBIO DE FONDO INICIAL === */
+    background-color: #ffffff; /* Fondo inicial BLANCO */
+    backface-visibility: hidden;
     position: relative;
 }
 
 /* Estado: Letra escrita (aún no enviada) */
 .grid-tile.filled {
-    border-color: var(--tile-border-active);
+    border-color: var(--tile-border-active); /* Borde gris medio */
     animation: popIn 0.1s ease;
 }
 
@@ -175,42 +177,36 @@ ESTILOS PARA EL JUEGO (Con animación @keyframes refinada)
     to { transform: scale(1); opacity: 1;}
 }
 
-/* --- ANIMACIÓN DE GIRO REFINADA --- */
+/* --- Animación de giro (sin cambios) --- */
 .grid-tile.flip {
-    /* Usamos 'ease-in-out' para suavidad al inicio y final */
-    animation: flip 0.8s ease-in-out forwards; /* Duración ligeramente mayor */
+    animation: flip 0.8s ease-in-out forwards;
 }
 
 @keyframes flip {
     0% {
         transform: rotateX(0deg);
-        background-color: transparent; /* Estado inicial */
+        background-color: #ffffff; /* Fondo inicial blanco */
         border-color: var(--tile-border-active);
-        color: var(--text-color-dark);
+        color: var(--text-color-dark); /* Texto inicial negro */
     }
     49.9% {
-        /* Justo antes de la mitad: gira a 90 grados, manteniendo estado inicial */
         transform: rotateX(90deg);
-        background-color: transparent;
+        background-color: #ffffff; /* Sigue blanco */
         border-color: var(--tile-border-active);
-        color: var(--text-color-dark);
+        color: var(--text-color-dark); /* Sigue negro */
     }
     50% {
-        /* Exactamente a la mitad: mantiene 90 grados, pero cambia al estado final */
-        /* El color de fondo (.correct, .present, .absent) se aplica aquí por JS */
-        /* Cambiamos el color del texto y quitamos el borde */
         transform: rotateX(90deg);
-        color: var(--text-color-light);
+        color: var(--text-color-light); /* Texto cambia a BLANCO */
         border-color: transparent;
+        /* El color de fondo (.correct, .present, .absent) se aplica por JS */
     }
     100% {
-        /* Termina el giro volviendo a 0 grados, mostrando el estado final */
         transform: rotateX(0deg);
-        color: var(--text-color-light);
+        color: var(--text-color-light); /* Texto final BLANCO */
         border-color: transparent;
     }
 }
-/* --- FIN DE REFINAMIENTO --- */
 
 
 /* Estado: Animación de error (palabra no válida) */

@@ -252,33 +252,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- AJUSTE PARA KEYFRAMES ---
-        // Volvemos a añadir la clase de estado Y la clase .flip
+        // --- LÓGICA PARA @keyframes ---
+        // Añade clase de estado y .flip con retardo
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
-                // Primero aplica el estado (color de fondo)
-                tile.classList.add(feedback[index]);
-                // Luego inicia la animación de volteo
-                tile.classList.add('flip');
-                // Actualiza el teclado
+                tile.classList.add(feedback[index]); // Aplica color de fondo
+                tile.classList.add('flip'); // Inicia animación
                 updateKeyboard(guessArray[index], feedback[index]);
-            }, index * 300); // Mantenemos el retardo escalonado
+            }, index * 300); // Retardo escalonado
         });
-        // --- FIN DEL AJUSTE ---
+        // --- FIN LÓGICA PARA @keyframes ---
 
 
         // Esperamos que terminen las animaciones keyframes
-        // Duración (0.7s = 700ms) + último retardo (4 * 300ms = 1200ms)
-        const totalAnimationTime = 700 + (4 * 300); // 1900ms
+        // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
+        const totalAnimationTime = 800 + (4 * 300); // 2000ms
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss..."); // Debug log
             checkWinLoss(guess);
              // Re-enable input ONLY if the game hasn't ended
-            if (guess !== targetWord && currentRowIndex < 6) { // Check against 6 because rows are 0-5
+            if (guess !== targetWord && currentRowIndex < 6) {
                  isGameActive = true;
                  console.log("Game continues, re-enabling input."); // Debug log
             }
-        }, totalAnimationTime + 100); // Esperamos un poco más por si acaso
+        }, totalAnimationTime + 100); // Esperamos un poco más
     }
 
     function updateKeyboard(letter, status) {
@@ -356,9 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
          const rowTiles = allTiles.slice(rowStart, rowStart + 5);
          rowTiles.forEach((tile, index) => {
             setTimeout(() => {
-                // Aseguramos que la animación se aplique correctamente
-                tile.style.animation = ''; // Limpiar animación anterior si la hubiera
-                void tile.offsetWidth; // Forzar reflow
+                tile.style.animation = '';
+                void tile.offsetWidth;
                 tile.style.animation = `dance 0.5s ease ${index * 0.1}s`;
             }, 100);
          });
@@ -382,33 +378,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        } catch (e) {
-            console.warn("Could not access CSS rules:", sheet.href, e);
-        }
+        } catch (e) { console.warn("Could not access CSS rules:", sheet.href, e); }
         if (danceExists) break;
     }
 
     if (!danceExists) {
         try {
             let targetSheet = null;
-            for(const sheet of document.styleSheets){
-                if(sheet.href && sheet.href.includes('wordle.css')){ targetSheet = sheet; break; }
-            }
-            if(!targetSheet) {
-                 for(let i = document.styleSheets.length - 1; i >= 0; i--) {
-                     const sheet = document.styleSheets[i];
-                     if (!sheet.href || sheet.href.startsWith(window.location.origin)) { targetSheet = sheet; break; }
-                 }
-            }
+            for(const sheet of document.styleSheets){ if(sheet.href && sheet.href.includes('wordle.css')){ targetSheet = sheet; break; } }
+            if(!targetSheet) { for(let i = document.styleSheets.length - 1; i >= 0; i--) { const sheet = document.styleSheets[i]; if (!sheet.href || sheet.href.startsWith(window.location.origin)) { targetSheet = sheet; break; } } }
             if(targetSheet){
                  targetSheet.insertRule(`@keyframes dance { 20%, 80% { transform: translateY(-8px); } 40%, 60% { transform: translateY(0px); } }`, targetSheet.cssRules.length);
                  console.log("Inserted @keyframes dance rule.");
-            } else {
-                 console.warn("Could not find suitable stylesheet to insert @keyframes dance.");
-            }
-        } catch (e) {
-            console.error("Failed to insert @keyframes dance rule:", e);
-        }
+            } else { console.warn("Could not find suitable stylesheet to insert @keyframes dance."); }
+        } catch (e) { console.error("Failed to insert @keyframes dance rule:", e); }
     }
 
     // --- INICIAR EL JUEGO ---

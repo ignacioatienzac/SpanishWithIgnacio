@@ -81,9 +81,11 @@
     --color-c2: #e67e22; /* Naranja oscuro */
 
     /* Colores del juego Wordle */
-    --color-correct: #27ae60; /* Verde (B2) */
-    --color-present: #f39c12; /* Naranja (C1) */
-    --color-absent: #7f8c8d;  /* Gris */
+    --color-correct: #538d4e; /* Verde del ejemplo */
+    --color-present: #b59f3b; /* Amarillo/Naranja del ejemplo */
+    --color-absent: #3a3a3c;  /* Gris oscuro del ejemplo */
+    --tile-border-idle: #3a3a3c; /* Borde inactivo del ejemplo */
+    --tile-border-active: #565758; /* Borde activo del ejemplo */
 }
 
 .level-button.level-a1 { background-color: var(--color-a1); }
@@ -117,7 +119,7 @@
 
 
 /* ####################################################
-NUEVOS ESTILOS PARA EL JUEGO
+ESTILOS PARA EL JUEGO (Con animación de TRANSICIÓN)
 ####################################################
 */
 
@@ -137,46 +139,54 @@ NUEVOS ESTILOS PARA EL JUEGO
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
-    width: 350px;
-    height: 420px;
+    width: 320px;
+    height: 380px;
 }
 
 .grid-tile {
     width: 100%;
     height: 100%;
-    border: 2px solid #bdc3c7;
-    font-size: 2.5rem;
+    border: 2px solid var(--tile-border-idle);
+    font-size: 2rem;
     font-weight: bold;
     font-family: 'Oswald', sans-serif;
-    color: var(--secondary-color);
+    color: #ffffff;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* transition: transform 0.2s; <--- Eliminamos esta transición para evitar conflictos con la animación 'flip' */
     transform-style: preserve-3d;
-    position: relative; /* Necesario para los pseudo-elementos o para asegurar que el color se aplique detrás del texto */
+    background-color: transparent; /* Fondo inicial */
+    /* === TRANSICIÓN AÑADIDA AQUÍ === */
+    transition: transform 0.6s ease; /* Transición suave para el giro */
 }
 
 /* Estado: Letra escrita (aún no enviada) */
 .grid-tile.filled {
-    border-color: var(--secondary-color);
-    transform: scale(1.05); /* Esto se mantiene para el efecto de "escribir" */
+    border-color: var(--tile-border-active);
+    animation: popIn 0.1s ease;
 }
 
-/* Estado: Animación de volteo */
-/* Aquí está la clave para suavizarla */
-.grid-tile.flip {
-    animation: flip 0.6s ease-in-out forwards; /* Aumentamos duración, cambiamos timing-function y añadimos 'forwards' */
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0;}
+    to { transform: scale(1); opacity: 1;}
 }
 
-@keyframes flip {
-    0% { transform: rotateX(0deg); background-color: transparent; } /* Empieza normal */
-    49% { transform: rotateX(90deg); background-color: transparent; } /* A mitad, gira y es transparente */
-    50% { transform: rotateX(90deg); color: #ffffff; } /* En el 50%, justo antes de girar de vuelta, el color de la letra cambia a blanco */
-    51% { transform: rotateX(90deg); } /* Sigue girado, color de fondo aplicado por JS */
-    100% { transform: rotateX(0deg); } /* Termina de girar de vuelta */
+/* === EL GIRO SE DEFINE AHORA AL APLICAR EL ESTADO === */
+/* Cuando una casilla tiene un estado (.correct, .present, o .absent), se gira */
+.grid-tile.correct,
+.grid-tile.present,
+.grid-tile.absent {
+    transform: rotateY(180deg); /* Aplica el giro */
+    border-color: transparent; /* Quitamos borde cuando hay color */
 }
+
+/* Los colores de fondo se aplican directamente, visibles durante/después del giro */
+.grid-tile.correct { background-color: var(--color-correct); }
+.grid-tile.present { background-color: var(--color-present); }
+.grid-tile.absent { background-color: var(--color-absent); }
+
+/* === ELIMINAMOS LA ANIMACIÓN @keyframes flip Y LA CLASE .flip === */
 
 
 /* Estado: Animación de error (palabra no válida) */
@@ -191,35 +201,13 @@ NUEVOS ESTILOS PARA EL JUEGO
     40%, 60% { transform: translateX(4px); }
 }
 
-
-/* Colores de resultado */
-.grid-tile.correct,
-.grid-tile.present,
-.grid-tile.absent {
-    color: #ffffff; /* El color del texto se vuelve blanco cuando la casilla tiene un color de fondo */
-    border-color: transparent; /* No mostramos borde si ya tiene color */
-}
-
-/* Las clases de color se añaden al mismo tiempo que la clase 'flip' en JS */
-/* La transición del color de fondo la gestiona la propia animación keyframes o la propiedad de transición directa si es necesario */
-.grid-tile.correct {
-    background-color: var(--color-correct);
-}
-.grid-tile.present {
-    background-color: var(--color-present);
-}
-.grid-tile.absent {
-    background-color: var(--color-absent);
-}
-
-
 /* --- Teclado Virtual --- */
-
 .game-keyboard {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    max-width: 500px;
 }
 
 .keyboard-row {
@@ -231,50 +219,42 @@ NUEVOS ESTILOS PARA EL JUEGO
 .keyboard-key {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    font-size: 1rem;
-    height: 50px;
+    font-size: 0.9rem;
+    height: 58px;
     flex: 1;
-    max-width: 45px;
-    padding: 0;
+    padding: 0 8px;
+    margin: 0 3px;
     border: none;
-    background-color: #d3d6da;
-    color: var(--secondary-color);
+    background-color: #818384;
+    color: #ffffff;
     border-radius: 4px;
     cursor: pointer;
     text-transform: uppercase;
-    transition: background-color 0.2s ease, color 0.2s ease; /* Añadimos transición para el teclado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
 }
 
 .keyboard-key:hover {
-    background-color: #bdc3c7;
+    background-color: #999b9c;
 }
 
 .keyboard-key.large {
     flex: 1.5;
-    max-width: 75px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 /* Colores del teclado después de usar */
-.keyboard-key.correct {
-    background-color: var(--color-correct);
-    color: #ffffff;
-}
-.keyboard-key.present {
-    background-color: var(--color-present);
-    color: #ffffff;
-}
-.keyboard-key.absent {
-    background-color: var(--color-absent);
-    color: #ffffff;
-}
+.keyboard-key.correct { background-color: var(--color-correct); color: #ffffff; }
+.keyboard-key.present { background-color: var(--color-present); color: #ffffff; }
+.keyboard-key.absent { background-color: var(--color-absent); color: #ffffff; }
 
 
 /* --- Notificaciones (Toast) --- */
-
 .toast-container {
     position: fixed;
-    top: 100px;
+    top: 60px; /* Un poco más arriba */
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
@@ -285,22 +265,18 @@ NUEVOS ESTILOS PARA EL JUEGO
 }
 
 .toast {
-    background-color: var(--secondary-color);
-    color: #ffffff;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.95); /* Fondo casi opaco */
+    color: #121213; /* Texto oscuro */
+    padding: 0.8rem 1.2rem; /* Un poco más pequeño */
+    border-radius: 4px;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    animation: slideIn 0.3s ease-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: slideInFadeOut 2.3s ease-out forwards;
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes slideInFadeOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
 }

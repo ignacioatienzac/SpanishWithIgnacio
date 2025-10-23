@@ -84,9 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
      function getWordOfTheDay(list) {
-        const epoch = new Date('2025-01-01'); // Asegúrate que la fecha sea válida
+        const epoch = new Date('2025-01-01');
         const today = new Date();
-        // Asegúrate que today > epoch para evitar números negativos si la fecha es futura
         const diffTime = Math.max(0, today - epoch);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         const wordIndex = diffDays % list.length;
@@ -99,14 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startInteraction() {
         console.log("Starting input interaction listeners."); // Debug log
-        // Clear previous listeners just in case
         document.removeEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick));
 
-        // Attach new listeners
         document.addEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.addEventListener('click', handleKeyClick));
-        isGameActive = true; // Ensure game is active
+        isGameActive = true;
     }
 
     function stopInteraction() {
@@ -127,15 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isGameActive) return;
         console.log("Physical key pressed:", e.key); // Debug log
 
-        // Use e.key for special keys
         if (e.key === 'Enter') {
             handleKey('ENTER');
         } else if (e.key === 'Backspace') {
             handleKey('BACKSPACE');
         } else {
-            // For letters, standardize to uppercase
             const key = e.key.toUpperCase();
-            // Check if it's a single valid letter (A-Z or Ñ)
             if (key.length === 1 && ((key >= 'A' && key <= 'Z') || key === 'Ñ')) {
                 handleKey(key);
             } else {
@@ -156,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitGuess();
         } else if (key === 'BACKSPACE') {
             deleteLetter();
-        } else if (currentColIndex < 5) { // Only add if row is not full
+        } else if (currentColIndex < 5) {
             addLetter(key);
         } else {
             console.log("Row is full, cannot add letter:", key); // Debug log
@@ -204,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const guess = getCurrentGuess();
         console.log("Current guess:", guess); // Debug log
 
-        // Check word validity immediately
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -233,26 +226,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const guessArray = guess.split('');
         console.log(`Evaluating guess: ${guess} against target: ${targetWord}`); // Debug log
 
-        // Create temporary feedback array to handle duplicates correctly
-        const feedback = Array(5).fill(null); // correct, present, absent
+        const feedback = Array(5).fill(null);
 
-        // 1. Mark greens (correct position)
+        // 1. Mark greens
         for (let i = 0; i < 5; i++) {
             if (guessArray[i] === targetArray[i]) {
                 feedback[i] = 'correct';
-                targetArray[i] = null; // Mark target letter as used
+                targetArray[i] = null;
                  console.log(`Letter ${guessArray[i]} at index ${i} is correct`); // Debug log
             }
         }
 
-        // 2. Mark yellows (present) and grays (absent)
+        // 2. Mark yellows and grays
         for (let i = 0; i < 5; i++) {
-            if (feedback[i] === 'correct') continue; // Skip greens
+            if (feedback[i] === 'correct') continue;
 
             const letterIndexInTarget = targetArray.indexOf(guessArray[i]);
-            if (letterIndexInTarget > -1) { // Letter exists elsewhere in target
+            if (letterIndexInTarget > -1) {
                  feedback[i] = 'present';
-                 targetArray[letterIndexInTarget] = null; // Mark target letter as used
+                 targetArray[letterIndexInTarget] = null;
                  console.log(`Letter ${guessArray[i]} at index ${i} is present`); // Debug log
             } else {
                  feedback[i] = 'absent';
@@ -260,31 +252,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- AJUSTE PARA LA TRANSICIÓN ---
-        // Aplicamos la clase de estado (color) con un retardo.
-        // La transición CSS en .grid-tile se encargará del giro automáticamente.
+        // --- AJUSTE PARA KEYFRAMES ---
+        // Volvemos a añadir la clase de estado Y la clase .flip
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
+                // Primero aplica el estado (color de fondo)
                 tile.classList.add(feedback[index]);
+                // Luego inicia la animación de volteo
+                tile.classList.add('flip');
+                // Actualiza el teclado
                 updateKeyboard(guessArray[index], feedback[index]);
             }, index * 300); // Mantenemos el retardo escalonado
         });
         // --- FIN DEL AJUSTE ---
 
 
-        // Wait for all animations (transitions) to roughly finish before checking win/loss
+        // Esperamos que terminen las animaciones keyframes
+        // Duración (0.7s = 700ms) + último retardo (4 * 300ms = 1200ms)
+        const totalAnimationTime = 700 + (4 * 300); // 1900ms
         setTimeout(() => {
-            console.log("Flip transition complete, checking win/loss..."); // Debug log
+            console.log("Flip animation complete, checking win/loss..."); // Debug log
             checkWinLoss(guess);
              // Re-enable input ONLY if the game hasn't ended
             if (guess !== targetWord && currentRowIndex < 6) { // Check against 6 because rows are 0-5
                  isGameActive = true;
                  console.log("Game continues, re-enabling input."); // Debug log
             }
-        }, 5 * 300 + 300); // Adjust timing based on transition duration (0.6s = 600ms)
-                           // We need 5 staggered starts (4*300ms) + duration (600ms)
-                           // 4 * 300 + 600 = 1200 + 600 = 1800ms total animation time
-                           // Let's use 1800ms or slightly more
+        }, totalAnimationTime + 100); // Esperamos un poco más por si acaso
     }
 
     function updateKeyboard(letter, status) {
@@ -295,15 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
                               key.classList.contains('present') ? 'present' :
                               key.classList.contains('absent') ? 'absent' : null;
 
-        // Determine the best status (correct > present > absent)
         const newStatusPriority = status === 'correct' ? 3 : status === 'present' ? 2 : 1;
         const currentStatusPriority = currentStatus === 'correct' ? 3 : currentStatus === 'present' ? 2 : currentStatus === 'absent' ? 1 : 0;
 
-        // Only update if the new status is better or equal (handles initial state)
         if (newStatusPriority >= currentStatusPriority) {
-            // Remove previous status classes if they exist
             if (currentStatus) key.classList.remove(currentStatus);
-            // Add the new status class
             key.classList.add(status);
              console.log(`Keyboard key ${letter} updated to ${status}`); // Debug log
         }
@@ -319,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Check if it was the last row (index 5)
         if (currentRowIndex === 5) {
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
@@ -327,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Move to the next row if the game is still ongoing
         currentRowIndex++;
         currentColIndex = 0;
         console.log(`Moving to next row: ${currentRowIndex}`); // Debug log
@@ -337,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        // Clear short-lived toasts immediately
         if (duration < 3000) {
              const existingToasts = toastContainer.querySelectorAll('.toast');
              existingToasts.forEach(t => t.remove());
@@ -346,9 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const toast = document.createElement('div');
         toast.classList.add('toast');
         toast.textContent = message;
-        toastContainer.prepend(toast); // Usar prepend para que el último mensaje aparezca arriba
+        toastContainer.prepend(toast);
 
-        // Auto remove toast
         setTimeout(() => {
             toast.style.transition = 'opacity 0.5s ease';
             toast.style.opacity = '0';
@@ -359,8 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function shakeRow() {
         console.log("Shaking current row:", currentRowIndex); // Debug log
-        grid.classList.remove('shake'); // Remove first to allow re-triggering
-        // Force reflow
+        grid.classList.remove('shake');
         void grid.offsetWidth;
         grid.classList.add('shake');
     }
@@ -370,78 +355,61 @@ document.addEventListener('DOMContentLoaded', () => {
          const rowStart = currentRowIndex * 5;
          const rowTiles = allTiles.slice(rowStart, rowStart + 5);
          rowTiles.forEach((tile, index) => {
-            // Use a slight delay and stagger to ensure animation plays
             setTimeout(() => {
+                // Aseguramos que la animación se aplique correctamente
+                tile.style.animation = ''; // Limpiar animación anterior si la hubiera
+                void tile.offsetWidth; // Forzar reflow
                 tile.style.animation = `dance 0.5s ease ${index * 0.1}s`;
             }, 100);
          });
     }
 
-    // Ensure the dance animation keyframes are injected
-    // Check if the rule already exists to avoid duplicates
+
+    // Asegurar que @keyframes dance exista
     let danceExists = false;
     for (const sheet of document.styleSheets) {
         try {
-            // Check rules only for local stylesheets to avoid CORS issues
             if (sheet.href && sheet.href.startsWith(window.location.origin)) {
                 for (const rule of sheet.cssRules) {
                     if (rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'dance') {
-                        danceExists = true;
-                        break;
+                        danceExists = true; break;
                     }
                 }
-            } else if (!sheet.href) { // Inline styles
+            } else if (!sheet.href) {
                  for (const rule of sheet.cssRules) {
                     if (rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'dance') {
-                        danceExists = true;
-                        break;
+                        danceExists = true; break;
                     }
                 }
             }
         } catch (e) {
-            console.warn("Could not access CSS rules, possibly due to CORS:", sheet.href, e);
+            console.warn("Could not access CSS rules:", sheet.href, e);
         }
         if (danceExists) break;
     }
 
-
     if (!danceExists) {
         try {
-            // Find the first modifiable stylesheet (likely wordle.css)
             let targetSheet = null;
             for(const sheet of document.styleSheets){
-                if(sheet.href && sheet.href.includes('wordle.css')){
-                    targetSheet = sheet;
-                    break;
-                }
+                if(sheet.href && sheet.href.includes('wordle.css')){ targetSheet = sheet; break; }
             }
-            if(!targetSheet) { // Fallback to the last stylesheet if wordle.css not found by name
+            if(!targetSheet) {
                  for(let i = document.styleSheets.length - 1; i >= 0; i--) {
                      const sheet = document.styleSheets[i];
-                     if (!sheet.href || sheet.href.startsWith(window.location.origin)) {
-                         targetSheet = sheet;
-                         break;
-                     }
+                     if (!sheet.href || sheet.href.startsWith(window.location.origin)) { targetSheet = sheet; break; }
                  }
             }
-
             if(targetSheet){
-                 targetSheet.insertRule(`
-                    @keyframes dance {
-                        20%, 80% { transform: translateY(-8px); }
-                        40%, 60% { transform: translateY(0px); }
-                    }
-                `, targetSheet.cssRules.length);
-                 console.log("Inserted @keyframes dance rule."); // Debug log
+                 targetSheet.insertRule(`@keyframes dance { 20%, 80% { transform: translateY(-8px); } 40%, 60% { transform: translateY(0px); } }`, targetSheet.cssRules.length);
+                 console.log("Inserted @keyframes dance rule.");
             } else {
-                 console.warn("Could not find a suitable stylesheet to insert @keyframes."); // Debug log
+                 console.warn("Could not find suitable stylesheet to insert @keyframes dance.");
             }
-
         } catch (e) {
-            console.error("Failed to insert @keyframes rule:", e); // Debug log
+            console.error("Failed to insert @keyframes dance rule:", e);
         }
     }
-
 
     // --- INICIAR EL JUEGO ---
     initializeGame();

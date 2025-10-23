@@ -260,25 +260,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Apply feedback to tiles and keyboard with animation
+        // --- AJUSTE PARA LA TRANSICIÓN ---
+        // Aplicamos la clase de estado (color) con un retardo.
+        // La transición CSS en .grid-tile se encargará del giro automáticamente.
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
-                tile.classList.add(feedback[index]); // Add color class
-                tile.classList.add('flip'); // Start flip animation
-                updateKeyboard(guessArray[index], feedback[index]); // Update keyboard state
-            }, index * 300); // Stagger animation start
+                tile.classList.add(feedback[index]);
+                updateKeyboard(guessArray[index], feedback[index]);
+            }, index * 300); // Mantenemos el retardo escalonado
         });
+        // --- FIN DEL AJUSTE ---
 
-        // Wait for all animations to roughly finish before checking win/loss
+
+        // Wait for all animations (transitions) to roughly finish before checking win/loss
         setTimeout(() => {
-            console.log("Flip animation complete, checking win/loss..."); // Debug log
+            console.log("Flip transition complete, checking win/loss..."); // Debug log
             checkWinLoss(guess);
              // Re-enable input ONLY if the game hasn't ended
-            if (guess !== targetWord && currentRowIndex < 6) {
+            if (guess !== targetWord && currentRowIndex < 6) { // Check against 6 because rows are 0-5
                  isGameActive = true;
                  console.log("Game continues, re-enabling input."); // Debug log
             }
-        }, 5 * 300 + 100); // Wait slightly longer than the last animation starts
+        }, 5 * 300 + 300); // Adjust timing based on transition duration (0.6s = 600ms)
+                           // We need 5 staggered starts (4*300ms) + duration (600ms)
+                           // 4 * 300 + 600 = 1200 + 600 = 1800ms total animation time
+                           // Let's use 1800ms or slightly more
     }
 
     function updateKeyboard(letter, status) {
@@ -313,8 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Check if it was the last row
-        if (currentRowIndex === 5) { // Row indices are 0-5
+        // Check if it was the last row (index 5)
+        if (currentRowIndex === 5) {
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
             console.log("Game outcome: LOSS"); // Debug log
@@ -340,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const toast = document.createElement('div');
         toast.classList.add('toast');
         toast.textContent = message;
-        toastContainer.prepend(toast);
+        toastContainer.prepend(toast); // Usar prepend para que el último mensaje aparezca arriba
 
         // Auto remove toast
         setTimeout(() => {
@@ -376,17 +382,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let danceExists = false;
     for (const sheet of document.styleSheets) {
         try {
-            for (const rule of sheet.cssRules) {
-                if (rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'dance') {
-                    danceExists = true;
-                    break;
+            // Check rules only for local stylesheets to avoid CORS issues
+            if (sheet.href && sheet.href.startsWith(window.location.origin)) {
+                for (const rule of sheet.cssRules) {
+                    if (rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'dance') {
+                        danceExists = true;
+                        break;
+                    }
+                }
+            } else if (!sheet.href) { // Inline styles
+                 for (const rule of sheet.cssRules) {
+                    if (rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'dance') {
+                        danceExists = true;
+                        break;
+                    }
                 }
             }
         } catch (e) {
-            // Ignore CORS errors from external stylesheets
+            console.warn("Could not access CSS rules, possibly due to CORS:", sheet.href, e);
         }
         if (danceExists) break;
     }
+
 
     if (!danceExists) {
         try {
@@ -398,7 +415,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
             }
-            if(!targetSheet) targetSheet = document.styleSheets[0]; // Fallback
+            if(!targetSheet) { // Fallback to the last stylesheet if wordle.css not found by name
+                 for(let i = document.styleSheets.length - 1; i >= 0; i--) {
+                     const sheet = document.styleSheets[i];
+                     if (!sheet.href || sheet.href.startsWith(window.location.origin)) {
+                         targetSheet = sheet;
+                         break;
+                     }
+                 }
+            }
 
             if(targetSheet){
                  targetSheet.insertRule(`
@@ -409,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `, targetSheet.cssRules.length);
                  console.log("Inserted @keyframes dance rule."); // Debug log
             } else {
-                 console.warn("Could not find a stylesheet to insert @keyframes."); // Debug log
+                 console.warn("Could not find a suitable stylesheet to insert @keyframes."); // Debug log
             }
 
         } catch (e) {

@@ -13,7 +13,7 @@
     flex-direction: column;
     align-items: center;
     gap: 2rem; /* Espacio entre título, descripción y botones */
-    
+
     /* Transición para ocultar la intro */
     transition: opacity 0.5s ease-out;
 }
@@ -38,7 +38,7 @@
     line-height: 1.7;
     max-width: 650px;
     color: var(--text-color);
-    text-align: justify; 
+    text-align: justify;
 }
 
 .game-description p {
@@ -48,14 +48,14 @@
 .level-selector {
     display: flex;
     justify-content: center;
-    gap: 1.5rem; 
-    flex-wrap: wrap; 
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .level-button {
     width: 100px;
     height: 100px;
-    border-radius: 50%; 
+    border-radius: 50%;
     border: 4px solid #ffffff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     font-size: 2rem;
@@ -95,11 +95,11 @@
 
 
 .level-list {
-    list-style-type: none; 
+    list-style-type: none;
     padding: 0;
     margin-top: 1rem;
-    text-align: left; 
-    padding-left: 2rem; 
+    text-align: left;
+    padding-left: 2rem;
 }
 
 .level-list li {
@@ -153,26 +153,31 @@ NUEVOS ESTILOS PARA EL JUEGO
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.2s;
+    /* transition: transform 0.2s; <--- Eliminamos esta transición para evitar conflictos con la animación 'flip' */
     transform-style: preserve-3d;
+    position: relative; /* Necesario para los pseudo-elementos o para asegurar que el color se aplique detrás del texto */
 }
 
 /* Estado: Letra escrita (aún no enviada) */
 .grid-tile.filled {
     border-color: var(--secondary-color);
-    transform: scale(1.05);
+    transform: scale(1.05); /* Esto se mantiene para el efecto de "escribir" */
 }
 
 /* Estado: Animación de volteo */
+/* Aquí está la clave para suavizarla */
 .grid-tile.flip {
-    animation: flip 0.5s ease;
+    animation: flip 0.6s ease-in-out forwards; /* Aumentamos duración, cambiamos timing-function y añadimos 'forwards' */
 }
 
 @keyframes flip {
-    0% { transform: rotateX(0deg); }
-    50% { transform: rotateX(90deg); }
-    100% { transform: rotateX(0deg); }
+    0% { transform: rotateX(0deg); background-color: transparent; } /* Empieza normal */
+    49% { transform: rotateX(90deg); background-color: transparent; } /* A mitad, gira y es transparente */
+    50% { transform: rotateX(90deg); color: #ffffff; } /* En el 50%, justo antes de girar de vuelta, el color de la letra cambia a blanco */
+    51% { transform: rotateX(90deg); } /* Sigue girado, color de fondo aplicado por JS */
+    100% { transform: rotateX(0deg); } /* Termina de girar de vuelta */
 }
+
 
 /* Estado: Animación de error (palabra no válida) */
 .game-grid.shake {
@@ -191,10 +196,12 @@ NUEVOS ESTILOS PARA EL JUEGO
 .grid-tile.correct,
 .grid-tile.present,
 .grid-tile.absent {
-    color: #ffffff;
-    border-color: transparent;
+    color: #ffffff; /* El color del texto se vuelve blanco cuando la casilla tiene un color de fondo */
+    border-color: transparent; /* No mostramos borde si ya tiene color */
 }
 
+/* Las clases de color se añaden al mismo tiempo que la clase 'flip' en JS */
+/* La transición del color de fondo la gestiona la propia animación keyframes o la propiedad de transición directa si es necesario */
 .grid-tile.correct {
     background-color: var(--color-correct);
 }
@@ -235,6 +242,7 @@ NUEVOS ESTILOS PARA EL JUEGO
     border-radius: 4px;
     cursor: pointer;
     text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease; /* Añadimos transición para el teclado */
 }
 
 .keyboard-key:hover {

@@ -1,10 +1,25 @@
+import globals from "globals";
+import js from "@eslint/js";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
 import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  { ignores: ["**/*.js", "**/*.cjs", "**/*.mjs"] },
+  // Configuración base (reemplaza 'ignores')
+  js.configs.recommended,
+  
+  // Añadimos configuración para el navegador
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.browser
+      }
+    }
+  },
+  
+  // Tus configuraciones existentes para otros archivos
   { files: ["**/*.json"], plugins: { json }, language: "json/json", extends: ["json/recommended"] },
   { files: ["**/*.jsonc"], plugins: { json }, language: "json/jsonc", extends: ["json/recommended"] },
   { files: ["**/*.json5"], plugins: { json }, language: "json/json5", extends: ["json/recommended"] },

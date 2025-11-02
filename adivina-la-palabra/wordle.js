@@ -92,6 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Epoch: ${epoch}, Today: ${today}, DiffDays: ${diffDays}, Index: ${wordIndex}`); // Debug log
         return list[wordIndex];
     }
+    
+    // --- NUEVA FUNCIÓN PARA LA API ---
+    async function checkWordWithAPI(word) {
+        console.log(`Checking API for word: ${word}`);
+        try {
+            // Llama a la API gratuita para la palabra en español
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/es/${word}`);
+            
+            // Si la respuesta es "OK" (status 200), la palabra existe
+            if (response.ok) {
+                console.log("API check: Word exists.");
+                return true;
+            } else {
+                // Si la respuesta es 404, la palabra no existe
+                console.log("API check: Word does not exist (404).");
+                return false;
+            }
+        } catch (error) {
+            // Si hay un error de red, asumimos que no es válida para evitar problemas
+            console.error("Error fetching from API:", error);
+            return false;
+        }
+    }
+    // --- FIN DE NUEVA FUNCIÓN ---
 
 
     // --- LÓGICA DEL JUEGO ---
@@ -186,29 +210,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- FUNCIÓN SUBMITGUESS MODIFICADA ---
     async function submitGuess() {
-        console.log(`Attempting to submit guess (Row: ${currentRowIndex}, Col: ${currentColIndex})`); // Debug log
+        console.log(`Attempting to submit guess (Row: ${currentRowIndex}, Col: ${currentColIndex})`);
         if (currentColIndex < 5) {
             showToast('Faltan letras');
             shakeRow();
-            console.log("Submit failed: Not enough letters."); // Debug log
+            console.log("Submit failed: Not enough letters.");
             return;
         }
 
         const guess = getCurrentGuess();
-        console.log("Current guess:", guess); // Debug log
+        console.log("Current guess:", guess);
 
-        if (!wordList.includes(guess)) {
-            showToast('No está en la lista de palabras');
-            shakeRow();
-            console.log("Submit failed: Word not in list."); // Debug log
-            return;
+        // --- INICIO DE LA MODIFICACIÓN ---
+        
+        // Comprobamos si la palabra es válida.
+        // Primero mira en nuestra lista A1 (rápido) y si no, mira en la API (lento).
+        let isValidWord = wordList.includes(guess);
+        
+        if (!isValidWord) {
+            // Si no está en la lista A1, pregunta a la API
+            isGameActive = false; // Desactivar input mientras carga
+            showToast('Comprobando diccionario...'); // Mensaje de espera
+            isValidWord = await checkWordWithAPI(guess);
+            isGameActive = true; // Reactivar input
         }
 
-        console.log("Word is valid, evaluating..."); // Debug log
-        isGameActive = false; // Disable input during evaluation/animation
+        if (!isValidWord) {
+            showToast('No está en la lista de palabras');
+            shakeRow();
+            console.log("Submit failed: Word not in A1 list or API.");
+            return;
+        }
+        
+        // --- FIN DE LA MODIFICACIÓN ---
+
+        console.log("Word is valid, evaluating...");
+        isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
     }
+    // --- FIN DE FUNCIÓN SUBMITGUESS ---
 
     function getCurrentGuess() {
         let guess = '';
@@ -253,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LÓGICA PARA @keyframes ---
-        // Añade clase de estado y .flip con retardo
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
                 tile.classList.add(feedback[index]); // Aplica color de fondo
@@ -263,19 +304,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         // --- FIN LÓGICA PARA @keyframes ---
 
-
-        // Esperamos que terminen las animaciones keyframes
-        // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
         const totalAnimationTime = 800 + (4 * 300); // 2000ms
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss..."); // Debug log
             checkWinLoss(guess);
-             // Re-enable input ONLY if the game hasn't ended
             if (guess !== targetWord && currentRowIndex < 6) {
                  isGameActive = true;
                  console.log("Game continues, re-enabling input."); // Debug log
             }
-        }, totalAnimationTime + 100); // Esperamos un poco más
+        }, totalAnimationTime + 100);
     }
 
     function updateKeyboard(letter, status) {
@@ -322,9 +359,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        if (duration < 3000) {
+        if (duration < 3000 && message !== 'Comprobando diccionario...') {
              const existingToasts = toastContainer.querySelectorAll('.toast');
              existingToasts.forEach(t => t.remove());
+        }
+        
+        // Si es el mensaje de "Comprobando", no lo elimines tan rápido
+        if (message === 'Comprobando diccionario...' && duration < 3000) {
+            duration = 3000; // Darle más tiempo
         }
 
         const toast = document.createElement('div');
@@ -332,11 +374,16 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.textContent = message;
         toastContainer.prepend(toast);
 
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.5s ease';
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 500);
-        }, duration);
+        // Si es "Comprobando", no lo auto-elimines, lo haremos manualmente
+        if (message === 'Comprobando diccionario...') {
+            toast.id = "toast-loading"; // Darle un ID para encontrarlo
+        } else {
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.5s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, duration);
+        }
     }
 
 

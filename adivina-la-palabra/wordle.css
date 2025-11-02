@@ -16,6 +16,7 @@
     transition: opacity 0.5s ease-out;
 }
 
+/* Clase para ocultar la intro */
 .game-intro.hidden {
     opacity: 0;
     pointer-events: none;
@@ -70,23 +71,21 @@
 
 /* Colores de los botones por nivel */
 :root {
-    --color-a1: #3498db; /* Azul */
-    --color-a2: #2980b9; /* Azul oscuro */
-    --color-b1: #2ecc71; /* Verde */
-    --color-b2: #27ae60; /* Verde oscuro */
-    --color-c1: #f39c12; /* Naranja */
-    --color-c2: #e67e22; /* Naranja oscuro */
+    --color-a1: #3498db;
+    --color-a2: #2980b9;
+    --color-b1: #2ecc71;
+    --color-b2: #27ae60;
+    --color-c1: #f39c12;
+    --color-c2: #e67e22;
 
-    /* Colores del juego Wordle */
+    /* Colores del juego Wordle (Estilo oscuro/moderno) */
     --color-correct: #538d4e;
     --color-present: #b59f3b;
     --color-absent: #3a3a3c;
-    
-    /* Colores de las casillas y texto (Tus peticiones) */
-    --tile-border-idle: #d3d6da;      /* Borde gris claro para fondo blanco */
-    --tile-border-active: #86888a;    /* Borde gris oscuro para casilla activa */
-    --text-color-light: #ffffff;      /* Letras blancas (para casillas con color) */
-    --text-color-dark: #000000;       /* Letras negras (para la casilla blanca inicial) */
+    --tile-border-idle: #d3d6da; /* Borde gris claro */
+    --tile-border-active: #86888a; /* Borde gris medio */
+    --text-color-light: #ffffff;
+    --text-color-dark: #000000;
 }
 
 .level-button.level-a1 { background-color: var(--color-a1); }
@@ -120,7 +119,7 @@
 
 
 /* ####################################################
-ESTILOS PARA EL JUEGO
+ ESTILOS PARA EL JUEGO
 ####################################################
 */
 
@@ -133,14 +132,14 @@ ESTILOS PARA EL JUEGO
     gap: 2rem;
 }
 
-/* --- Controles del Juego (NUEVO) --- */
+/* --- (NUEVO) Barra de Controles del Juego --- */
 .game-controls {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
-    margin-bottom: -1rem;
+    padding: 0 10px; /* Pequeño padding lateral */
+    margin-bottom: -1rem; /* Acercarlo al tablero */
 }
 
 .game-controls h2 {
@@ -153,7 +152,7 @@ ESTILOS PARA EL JUEGO
 #calendar-button {
     background: none;
     border: none;
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Tamaño del emoji */
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 8px;
@@ -184,16 +183,16 @@ ESTILOS PARA EL JUEGO
     font-size: 2rem;
     font-weight: bold;
     font-family: 'Oswald', sans-serif;
+    color: var(--text-color-dark); /* Texto inicial NEGRO */
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
+    background-color: #ffffff; /* Fondo inicial BLANCO */
     backface-visibility: hidden;
     position: relative;
-    /* --- CAMBIOS REQUERIDOS --- */
-    background-color: #ffffff;           /* 1. Fondo inicial BLANCO */
-    color: var(--text-color-dark);       /* 2. Texto inicial NEGRO */
+    transition: transform 0.8s ease-in-out; /* Esta es la transición */
 }
 
 /* Estado: Letra escrita (aún no enviada) */
@@ -207,39 +206,125 @@ ESTILOS PARA EL JUEGO
     to { transform: scale(1); opacity: 1;}
 }
 
-/* --- ANIMACIÓN DE GIRO SUAVE (Volteo vertical) --- */
-.grid-tile.flip {
-    animation: flip 0.8s ease-in-out forwards; /* Más largo y suave */
+/* --- Animación de giro (Suave) --- */
+/* El giro se aplica al añadir la clase de estado */
+.grid-tile.correct,
+.grid-tile.present,
+.grid-tile.absent {
+    transform: rotateX(180deg);
+    border-color: transparent;
+    color: var(--text-color-light); /* Letras blancas al girar */
 }
 
-@keyframes flip {
-    0% {
-        transform: rotateX(0deg);
-        background-color: #ffffff; /* Sigue blanco */
-        border-color: var(--tile-border-active);
-        color: var(--text-color-dark); /* Sigue negro */
-    }
-    49.9% {
-        /* Gira 90 grados, sigue siendo visible como una línea */
-        transform: rotateX(90deg);
-        background-color: #ffffff;
-        color: var(--text-color-dark);
-    }
-    50% {
-        /* En la mitad, aplica el color de fondo y el texto blanco */
-        transform: rotateX(90deg);
-        color: var(--text-color-light); /* 2. Texto cambia a BLANCO */
-        border-color: transparent;
-        /* El color de fondo (.correct, etc.) ya ha sido aplicado por JS */
-    }
-    100% {
-        /* Termina el giro volviendo a 0 grados */
-        transform: rotateX(0deg);
-        color: var(--text-color-light); /* Texto final BLANCO */
-        border-color: transparent;
-    }
+/* El texto de la cara trasera debe estar espejado para que se lea bien al girar */
+.grid-tile.correct::before,
+.grid-tile.present::before,
+.grid-tile.absent::before {
+    content: attr(data-letter); /* Usaremos un atributo de datos para el texto */
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transform: rotateX(180deg); /* Voltear el texto en la cara trasera */
+    backface-visibility: hidden;
+    color: var(--text-color-light);
 }
-/* --- FIN DE AJUSTE DE ANIMACIÓN --- */
+
+.grid-tile.correct { background-color: var(--color-correct); }
+.grid-tile.present { background-color: var(--color-present); }
+.grid-tile.absent { background-color: var(--color-absent); }
 
 
-/* Estado: Animación de error (pal
+/* Estado: Animación de error (palabra no válida) */
+.game-grid.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+
+
+/* --- Teclado Virtual --- */
+.game-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.keyboard-key {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+    height: 58px;
+    flex: 1;
+    padding: 0 8px;
+    margin: 0 3px;
+    border: none;
+    background-color: #818384;
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.keyboard-key:hover {
+    background-color: #999b9c;
+}
+
+.keyboard-key.large {
+    flex: 1.5;
+    font-size: 0.8rem;
+}
+
+.keyboard-key.correct { background-color: var(--color-correct); color: #ffffff; }
+.keyboard-key.present { background-color: var(--color-present); color: #ffffff; }
+.keyboard-key.absent { background-color: var(--color-absent); color: #ffffff; }
+
+
+/* --- Notificaciones (Toast) --- */
+.toast-container {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #121213;
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: slideInFadeOut 2.3s ease-out forwards;
+}
+
+@keyframes slideInFadeOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}

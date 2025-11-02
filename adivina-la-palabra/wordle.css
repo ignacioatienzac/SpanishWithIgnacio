@@ -12,7 +12,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 2rem; /* Espacio entre título, descripción y botones */
+
+    /* Transición para ocultar la intro */
     transition: opacity 0.5s ease-out;
 }
 
@@ -71,21 +73,23 @@
 
 /* Colores de los botones por nivel */
 :root {
-    --color-a1: #3498db;
-    --color-a2: #2980b9;
-    --color-b1: #2ecc71;
-    --color-b2: #27ae60;
-    --color-c1: #f39c12;
-    --color-c2: #e67e22;
+    --color-a1: #3498db; /* Azul */
+    --color-a2: #2980b9; /* Azul oscuro */
+    --color-b1: #2ecc71; /* Verde */
+    --color-b2: #27ae60; /* Verde oscuro */
+    --color-c1: #f39c12; /* Naranja */
+    --color-c2: #e67e22; /* Naranja oscuro */
 
-    /* Colores del juego Wordle (Estilo oscuro/moderno) */
+    /* Colores del juego Wordle */
     --color-correct: #538d4e;
     --color-present: #b59f3b;
     --color-absent: #3a3a3c;
-    --tile-border-idle: #d3d6da; /* Borde gris claro */
-    --tile-border-active: #86888a; /* Borde gris medio */
-    --text-color-light: #ffffff;
-    --text-color-dark: #000000;
+    
+    /* --- CAMBIOS REQUERIDOS --- */
+    --tile-border-idle: #d3d6da;      /* Borde gris claro para el fondo blanco */
+    --tile-border-active: #86888a;    /* Borde gris oscuro para casilla activa */
+    --text-color-light: #ffffff;      /* Letras blancas (para cuando la casilla tiene color) */
+    --text-color-dark: #000000;       /* 2. Letras negras (para la casilla blanca inicial) */
 }
 
 .level-button.level-a1 { background-color: var(--color-a1); }
@@ -119,7 +123,7 @@
 
 
 /* ####################################################
- ESTILOS PARA EL JUEGO
+ESTILOS PARA EL JUEGO
 ####################################################
 */
 
@@ -132,38 +136,6 @@
     gap: 2rem;
 }
 
-/* --- (NUEVO) Barra de Controles del Juego --- */
-.game-controls {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px; /* Pequeño padding lateral */
-    margin-bottom: -1rem; /* Acercarlo al tablero */
-}
-
-.game-controls h2 {
-    font-family: 'Oswald', sans-serif;
-    color: var(--secondary-color);
-    font-size: 2rem;
-    margin: 0;
-}
-
-#calendar-button {
-    background: none;
-    border: none;
-    font-size: 2.5rem; /* Tamaño del emoji */
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-
-#calendar-button:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-
 /* --- Rejilla del Juego --- */
 
 .game-grid {
@@ -173,31 +145,35 @@
     gap: 5px;
     width: 320px;
     height: 380px;
-    perspective: 1000px;
+    perspective: 1000px; /* Necesario para 3D */
 }
 
 .grid-tile {
     width: 100%;
     height: 100%;
-    border: 2px solid var(--tile-border-idle);
+    /* === CAMBIO 1: Fondo blanco y borde claro === */
+    border: 2px solid var(--tile-border-idle); 
+    background-color: #ffffff;
+    
     font-size: 2rem;
     font-weight: bold;
     font-family: 'Oswald', sans-serif;
-    color: var(--text-color-dark); /* Texto inicial NEGRO */
+    
+    /* === CAMBIO 2: Texto inicial negro === */
+    color: var(--text-color-dark);
+    
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-    background-color: #ffffff; /* Fondo inicial BLANCO */
-    backface-visibility: hidden;
+    backface-visibility: hidden; /* Oculta la "cara trasera" mientras gira */
     position: relative;
-    transition: transform 0.8s ease-in-out; /* Esta es la transición */
 }
 
 /* Estado: Letra escrita (aún no enviada) */
 .grid-tile.filled {
-    border-color: var(--tile-border-active);
+    border-color: var(--tile-border-active); /* Borde más oscuro al escribir */
     animation: popIn 0.1s ease;
 }
 
@@ -206,35 +182,35 @@
     to { transform: scale(1); opacity: 1;}
 }
 
-/* --- Animación de giro (Suave) --- */
-/* El giro se aplica al añadir la clase de estado */
-.grid-tile.correct,
-.grid-tile.present,
-.grid-tile.absent {
-    transform: rotateX(180deg);
-    border-color: transparent;
-    color: var(--text-color-light); /* Letras blancas al girar */
+/* === ANIMACIÓN DE GIRO SUAVE (sin desaparecer) === */
+.grid-tile.flip {
+    animation: flip 0.8s ease-in-out forwards; /* Más largo y suave */
 }
 
-/* El texto de la cara trasera debe estar espejado para que se lea bien al girar */
-.grid-tile.correct::before,
-.grid-tile.present::before,
-.grid-tile.absent::before {
-    content: attr(data-letter); /* Usaremos un atributo de datos para el texto */
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    transform: rotateX(180deg); /* Voltear el texto en la cara trasera */
-    backface-visibility: hidden;
-    color: var(--text-color-light);
+@keyframes flip {
+    0% {
+        transform: rotateX(0deg);
+        /* El estado inicial (fondo blanco, texto negro) se define en .grid-tile */
+    }
+    49.9% {
+        transform: rotateX(90deg);
+        /* Justo antes de la mitad, el texto sigue siendo negro */
+        color: var(--text-color-dark); 
+    }
+    50% {
+        transform: rotateX(90deg);
+        /* A la mitad, el texto se vuelve blanco para coincidir con el fondo de color */
+        color: var(--text-color-light); 
+        border-color: transparent;
+        /* El color de fondo (correct/present/absent) ya ha sido aplicado por JS */
+    }
+    100% {
+        transform: rotateX(0deg); /* Vuelve a 0 */
+        color: var(--text-color-light); /* Mantiene el texto blanco */
+        border-color: transparent;
+    }
 }
-
-.grid-tile.correct { background-color: var(--color-correct); }
-.grid-tile.present { background-color: var(--color-present); }
-.grid-tile.absent { background-color: var(--color-absent); }
+/* === FIN DE MODIFICACIÓN DE ANIMACIÓN === */
 
 
 /* Estado: Animación de error (palabra no válida) */
@@ -250,7 +226,13 @@
 }
 
 
-/* --- Teclado Virtual --- */
+/* Colores de resultado (se aplican ANTES de la clase .flip) */
+.grid-tile.correct { background-color: var(--color-correct); }
+.grid-tile.present { background-color: var(--color-present); }
+.grid-tile.absent { background-color: var(--color-absent); }
+
+
+/* --- Teclado Virtual (Sin cambios) --- */
 .game-keyboard {
     display: flex;
     flex-direction: column;
@@ -299,7 +281,7 @@
 .keyboard-key.absent { background-color: var(--color-absent); color: #ffffff; }
 
 
-/* --- Notificaciones (Toast) --- */
+/* --- Notificaciones (Toast) (Sin cambios) --- */
 .toast-container {
     position: fixed;
     top: 60px;

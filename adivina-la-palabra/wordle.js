@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- SELECTORES DEL DOM ---
     const gameContainer = document.querySelector('.game-container');
     const grid = document.querySelector('.game-grid');
-    const allTiles = Array.from(grid.children);
     const keyboardKeys = document.querySelectorAll('.keyboard-key');
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
 
+    // Comprobación de elementos
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
@@ -27,10 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DEL JUEGO ---
     let validationList = []; // Lista para VALIDAR (de 05.json)
     let answerList = []; // Lista para RESPUESTAS (de wordle-a1-palabras.json)
+    let allTiles = []; // Ahora se rellenará dinámicamente
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
-    let isGameActive = false;
+    let isGameActive = false; // El juego empieza inactivo
     let currentDate = new Date();
     let currentLevel = null;
 
@@ -42,8 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLevel = urlParams.get('level') || 'A1';
         levelTitle.textContent = `Nivel ${currentLevel}`;
         
+        // --- ¡CORRECCIÓN! ---
+        // 1. Crear el tablero antes de hacer nada más
+        createBoard();
+        // 2. Ahora que las casillas existen, las seleccionamos
+        allTiles = Array.from(grid.children);
+        // --- FIN CORRECCIÓN ---
+
         setupCalendar();
         loadGameForDate(new Date());
+    }
+
+    /**
+     * (NUEVA FUNCIÓN) Crea las 30 casillas del tablero
+     */
+    function createBoard() {
+        grid.innerHTML = ''; // Limpiar por si acaso
+        for (let i = 0; i < WORD_LENGTH * MAX_TRIES; i++) {
+            const tile = document.createElement('div');
+            tile.classList.add('grid-tile');
+            grid.appendChild(tile);
+        }
     }
 
     /**
@@ -89,16 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDate = date;
         showToast('Cargando juego...', 2000);
         
-        resetBoard();
+        resetBoard(); // Limpiar tablero y teclado
 
+        // 1. Cargar listas (solo si no están cargadas)
         if (wordList.length === 0) {
             const success = await loadWordLists(currentLevel);
             if (!success) return;
         }
 
+        // 2. Obtener la palabra para la fecha seleccionada de la 'answerList'
         targetWord = getWordForDate(answerList, date);
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
+        // 3. Activar el juego
         isGameActive = true;
         startInteraction();
     }
@@ -163,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function resetBoard() {
         console.log("Reseteando tablero...");
+        // 'allTiles' ya debería estar definido por createBoard() la primera vez
         allTiles.forEach(tile => {
             tile.textContent = '';
             tile.className = 'grid-tile';
@@ -316,13 +340,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
         
-        // Limpiar el toast de "Comprobando..." si existiera
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
         }
 
-        // Usamos la lista de validación completa (wordList)
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -374,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- LÓGICA PARA @keyframes ---
+        // Lógica para @keyframes
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
@@ -388,10 +410,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
             
-            // --- INICIO DE LA CORRECCIÓN ---
             const gameEnded = checkWinLoss(guess); 
             
-            // Si el juego NO ha terminado (gameEnded es false), reactivamos el input
+            // --- ¡CORRECCIÓN CLAVE! ---
+            // Solo reactivamos si el juego NO ha terminado
             if (!gameEnded) { 
                  isGameActive = true;
                  console.log("Game continues, re-enabling input.");
@@ -418,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- FUNCIÓN CHECKWINLOSS MODIFICADA ---
     // Devuelve 'true' si el juego ha terminado (gana o pierde)
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
@@ -430,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true; // Juego terminado
         }
 
+        // --- ¡CORRECCIÓN CLAVE! ---
         // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             showToast(`La palabra era: ${targetWord}`, 5000);
@@ -437,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Game outcome: LOSS");
             return true; // Juego terminado
         }
+        // --- FIN DE CORRECCIÓN ---
 
         // Si no ha ganado ni perdido, el juego continúa
         currentRowIndex++;
@@ -444,13 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Moving to next row: ${currentRowIndex}`);
         return false; // Juego NO terminado
     }
-    // --- FIN DE MODIFICACIÓN ---
 
 
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        // Limpiar el toast de "cargando" si existe
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();

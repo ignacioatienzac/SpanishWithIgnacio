@@ -7,31 +7,40 @@ import css from "@eslint/css";
 export default [
     // 1. Configuración para archivos JavaScript (.js)
     {
-        ...js.configs.recommended,
         files: ["**/*.js"],
         languageOptions: {
             globals: {
                 ...globals.browser, // Añade globales de navegador (document, fetch, etc.)
-                "flatpickr": "readonly" // Añade flatpickr como global conocido
+                "flatpickr": "readonly" // Define 'flatpickr' para que ESLint no dé error
             }
+        },
+        rules: {
+            ...js.configs.recommended.rules,
+            "no-unused-vars": "warn", // Avisa de variables no usadas
+            "no-undef": "warn" // Avisa de variables no definidas
         }
     },
-    
+
     // 2. Configuración para archivos CSS (.css)
     {
-        ...css.configs.recommended,
-        files: ["**/*.css"]
+        files: ["**/*.css"],
+        ...css.configs.recommended
     },
-    
+
     // 3. Configuración para archivos JSON (.json)
     {
-        ...json.configs.recommended,
-        files: ["**/*.json", "**/*.jsonc", "**/*.json5"]
+        files: ["**/*.json", "**/*.jsonc", "**/*.json5"],
+        ...json.configs.recommended
     },
-    
+
     // 4. Configuración para archivos Markdown (.md)
     {
-        ...markdown.configs.recommended,
-        files: ["**/*.md"]
+        files: ["**/*.md"],
+        ...markdown.configs.recommended
+    },
+
+    // 5. Ignorar la carpeta node_modules globalmente
+    {
+        ignores: ["node_modules/"]
     }
 ];

@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guess the Word - Game</title>
     <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <link rel="stylesheet" href="wordle.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
     <script src="wordle.js" defer></script>
 </head>
 <body>
@@ -38,6 +43,11 @@
         <section class="game-container">
 
             <div class="toast-container"></div>
+
+            <div class="game-controls">
+                <h2 id="game-level-title">Nivel A1</h2>
+                <button id="calendar-button" title="Elegir otro día">📅</button>
+            </div>
 
             <div class="game-grid">
                 <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div>

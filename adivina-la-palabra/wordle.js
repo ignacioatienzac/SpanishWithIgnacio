@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_TRIES = 6;
     
     // Simula que el usuario es premium (para probar el calendario)
+    // CAMBIA ESTO A 'false' PARA PROBAR EL BLOQUEO DE PAGO
     const IS_PREMIUM_USER = true; 
 
     // --- SELECTORES DEL DOM ---
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
 
+    // Comprobación de elementos
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
@@ -30,48 +32,55 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
-    let isGameActive = false;
-    let currentDate = new Date();
+    let isGameActive = false; // El juego empieza inactivo hasta que se cargan las palabras
     let currentLevel = null;
+    let currentDate = new Date(); // Guarda la fecha que se está jugando
 
     // --- INICIALIZACIÓN ---
 
     function initializeGame() {
         console.log("Initializing game setup...");
         const urlParams = new URLSearchParams(window.location.search);
-        currentLevel = urlParams.get('level') || 'A1';
+        currentLevel = urlParams.get('level') || 'A1'; // Nivel A1 por defecto
         levelTitle.textContent = `Nivel ${currentLevel}`;
         
-        setupCalendar();
-        loadGameForDate(new Date());
+        setupCalendar(); // Configurar el calendario
+        loadGameForDate(new Date()); // Cargar el juego para el día de hoy
     }
 
+    /**
+     * Configura el calendario Flatpickr
+     */
     function setupCalendar() {
         const today = new Date();
-        const sixtyDaysAgo = new Date().fp_incr(-60);
+        const sixtyDaysAgo = new Date().fp_incr(-60); // Límite de 60 días
 
         flatpickr(calendarButton, {
-            maxDate: today,
-            minDate: sixtyDaysAgo,
+            maxDate: today, // No se pueden seleccionar días futuros
+            minDate: sixtyDaysAgo, // Solo los últimos 60 días
             defaultDate: today,
             disableMobile: "true",
-            dateFormat: "Y-m-d",
+            dateFormat: "Y-m-d", // Formato de fecha estándar
             
             onChange: function(selectedDates, dateStr) {
                 const selectedDate = selectedDates[0];
                 if (!selectedDate) return;
                 
+                // Evitar recargar si se selecciona el mismo día
                 if (dateStr === normalizeDate(currentDate)) return;
 
                 if (isToday(selectedDate)) {
+                    // El juego de hoy es gratis
                     console.log("Cargando juego para hoy.");
                     loadGameForDate(selectedDate);
                 } else {
+                    // Es un día anterior, comprobar si es premium
                     if (IS_PREMIUM_USER) {
                         console.log("Usuario premium, cargando día anterior:", dateStr);
                         loadGameForDate(selectedDate);
                     } else {
                         showToast('Solo los suscriptores pueden jugar días anteriores.');
+                        // Devolver el calendario a la fecha actual
                         this.setDate(currentDate); 
                     }
                 }
@@ -79,28 +88,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Carga las listas de palabras y prepara el juego para una fecha específica
+     */
     async function loadGameForDate(date) {
-        currentDate = date;
+        currentDate = date; // Actualiza la fecha actual del juego
         showToast('Cargando juego...', 2000);
         
-        resetBoard();
+        resetBoard(); // Limpiar tablero y teclado
 
+        // 1. Cargar listas (solo si no están cargadas)
+        // (wordList es la de validación, answerList es la de respuestas)
         if (wordList.length === 0) {
             const success = await loadWordLists(currentLevel);
-            if (!success) return;
+            if (!success) return; // Si falla la carga, detener
         }
 
+        // 2. Obtener la palabra para la fecha seleccionada
         targetWord = getWordForDate(answerList, date);
-        console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
+        console.log(`Palabra para ${date.toDateString()}: ${targetWord}`); // Para pruebas
 
+        // 3. Activar el juego
         isGameActive = true;
-        startInteraction();
+        startInteraction(); // (Re)activar los listeners del teclado
     }
 
+    /**
+     * Carga las listas de palabras (validación y respuestas) desde los archivos
+     */
     async function loadWordLists(levelIdentifier) {
         console.log(`Loading word lists for ${levelIdentifier}...`);
         
+        // Usamos el archivo 05.json como diccionario de validación
         const validationListFilename = `../data/05.json`; 
+        // Y el wordle-a1-palabras.json como lista de respuestas
         const answerListFilename = `../data/wordle-a1-palabras.json`; 
 
         try {
@@ -113,22 +134,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!validationResponse.ok) throw new Error(`No se pudo cargar ${validationListFilename}`);
 
             const answerWords = await answerResponse.json();
-            const validationWords = await validationResponse.json();
+            const validationWords = await validationResponse.json(); // Esta lista tiene tildes
 
-            // 1. Procesar lista de RESPUESTAS
-            answerList = answerWords
-                .map(word => normalizeWord(word.trim()))
-                .filter(word => word.length === WORD_LENGTH);
+            // 1. Procesar la lista de RESPUESTAS (A1_words.json)
+            // Ya asumimos que esta lista está limpia (5 letras, mayúsculas, sin tildes)
+            answerList = answerWords.filter(word => word.length === WORD_LENGTH);
             
             console.log(`Lista de respuestas (${WORD_LENGTH} letras) cargada:`, answerList.length, "palabras");
 
-            // 2. Procesar lista de VALIDACIÓN
+            // 2. Procesar la lista de VALIDACIÓN (05.json)
             const validationSet = new Set(validationWords
-                .map(word => normalizeWord(word.trim()))
-                .filter(word => word.length === WORD_LENGTH)
+                .map(word => normalizeWord(word.trim())) // Quitamos tildes
+                .filter(word => word.length === WORD_LENGTH) // Nos aseguramos que sean de 5 letras
             );
             
-            // 3. Unir ambas listas para la validación
+            // 3. Asegurarnos de que todas las respuestas también están en la lista de validación
             answerList.forEach(word => validationSet.add(word));
             wordList = Array.from(validationSet); // 'wordList' es ahora la lista de validación completa
             
@@ -140,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
             
-            return true;
+            return true; // Éxito
 
         } catch (error) {
             console.error("Error al cargar las listas de palabras:", error);
@@ -149,26 +169,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Resetea el tablero y el teclado a su estado inicial
+     */
     function resetBoard() {
         console.log("Reseteando tablero...");
+        // Limpiar casillas
         allTiles.forEach(tile => {
             tile.textContent = '';
-            tile.className = 'grid-tile';
+            tile.className = 'grid-tile'; // Resetea clases
         });
 
+        // Limpiar teclado
         keyboardKeys.forEach(key => {
-            key.className = 'keyboard-key';
+            key.className = 'keyboard-key'; // Resetea clases base
             if (key.dataset.key === 'ENTER' || key.dataset.key === 'BACKSPACE') {
                 key.classList.add('large');
             }
         });
 
+        // Resetear estado del juego
         currentRowIndex = 0;
         currentColIndex = 0;
-        isGameActive = false;
-        stopInteraction();
+        isGameActive = false; // Se (re)activa después de cargar la palabra
+        stopInteraction(); // Detener listeners mientras se carga
     }
 
+    /**
+     * Obtiene la palabra del día (o de la fecha seleccionada)
+     */
      function getWordForDate(list, date) {
         const epoch = new Date('2025-01-01');
         const selectedDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -181,14 +210,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return list[wordIndex];
     }
     
+    /**
+     * Función helper para normalizar palabras (quitar tildes, mayúsculas)
+     */
     function normalizeWord(word) {
         if (typeof word !== 'string') return '';
         return word
             .toUpperCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            .replace(/[\u0300-\u036f]/g, ""); // Elimina tildes y diéresis
     }
     
+    /**
+     * Función helper para saber si una fecha es hoy
+     */
     function isToday(someDate) {
         const today = new Date();
         return someDate.getDate() === today.getDate() &&
@@ -196,6 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
             someDate.getFullYear() === today.getFullYear();
     }
     
+    /**
+     * Función helper para formatear una fecha como YYYY-MM-DD
+     */
     function normalizeDate(date) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -208,8 +246,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startInteraction() {
         console.log("Starting input interaction listeners.");
-        document.removeEventListener('keydown', handleKeyPress);
-        keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick));
+        document.removeEventListener('keydown', handleKeyPress); // Limpiar por si acaso
+        keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick)); // Limpiar por si acaso
 
         document.addEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.addEventListener('click', handleKeyClick));
@@ -281,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function submitGuess() {
-        if (!isGameActive) return;
+        if (!isGameActive) return; // Evitar envíos múltiples
         
         if (currentColIndex < WORD_LENGTH) {
             showToast('Faltan letras');
@@ -292,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
 
+        // Usamos la lista de validación completa (05.json)
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -300,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log("Word is valid, evaluating...");
-        isGameActive = false;
+        isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
     }
 
@@ -322,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const feedback = Array(WORD_LENGTH).fill(null);
 
+        // 1. Mark greens
         for (let i = 0; i < WORD_LENGTH; i++) {
             if (guessArray[i] === targetArray[i]) {
                 feedback[i] = 'correct';
@@ -329,8 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // 2. Mark yellows and grays
         for (let i = 0; i < WORD_LENGTH; i++) {
             if (feedback[i] === 'correct') continue;
+
             const letterIndexInTarget = targetArray.indexOf(guessArray[i]);
             if (letterIndexInTarget > -1) {
                  feedback[i] = 'present';
@@ -340,21 +382,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- LÓGICA PARA @keyframes ---
+        // --- LÓGICA PARA @keyframes (Esta es la versión que querías) ---
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
+                // Primero aplica el estado (color de fondo)
                 tile.classList.add(feedback[index]);
+                // Luego inicia la animación de volteo
                 tile.classList.add('flip');
+                // Actualiza el teclado
                 updateKeyboard(guessArray[index], feedback[index]);
             }, index * 300); // Retardo escalonado
         });
 
+        // Esperamos que terminen las animaciones keyframes
         // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
-        const totalAnimationTime = 800 + ((WORD_LENGTH - 1) * 300); // 2000ms
+        const totalAnimationTime = 800 + ((WORD_LENGTH - 1) * 300); // 800 + 1200 = 2000ms
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
-            const gameEnded = checkWinLoss(guess); // <--- LÓGICA CORREGIDA
-            if (!gameEnded) { // <--- LÓGICA CORREGIDA
+            checkWinLoss(guess);
+            // Reactivar input SOLO si el juego no ha terminado
+            if (guess !== targetWord && currentRowIndex < MAX_TRIES - 1) { // Comprobar < 5 (ya que 5 es la última fila)
                  isGameActive = true;
                  console.log("Game continues, re-enabling input.");
             }
@@ -379,62 +426,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- FUNCIÓN CHECKWINLOSS MODIFICADA ---
-    // Ahora devuelve 'true' si el juego ha terminado (gana o pierde)
-    // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
             showToast('¡Felicidades, has ganado!', 5000);
             stopInteraction();
             danceWin();
             console.log("Game outcome: WIN");
-            return true; // Juego terminado
+            return;
         }
 
+        // Si se acabaron los intentos
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
             console.log("Game outcome: LOSS");
-            return true; // Juego terminado
+            return;
         }
 
-        // Si no ha ganado ni perdido, el juego continúa
+        // Mover a la siguiente fila
         currentRowIndex++;
         currentColIndex = 0;
         console.log(`Moving to next row: ${currentRowIndex}`);
-        return false; // Juego NO terminado
     }
-    // --- FIN DE MODIFICACIÓN ---
 
 
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        // Limpiar el toast de "cargando" si existe
-        const loadingToast = document.getElementById('toast-loading');
-        if (loadingToast) {
-            loadingToast.remove();
-        }
-
-        if (duration < 3000 && message !== 'Comprobando diccionario...') {
-             const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
-             existingToasts.forEach(t => t.remove());
-        }
+        // Limpiar toasts anteriores
+        const existingToasts = toastContainer.querySelectorAll('.toast');
+        existingToasts.forEach(t => t.remove());
         
         const toast = document.createElement('div');
         toast.classList.add('toast');
         toast.textContent = message;
         toastContainer.prepend(toast);
 
-        if (message === 'Comprobando diccionario...') {
-            toast.id = "toast-loading";
-        } else {
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.5s ease';
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, duration);
-        }
+        // Auto-eliminar el toast
+        setTimeout(() => {
+            toast.style.transition = 'opacity 0.5s ease';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500);
+        }, duration);
     }
 
 
@@ -458,10 +491,10 @@ document.addEventListener('DOMContentLoaded', () => {
          });
     }
 
-    // --- INYECCIÓN DE KEYFRAMES ---
+    // --- INYECCIÓN DE KEYFRAMES (Revisado para robustez) ---
     function injectKeyframes() {
         const styleSheetId = "wordle-animations";
-        if (document.getElementById(styleSheetId)) return;
+        if (document.getElementById(styleSheetId)) return; // Ya existen
 
         const style = document.createElement("style");
         style.id = styleSheetId;

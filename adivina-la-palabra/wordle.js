@@ -1,7 +1,7 @@
 // Adivina la Palabra - Game Logic JavaScript File
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM loaded. Initializing game..."); // Debug log
+    console.log("DOM loaded. Initializing game...");
 
     const gameContainer = document.querySelector('.game-container');
     const grid = document.querySelector('.game-grid');
@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const keyboardKeys = document.querySelectorAll('.keyboard-key');
     const toastContainer = document.querySelector('.toast-container');
 
-    // Check if elements were found
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer) {
         console.error("Error: Could not find essential game elements in the HTML.");
-        return; // Stop if elements are missing
+        return;
     }
 
-    let wordList = [];
+    let wordList = []; // Lista para las RESPUESTAS (wordle-a1-palabras.json)
+    let validationList = []; // Lista para VALIDAR (05.json)
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
@@ -25,60 +25,92 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INICIO DEL JUEGO AL CARGAR LA PÁGINA game.html ---
 
     function initializeGame() {
-        console.log("Initializing game setup..."); // Debug log
+        console.log("Initializing game setup...");
         const urlParams = new URLSearchParams(window.location.search);
         currentLevel = urlParams.get('level');
 
         if (!currentLevel) {
             showToast('Nivel no especificado.');
-            console.error("Level parameter missing from URL"); // Debug log
+            console.error("Level parameter missing from URL");
             return;
         }
-        console.log("Level detected:", currentLevel); // Debug log
+        console.log("Level detected:", currentLevel);
 
-        // TODO: Adaptar para cargar JSON según currentLevel cuando estén listos
-        if (currentLevel.startsWith('A')) {
-             loadWordListAndStart('A1');
+        if (currentLevel === 'A1') {
+             loadWordLists('A1');
         } else {
              showToast(`Nivel ${currentLevel} no disponible todavía.`);
-             console.warn(`Word list for level ${currentLevel} not implemented yet.`); // Debug log
+             console.warn(`Word list for level ${currentLevel} not implemented yet.`);
         }
     }
 
-    async function loadWordListAndStart(levelIdentifier) {
-        console.log(`Loading word list for ${levelIdentifier}...`); // Debug log
+    /**
+     * Normaliza una palabra: la convierte a mayúsculas,
+     * quita las tildes y diéresis, pero mantiene la Ñ.
+     */
+    function normalizeWord(word) {
+        if (typeof word !== 'string') return ''; // Evita errores si hay datos nulos
+        return word
+            .toUpperCase()
+            .normalize("NFD") // Separa las tildes de las letras (ej: "Á" -> "A" + "´")
+            .replace(/[\u0300-\u036f]/g, ""); // Elimina los caracteres diacríticos (las tildes)
+    }
+
+
+    async function loadWordLists(levelIdentifier) {
+        console.log(`Loading word lists for ${levelIdentifier}...`);
+        
+        // Definimos las rutas de los dos archivos que necesitamos
+        const answerListFilename = `../data/wordle-a1-palabras.json`; // Lista de respuestas
+        const validationListFilename = `../data/05.json`; // Diccionario de validación
+
         try {
-            let filename = '';
-            if (levelIdentifier === 'A1') {
-                filename = `../data/wordle-a1-palabras.json`;
-            } else {
-                throw new Error(`Lista de palabras para ${levelIdentifier} no encontrada.`);
-            }
+            // Cargamos ambos archivos al mismo tiempo
+            const [answerResponse, validationResponse] = await Promise.all([
+                fetch(answerListFilename),
+                fetch(validationListFilename)
+            ]);
 
-            const response = await fetch(filename);
-            if (!response.ok) {
-                 throw new Error(`HTTP error! status: ${response.status} while fetching ${filename}`);
-            }
+            if (!answerResponse.ok) throw new Error(`No se pudo cargar ${answerListFilename}`);
+            if (!validationResponse.ok) throw new Error(`No se pudo cargar ${validationListFilename}`);
 
-            const allWords = await response.json();
-            console.log("Raw word list loaded:", allWords.length, "words"); // Debug log
+            const answerWords = await answerResponse.json();
+            const validationWords = await validationResponse.json(); // Esta lista tiene tildes
 
-            wordList = allWords.filter(word => word.length === 5);
-            console.log("Filtered 5-letter word list:", wordList.length, "words"); // Debug log
+            // 1. Procesar la lista de RESPUESTAS (wordList)
+            wordList = answerWords
+                .map(word => normalizeWord(word.trim()))
+                .filter(word => word.length === 5);
+            
+            console.log("Lista de respuestas (5 letras) cargada:", wordList.length, "palabras");
+
+            // 2. Procesar la lista de VALIDACIÓN (validationList)
+            validationList = validationWords
+                .map(word => normalizeWord(word.trim())) // Quitamos tildes
+                .filter(word => word.length === 5); // Nos aseguramos que sean de 5 letras
+
+            // 3. (Opcional pero recomendado) Asegurarnos de que todas las respuestas
+            //    estén en la lista de validación, usando un Set para eficiencia.
+            const combinedSet = new Set([...validationList, ...wordList]);
+            validationList = Array.from(combinedSet);
+            
+            console.log("Lista de validación (5 letras) cargada:", validationList.length, "palabras");
 
             if (wordList.length === 0) {
-                showToast('No se encontraron palabras de 5 letras para este nivel.');
-                console.error("No 5-letter words found in the list."); // Debug log
+                showToast('No se encontraron palabras de respuesta.');
+                console.error("La lista de respuestas (wordle-a1-palabras.json) está vacía o falló.");
                 return;
             }
 
+            // 4. Elegir la palabra del día de la lista de RESPUESTAS
             targetWord = getWordOfTheDay(wordList);
-            console.log("Word of the day:", targetWord); // Debug log (essential!)
+            console.log("Palabra del día:", targetWord); // Para pruebas
 
-            startInteraction(); // <-- Start listening for input AFTER loading words
+            // 5. Iniciar interacción
+            startInteraction();
 
         } catch (error) {
-            console.error("Error loading or processing word list:", error); // Debug log
+            console.error("Error al cargar las listas de palabras:", error);
             showToast('Error al iniciar el juego.');
         }
     }
@@ -89,39 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const diffTime = Math.max(0, today - epoch);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         const wordIndex = diffDays % list.length;
-        console.log(`Epoch: ${epoch}, Today: ${today}, DiffDays: ${diffDays}, Index: ${wordIndex}`); // Debug log
+        console.log(`Epoch: ${epoch}, Today: ${today}, DiffDays: ${diffDays}, Index: ${wordIndex}`);
         return list[wordIndex];
     }
     
-    // --- NUEVA FUNCIÓN PARA LA API ---
-    async function checkWordWithAPI(word) {
-        console.log(`Checking API for word: ${word}`);
-        try {
-            // Llama a la API gratuita para la palabra en español
-            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/es/${word}`);
-            
-            // Si la respuesta es "OK" (status 200), la palabra existe
-            if (response.ok) {
-                console.log("API check: Word exists.");
-                return true;
-            } else {
-                // Si la respuesta es 404, la palabra no existe
-                console.log("API check: Word does not exist (404).");
-                return false;
-            }
-        } catch (error) {
-            // Si hay un error de red, asumimos que no es válida para evitar problemas
-            console.error("Error fetching from API:", error);
-            return false;
-        }
-    }
-    // --- FIN DE NUEVA FUNCIÓN ---
-
-
     // --- LÓGICA DEL JUEGO ---
 
     function startInteraction() {
-        console.log("Starting input interaction listeners."); // Debug log
+        console.log("Starting input interaction listeners.");
         document.removeEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick));
 
@@ -131,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function stopInteraction() {
-        console.log("Stopping input interaction listeners."); // Debug log
+        console.log("Stopping input interaction listeners.");
         document.removeEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick));
         isGameActive = false;
@@ -140,13 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleKeyClick(e) {
         if (!isGameActive) return;
         const key = e.target.dataset.key;
-        console.log("Virtual key clicked:", key); // Debug log
+        console.log("Virtual key clicked:", key);
         handleKey(key);
     }
 
     function handleKeyPress(e) {
         if (!isGameActive) return;
-        console.log("Physical key pressed:", e.key); // Debug log
+        console.log("Physical key pressed:", e.key);
 
         if (e.key === 'Enter') {
             handleKey('ENTER');
@@ -157,16 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (key.length === 1 && ((key >= 'A' && key <= 'Z') || key === 'Ñ')) {
                 handleKey(key);
             } else {
-                 console.log("Ignoring physical key:", e.key); // Debug log for ignored keys
+                 console.log("Ignoring physical key:", e.key);
             }
         }
     }
 
 
     function handleKey(key) {
-        console.log("Processing key:", key); // Debug log
+        console.log("Processing key:", key);
         if (!isGameActive) {
-            console.log("Game not active, ignoring key."); // Debug log
+            console.log("Game not active, ignoring key.");
             return;
         }
 
@@ -177,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentColIndex < 5) {
             addLetter(key);
         } else {
-            console.log("Row is full, cannot add letter:", key); // Debug log
+            console.log("Row is full, cannot add letter:", key);
         }
     }
 
@@ -185,14 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function addLetter(letter) {
         if (currentColIndex >= 5) return;
         const tileIndex = currentRowIndex * 5 + currentColIndex;
-        console.log(`Adding letter '${letter}' to tile ${tileIndex} (Row: ${currentRowIndex}, Col: ${currentColIndex})`); // Debug log
+        console.log(`Adding letter '${letter}' to tile ${tileIndex} (Row: ${currentRowIndex}, Col: ${currentColIndex})`);
         const tile = allTiles[tileIndex];
         if (tile) {
             tile.textContent = letter;
             tile.classList.add('filled');
             currentColIndex++;
         } else {
-            console.error("Could not find tile at index:", tileIndex); // Debug log
+            console.error("Could not find tile at index:", tileIndex);
         }
     }
 
@@ -200,13 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentColIndex === 0) return;
         currentColIndex--;
         const tileIndex = currentRowIndex * 5 + currentColIndex;
-        console.log(`Deleting letter from tile ${tileIndex} (Row: ${currentRowIndex}, Col: ${currentColIndex})`); // Debug log
+        console.log(`Deleting letter from tile ${tileIndex} (Row: ${currentRowIndex}, Col: ${currentColIndex})`);
         const tile = allTiles[tileIndex];
          if (tile) {
             tile.textContent = '';
             tile.classList.remove('filled');
         } else {
-            console.error("Could not find tile at index:", tileIndex); // Debug log
+            console.error("Could not find tile at index:", tileIndex);
         }
     }
 
@@ -224,26 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Current guess:", guess);
 
         // --- INICIO DE LA MODIFICACIÓN ---
-        
-        // Comprobamos si la palabra es válida.
-        // Primero mira en nuestra lista A1 (rápido) y si no, mira en la API (lento).
-        let isValidWord = wordList.includes(guess);
-        
-        if (!isValidWord) {
-            // Si no está en la lista A1, pregunta a la API
-            isGameActive = false; // Desactivar input mientras carga
-            showToast('Comprobando diccionario...'); // Mensaje de espera
-            isValidWord = await checkWordWithAPI(guess);
-            isGameActive = true; // Reactivar input
-        }
-
-        if (!isValidWord) {
+        // Comprobar si la palabra está en la LISTA DE VALIDACIÓN (05.json)
+        if (!validationList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
-            console.log("Submit failed: Word not in A1 list or API.");
+            console.log(`Submit failed: Word "${guess}" not in validation list.`);
             return;
         }
-        
         // --- FIN DE LA MODIFICACIÓN ---
 
         console.log("Word is valid, evaluating...");
@@ -266,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const rowTiles = allTiles.slice(rowStart, rowStart + 5);
         const targetArray = targetWord.split('');
         const guessArray = guess.split('');
-        console.log(`Evaluating guess: ${guess} against target: ${targetWord}`); // Debug log
+        console.log(`Evaluating guess: ${guess} against target: ${targetWord}`);
 
         const feedback = Array(5).fill(null);
 
@@ -275,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (guessArray[i] === targetArray[i]) {
                 feedback[i] = 'correct';
                 targetArray[i] = null;
-                 console.log(`Letter ${guessArray[i]} at index ${i} is correct`); // Debug log
+                 console.log(`Letter ${guessArray[i]} at index ${i} is correct`);
             }
         }
 
@@ -287,10 +281,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (letterIndexInTarget > -1) {
                  feedback[i] = 'present';
                  targetArray[letterIndexInTarget] = null;
-                 console.log(`Letter ${guessArray[i]} at index ${i} is present`); // Debug log
+                 console.log(`Letter ${guessArray[i]} at index ${i} is present`);
             } else {
                  feedback[i] = 'absent';
-                 console.log(`Letter ${guessArray[i]} at index ${i} is absent`); // Debug log
+                 console.log(`Letter ${guessArray[i]} at index ${i} is absent`);
             }
         }
 
@@ -304,13 +298,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         // --- FIN LÓGICA PARA @keyframes ---
 
-        const totalAnimationTime = 800 + (4 * 300); // 2000ms
+        const totalAnimationTime = 800 + (4 * 300); // 2000ms (0.8s anim + 1.2s delay)
         setTimeout(() => {
-            console.log("Flip animation complete, checking win/loss..."); // Debug log
+            console.log("Flip animation complete, checking win/loss...");
             checkWinLoss(guess);
-            if (guess !== targetWord && currentRowIndex < 6) {
+            if (guess !== targetWord && currentRowIndex < 6) { // Check < 6 (filas 0-5)
                  isGameActive = true;
-                 console.log("Game continues, re-enabling input."); // Debug log
+                 console.log("Game continues, re-enabling input.");
             }
         }, totalAnimationTime + 100);
     }
@@ -329,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newStatusPriority >= currentStatusPriority) {
             if (currentStatus) key.classList.remove(currentStatus);
             key.classList.add(status);
-             console.log(`Keyboard key ${letter} updated to ${status}`); // Debug log
+             console.log(`Keyboard key ${letter} updated to ${status}`);
         }
     }
 
@@ -339,34 +333,39 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('¡Felicidades, has ganado!', 5000);
             stopInteraction();
             danceWin();
-            console.log("Game outcome: WIN"); // Debug log
+            console.log("Game outcome: WIN");
             return;
         }
 
-        if (currentRowIndex === 5) {
+        if (currentRowIndex === 5) { // Si estábamos en la última fila (índice 5)
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
-            console.log("Game outcome: LOSS"); // Debug log
+            console.log("Game outcome: LOSS");
             return;
         }
 
         currentRowIndex++;
         currentColIndex = 0;
-        console.log(`Moving to next row: ${currentRowIndex}`); // Debug log
+        console.log(`Moving to next row: ${currentRowIndex}`);
     }
 
 
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
+        // Limpiamos los toasts de "cargando" si existe
+        const loadingToast = document.getElementById('toast-loading');
+        if (loadingToast) {
+            loadingToast.remove();
+        }
+        
         if (duration < 3000 && message !== 'Comprobando diccionario...') {
-             const existingToasts = toastContainer.querySelectorAll('.toast');
+             const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
              existingToasts.forEach(t => t.remove());
         }
         
-        // Si es el mensaje de "Comprobando", no lo elimines tan rápido
         if (message === 'Comprobando diccionario...' && duration < 3000) {
-            duration = 3000; // Darle más tiempo
+            duration = 3000;
         }
 
         const toast = document.createElement('div');
@@ -374,10 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.textContent = message;
         toastContainer.prepend(toast);
 
-        // Si es "Comprobando", no lo auto-elimines, lo haremos manualmente
         if (message === 'Comprobando diccionario...') {
-            toast.id = "toast-loading"; // Darle un ID para encontrarlo
+            toast.id = "toast-loading";
         } else {
+            // Eliminar toast después de la duración
             setTimeout(() => {
                 toast.style.transition = 'opacity 0.5s ease';
                 toast.style.opacity = '0';
@@ -388,14 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function shakeRow() {
-        console.log("Shaking current row:", currentRowIndex); // Debug log
+        console.log("Shaking current row:", currentRowIndex);
         grid.classList.remove('shake');
         void grid.offsetWidth;
         grid.classList.add('shake');
     }
 
     function danceWin() {
-         console.log("Triggering win dance animation on row:", currentRowIndex); // Debug log
+         console.log("Triggering win dance animation on row:", currentRowIndex);
          const rowStart = currentRowIndex * 5;
          const rowTiles = allTiles.slice(rowStart, rowStart + 5);
          rowTiles.forEach((tile, index) => {

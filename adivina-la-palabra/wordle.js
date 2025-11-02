@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function setupCalendar() {
         const today = new Date();
-        const sixtyDaysAgo = new Date().fp_incr(-60); // Límite de 60 días
+        const sixtyDaysAgo = new Date().fp_incr(-60);
 
         flatpickr(calendarButton, {
             maxDate: today,
@@ -89,19 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDate = date;
         showToast('Cargando juego...', 2000);
         
-        resetBoard(); // Limpiar tablero y teclado
+        resetBoard();
 
-        // 1. Cargar listas (solo si no están cargadas)
-        if (wordList.length === 0) { // wordList es la lista de validación
+        if (wordList.length === 0) {
             const success = await loadWordLists(currentLevel);
             if (!success) return;
         }
 
-        // 2. Obtener la palabra para la fecha seleccionada de la 'answerList'
         targetWord = getWordForDate(answerList, date);
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
-        // 3. Activar el juego
         isGameActive = true;
         startInteraction();
     }
@@ -318,13 +315,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
-
+        
         // Limpiar el toast de "Comprobando..." si existiera
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
         }
 
+        // Usamos la lista de validación completa (wordList)
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -376,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Lógica para @keyframes
+        // --- LÓGICA PARA @keyframes ---
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
@@ -393,8 +391,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- INICIO DE LA CORRECCIÓN ---
             const gameEnded = checkWinLoss(guess); 
             
-            if (!gameEnded) { // Si el juego NO ha terminado...
-                 isGameActive = true; // ...reactivamos el input
+            // Si el juego NO ha terminado (gameEnded es false), reactivamos el input
+            if (!gameEnded) { 
+                 isGameActive = true;
                  console.log("Game continues, re-enabling input.");
             }
             // --- FIN DE LA CORRECCIÓN ---
@@ -451,26 +450,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
+        // Limpiar el toast de "cargando" si existe
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
         }
         
-        // No mostrar 'Comprobando' si el mensaje es 'Faltan letras' o 'No está en la lista'
-        if (message !== 'Comprobando diccionario...') {
-            const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
-            existingToasts.forEach(t => t.remove());
+        if (duration < 3000 && message !== 'Comprobando diccionario...') {
+             const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
+             existingToasts.forEach(t => t.remove());
         }
-
+        
         const toast = document.createElement('div');
         toast.classList.add('toast');
         toast.textContent = message;
         toastContainer.prepend(toast);
 
         if (message === 'Comprobando diccionario...') {
-            toast.id = "toast-loading"; // Darle ID para poder borrarlo
+            toast.id = "toast-loading";
         } else {
-            // Auto-eliminar el toast
             setTimeout(() => {
                 toast.style.transition = 'opacity 0.5s ease';
                 toast.style.opacity = '0';

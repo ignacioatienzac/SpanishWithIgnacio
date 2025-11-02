@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
-    let isGameActive = false; // El juego empieza inactivo hasta que se cargan las palabras
+    let isGameActive = false;
     let currentDate = new Date();
     let currentLevel = null;
 
@@ -127,14 +127,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const answerWords = await answerResponse.json();
             const validationWords = await validationResponse.json();
 
-            // 1. Procesar lista de RESPUESTAS (wordle-a1-palabras.json)
+            // 1. Procesar lista de RESPUESTAS
             answerList = answerWords
                 .map(word => normalizeWord(word.trim()))
                 .filter(word => word.length === WORD_LENGTH);
             
             console.log(`Lista de respuestas (${WORD_LENGTH} letras) cargada:`, answerList.length, "palabras");
 
-            // 2. Procesar lista de VALIDACIÓN (05.json)
+            // 2. Procesar lista de VALIDACIÓN
             const validationSet = new Set(validationWords
                 .map(word => normalizeWord(word.trim()))
                 .filter(word => word.length === WORD_LENGTH)
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRowIndex = 0;
         currentColIndex = 0;
         isGameActive = false;
-        stopInteraction(); // Detener listeners mientras se carga
+        stopInteraction();
     }
 
     /**
@@ -319,7 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
 
-        // Usamos la lista de validación completa (wordList)
+        // Limpiar el toast de "Comprobando..." si existiera
+        const loadingToast = document.getElementById('toast-loading');
+        if (loadingToast) {
+            loadingToast.remove();
+        }
+
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -371,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- LÓGICA PARA @keyframes ---
+        // Lógica para @keyframes
         rowTiles.forEach((tile, index) => {
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
@@ -386,8 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Flip animation complete, checking win/loss...");
             
             // --- INICIO DE LA CORRECCIÓN ---
-            // Guardamos el resultado (true si ganó, false si sigue)
-            // y movemos la lógica de reactivación aquí.
             const gameEnded = checkWinLoss(guess); 
             
             if (!gameEnded) { // Si el juego NO ha terminado...
@@ -417,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNCIÓN CHECKWINLOSS MODIFICADA ---
-    // Ahora devuelve 'true' si el juego ha terminado (gana o pierde)
+    // Devuelve 'true' si el juego ha terminado (gana o pierde)
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
@@ -428,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true; // Juego terminado
         }
 
-        // Si se acabaron los intentos
+        // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
@@ -444,28 +447,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- FIN DE MODIFICACIÓN ---
 
+
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        // Limpiar el toast de "cargando" si existe
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
         }
-
-        if (duration < 3000 && message !== 'Comprobando diccionario...') {
-             const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
-             existingToasts.forEach(t => t.remove());
-        }
         
+        // No mostrar 'Comprobando' si el mensaje es 'Faltan letras' o 'No está en la lista'
+        if (message !== 'Comprobando diccionario...') {
+            const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
+            existingToasts.forEach(t => t.remove());
+        }
+
         const toast = document.createElement('div');
         toast.classList.add('toast');
         toast.textContent = message;
         toastContainer.prepend(toast);
 
         if (message === 'Comprobando diccionario...') {
-            toast.id = "toast-loading";
+            toast.id = "toast-loading"; // Darle ID para poder borrarlo
         } else {
+            // Auto-eliminar el toast
             setTimeout(() => {
                 toast.style.transition = 'opacity 0.5s ease';
                 toast.style.opacity = '0';

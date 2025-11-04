@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DEL JUEGO ---
     let validationList = []; // Lista para VALIDAR (de 05.json)
     let answerList = []; // Lista para RESPUESTAS (de wordle-a1-palabras.json)
+    let wordList = []; // Lista combinada para validar los intentos
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;

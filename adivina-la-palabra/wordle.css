@@ -283,7 +283,7 @@
     padding: 0 8px;
     margin: 0 3px;
     border: none;
-    background-color: #818384;
+    background-color: #b0b4b7;
     color: #ffffff;
     border-radius: 4px;
     cursor: pointer;
@@ -295,7 +295,7 @@
 }
 
 .keyboard-key:hover {
-    background-color: #999b9c;
+    background-color: #c4c7c9;
 }
 
 .keyboard-key.large {

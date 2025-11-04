@@ -81,7 +81,7 @@
     /* Colores del juego Wordle (Estilo oscuro/moderno) */
     --color-correct: #538d4e;
     --color-present: #b59f3b;
-    --color-absent: #3a3a3c;
+    --color-absent: #787c7e;
     --tile-border-idle: #d3d6da; /* Borde gris claro */
     --tile-border-active: #86888a; /* Borde gris medio */
     --text-color-light: #ffffff;

@@ -215,6 +215,22 @@
     color: var(--text-color-dark); /* Mantener letras negras tras el giro */
 }
 
+/* El texto de la cara trasera debe estar espejado para que se lea bien al girar */
+.grid-tile.correct::before,
+.grid-tile.present::before,
+.grid-tile.absent::before {
+    content: attr(data-letter); /* Usaremos un atributo de datos para el texto */
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transform: rotateX(180deg); /* Voltear el texto en la cara trasera */
+    backface-visibility: hidden;
+    color: var(--text-color-dark);
+}
+
 .grid-tile.correct { background-color: var(--color-correct); }
 .grid-tile.present { background-color: var(--color-present); }
 .grid-tile.absent { background-color: var(--color-absent); }

@@ -211,7 +211,6 @@
 .grid-tile.correct,
 .grid-tile.present,
 .grid-tile.absent {
-    transform: rotateX(180deg);
     border-color: transparent;
     color: var(--text-color-dark); /* Mantener letras negras tras el giro */
 }
@@ -235,6 +234,16 @@
 .grid-tile.correct { background-color: var(--color-correct); }
 .grid-tile.present { background-color: var(--color-present); }
 .grid-tile.absent { background-color: var(--color-absent); }
+
+.grid-tile.flip {
+    animation: flipReveal 0.8s ease forwards;
+}
+
+@keyframes flipReveal {
+    0% { transform: rotateX(0deg); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+}
 
 
 /* Estado: Animación de error (palabra no válida) */

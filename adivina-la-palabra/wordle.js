@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allTiles.forEach(tile => {
             tile.textContent = '';
             tile.className = 'grid-tile';
+            tile.removeAttribute('data-letter');
         });
 
         keyboardKeys.forEach(key => {
@@ -290,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tile) {
             tile.textContent = letter;
             tile.classList.add('filled');
+            tile.dataset.letter = letter;
             currentColIndex++;
         }
     }
@@ -302,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
          if (tile) {
             tile.textContent = '';
             tile.classList.remove('filled');
+            tile.removeAttribute('data-letter');
         }
     }
 
@@ -377,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- LÓGICA PARA @keyframes ---
         rowTiles.forEach((tile, index) => {
+            tile.dataset.letter = guessArray[index];
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
                 tile.classList.add('flip');

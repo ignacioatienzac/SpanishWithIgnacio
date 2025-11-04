@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadGameForDate(new Date());
     }
 
+    /**
+     * Configura el calendario Flatpickr
+     */
     function setupCalendar() {
         const today = new Date();
         const sixtyDaysAgo = new Date().fp_incr(-60);
@@ -79,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Carga las listas de palabras y prepara el juego para una fecha específica
+     */
     async function loadGameForDate(date) {
         currentDate = date;
         showToast('Cargando juego...', 2000);
@@ -97,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
         startInteraction();
     }
 
+    /**
+     * Carga las listas de palabras (validación y respuestas) desde los archivos
+     */
     async function loadWordLists(levelIdentifier) {
         console.log(`Loading word lists for ${levelIdentifier}...`);
         
@@ -140,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
             
-            return true;
+            return true; // Éxito
 
         } catch (error) {
             console.error("Error al cargar las listas de palabras:", error);
@@ -149,6 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Resetea el tablero y el teclado a su estado inicial
+     */
     function resetBoard() {
         console.log("Reseteando tablero...");
         allTiles.forEach(tile => {
@@ -169,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
         stopInteraction();
     }
 
+    /**
+     * Obtiene la palabra del día (o de la fecha seleccionada)
+     */
      function getWordForDate(list, date) {
         const epoch = new Date('2025-01-01');
         const selectedDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -181,6 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return list[wordIndex];
     }
     
+    /**
+     * Función helper para normalizar palabras (quitar tildes, mayúsculas)
+     */
     function normalizeWord(word) {
         if (typeof word !== 'string') return '';
         return word
@@ -189,6 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/[\u0300-\u036f]/g, "");
     }
     
+    /**
+     * Función helper para saber si una fecha es hoy
+     */
     function isToday(someDate) {
         const today = new Date();
         return someDate.getDate() === today.getDate() &&
@@ -196,6 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
             someDate.getFullYear() === today.getFullYear();
     }
     
+    /**
+     * Función helper para formatear una fecha como YYYY-MM-DD
+     */
     function normalizeDate(date) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -291,7 +315,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
+        
+        // Limpiar el toast de "Comprobando..." si existiera
+        const loadingToast = document.getElementById('toast-loading');
+        if (loadingToast) {
+            loadingToast.remove();
+        }
 
+        // Usamos la lista de validación completa (wordList)
         if (!wordList.includes(guess)) {
             showToast('No está en la lista de palabras');
             shakeRow();
@@ -300,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log("Word is valid, evaluating...");
-        isGameActive = false;
+        isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
     }
 
@@ -322,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const feedback = Array(WORD_LENGTH).fill(null);
 
+        // 1. Mark greens
         for (let i = 0; i < WORD_LENGTH; i++) {
             if (guessArray[i] === targetArray[i]) {
                 feedback[i] = 'correct';
@@ -329,8 +361,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // 2. Mark yellows and grays
         for (let i = 0; i < WORD_LENGTH; i++) {
             if (feedback[i] === 'correct') continue;
+
             const letterIndexInTarget = targetArray.indexOf(guessArray[i]);
             if (letterIndexInTarget > -1) {
                  feedback[i] = 'present';
@@ -353,11 +387,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalAnimationTime = 800 + ((WORD_LENGTH - 1) * 300); // 2000ms
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
-            const gameEnded = checkWinLoss(guess); // <--- LÓGICA CORREGIDA
-            if (!gameEnded) { // <--- LÓGICA CORREGIDA
+            
+            // --- INICIO DE LA CORRECCIÓN ---
+            const gameEnded = checkWinLoss(guess); 
+            
+            // Si el juego NO ha terminado (gameEnded es false), reactivamos el input
+            if (!gameEnded) { 
                  isGameActive = true;
                  console.log("Game continues, re-enabling input.");
             }
+            // --- FIN DE LA CORRECCIÓN ---
+            
         }, totalAnimationTime + 100);
     }
 
@@ -378,9 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     // --- FUNCIÓN CHECKWINLOSS MODIFICADA ---
-    // Ahora devuelve 'true' si el juego ha terminado (gana o pierde)
+    // Devuelve 'true' si el juego ha terminado (gana o pierde)
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
@@ -391,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true; // Juego terminado
         }
 
+        // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             showToast(`La palabra era: ${targetWord}`, 5000);
             stopInteraction();
@@ -415,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loadingToast) {
             loadingToast.remove();
         }
-
+        
         if (duration < 3000 && message !== 'Comprobando diccionario...') {
              const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
              existingToasts.forEach(t => t.remove());

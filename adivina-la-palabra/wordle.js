@@ -379,12 +379,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LÓGICA PARA @keyframes ---
+        const FLIP_ANIMATION_DURATION = 800;
+
         rowTiles.forEach((tile, index) => {
             tile.dataset.letter = guessArray[index];
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
                 tile.classList.add('flip');
                 updateKeyboard(guessArray[index], feedback[index]);
+                setTimeout(() => {
+                    tile.style.color = '#ffffff';
+                }, FLIP_ANIMATION_DURATION);
             }, index * 300); // Retardo escalonado
         });
 

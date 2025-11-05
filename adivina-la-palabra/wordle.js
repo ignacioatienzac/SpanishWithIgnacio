@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Initializing game setup...");
         const urlParams = new URLSearchParams(window.location.search);
         currentLevel = urlParams.get('level') || 'A1';
-        levelTitle.textContent = `Nivel ${currentLevel}`;
+        levelTitle.textContent = `Level ${currentLevel}`;
         
         setupCalendar();
         loadGameForDate(new Date());
@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Usamos la lista de validación completa (wordList)
         if (!wordList.includes(guess)) {
-            showToast('No está en la lista de palabras');
+            showToast('Not in word list');
             shakeRow();
             console.log(`Submit failed: Word "${guess}" not in validation list.`);
             return;
@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
-            showToast(`La palabra era: ${targetWord}`, 5000);
+            showToast('Want to try again?', 5000);
             stopInteraction();
             console.log("Game outcome: LOSS");
             return true; // Juego terminado

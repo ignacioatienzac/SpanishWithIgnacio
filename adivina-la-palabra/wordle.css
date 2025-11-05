@@ -81,7 +81,7 @@
     /* Colores del juego Wordle (Estilo oscuro/moderno) */
     --color-correct: #538d4e;
     --color-present: #b59f3b;
-    --color-absent: #3a3a3c;
+    --color-absent: #787c7e;
     --tile-border-idle: #d3d6da; /* Borde gris claro */
     --tile-border-active: #86888a; /* Borde gris medio */
     --text-color-light: #ffffff;
@@ -211,30 +211,23 @@
 .grid-tile.correct,
 .grid-tile.present,
 .grid-tile.absent {
-    transform: rotateX(180deg);
     border-color: transparent;
-    color: var(--text-color-light); /* Letras blancas al girar */
-}
-
-/* El texto de la cara trasera debe estar espejado para que se lea bien al girar */
-.grid-tile.correct::before,
-.grid-tile.present::before,
-.grid-tile.absent::before {
-    content: attr(data-letter); /* Usaremos un atributo de datos para el texto */
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    transform: rotateX(180deg); /* Voltear el texto en la cara trasera */
-    backface-visibility: hidden;
-    color: var(--text-color-light);
+    color: var(--text-color-light); /* Letras blancas tras el giro */
 }
 
 .grid-tile.correct { background-color: var(--color-correct); }
 .grid-tile.present { background-color: var(--color-present); }
 .grid-tile.absent { background-color: var(--color-absent); }
+
+.grid-tile.flip {
+    animation: flipReveal 0.8s ease forwards;
+}
+
+@keyframes flipReveal {
+    0% { transform: rotateX(0deg); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+}
 
 
 /* Estado: Animación de error (palabra no válida) */
@@ -274,7 +267,7 @@
     padding: 0 8px;
     margin: 0 3px;
     border: none;
-    background-color: #818384;
+    background-color: #b0b4b7;
     color: #ffffff;
     border-radius: 4px;
     cursor: pointer;
@@ -286,7 +279,7 @@
 }
 
 .keyboard-key:hover {
-    background-color: #999b9c;
+    background-color: #c4c7c9;
 }
 
 .keyboard-key.large {

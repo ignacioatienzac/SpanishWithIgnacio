@@ -168,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.textContent = '';
             tile.className = 'grid-tile';
             tile.removeAttribute('data-letter');
-            tile.style.color = '';
         });
 
         keyboardKeys.forEach(key => {
@@ -293,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.textContent = letter;
             tile.classList.add('filled');
             tile.dataset.letter = letter;
-            tile.style.color = 'var(--text-color-dark)';
             currentColIndex++;
         }
     }
@@ -390,6 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tile.classList.add('flip');
                 tile.style.color = '#ffffff';
                 updateKeyboard(guessArray[index], feedback[index]);
+                setTimeout(() => {
+                    tile.style.color = '#ffffff';
+                }, FLIP_ANIMATION_DURATION);
             }, index * 300); // Retardo escalonado
         });
 

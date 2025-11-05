@@ -386,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
                 tile.classList.add('flip');
+                tile.style.color = '#ffffff';
                 updateKeyboard(guessArray[index], feedback[index]);
                 setTimeout(() => {
                     tile.style.color = '#ffffff';

@@ -168,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.textContent = '';
             tile.className = 'grid-tile';
             tile.removeAttribute('data-letter');
-            tile.style.color = '';
         });
 
         keyboardKeys.forEach(key => {

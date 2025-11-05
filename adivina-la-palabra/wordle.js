@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DEL JUEGO ---
     let validationList = []; // Lista para VALIDAR (de 05.json)
     let answerList = []; // Lista para RESPUESTAS (de wordle-a1-palabras.json)
+    let wordList = []; // Lista combinada para validar los intentos
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
@@ -166,6 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
         allTiles.forEach(tile => {
             tile.textContent = '';
             tile.className = 'grid-tile';
+            tile.removeAttribute('data-letter');
+            tile.style.color = '';
         });
 
         keyboardKeys.forEach(key => {
@@ -289,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tile) {
             tile.textContent = letter;
             tile.classList.add('filled');
+            tile.dataset.letter = letter;
             currentColIndex++;
         }
     }
@@ -301,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
          if (tile) {
             tile.textContent = '';
             tile.classList.remove('filled');
+            tile.removeAttribute('data-letter');
         }
     }
 
@@ -375,10 +380,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LÓGICA PARA @keyframes ---
+        const FLIP_ANIMATION_DURATION = 800;
+
         rowTiles.forEach((tile, index) => {
+            tile.dataset.letter = guessArray[index];
             setTimeout(() => {
                 tile.classList.add(feedback[index]);
                 tile.classList.add('flip');
+                tile.style.color = '#ffffff';
                 updateKeyboard(guessArray[index], feedback[index]);
             }, index * 300); // Retardo escalonado
         });

@@ -168,11 +168,11 @@
 
 .game-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(var(--word-length, 5), 1fr);
+    grid-template-rows: repeat(var(--max-tries, 6), 1fr);
     gap: 5px;
-    width: 320px;
-    height: 380px;
+    width: var(--grid-width, 320px);
+    height: var(--grid-height, 380px);
     perspective: 1000px;
 }
 

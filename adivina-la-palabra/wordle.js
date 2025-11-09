@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_TRIES = 6;
     const MIN_WORD_LENGTH = 3;
     const MAX_WORD_LENGTH = 6;
-    const SPANISH_ARTICLES = new Set(['EL', 'LA', 'LOS', 'LAS', 'LO', 'UN', 'UNA', 'UNOS', 'UNAS', 'AL', 'DEL']);
     
     // Simula que el usuario es premium (para probar el calendario)
     const IS_PREMIUM_USER = true; 
@@ -15,8 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- SELECTORES DEL DOM ---
     const gameContainer = document.querySelector('.game-container');
     const grid = document.querySelector('.game-grid');
-    const clueButton = document.querySelector('.clue-button');
-    const clueMessagesContainer = document.querySelector('.clue-messages');
     let allTiles = [];
     const keyboardKeys = document.querySelectorAll('.keyboard-key');
     const toastContainer = document.querySelector('.toast-container');
@@ -110,10 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!success) return;
         }
 
-        if (!hintDataLoaded) {
-            await loadHintDictionary();
-        }
-
         const selection = getWordForDate(date);
         if (!selection) {
             showToast('No se encontró una palabra para esta fecha.');
@@ -125,8 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWordLength = selection.length;
 
         resetBoard(currentWordLength);
-        resetCluePanelForNewWord();
-        prepareHintsForWord(targetWord);
 
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
@@ -348,244 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
             [result[i], result[j]] = [result[j], result[i]];
         }
         return result;
-    }
-
-
-    async function loadHintDictionary() {
-        if (hintDataLoaded) return true;
-
-        const hintsFile = `../data/vocabulario-a1-completo.json`;
-        try {
-            const response = await fetch(hintsFile);
-            if (!response.ok) throw new Error(`No se pudo cargar ${hintsFile}`);
-
-            const data = await response.json();
-            extractHintEntries(data);
-            hintDataLoaded = hintDictionary.size > 0;
-            console.log('Hint dictionary loaded:', hintDictionary.size, 'entries');
-            return hintDataLoaded;
-        } catch (error) {
-            console.warn('No se pudo cargar el diccionario de pistas:', error);
-            return false;
-        }
-    }
-
-    function extractHintEntries(node, context = {}) {
-        if (!node) return;
-
-        if (Array.isArray(node)) {
-            node.forEach(item => extractHintEntries(item, context));
-            return;
-        }
-
-        if (typeof node !== 'object') return;
-
-        const updatedContext = { ...context };
-
-        if (typeof node.categoria_general === 'string') {
-            updatedContext.general = node.categoria_general;
-        }
-
-        if (typeof node.tema === 'string') {
-            updatedContext.general = node.tema;
-        }
-
-        if (typeof node.subcategoria === 'string') {
-            updatedContext.subcategory = node.subcategoria;
-        }
-
-        if (typeof node.categoria === 'string') {
-            updatedContext.subcategory = node.categoria;
-        }
-
-        if (Array.isArray(node.vocabulario)) {
-            node.vocabulario.forEach(item => {
-                if (!item || typeof item !== 'object') return;
-                const spanish = item.es || item.espanol || item.spanish;
-                const english = item.en || item.ingles || item.english;
-                if (!spanish || !english) return;
-
-                const variants = splitSpanishVariants(spanish);
-                variants.forEach(variant => {
-                    const normalized = normalizeWord(variant);
-                    if (!normalized) return;
-                    if (!hintDictionary.has(normalized)) {
-                        hintDictionary.set(normalized, {
-                            translation: english,
-                            category: updatedContext.general || '',
-                            subcategory: updatedContext.subcategory || ''
-                        });
-                    }
-                });
-            });
-        }
-
-        Object.entries(node).forEach(([key, value]) => {
-            if (key === 'vocabulario') return;
-            extractHintEntries(value, updatedContext);
-        });
-    }
-
-    function splitSpanishVariants(rawText) {
-        if (typeof rawText !== 'string') return [];
-
-        const cleaned = rawText
-            .replace(/\(.*?\)/g, ' ')
-            .replace(/\[.*?\]/g, ' ')
-            .replace(/"/g, ' ')
-            .replace(/-/g, ' ')
-            .replace(/\./g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-
-        if (!cleaned) return [];
-
-        const replaced = cleaned.replace(/\s+(?:o|u|y)\s+/gi, '/');
-        const primaryParts = replaced.split(/[\/,;]/).map(part => part.trim()).filter(Boolean);
-        const variants = new Set();
-
-        primaryParts.forEach(part => {
-            if (!part) return;
-            const tokens = part.split(/\s+/).filter(Boolean);
-            while (tokens.length && SPANISH_ARTICLES.has(tokens[0].toUpperCase())) {
-                tokens.shift();
-            }
-
-            if (!tokens.length) return;
-
-            const combined = tokens.join(' ');
-            if (combined) {
-                variants.add(combined);
-            }
-
-            if (tokens.length > 1) {
-                variants.add(tokens[0]);
-            }
-        });
-
-        return Array.from(variants);
-    }
-
-    function cleanEnglishTranslation(text) {
-        if (typeof text !== 'string') return '';
-        const withoutParens = text.replace(/\(.*?\)/g, '');
-        const segments = withoutParens.split(/[\/,;]/).map(segment => segment.trim()).filter(Boolean);
-        return segments.length ? segments[0] : withoutParens.trim();
-    }
-
-    function inferPartOfSpeech(entry, translation) {
-        const context = `${entry.category || ''} ${entry.subcategory || ''}`.toLowerCase();
-        const loweredTranslation = translation.toLowerCase();
-
-        if (loweredTranslation.startsWith('to ')) return 'verb';
-        if (/verbo|accion|acciones|infinitivo/.test(context)) return 'verb';
-        if (/adjetiv/.test(context)) return 'adjective';
-        if (/adverb/.test(context)) return 'adverb';
-        if (/pronombre/.test(context)) return 'pronoun';
-        if (/expresion|frase/.test(context)) return 'expression';
-        if (/sustantiv/.test(context)) return 'noun';
-        return 'noun';
-    }
-
-    function createPartOfSpeechHint(partOfSpeech) {
-        switch (partOfSpeech) {
-            case 'verb':
-                return 'This word is a verb.';
-            case 'adjective':
-                return 'This word is an adjective.';
-            case 'adverb':
-                return 'This word is an adverb.';
-            case 'pronoun':
-                return 'This word is a pronoun.';
-            case 'expression':
-                return 'This word is a common expression.';
-            default:
-                return 'This word is a noun.';
-        }
-    }
-
-    function createUsageHint(entry, translation) {
-        const topic = entry.subcategory || entry.category;
-        if (topic && translation) {
-            return `You often use this word when talking about "${topic}"—think of ${translation}.`;
-        }
-        if (topic) {
-            return `You often use this word when talking about "${topic}".`;
-        }
-        if (translation) {
-            return `You might use this word when you want to refer to ${translation}.`;
-        }
-        return 'You might use this word in everyday Spanish conversations.';
-    }
-
-    function buildHintsForWord(word) {
-        const normalized = normalizeWord(word);
-        const entry = hintDictionary.get(normalized);
-        const hints = [];
-
-        if (entry) {
-            const translation = cleanEnglishTranslation(entry.translation);
-            const partOfSpeech = inferPartOfSpeech(entry, translation || '');
-            hints.push(createPartOfSpeechHint(partOfSpeech));
-            hints.push(createUsageHint(entry, translation));
-            if (translation) {
-                hints.push(`This word means "${translation}" in Spanish.`);
-            } else {
-                hints.push('This word has several everyday meanings in Spanish.');
-            }
-        } else {
-            hints.push(`This word has ${word.length} letters.`);
-            hints.push(`It starts with the letter "${word.charAt(0)}".`);
-            hints.push(`This word means "${word.toLowerCase()}" in Spanish.`);
-        }
-
-        return hints;
-    }
-
-    function resetCluePanelForNewWord() {
-        hintsForCurrentWord = [];
-        nextHintIndex = 0;
-        clueUsedThisRow = false;
-        clueMessagesContainer.innerHTML = '';
-        updateClueAvailability();
-    }
-
-    function prepareHintsForWord(word) {
-        hintsForCurrentWord = buildHintsForWord(word);
-        nextHintIndex = 0;
-        clueUsedThisRow = false;
-        updateClueAvailability();
-    }
-
-    function handleClueClick() {
-        if (clueButton.disabled) return;
-        if (nextHintIndex >= hintsForCurrentWord.length) return;
-
-        const hintText = hintsForCurrentWord[nextHintIndex];
-        const hintNumber = nextHintIndex + 1;
-        const message = document.createElement('p');
-        message.className = 'clue-message';
-        message.textContent = `Hint ${hintNumber}: ${hintText}`;
-        clueMessagesContainer.appendChild(message);
-
-        nextHintIndex++;
-        clueUsedThisRow = true;
-        updateClueAvailability();
-    }
-
-    function updateClueAvailability() {
-        const eligibleRow = currentRowIndex >= (MAX_TRIES - 3);
-        const hasMoreHints = nextHintIndex < hintsForCurrentWord.length;
-        const canUse = isGameActive && eligibleRow && hasMoreHints && !clueUsedThisRow;
-
-        clueButton.disabled = !canUse;
-        clueButton.setAttribute('aria-disabled', (!canUse).toString());
-
-        if (canUse) {
-            clueButton.classList.add('active');
-        } else {
-            clueButton.classList.remove('active');
-        }
     }
 
 

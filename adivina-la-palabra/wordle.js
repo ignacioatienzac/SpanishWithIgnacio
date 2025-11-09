@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadGameForDate(date) {
         currentDate = date;
-        showToast('Cargando juego...', 2000);
+        showToast('Loading game...', 2000);
 
         stopInteraction();
 
@@ -759,7 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
-            showToast('¡Felicidades, has ganado!', 5000);
+            showToast('Well done! 🥳', 5000);
             stopInteraction();
             danceWin();
             console.log("Game outcome: WIN");

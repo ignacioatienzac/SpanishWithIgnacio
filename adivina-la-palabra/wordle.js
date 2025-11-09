@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded. Initializing game...");
 
     // --- CONSTANTES DE CONFIGURACIÓN ---
-    const WORD_LENGTH = 5;
     const MAX_TRIES = 6;
+    const MIN_WORD_LENGTH = 3;
+    const MAX_WORD_LENGTH = 6;
     
     // Simula que el usuario es premium (para probar el calendario)
     const IS_PREMIUM_USER = true; 
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- SELECTORES DEL DOM ---
     const gameContainer = document.querySelector('.game-container');
     const grid = document.querySelector('.game-grid');
-    const allTiles = Array.from(grid.children);
+    let allTiles = [];
     const keyboardKeys = document.querySelectorAll('.keyboard-key');
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
@@ -25,9 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ESTADO DEL JUEGO ---
-    let validationList = []; // Lista para VALIDAR (de 05.json)
-    let answerList = []; // Lista para RESPUESTAS (de wordle-a1-palabras.json)
-    let wordList = []; // Lista combinada para validar los intentos
+    const answerListsByLength = new Map();
+    const validationSetsByLength = new Map();
+    let combinedAnswerList = [];
+    let currentWordLength = 5;
+    let wordDataLoaded = false;
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
@@ -89,15 +92,26 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadGameForDate(date) {
         currentDate = date;
         showToast('Cargando juego...', 2000);
-        
-        resetBoard();
 
-        if (wordList.length === 0) {
+        stopInteraction();
+
+        if (!wordDataLoaded) {
             const success = await loadWordLists(currentLevel);
             if (!success) return;
         }
 
-        targetWord = getWordForDate(answerList, date);
+        const selection = getWordForDate(date);
+        if (!selection) {
+            showToast('No se encontró una palabra para esta fecha.');
+            console.error('No target word available for the selected date.');
+            return;
+        }
+
+        targetWord = selection.word;
+        currentWordLength = selection.length;
+
+        resetBoard(currentWordLength);
+
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
         isGameActive = true;
@@ -109,47 +123,81 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadWordLists(levelIdentifier) {
         console.log(`Loading word lists for ${levelIdentifier}...`);
-        
-        const validationListFilename = `../data/05.json`; 
-        const answerListFilename = `../data/wordle-a1-palabras.json`; 
+
+        const answerListFilename = `../data/wordle-a1-palabras.json`;
+        const validationFiles = [
+            { length: 3, filename: `../data/03.json` },
+            { length: 4, filename: `../data/04.json` },
+            { length: 5, filename: `../data/05.json` },
+            { length: 6, filename: `../data/06.json` },
+        ];
 
         try {
-            const [answerResponse, validationResponse] = await Promise.all([
-                fetch(answerListFilename),
-                fetch(validationListFilename)
-            ]);
-
+            const answerResponse = await fetch(answerListFilename);
             if (!answerResponse.ok) throw new Error(`No se pudo cargar ${answerListFilename}`);
-            if (!validationResponse.ok) throw new Error(`No se pudo cargar ${validationListFilename}`);
 
-            const answerWords = await answerResponse.json();
-            const validationWords = await validationResponse.json();
+            const validationResponses = await Promise.all(validationFiles.map(file => fetch(file.filename)));
+            validationResponses.forEach((response, index) => {
+                if (!response.ok) {
+                    throw new Error(`No se pudo cargar ${validationFiles[index].filename}`);
+                }
+            });
 
-            // 1. Procesar lista de RESPUESTAS
-            answerList = answerWords
+            const rawAnswerWords = await answerResponse.json();
+            const normalizedAnswers = rawAnswerWords
                 .map(word => normalizeWord(word.trim()))
-                .filter(word => word.length === WORD_LENGTH);
-            
-            console.log(`Lista de respuestas (${WORD_LENGTH} letras) cargada:`, answerList.length, "palabras");
+                .filter(word => word.length >= MIN_WORD_LENGTH && word.length <= MAX_WORD_LENGTH);
 
-            // 2. Procesar lista de VALIDACIÓN
-            const validationSet = new Set(validationWords
-                .map(word => normalizeWord(word.trim()))
-                .filter(word => word.length === WORD_LENGTH)
-            );
-            
-            // 3. Unir ambas listas para la validación
-            answerList.forEach(word => validationSet.add(word));
-            wordList = Array.from(validationSet); // 'wordList' es ahora la lista de validación completa
-            
-            console.log(`Lista de validación (${WORD_LENGTH} letras) cargada:`, wordList.length, "palabras");
+            answerListsByLength.clear();
+            validationSetsByLength.clear();
 
-            if (answerList.length === 0) {
+            for (let length = MIN_WORD_LENGTH; length <= MAX_WORD_LENGTH; length++) {
+                answerListsByLength.set(length, []);
+            }
+
+            normalizedAnswers.forEach(word => {
+                const length = word.length;
+                if (answerListsByLength.has(length)) {
+                    answerListsByLength.get(length).push(word);
+                }
+            });
+
+            const validationData = await Promise.all(validationResponses.map(response => response.json()));
+
+            validationFiles.forEach(({ length }, index) => {
+                const rawList = validationData[index] || [];
+                const normalizedList = rawList
+                    .map(word => normalizeWord(word.trim()))
+                    .filter(word => word.length === length);
+
+                const validationSet = new Set(normalizedList);
+                const answersForLength = answerListsByLength.get(length) || [];
+                answersForLength.forEach(word => validationSet.add(word));
+
+                if (validationSet.size > 0) {
+                    validationSetsByLength.set(length, validationSet);
+                }
+
+                console.log(`Lista de validación (${length} letras) cargada:`, validationSet.size, "palabras");
+            });
+
+            combinedAnswerList = normalizedAnswers.filter(word => validationSetsByLength.has(word.length));
+            combinedAnswerList = shuffleArrayDeterministic(Array.from(new Set(combinedAnswerList)));
+
+            if (combinedAnswerList.length === 0) {
                 showToast('No se encontraron palabras de respuesta.');
-                console.error("La lista de respuestas (wordle-a1-palabras.json) está vacía o falló.");
+                console.error('La lista de respuestas no contiene palabras válidas.');
                 return false;
             }
-            
+
+            [3, 4, 5, 6].forEach(length => {
+                const answersForLength = answerListsByLength.get(length) || [];
+                console.log(`Lista de respuestas (${length} letras) cargada:`, answersForLength.length, 'palabras');
+            });
+
+            console.log('Total de palabras disponibles:', combinedAnswerList.length);
+
+            wordDataLoaded = true;
             return true; // Éxito
 
         } catch (error) {
@@ -162,8 +210,37 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Resetea el tablero y el teclado a su estado inicial
      */
-    function resetBoard() {
-        console.log("Reseteando tablero...");
+    function buildBoard(wordLength) {
+        const totalTilesNeeded = MAX_TRIES * wordLength;
+
+        if (allTiles.length !== totalTilesNeeded) {
+            grid.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < totalTilesNeeded; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'grid-tile';
+                fragment.appendChild(tile);
+            }
+            grid.appendChild(fragment);
+        }
+
+        allTiles = Array.from(grid.children);
+
+        grid.style.setProperty('--word-length', wordLength);
+        grid.style.setProperty('--max-tries', MAX_TRIES);
+
+        const gap = 5;
+        const tileWidth = 60; // Mantener tamaño aproximado del diseño original
+        const width = wordLength * tileWidth + (wordLength - 1) * gap;
+        grid.style.setProperty('--grid-width', `${width}px`);
+        grid.style.setProperty('--grid-height', `380px`);
+    }
+
+    function resetBoard(wordLength = currentWordLength) {
+        console.log(`Reseteando tablero (${wordLength} letras)...`);
+        buildBoard(wordLength);
+        grid.classList.remove('shake');
+
         allTiles.forEach(tile => {
             tile.textContent = '';
             tile.className = 'grid-tile';
@@ -180,22 +257,29 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRowIndex = 0;
         currentColIndex = 0;
         isGameActive = false;
-        stopInteraction();
     }
 
     /**
      * Obtiene la palabra del día (o de la fecha seleccionada)
      */
-     function getWordForDate(list, date) {
+     function getWordForDate(date) {
+        if (!combinedAnswerList.length) return null;
+
         const epoch = new Date('2025-01-01');
         const selectedDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        
+
         const diffTime = Math.max(0, selectedDay - epoch);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        const wordIndex = diffDays % list.length;
-        
+        const wordIndex = diffDays % combinedAnswerList.length;
+
+        const word = combinedAnswerList[wordIndex];
+        if (!word) return null;
+
         console.log(`Fecha: ${selectedDay.toDateString()}, DiffDays: ${diffDays}, Index: ${wordIndex}`);
-        return list[wordIndex];
+        return {
+            word,
+            length: word.length
+        };
     }
     
     /**
@@ -227,6 +311,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+
+    function mulberry32(a) {
+        return function() {
+            let t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
+    function shuffleArrayDeterministic(array, seed = 0x1234ABCD) {
+        const random = mulberry32(seed);
+        const result = array.slice();
+        for (let i = result.length - 1; i > 0; i--) {
+            const j = Math.floor(random() * (i + 1));
+            [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
     }
 
 
@@ -278,15 +382,15 @@ document.addEventListener('DOMContentLoaded', () => {
             submitGuess();
         } else if (key === 'BACKSPACE') {
             deleteLetter();
-        } else if (currentColIndex < WORD_LENGTH) {
+        } else if (currentColIndex < currentWordLength) {
             addLetter(key);
         }
     }
 
 
     function addLetter(letter) {
-        if (currentColIndex >= WORD_LENGTH) return;
-        const tileIndex = currentRowIndex * WORD_LENGTH + currentColIndex;
+        if (currentColIndex >= currentWordLength) return;
+        const tileIndex = currentRowIndex * currentWordLength + currentColIndex;
         const tile = allTiles[tileIndex];
         if (tile) {
             tile.textContent = letter;
@@ -299,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteLetter() {
         if (currentColIndex === 0) return;
         currentColIndex--;
-        const tileIndex = currentRowIndex * WORD_LENGTH + currentColIndex;
+        const tileIndex = currentRowIndex * currentWordLength + currentColIndex;
         const tile = allTiles[tileIndex];
          if (tile) {
             tile.textContent = '';
@@ -310,8 +414,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function submitGuess() {
         if (!isGameActive) return;
-        
-        if (currentColIndex < WORD_LENGTH) {
+
+        if (currentColIndex < currentWordLength) {
             showToast('Faltan letras');
             shakeRow();
             return;
@@ -326,8 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingToast.remove();
         }
 
-        // Usamos la lista de validación completa (wordList)
-        if (!wordList.includes(guess)) {
+        // Usamos la lista de validación completa para la longitud actual
+        const validationSet = validationSetsByLength.get(currentWordLength) || new Set();
+        if (!validationSet.has(guess)) {
             showToast('Not in word list');
             shakeRow();
             console.log(`Submit failed: Word "${guess}" not in validation list.`);
@@ -341,24 +446,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getCurrentGuess() {
         let guess = '';
-        const rowStart = currentRowIndex * WORD_LENGTH;
-        for (let i = 0; i < WORD_LENGTH; i++) {
+        const rowStart = currentRowIndex * currentWordLength;
+        for (let i = 0; i < currentWordLength; i++) {
             guess += allTiles[rowStart + i].textContent;
         }
         return guess;
     }
 
     function evaluateGuess(guess) {
-        const rowStart = currentRowIndex * WORD_LENGTH;
-        const rowTiles = allTiles.slice(rowStart, rowStart + WORD_LENGTH);
+        const rowStart = currentRowIndex * currentWordLength;
+        const rowTiles = allTiles.slice(rowStart, rowStart + currentWordLength);
         const targetArray = targetWord.split('');
         const guessArray = guess.split('');
         console.log(`Evaluating guess: ${guess} against target: ${targetWord}`);
 
-        const feedback = Array(WORD_LENGTH).fill(null);
+        const feedback = Array(currentWordLength).fill(null);
 
         // 1. Mark greens
-        for (let i = 0; i < WORD_LENGTH; i++) {
+        for (let i = 0; i < currentWordLength; i++) {
             if (guessArray[i] === targetArray[i]) {
                 feedback[i] = 'correct';
                 targetArray[i] = null;
@@ -366,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 2. Mark yellows and grays
-        for (let i = 0; i < WORD_LENGTH; i++) {
+        for (let i = 0; i < currentWordLength; i++) {
             if (feedback[i] === 'correct') continue;
 
             const letterIndexInTarget = targetArray.indexOf(guessArray[i]);
@@ -395,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
-        const totalAnimationTime = 800 + ((WORD_LENGTH - 1) * 300); // 2000ms
+        const totalAnimationTime = 800 + ((currentWordLength - 1) * 300); // 2000ms
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
             
@@ -498,8 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function danceWin() {
          console.log("Triggering win dance animation on row:", currentRowIndex);
-         const rowStart = currentRowIndex * WORD_LENGTH;
-         const rowTiles = allTiles.slice(rowStart, rowStart + WORD_LENGTH);
+         const rowStart = currentRowIndex * currentWordLength;
+         const rowTiles = allTiles.slice(rowStart, rowStart + currentWordLength);
          rowTiles.forEach((tile, index) => {
             setTimeout(() => {
                 tile.style.animation = '';

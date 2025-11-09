@@ -46,6 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
+    let guessesMade = 0;
+
+    function handleClueClick() {
+        if (!clueButton || clueButton.disabled) return;
+        if (!clueMessagesContainer) return;
+
+        if (nextHintIndex >= hintsForCurrentWord.length) {
+            updateClueAvailability();
+            return;
+        }
+
+        const hintText = hintsForCurrentWord[nextHintIndex];
+        nextHintIndex++;
+        clueUsedThisRow = true;
+
+        const hintMessage = document.createElement('p');
+        hintMessage.classList.add('clue-message');
+        hintMessage.textContent = hintText;
+        clueMessagesContainer.appendChild(hintMessage);
+
+        updateClueAvailability();
+    }
 
     function handleClueClick() {
         if (!clueButton || clueButton.disabled) return;
@@ -134,6 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWordLength = selection.length;
 
         resetBoard(currentWordLength);
+        await ensureHintData();
+        prepareHintsForWord(targetWord);
 
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
@@ -471,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log("Word is valid, evaluating...");
+        guessesMade++;
         isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
         updateClueAvailability();

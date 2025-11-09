@@ -100,34 +100,82 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function setupCalendar() {
         const today = new Date();
-        const sixtyDaysAgo = new Date().fp_incr(-60);
+        today.setHours(0, 0, 0, 0);
+        const sixtyDaysAgo = subtractDays(today, 60);
 
-        flatpickr(calendarButton, {
-            maxDate: today,
-            minDate: sixtyDaysAgo,
-            defaultDate: today,
-            disableMobile: "true",
-            dateFormat: "Y-m-d",
-            
-            onChange: function(selectedDates, dateStr) {
-                const selectedDate = selectedDates[0];
-                if (!selectedDate) return;
-                
-                if (dateStr === normalizeDate(currentDate)) return;
+        const handleDateSelection = (selectedDate, dateStr, revertSelection) => {
+            if (!selectedDate) return;
 
-                if (isToday(selectedDate)) {
-                    console.log("Cargando juego para hoy.");
-                    loadGameForDate(selectedDate);
-                } else {
-                    if (IS_PREMIUM_USER) {
-                        console.log("Usuario premium, cargando día anterior:", dateStr);
-                        loadGameForDate(selectedDate);
-                    } else {
-                        showToast('Solo los suscriptores pueden jugar días anteriores.');
-                        this.setDate(currentDate); 
-                    }
-                }
-            },
+            if (dateStr === normalizeDate(currentDate)) {
+                if (revertSelection) revertSelection();
+                return;
+            }
+
+            if (isToday(selectedDate)) {
+                console.log("Cargando juego para hoy.");
+                loadGameForDate(selectedDate);
+                return;
+            }
+
+            if (IS_PREMIUM_USER) {
+                console.log("Usuario premium, cargando día anterior:", dateStr);
+                loadGameForDate(selectedDate);
+                return;
+            }
+
+            showToast('Solo los suscriptores pueden jugar días anteriores.');
+            if (revertSelection) revertSelection();
+        };
+
+        if (typeof flatpickr === 'function') {
+            flatpickr(calendarButton, {
+                maxDate: today,
+                minDate: sixtyDaysAgo,
+                defaultDate: today,
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+
+                onChange(selectedDates, dateStr, instance) {
+                    const selectedDate = selectedDates[0];
+                    handleDateSelection(selectedDate, dateStr, () => instance.setDate(currentDate));
+                },
+            });
+            return;
+        }
+
+        console.warn('flatpickr no está disponible. Usando selector nativo de fechas.');
+        const fallbackInput = document.createElement('input');
+        fallbackInput.type = 'date';
+        fallbackInput.id = calendarButton.id;
+        fallbackInput.className = calendarButton.className || '';
+        fallbackInput.min = normalizeDate(sixtyDaysAgo);
+        fallbackInput.max = normalizeDate(today);
+        fallbackInput.value = normalizeDate(today);
+        fallbackInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Elegir otro día');
+
+        fallbackInput.style.position = 'absolute';
+        fallbackInput.style.opacity = '0';
+        fallbackInput.style.pointerEvents = 'none';
+        fallbackInput.style.width = '0';
+        fallbackInput.style.height = '0';
+
+        calendarButton.parentNode.insertBefore(fallbackInput, calendarButton.nextSibling);
+
+        calendarButton.addEventListener('click', () => {
+            if (typeof fallbackInput.showPicker === 'function') {
+                fallbackInput.showPicker();
+            } else {
+                fallbackInput.focus();
+            }
+        });
+
+        fallbackInput.addEventListener('change', event => {
+            const dateStr = event.target.value;
+            if (!dateStr) return;
+            const selectedDate = new Date(`${dateStr}T00:00:00`);
+            handleDateSelection(selectedDate, dateStr, () => {
+                event.target.value = normalizeDate(currentDate);
+            });
         });
     }
 
@@ -364,6 +412,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+    function subtractDays(date, amount) {
+        const result = new Date(date);
+        result.setDate(result.getDate() - amount);
+        return result;
     }
 
 

@@ -125,11 +125,99 @@
 
 .game-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+}
+
+.game-main-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    align-items: flex-start;
+}
+
+.game-board-area {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.clue-panel {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    background-color: #f2f2f2;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.clue-button {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: #7a7a7a;
+    color: #ffffff;
+    cursor: not-allowed;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clue-button.active {
+    background-color: #c0392b;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(192, 57, 43, 0.35);
+}
+
+.clue-button.active:hover {
+    background-color: #a93226;
+    transform: translateY(-2px);
+}
+
+.clue-button:disabled {
+    opacity: 0.85;
+}
+
+.clue-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.clue-message {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+    .game-main-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .clue-panel {
+        width: 100%;
+        max-width: 360px;
+    }
 }
 
 /* --- (NUEVO) Barra de Controles del Juego --- */

@@ -20,10 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
+
+    clueButton.addEventListener('click', handleClueClick);
 
     // --- ESTADO DEL JUEGO ---
     const answerListsByLength = new Map();
@@ -37,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let isGameActive = false;
     let currentDate = new Date();
     let currentLevel = null;
+    const hintDictionary = new Map();
+    let hintDataLoaded = false;
+    let hintsForCurrentWord = [];
+    let nextHintIndex = 0;
+    let clueUsedThisRow = false;
 
     // --- INICIALIZACIÓN ---
 
@@ -116,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isGameActive = true;
         startInteraction();
+        updateClueAvailability();
     }
 
     /**
@@ -344,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.addEventListener('click', handleKeyClick));
         isGameActive = true;
+        updateClueAvailability();
     }
 
     function stopInteraction() {
@@ -351,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('keydown', handleKeyPress);
         keyboardKeys.forEach(key => key.removeEventListener('click', handleKeyClick));
         isGameActive = false;
+        updateClueAvailability();
     }
 
     function handleKeyClick(e) {
@@ -442,6 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Word is valid, evaluating...");
         isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
+        updateClueAvailability();
     }
 
     function getCurrentGuess() {
@@ -505,15 +516,16 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Flip animation complete, checking win/loss...");
             
             // --- INICIO DE LA CORRECCIÓN ---
-            const gameEnded = checkWinLoss(guess); 
-            
+            const gameEnded = checkWinLoss(guess);
+
             // Si el juego NO ha terminado (gameEnded es false), reactivamos el input
-            if (!gameEnded) { 
+            if (!gameEnded) {
                  isGameActive = true;
                  console.log("Game continues, re-enabling input.");
             }
+            updateClueAvailability();
             // --- FIN DE LA CORRECCIÓN ---
-            
+
         }, totalAnimationTime + 100);
     }
 
@@ -543,6 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stopInteraction();
             danceWin();
             console.log("Game outcome: WIN");
+            updateClueAvailability();
             return true; // Juego terminado
         }
 
@@ -551,12 +564,15 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Want to try again?', 5000);
             stopInteraction();
             console.log("Game outcome: LOSS");
+            updateClueAvailability();
             return true; // Juego terminado
         }
 
         // Si no ha ganado ni perdido, el juego continúa
         currentRowIndex++;
         currentColIndex = 0;
+        clueUsedThisRow = false;
+        updateClueAvailability();
         console.log(`Moving to next row: ${currentRowIndex}`);
         return false; // Juego NO terminado
     }

@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
+    const clueButton = document.querySelector('.clue-button');
+    const clueMessagesContainer = document.querySelector('.clue-messages');
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -44,6 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
+    let guessesMade = 0;
+
+    function handleClueClick() {
+        if (!clueButton || clueButton.disabled) return;
+        if (!clueMessagesContainer) return;
+
+        if (nextHintIndex >= hintsForCurrentWord.length) {
+            updateClueAvailability();
+            return;
+        }
+
+        const hintText = hintsForCurrentWord[nextHintIndex];
+        nextHintIndex++;
+        clueUsedThisRow = true;
+
+        const hintMessage = document.createElement('p');
+        hintMessage.classList.add('clue-message');
+        hintMessage.textContent = hintText;
+        clueMessagesContainer.appendChild(hintMessage);
+
+        updateClueAvailability();
+    }
 
     // --- INICIALIZACIÓN ---
 
@@ -62,34 +86,82 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function setupCalendar() {
         const today = new Date();
-        const sixtyDaysAgo = new Date().fp_incr(-60);
+        today.setHours(0, 0, 0, 0);
+        const sixtyDaysAgo = subtractDays(today, 60);
 
-        flatpickr(calendarButton, {
-            maxDate: today,
-            minDate: sixtyDaysAgo,
-            defaultDate: today,
-            disableMobile: "true",
-            dateFormat: "Y-m-d",
-            
-            onChange: function(selectedDates, dateStr) {
-                const selectedDate = selectedDates[0];
-                if (!selectedDate) return;
-                
-                if (dateStr === normalizeDate(currentDate)) return;
+        const handleDateSelection = (selectedDate, dateStr, revertSelection) => {
+            if (!selectedDate) return;
 
-                if (isToday(selectedDate)) {
-                    console.log("Cargando juego para hoy.");
-                    loadGameForDate(selectedDate);
-                } else {
-                    if (IS_PREMIUM_USER) {
-                        console.log("Usuario premium, cargando día anterior:", dateStr);
-                        loadGameForDate(selectedDate);
-                    } else {
-                        showToast('Solo los suscriptores pueden jugar días anteriores.');
-                        this.setDate(currentDate); 
-                    }
-                }
-            },
+            if (dateStr === normalizeDate(currentDate)) {
+                if (revertSelection) revertSelection();
+                return;
+            }
+
+            if (isToday(selectedDate)) {
+                console.log("Cargando juego para hoy.");
+                loadGameForDate(selectedDate);
+                return;
+            }
+
+            if (IS_PREMIUM_USER) {
+                console.log("Usuario premium, cargando día anterior:", dateStr);
+                loadGameForDate(selectedDate);
+                return;
+            }
+
+            showToast('Solo los suscriptores pueden jugar días anteriores.');
+            if (revertSelection) revertSelection();
+        };
+
+        if (typeof flatpickr === 'function') {
+            flatpickr(calendarButton, {
+                maxDate: today,
+                minDate: sixtyDaysAgo,
+                defaultDate: today,
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+
+                onChange(selectedDates, dateStr, instance) {
+                    const selectedDate = selectedDates[0];
+                    handleDateSelection(selectedDate, dateStr, () => instance.setDate(currentDate));
+                },
+            });
+            return;
+        }
+
+        console.warn('flatpickr no está disponible. Usando selector nativo de fechas.');
+        const fallbackInput = document.createElement('input');
+        fallbackInput.type = 'date';
+        fallbackInput.id = calendarButton.id;
+        fallbackInput.className = calendarButton.className || '';
+        fallbackInput.min = normalizeDate(sixtyDaysAgo);
+        fallbackInput.max = normalizeDate(today);
+        fallbackInput.value = normalizeDate(today);
+        fallbackInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Elegir otro día');
+
+        fallbackInput.style.position = 'absolute';
+        fallbackInput.style.opacity = '0';
+        fallbackInput.style.pointerEvents = 'none';
+        fallbackInput.style.width = '0';
+        fallbackInput.style.height = '0';
+
+        calendarButton.parentNode.insertBefore(fallbackInput, calendarButton.nextSibling);
+
+        calendarButton.addEventListener('click', () => {
+            if (typeof fallbackInput.showPicker === 'function') {
+                fallbackInput.showPicker();
+            } else {
+                fallbackInput.focus();
+            }
+        });
+
+        fallbackInput.addEventListener('change', event => {
+            const dateStr = event.target.value;
+            if (!dateStr) return;
+            const selectedDate = new Date(`${dateStr}T00:00:00`);
+            handleDateSelection(selectedDate, dateStr, () => {
+                event.target.value = normalizeDate(currentDate);
+            });
         });
     }
 
@@ -118,6 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWordLength = selection.length;
 
         resetBoard(currentWordLength);
+        await ensureHintData();
+        prepareHintsForWord(targetWord);
 
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
@@ -265,6 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRowIndex = 0;
         currentColIndex = 0;
         isGameActive = false;
+        clueUsedThisRow = false;
+        guessesMade = 0;
+
+        if (clueMessagesContainer) {
+            clueMessagesContainer.innerHTML = '';
+        }
     }
 
     /**
@@ -319,6 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+    function subtractDays(date, amount) {
+        const result = new Date(date);
+        result.setDate(result.getDate() - amount);
+        return result;
     }
 
 
@@ -450,6 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log("Word is valid, evaluating...");
+        guessesMade++;
         isGameActive = false; // Desactivar input durante la animación
         evaluateGuess(guess);
         updateClueAvailability();
@@ -587,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loadingToast) {
             loadingToast.remove();
         }
-        
+
         if (duration < 3000 && message !== 'Comprobando diccionario...') {
              const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
              existingToasts.forEach(t => t.remove());
@@ -615,6 +702,204 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.classList.remove('shake');
         void grid.offsetWidth; // Forzar reflow
         grid.classList.add('shake');
+    }
+
+    function updateClueAvailability() {
+        if (!clueButton || !clueMessagesContainer) return;
+
+        const cluesUnlocked = guessesMade >= 3;
+        const hasHintsLeft = nextHintIndex < hintsForCurrentWord.length;
+        const canUseClue = isGameActive && cluesUnlocked && hasHintsLeft && !clueUsedThisRow;
+
+        clueButton.disabled = !canUseClue;
+        clueButton.classList.toggle('active', canUseClue);
+
+        renderClueStatusMessage();
+    }
+
+    async function ensureHintData() {
+        if (hintDataLoaded) return true;
+
+        try {
+            const response = await fetch('../data/vocabulario-a1-completo.json');
+            if (!response.ok) throw new Error('No se pudo cargar el archivo de pistas');
+
+            const hintPayload = await response.json();
+            const categories = hintPayload.categorias_generales || [];
+
+            categories.forEach(category => {
+                const generalCategory = category.categoria_general || '';
+                const subcategories = category.subcategorias || [];
+
+                subcategories.forEach(subcategory => {
+                    const subcategoryName = subcategory.subcategoria || '';
+                    const vocabulary = subcategory.vocabulario || [];
+
+                    vocabulary.forEach(entry => {
+                        if (!entry || !entry.es) return;
+                        const normalizedWord = normalizeWord(entry.es.trim());
+                        const translation = entry.en || '';
+
+                        hintDictionary.set(normalizedWord, {
+                            generalCategory,
+                            subcategory: subcategoryName,
+                            translation
+                        });
+                    });
+                });
+            });
+
+            hintDataLoaded = true;
+            return true;
+        } catch (error) {
+            console.error('Error loading hint data:', error);
+            hintDataLoaded = false;
+            return false;
+        }
+    }
+
+    function prepareHintsForWord(word) {
+        hintsForCurrentWord = buildHintsForWord(word);
+        nextHintIndex = 0;
+        clueUsedThisRow = false;
+        guessesMade = 0;
+        renderClueStatusMessage();
+        updateClueAvailability();
+    }
+
+    function buildHintsForWord(word) {
+        const normalizedWord = normalizeWord(word);
+        const hintInfo = hintDictionary.get(normalizedWord) || null;
+
+        const hints = [];
+
+        const categoryHint = buildCategoryHint(hintInfo);
+        if (categoryHint) hints.push(categoryHint);
+
+        const descriptionHint = buildDescriptionHint(hintInfo, word);
+        if (descriptionHint) hints.push(descriptionHint);
+
+        const meaningHint = buildMeaningHint(hintInfo, word);
+        if (meaningHint) hints.push(meaningHint);
+
+        if (!hints.length) {
+            hints.push('We are still preparing clues for this word.');
+        }
+
+        while (hints.length < 3) {
+            hints.push(`Keep analyzing the ${word.length}-letter word to uncover more clues.`);
+        }
+
+        return hints;
+    }
+
+    function buildCategoryHint(info) {
+        if (!info) return 'Category hint: keep exploring everyday Spanish vocabulary.';
+
+        const parts = [];
+        if (info.generalCategory) parts.push(info.generalCategory);
+        if (info.subcategory && info.subcategory !== info.generalCategory) parts.push(info.subcategory);
+
+        const partOfSpeech = detectPartOfSpeech(info);
+
+        if (partOfSpeech && parts.length) {
+            return `Category hint: It's a ${partOfSpeech} from ${parts.join(' → ')}.`;
+        }
+
+        if (partOfSpeech) {
+            return `Category hint: It's a ${partOfSpeech}.`;
+        }
+
+        if (parts.length) {
+            return `Category hint: ${parts.join(' → ')}.`;
+        }
+
+        return 'Category hint: keep exploring everyday Spanish vocabulary.';
+    }
+
+    function detectPartOfSpeech(info) {
+        if (!info) return null;
+
+        const translation = (info.translation || '').toLowerCase();
+        if (translation.startsWith('to ')) return 'verb';
+
+        const subcategory = (info.subcategory || '').toLowerCase();
+        if (subcategory.includes('verb')) return 'verb';
+        if (subcategory.includes('sustantiv') || subcategory.includes('noun')) return 'noun';
+        if (subcategory.includes('adjetiv') || subcategory.includes('adjective')) return 'adjective';
+        if (subcategory.includes('adverb')) return 'adverb';
+        if (subcategory.includes('expresi')) return 'expression';
+
+        return null;
+    }
+
+    function buildDescriptionHint(info, word) {
+        if (!info) {
+            return `Description hint: Think about when you might use a word like this ${word.length}-letter answer.`;
+        }
+
+        const translation = (info.translation || '').replace(/\s+/g, ' ').trim();
+        const cleanedTranslation = translation.replace(/\([^\)]*\)/g, '').trim();
+        const lower = cleanedTranslation.toLowerCase();
+
+        if (lower.startsWith('to ')) {
+            const verbAction = cleanedTranslation.slice(3).trim();
+            return `Description hint: It's an action verb you use when you want to ${verbAction}.`;
+        }
+
+        if (lower.startsWith('a ') || lower.startsWith('an ') || lower.startsWith('the ')) {
+            const noun = cleanedTranslation.replace(/^(a|an|the)\s+/i, '').trim();
+            return `Description hint: It's something connected to ${noun}.`;
+        }
+
+        if (cleanedTranslation) {
+            return `Description hint: It's closely related to ${cleanedTranslation.toLowerCase()}.`;
+        }
+
+        if (info.subcategory) {
+            return `Description hint: It's common in the context of ${info.subcategory.toLowerCase()}.`;
+        }
+
+        return `Description hint: Think about when you might use a word like this ${word.length}-letter answer.`;
+    }
+
+    function buildMeaningHint(info, word) {
+        if (info && info.translation) {
+            return `Meaning hint: This word means "${info.translation}" in Spanish.`;
+        }
+
+        return `Meaning hint: We use this ${word.length}-letter word for everyday Spanish conversations.`;
+    }
+
+    function renderClueStatusMessage() {
+        if (!clueMessagesContainer) return;
+
+        let statusMessage = clueMessagesContainer.querySelector('[data-role="clue-status"]');
+        if (!statusMessage) {
+            statusMessage = document.createElement('p');
+            statusMessage.dataset.role = 'clue-status';
+            clueMessagesContainer.prepend(statusMessage);
+        } else if (clueMessagesContainer.firstChild !== statusMessage) {
+            clueMessagesContainer.prepend(statusMessage);
+        }
+
+        statusMessage.textContent = getClueStatusText();
+    }
+
+    function getClueStatusText() {
+        if (guessesMade === 0) return 'Try 3 words to get a clue';
+        if (guessesMade === 1) return 'Try 2 more words to get a clue';
+        if (guessesMade === 2) return 'Try 1 more word to get a clue';
+
+        if (nextHintIndex >= hintsForCurrentWord.length) {
+            return 'All available clues have been used for this game.';
+        }
+
+        if (clueUsedThisRow) {
+            return 'You already used your clue for this attempt. Try another word to unlock the next one.';
+        }
+
+        return `Clue ${nextHintIndex + 1} is ready! Press the button to reveal it.`;
     }
 
     function danceWin() {

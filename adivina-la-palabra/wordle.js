@@ -48,11 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let clueUsedThisRow = false;
     let guessesMade = 0;
 
+    function sanitizeWordForHints(word) {
+        if (typeof word !== 'string') return '';
+        return normalizeWord(word).replace(/[^A-ZÑ]/g, '');
+    }
+
+    function clearClueMessages() {
+        if (clueMessagesContainer) {
+            clueMessagesContainer.innerHTML = '';
+        }
+    }
+
     function handleClueClick() {
         if (!clueButton || clueButton.disabled) return;
         if (!clueMessagesContainer) return;
 
         if (nextHintIndex >= hintsForCurrentWord.length) {
+            clueUsedThisRow = true;
             updateClueAvailability();
             return;
         }
@@ -61,26 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
         nextHintIndex++;
         clueUsedThisRow = true;
 
+        const defaultMessage = clueMessagesContainer.querySelector('.clue-message-default');
+        if (defaultMessage) {
+            defaultMessage.remove();
+        }
+
         const hintMessage = document.createElement('p');
         hintMessage.classList.add('clue-message');
         hintMessage.textContent = hintText;
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
-    }
-
-    function handleClueClick() {
-        if (!clueButton || clueButton.disabled) return;
-
-        clueUsedThisRow = true;
-        updateClueAvailability();
-
-        if (!clueMessagesContainer) return;
-
-        const message = document.createElement('p');
-        message.textContent = 'Clue feature coming soon!';
-        clueMessagesContainer.innerHTML = '';
-        clueMessagesContainer.appendChild(message);
     }
 
     // --- INICIALIZACIÓN ---
@@ -204,8 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWordLength = selection.length;
 
         resetBoard(currentWordLength);
-        await ensureHintData();
-        prepareHintsForWord(targetWord);
+        const hintsReady = await ensureHintData();
+        prepareHintsForWord(targetWord, hintsReady);
 
         console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
 
@@ -301,6 +304,111 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Error al iniciar el juego.');
             return false;
         }
+    }
+
+    async function ensureHintData() {
+        if (hintDataLoaded) {
+            return true;
+        }
+
+        try {
+            const response = await fetch('../data/vocabulario-a1-completo.json');
+            if (!response.ok) {
+                throw new Error(`No se pudo cargar ../data/vocabulario-a1-completo.json`);
+            }
+
+            const rawData = await response.json();
+            if (!rawData || !Array.isArray(rawData.categorias_generales)) {
+                throw new Error('Formato de datos de pistas no válido.');
+            }
+
+            rawData.categorias_generales.forEach(category => {
+                if (!category || !Array.isArray(category.subcategorias)) return;
+
+                category.subcategorias.forEach(subcategory => {
+                    if (!subcategory || !Array.isArray(subcategory.vocabulario)) return;
+
+                    subcategory.vocabulario.forEach(entry => {
+                        if (!entry || typeof entry !== 'object') return;
+
+                        const spanishVariants = extractSpanishVariants(entry.es);
+                        if (!spanishVariants.length) return;
+
+                        const hints = buildHintsForEntry(entry);
+                        if (!hints.length) return;
+
+                        spanishVariants.forEach(variant => {
+                            const normalized = sanitizeWordForHints(variant);
+                            if (!normalized) return;
+                            if (normalized.length < MIN_WORD_LENGTH || normalized.length > MAX_WORD_LENGTH) return;
+
+                            const existingHints = hintDictionary.get(normalized) || [];
+                            hints.forEach(hint => {
+                                if (!existingHints.includes(hint)) {
+                                    existingHints.push(hint);
+                                }
+                            });
+
+                            if (existingHints.length) {
+                                hintDictionary.set(normalized, existingHints);
+                            }
+                        });
+                    });
+                });
+            });
+
+            hintDataLoaded = true;
+            console.log(`Loaded hints for ${hintDictionary.size} words.`);
+            return true;
+        } catch (error) {
+            console.error('Error al cargar las pistas:', error);
+            return false;
+        }
+    }
+
+    function extractSpanishVariants(value) {
+        if (typeof value !== 'string') return [];
+        const matches = value.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g);
+        return matches ? matches : [];
+    }
+
+    function buildHintsForEntry(entry) {
+        const hints = [];
+        if (entry && typeof entry.en === 'string' && entry.en.trim()) {
+            hints.push(`Translation: ${entry.en.trim()}`);
+        }
+        if (entry && typeof entry.ejemplo === 'string' && entry.ejemplo.trim()) {
+            hints.push(`Example: ${entry.ejemplo.trim()}`);
+        }
+        if (entry && typeof entry.contexto === 'string' && entry.contexto.trim()) {
+            hints.push(`Context: ${entry.contexto.trim()}`);
+        }
+        return hints;
+    }
+
+    function prepareHintsForWord(word, hintsReady) {
+        hintsForCurrentWord = [];
+        nextHintIndex = 0;
+        clearClueMessages();
+
+        if (!word) {
+            updateClueAvailability();
+            return;
+        }
+
+        if (hintsReady && hintDictionary.size) {
+            const normalized = sanitizeWordForHints(word);
+            const storedHints = hintDictionary.get(normalized);
+            if (Array.isArray(storedHints) && storedHints.length) {
+                hintsForCurrentWord = storedHints.slice();
+            }
+        }
+
+        if (!hintsForCurrentWord.length) {
+            hintsForCurrentWord = ['No hints available for this word yet.'];
+        }
+
+        updateClueAvailability();
     }
 
     /**
@@ -722,12 +830,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const canUseClue = isGameActive && !clueUsedThisRow;
         clueButton.disabled = !canUseClue;
+        clueButton.classList.toggle('active', canUseClue);
 
         if (!clueMessagesContainer) return;
         if (!canUseClue) return;
 
         if (!clueMessagesContainer.hasChildNodes()) {
             const defaultMessage = document.createElement('p');
+            defaultMessage.classList.add('clue-message', 'clue-message-default');
             defaultMessage.textContent = 'Press the clue button to get a hint.';
             clueMessagesContainer.appendChild(defaultMessage);
         }

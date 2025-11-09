@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
+    const clueButton = document.querySelector('.clue-button');
+    const clueMessagesContainer = document.querySelector('.clue-messages');
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -44,6 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
+
+    function handleClueClick() {
+        if (!clueButton || clueButton.disabled) return;
+
+        clueUsedThisRow = true;
+        updateClueAvailability();
+
+        if (!clueMessagesContainer) return;
+
+        const message = document.createElement('p');
+        message.textContent = 'Clue feature coming soon!';
+        clueMessagesContainer.innerHTML = '';
+        clueMessagesContainer.appendChild(message);
+    }
 
     // --- INICIALIZACIÓN ---
 
@@ -265,6 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRowIndex = 0;
         currentColIndex = 0;
         isGameActive = false;
+        clueUsedThisRow = false;
+
+        if (clueMessagesContainer) {
+            clueMessagesContainer.innerHTML = '';
+        }
     }
 
     /**
@@ -587,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loadingToast) {
             loadingToast.remove();
         }
-        
+
         if (duration < 3000 && message !== 'Comprobando diccionario...') {
              const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
              existingToasts.forEach(t => t.remove());
@@ -615,6 +636,22 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.classList.remove('shake');
         void grid.offsetWidth; // Forzar reflow
         grid.classList.add('shake');
+    }
+
+    function updateClueAvailability() {
+        if (!clueButton) return;
+
+        const canUseClue = isGameActive && !clueUsedThisRow;
+        clueButton.disabled = !canUseClue;
+
+        if (!clueMessagesContainer) return;
+        if (!canUseClue) return;
+
+        if (!clueMessagesContainer.hasChildNodes()) {
+            const defaultMessage = document.createElement('p');
+            defaultMessage.textContent = 'Press the clue button to get a hint.';
+            clueMessagesContainer.appendChild(defaultMessage);
+        }
     }
 
     function danceWin() {

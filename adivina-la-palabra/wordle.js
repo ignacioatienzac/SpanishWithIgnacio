@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const clueNumber = nextHintIndex + 1;
         const hintText = hintsForCurrentWord[nextHintIndex];
         nextHintIndex++;
         clueUsedThisRow = true;
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hintMessage = document.createElement('p');
         hintMessage.classList.add('clue-message');
-        hintMessage.textContent = hintText;
+        hintMessage.textContent = `Clue ${clueNumber}: ${hintText}`;
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
@@ -813,13 +814,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!hintsRemaining) {
-            if (existingDefault) {
-                existingDefault.remove();
-            }
-            return;
-        }
-
-        if (!canUseClue) {
             if (existingDefault) {
                 existingDefault.remove();
             }

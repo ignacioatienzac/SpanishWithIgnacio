@@ -820,13 +820,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (!canUseClue) {
-            if (existingDefault) {
-                existingDefault.remove();
-            }
-            return;
-        }
-
         const promptText = `Press "GET A CLUE" to see hint ${nextHintIndex + 1}.`;
         if (existingDefault) {
             existingDefault.textContent = promptText;

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_TRIES = 6;
     const MIN_WORD_LENGTH = 3;
     const MAX_WORD_LENGTH = 6;
+    const TRIES_BEFORE_HINTS = 3;
     
     // Simula que el usuario es premium (para probar el calendario)
     const IS_PREMIUM_USER = true; 
@@ -69,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const clueNumber = nextHintIndex + 1;
         const hintText = hintsForCurrentWord[nextHintIndex];
         nextHintIndex++;
         clueUsedThisRow = true;
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hintMessage = document.createElement('p');
         hintMessage.classList.add('clue-message');
-        hintMessage.textContent = hintText;
+        hintMessage.textContent = `Clue ${clueNumber}: ${hintText}`;
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
@@ -311,79 +313,35 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         }
 
-        try {
-            const response = await fetch('../data/vocabulario-a1-completo.json');
-            if (!response.ok) {
-                throw new Error(`No se pudo cargar ../data/vocabulario-a1-completo.json`);
-            }
+        const palabrasFuente = typeof baseDePalabras !== 'undefined'
+            ? baseDePalabras
+            : (typeof window !== 'undefined' ? window.baseDePalabras : undefined);
 
-            const rawData = await response.json();
-            if (!rawData || !Array.isArray(rawData.categorias_generales)) {
-                throw new Error('Formato de datos de pistas no válido.');
-            }
-
-            rawData.categorias_generales.forEach(category => {
-                if (!category || !Array.isArray(category.subcategorias)) return;
-
-                category.subcategorias.forEach(subcategory => {
-                    if (!subcategory || !Array.isArray(subcategory.vocabulario)) return;
-
-                    subcategory.vocabulario.forEach(entry => {
-                        if (!entry || typeof entry !== 'object') return;
-
-                        const spanishVariants = extractSpanishVariants(entry.es);
-                        if (!spanishVariants.length) return;
-
-                        const hints = buildHintsForEntry(entry);
-                        if (!hints.length) return;
-
-                        spanishVariants.forEach(variant => {
-                            const normalized = sanitizeWordForHints(variant);
-                            if (!normalized) return;
-                            if (normalized.length < MIN_WORD_LENGTH || normalized.length > MAX_WORD_LENGTH) return;
-
-                            const existingHints = hintDictionary.get(normalized) || [];
-                            hints.forEach(hint => {
-                                if (!existingHints.includes(hint)) {
-                                    existingHints.push(hint);
-                                }
-                            });
-
-                            if (existingHints.length) {
-                                hintDictionary.set(normalized, existingHints);
-                            }
-                        });
-                    });
-                });
-            });
-
-            hintDataLoaded = true;
-            console.log(`Loaded hints for ${hintDictionary.size} words.`);
-            return true;
-        } catch (error) {
-            console.error('Error al cargar las pistas:', error);
+        if (!Array.isArray(palabrasFuente)) {
+            console.error('No se encontró la base de pistas en palabras.js.');
             return false;
         }
-    }
 
-    function extractSpanishVariants(value) {
-        if (typeof value !== 'string') return [];
-        const matches = value.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g);
-        return matches ? matches : [];
-    }
+        palabrasFuente.forEach(entry => {
+            if (!entry || typeof entry.palabra !== 'string') return;
 
-    function buildHintsForEntry(entry) {
-        const hints = [];
-        if (entry && typeof entry.en === 'string' && entry.en.trim()) {
-            hints.push(`Translation: ${entry.en.trim()}`);
-        }
-        if (entry && typeof entry.ejemplo === 'string' && entry.ejemplo.trim()) {
-            hints.push(`Example: ${entry.ejemplo.trim()}`);
-        }
-        if (entry && typeof entry.contexto === 'string' && entry.contexto.trim()) {
-            hints.push(`Context: ${entry.contexto.trim()}`);
-        }
-        return hints;
+            const normalized = sanitizeWordForHints(entry.palabra);
+            if (!normalized) return;
+            if (normalized.length < MIN_WORD_LENGTH || normalized.length > MAX_WORD_LENGTH) return;
+
+            const hints = [entry.pista1, entry.pista2, entry.pista3]
+                .filter(text => typeof text === 'string' && text.trim())
+                .map(text => text.trim());
+
+            if (!hints.length) return;
+
+            const limitedHints = hints.slice(0, 3);
+            hintDictionary.set(normalized, limitedHints);
+        });
+
+        hintDataLoaded = true;
+        console.log(`Loaded hints for ${hintDictionary.size} words from palabras.js.`);
+        return true;
     }
 
     function prepareHintsForWord(word, hintsReady) {
@@ -828,17 +786,56 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateClueAvailability() {
         if (!clueButton) return;
 
-        const canUseClue = isGameActive && !clueUsedThisRow;
+        const hintsUnlocked = currentRowIndex >= TRIES_BEFORE_HINTS;
+        const hintsRemaining = nextHintIndex < hintsForCurrentWord.length;
+        const canUseClue = hintsUnlocked && hintsRemaining && isGameActive && !clueUsedThisRow;
+
         clueButton.disabled = !canUseClue;
         clueButton.classList.toggle('active', canUseClue);
+        clueButton.textContent = canUseClue ? 'GET A CLUE' : (hintsUnlocked ? 'GET A CLUE' : 'try more words to activate clues');
 
         if (!clueMessagesContainer) return;
-        if (!canUseClue) return;
 
-        if (!clueMessagesContainer.hasChildNodes()) {
+        const existingDefault = clueMessagesContainer.querySelector('.clue-message-default');
+
+        if (!hintsUnlocked) {
+            if (existingDefault) {
+                existingDefault.textContent = 'try more words to activate clues';
+                existingDefault.dataset.state = 'locked';
+            } else {
+                clueMessagesContainer.innerHTML = '';
+                const lockedMessage = document.createElement('p');
+                lockedMessage.classList.add('clue-message', 'clue-message-default');
+                lockedMessage.dataset.state = 'locked';
+                lockedMessage.textContent = 'try more words to activate clues';
+                clueMessagesContainer.appendChild(lockedMessage);
+            }
+            return;
+        }
+
+        if (!hintsRemaining) {
+            if (existingDefault) {
+                existingDefault.remove();
+            }
+            return;
+        }
+
+        if (!canUseClue) {
+            if (existingDefault) {
+                existingDefault.remove();
+            }
+            return;
+        }
+
+        const promptText = `Press "GET A CLUE" to see hint ${nextHintIndex + 1}.`;
+        if (existingDefault) {
+            existingDefault.textContent = promptText;
+            existingDefault.dataset.state = 'unlocked';
+        } else {
             const defaultMessage = document.createElement('p');
             defaultMessage.classList.add('clue-message', 'clue-message-default');
-            defaultMessage.textContent = 'Press the clue button to get a hint.';
+            defaultMessage.dataset.state = 'unlocked';
+            defaultMessage.textContent = promptText;
             clueMessagesContainer.appendChild(defaultMessage);
         }
     }

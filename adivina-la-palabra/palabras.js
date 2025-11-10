@@ -476,8 +476,7 @@ const baseDePalabras = [
   {
     palabra: "COCINAR",
     pista1: "Category: Verb",
-    pista2: "The action of preparing food,
- often using heat.",
+    pista2: "The action of preparing food, often using heat.",
     pista3: "This word means 'To cook' in English."
   },
   {

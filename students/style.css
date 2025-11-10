@@ -1,0 +1,129 @@
+.students-hero {
+    padding: 3rem 2rem 1rem;
+    text-align: center;
+}
+
+.students-hero__container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.students-hero__container h1 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+}
+
+.students-hero__container p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.tabs-section {
+    padding: 2rem;
+}
+
+.tabs-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    border: 2px solid var(--secondary-color);
+    background: transparent;
+    color: var(--secondary-color);
+    font-weight: 700;
+    padding: 0.6rem 1.8rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.tab-button:hover,
+.tab-button:focus {
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.tab-button.active,
+.tab-button[aria-selected="true"] {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.tab-panels {
+    width: 100%;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+}
+
+.resource-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--secondary-color);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.resource-card.active:hover,
+.resource-card.active:focus {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.resource-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.resource-card.disabled::after {
+    content: "Próximamente";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .students-hero__container h1 {
+        font-size: 2rem;
+    }
+
+    .tab-button {
+        padding: 0.5rem 1.2rem;
+    }
+}

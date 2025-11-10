@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish with Ignacio - Students</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="index.html" class="active">Students</a></li>
+                    <li><a href="#">Teachers</a></li>
+                    <li><a href="../adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="students-hero">
+            <div class="students-hero__container">
+                <h1>Recursos para estudiantes</h1>
+                <p>Selecciona tu nivel para acceder a actividades y materiales personalizados.</p>
+            </div>
+        </section>
+
+        <section class="tabs-section">
+            <div class="tabs-container">
+                <div class="tab-buttons" role="tablist" aria-label="Student levels">
+                    <button type="button" class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-A1" id="tab-button-A1" data-tab="A1">A1</button>
+                    <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-A2" id="tab-button-A2" data-tab="A2">A2</button>
+                    <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-B1" id="tab-button-B1" data-tab="B1">B1</button>
+                    <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-B2" id="tab-button-B2" data-tab="B2">B2</button>
+                    <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-C1" id="tab-button-C1" data-tab="C1">C1</button>
+                    <button type="button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-C2" id="tab-button-C2" data-tab="C2">C2</button>
+                </div>
+
+                <div class="tab-panels">
+                    <div class="tab-panel active" id="tab-A1" role="tabpanel" aria-labelledby="tab-button-A1" data-tab-content="A1">
+                        <div class="resource-grid">
+                            <a class="resource-card active" href="#">Grammar</a>
+                            <a class="resource-card active" href="#">Listening</a>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tab-A2" role="tabpanel" aria-labelledby="tab-button-A2" data-tab-content="A2" hidden>
+                        <div class="resource-grid">
+                            <div class="resource-card disabled" aria-disabled="true">Grammar</div>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Listening</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tab-B1" role="tabpanel" aria-labelledby="tab-button-B1" data-tab-content="B1" hidden>
+                        <div class="resource-grid">
+                            <div class="resource-card disabled" aria-disabled="true">Grammar</div>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Listening</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tab-B2" role="tabpanel" aria-labelledby="tab-button-B2" data-tab-content="B2" hidden>
+                        <div class="resource-grid">
+                            <div class="resource-card disabled" aria-disabled="true">Grammar</div>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Listening</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tab-C1" role="tabpanel" aria-labelledby="tab-button-C1" data-tab-content="C1" hidden>
+                        <div class="resource-grid">
+                            <div class="resource-card disabled" aria-disabled="true">Grammar</div>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Listening</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tab-C2" role="tabpanel" aria-labelledby="tab-button-C2" data-tab-content="C2" hidden>
+                        <div class="resource-grid">
+                            <div class="resource-card disabled" aria-disabled="true">Grammar</div>
+                            <div class="resource-card disabled" aria-disabled="true">Vocabulary</div>
+                            <div class="resource-card disabled" aria-disabled="true">Listening</div>
+                            <div class="resource-card disabled" aria-disabled="true">Reading</div>
+                            <div class="resource-card disabled" aria-disabled="true">Writing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

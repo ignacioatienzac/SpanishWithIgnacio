@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             : (typeof window !== 'undefined' ? window.baseDePalabras : undefined);
 
         if (!Array.isArray(palabrasFuente)) {
-            console.error('No se encontró la base de pistas en palabras.js.');
+            console.error('No se encontró la base de pistas en pistas-a1.js.');
             return false;
         }
 
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         hintDataLoaded = true;
-        console.log(`Loaded hints for ${hintDictionary.size} words from palabras.js.`);
+        console.log(`Loaded hints for ${hintDictionary.size} words from pistas-a1.js.`);
         return true;
     }
 

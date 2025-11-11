@@ -456,8 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof word !== 'string') return '';
         return word
             .toUpperCase()
+            .replace(/Ñ/g, '__ENYE__')
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/__ENYE__/g, 'Ñ');
     }
     
     /**

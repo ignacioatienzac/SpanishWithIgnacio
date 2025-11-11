@@ -109,15 +109,6 @@
     opacity: 0.6;
 }
 
-.resource-card.disabled::after {
-    content: "Próximamente";
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 400;
-    margin-top: 0.5rem;
-    color: var(--text-color);
-}
-
 @media (max-width: 768px) {
     .students-hero__container h1 {
         font-size: 2rem;

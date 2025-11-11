@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish with Ignacio - Games</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="../script.js" defer></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../students/index.html">Students</a></li>
+                    <li><a href="../profesores/index.html">Teachers</a></li>
+                    <li><a href="index.html" class="active">Games</a></li>
+                    <li><a href="../adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-text-container">
+                    <h2>Juegos para aprender español</h2>
+                    <p>Explora actividades interactivas que refuerzan vocabulario, gramática y comprensión auditiva mientras te diviertes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="wordle-section">
+            <div class="wordle-section__intro">
+                <h3>Selecciona un juego</h3>
+                <p>Más experiencias jugables estarán disponibles pronto. Mientras tanto, disfruta de nuestras propuestas destacadas.</p>
+            </div>
+
+            <div class="wordle-level-grid" role="list">
+                <a class="wordle-level wordle-level--a1" href="../adivina-la-palabra/index.html" role="listitem">
+                    <span class="wordle-level__label">Guess the Word</span>
+                    <span class="wordle-level__caption">Juego diario de vocabulario</span>
+                </a>
+                <button class="wordle-level wordle-level--a2 is-disabled" type="button" disabled aria-disabled="true" title="Disponible próximamente" role="listitem">
+                    <span class="wordle-level__label">Próximamente</span>
+                    <span class="wordle-level__caption">Nuevo juego en camino</span>
+                </button>
+                <button class="wordle-level wordle-level--b1 is-disabled" type="button" disabled aria-disabled="true" title="Disponible próximamente" role="listitem">
+                    <span class="wordle-level__label">Próximamente</span>
+                    <span class="wordle-level__caption">Sigue atento a las novedades</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

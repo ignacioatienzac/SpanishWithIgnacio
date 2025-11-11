@@ -52,12 +52,12 @@
             </div>
 
             <div class="level-selector">
-                <button class="level-button level-a1" data-level="A1">A1</button>
-                <button class="level-button level-a2" data-level="A2">A2</button>
-                <button class="level-button level-b1" data-level="B1">B1</button>
-                <button class="level-button level-b2" data-level="B2">B2</button>
-                <button class="level-button level-c1" data-level="C1">C1</button>
-                <button class="level-button level-c2" data-level="C2">C2</button>
+                <button class="level-button level-a1" data-level="A1" type="button">A1</button>
+                <button class="level-button level-a2" data-level="A2" type="button">A2</button>
+                <button class="level-button level-b1" data-level="B1" type="button" disabled aria-disabled="true" title="Disponible próximamente">B1</button>
+                <button class="level-button level-b2" data-level="B2" type="button" disabled aria-disabled="true" title="Disponible próximamente">B2</button>
+                <button class="level-button level-c1" data-level="C1" type="button" disabled aria-disabled="true" title="Disponible próximamente">C1</button>
+                <button class="level-button level-c2" data-level="C2" type="button" disabled aria-disabled="true" title="Disponible próximamente">C2</button>
             </div>
         </section>
     </main>
@@ -66,8 +66,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             const levelButtons = document.querySelectorAll('.level-button');
             levelButtons.forEach(button => {
+                if (button.disabled || button.getAttribute('aria-disabled') === 'true') {
+                    return;
+                }
+
                 button.addEventListener('click', () => {
                     const level = button.dataset.level;
+                    if (!level) return;
                     // Redirige a game.html pasando el nivel como parámetro
                     window.location.href = `game.html?level=${level}`;
                 });

@@ -111,6 +111,20 @@
 .level-button.level-c1 { background-color: var(--color-c1); }
 .level-button.level-c2 { background-color: var(--color-c2); }
 
+.level-button:disabled,
+.level-button[aria-disabled="true"] {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.level-button:disabled:hover,
+.level-button[aria-disabled="true"]:hover {
+    transform: none;
+    box-shadow: none;
+}
+
 
 .level-list {
     list-style-type: none;

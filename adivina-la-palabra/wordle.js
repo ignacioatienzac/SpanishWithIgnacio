@@ -10,7 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const TRIES_BEFORE_HINTS = 3;
     
     // Simula que el usuario es premium (para probar el calendario)
-    const IS_PREMIUM_USER = true; 
+    const IS_PREMIUM_USER = true;
+
+    const LEVEL_FILE_MAP = {
+        A1: '../data/wordle-a1-palabras.json',
+        A2: '../data/wordle-a2-palabras.json',
+    };
+    const SUPPORTED_LEVELS = Object.keys(LEVEL_FILE_MAP);
+
 
     // --- SELECTORES DEL DOM ---
     const gameContainer = document.querySelector('.game-container');
@@ -36,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let combinedAnswerList = [];
     let currentWordLength = 5;
     let wordDataLoaded = false;
+    let loadedLevel = null;
     let targetWord = "";
     let currentRowIndex = 0;
     let currentColIndex = 0;
@@ -93,7 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeGame() {
         console.log("Initializing game setup...");
         const urlParams = new URLSearchParams(window.location.search);
-        currentLevel = urlParams.get('level') || 'A1';
+        const requestedLevel = (urlParams.get('level') || 'A1').toUpperCase();
+        if (!SUPPORTED_LEVELS.includes(requestedLevel)) {
+            showToast('Ese nivel aún no está disponible. Mostrando nivel A1.');
+            currentLevel = 'A1';
+        } else {
+            currentLevel = requestedLevel;
+        }
+
         levelTitle.textContent = `Level ${currentLevel}`;
         
         setupCalendar();
@@ -223,9 +238,20 @@ document.addEventListener('DOMContentLoaded', () => {
      * Carga las listas de palabras (validación y respuestas) desde los archivos
      */
     async function loadWordLists(levelIdentifier) {
-        console.log(`Loading word lists for ${levelIdentifier}...`);
+        const normalizedLevel = (typeof levelIdentifier === 'string' ? levelIdentifier.toUpperCase() : 'A1');
+        console.log(`Loading word lists for ${normalizedLevel}...`);
 
-        const answerListFilename = `../data/wordle-a1-palabras.json`;
+        if (wordDataLoaded && loadedLevel === normalizedLevel) {
+            return true;
+        }
+
+        const answerListFilename = LEVEL_FILE_MAP[normalizedLevel];
+        if (!answerListFilename) {
+            console.error(`No se encontró un archivo de respuestas para el nivel ${normalizedLevel}.`);
+            showToast('Ese nivel aún no está disponible.');
+            return false;
+        }
+
         const validationFiles = [
             { length: 3, filename: `../data/03.json` },
             { length: 4, filename: `../data/04.json` },
@@ -249,6 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map(word => normalizeWord(word.trim()))
                 .filter(word => word.length >= MIN_WORD_LENGTH && word.length <= MAX_WORD_LENGTH);
 
+            const uniqueNormalizedAnswers = Array.from(new Set(normalizedAnswers));
+
             answerListsByLength.clear();
             validationSetsByLength.clear();
 
@@ -256,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 answerListsByLength.set(length, []);
             }
 
-            normalizedAnswers.forEach(word => {
+            uniqueNormalizedAnswers.forEach(word => {
                 const length = word.length;
                 if (answerListsByLength.has(length)) {
                     answerListsByLength.get(length).push(word);
@@ -282,8 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Lista de validación (${length} letras) cargada:`, validationSet.size, "palabras");
             });
 
-            combinedAnswerList = normalizedAnswers.filter(word => validationSetsByLength.has(word.length));
-            combinedAnswerList = shuffleArrayDeterministic(Array.from(new Set(combinedAnswerList)));
+            combinedAnswerList = uniqueNormalizedAnswers.filter(word => validationSetsByLength.has(word.length));
+            combinedAnswerList = shuffleArrayDeterministic(combinedAnswerList, getSeedForLevel(normalizedLevel));
 
             if (combinedAnswerList.length === 0) {
                 showToast('No se encontraron palabras de respuesta.');
@@ -299,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Total de palabras disponibles:', combinedAnswerList.length);
 
             wordDataLoaded = true;
+            loadedLevel = normalizedLevel;
             return true; // Éxito
 
         } catch (error) {
@@ -506,6 +535,19 @@ document.addEventListener('DOMContentLoaded', () => {
             [result[i], result[j]] = [result[j], result[i]];
         }
         return result;
+    }
+
+    function getSeedForLevel(levelKey) {
+        if (typeof levelKey !== 'string' || !levelKey.length) {
+            return 0x1234ABCD;
+        }
+
+        let seed = 0x1234ABCD;
+        for (let i = 0; i < levelKey.length; i++) {
+            seed = ((seed << 5) - seed + levelKey.charCodeAt(i)) >>> 0; // seed * 31 + charCode
+        }
+
+        return seed >>> 0;
     }
 
 

@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spanish with Ignacio - Games</title>
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
     <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -30,7 +32,27 @@
         </div>
     </header>
 
-    <main></main>
+    <main>
+        <section class="games-showcase">
+            <div class="games-grid" role="list">
+                <a class="game-card game-card--guess game-card--active" href="../adivina-la-palabra/index.html" role="listitem">
+                    <div class="game-card__image" aria-hidden="true"></div>
+                    <div class="game-card__info">
+                        <h2 class="game-card__title">Guess the Word</h2>
+                        <p class="game-card__description">Challenge yourself with a Wordle-style game to grow your Spanish vocabulary level by level.</p>
+                    </div>
+                </a>
+                <a class="game-card game-card--slate game-card--disabled" href="#" data-state="disabled" data-message="This game will be available soon." role="listitem">
+                    <div class="game-card__image" aria-hidden="true"></div>
+                    <div class="game-card__info">
+                        <h2 class="game-card__title">Coming Soon</h2>
+                        <p class="game-card__description">Stay tuned for our next interactive challenge to keep practicing your Spanish.</p>
+                    </div>
+                </a>
+            </div>
+            <p class="games-message" data-role="games-message" aria-live="polite"></p>
+        </section>
+    </main>
 
 </body>
 </html>

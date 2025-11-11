@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish with Ignacio - Games</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../students/index.html">Students</a></li>
+                    <li><a href="../profesores/index.html">Teachers</a></li>
+                    <li><a href="index.html" class="active">Games</a></li>
+                    <li><a href="../adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-text-container">
+                    <h2>Juegos para aprender español</h2>
+                    <p>Explora actividades interactivas que refuerzan vocabulario, gramática y comprensión auditiva mientras te diviertes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="games-showcase" aria-labelledby="games-list-heading">
+            <div class="games-showcase__intro">
+                <h3 id="games-list-heading">Selecciona un juego</h3>
+                <p>Más experiencias jugables estarán disponibles pronto. Mientras tanto, disfruta de nuestras propuestas destacadas.</p>
+            </div>
+
+            <div class="games-grid">
+                <a class="game-card game-card--guess game-card--active" href="../adivina-la-palabra/index.html" data-state="active">
+                    <div class="game-card__image" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="6" width="60" height="60" rx="16" fill="url(#guessGradient)"/>
+                            <path d="M37 23C31.477 23 27 27.477 27 33C27 38.523 31.477 43 37 43C37.552 43 38 43.448 38 44V46.5C38 47.881 39.119 49 40.5 49H43.5C44.881 49 46 47.881 46 46.5V44C46 43.448 46.448 43 47 43C52.523 43 57 38.523 57 33C57 27.477 52.523 23 47 23H37Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="guessGradient" x1="6" y1="6" x2="66" y2="66" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#F97316"/>
+                                    <stop offset="1" stop-color="#EF4444"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="game-card__info">
+                        <h3 class="game-card__title">Guess the Word</h3>
+                        <p class="game-card__description">Challenge your vocabulary by deducing the hidden word with limited clues.</p>
+                    </div>
+                </a>
+
+                <div class="game-card game-card--teal game-card--disabled" role="button" tabindex="0" aria-disabled="true" data-state="disabled" data-message="New puzzles are coming soon. Stay tuned!" title="Disponible próximamente">
+                    <div class="game-card__image" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="6" width="60" height="60" rx="16" fill="url(#tealGradient)"/>
+                            <path d="M33 25H27C25.895 25 25 25.895 25 27V33C25 34.105 25.895 35 27 35H33C34.105 35 35 34.105 35 33V27C35 25.895 34.105 25 33 25Z" fill="white"/>
+                            <path d="M39 37H45C46.105 37 47 37.895 47 39V45C47 46.105 46.105 47 45 47H39C37.895 47 37 46.105 37 45V39C37 37.895 37.895 37 39 37Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="tealGradient" x1="6" y1="6" x2="66" y2="66" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#2DD4BF"/>
+                                    <stop offset="1" stop-color="#0EA5E9"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="game-card__info">
+                        <h3 class="game-card__title">Title</h3>
+                        <p class="game-card__description">Explanation</p>
+                    </div>
+                </div>
+
+                <div class="game-card game-card--violet game-card--disabled" role="button" tabindex="0" aria-disabled="true" data-state="disabled" data-message="We are crafting fresh challenges for you." title="Disponible próximamente">
+                    <div class="game-card__image" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="6" width="60" height="60" rx="16" fill="url(#violetGradient)"/>
+                            <path d="M37 21C35.895 21 35 21.895 35 23V31H27C25.895 31 25 31.895 25 33V39C25 40.105 25.895 41 27 41H35V49C35 50.105 35.895 51 37 51H43C44.105 51 45 50.105 45 49V41H53C54.105 41 55 40.105 55 39V33C55 31.895 54.105 31 53 31H45V23C45 21.895 44.105 21 43 21H37Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="violetGradient" x1="6" y1="6" x2="66" y2="66" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#8B5CF6"/>
+                                    <stop offset="1" stop-color="#EC4899"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="game-card__info">
+                        <h3 class="game-card__title">Title</h3>
+                        <p class="game-card__description">Explanation</p>
+                    </div>
+                </div>
+
+                <div class="game-card game-card--slate game-card--disabled" role="button" tabindex="0" aria-disabled="true" data-state="disabled" data-message="Soon you will unlock another interactive activity." title="Disponible próximamente">
+                    <div class="game-card__image" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="6" width="60" height="60" rx="16" fill="url(#slateGradient)"/>
+                            <path d="M27 29C27 26.791 28.791 25 31 25H41C43.209 25 45 26.791 45 29V39C45 41.209 43.209 43 41 43H31C28.791 43 27 41.209 27 39V29Z" stroke="white" stroke-width="4"/>
+                            <path d="M31 47H41" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="slateGradient" x1="6" y1="6" x2="66" y2="66" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#475569"/>
+                                    <stop offset="1" stop-color="#0F172A"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="game-card__info">
+                        <h3 class="game-card__title">Title</h3>
+                        <p class="game-card__description">Explanation</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="games-message" data-role="games-message" aria-live="polite"></p>
+        </section>
+    </main>
+
+</body>
+</html>

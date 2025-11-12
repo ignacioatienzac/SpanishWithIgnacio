@@ -32,6 +32,34 @@ body {
     line-height: 1.6;
 }
 
+.page-hero {
+    padding: 3rem 2rem 1rem;
+    text-align: center;
+}
+
+.page-hero__container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-hero__title {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.page-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .page-hero__title {
+        font-size: 2rem;
+    }
+}
+
 /* Header and Navigation */
 .main-header {
     background-color: #ffffff;

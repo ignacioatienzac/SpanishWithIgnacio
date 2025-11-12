@@ -11,17 +11,6 @@
     text-align: center;
 }
 
-.teachers-hero__container h1 {
-    font-size: 3rem;
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-}
-
-.teachers-hero__container p {
-    font-size: 1.2rem;
-    color: var(--text-color);
-}
-
 .teachers-section {
     padding: 3rem 2rem;
 }
@@ -142,10 +131,6 @@
 }
 
 @media (max-width: 768px) {
-    .teachers-hero__container h1 {
-        font-size: 2.4rem;
-    }
-
     .teachers-section__header h2 {
         font-size: 2rem;
     }

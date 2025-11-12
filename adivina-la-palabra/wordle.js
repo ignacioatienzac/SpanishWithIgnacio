@@ -29,13 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelTitle = document.getElementById('game-level-title');
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
+    const instructionsButton = document.getElementById('instructions-button');
+    const instructionsModal = document.getElementById('instructions-modal');
+    const instructionsCloseButton = document.getElementById('instructions-close');
+    const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
 
     clueButton.addEventListener('click', handleClueClick);
+    instructionsButton.addEventListener('click', openInstructionsModal);
+    instructionsCloseButton.addEventListener('click', closeInstructionsModal);
+    instructionsOverlay.addEventListener('click', closeInstructionsModal);
+    document.addEventListener('keydown', handleInstructionsKeydown);
 
     // --- ESTADO DEL JUEGO ---
     const answerListsByLength = new Map();
@@ -94,6 +102,33 @@ document.addEventListener('DOMContentLoaded', () => {
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
+    }
+
+    function openInstructionsModal() {
+        if (!instructionsModal) return;
+        instructionsModal.classList.add('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'false');
+        window.setTimeout(() => {
+            if (instructionsCloseButton) {
+                instructionsCloseButton.focus();
+            }
+        }, 0);
+    }
+
+    function closeInstructionsModal() {
+        if (!instructionsModal) return;
+        instructionsModal.classList.remove('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'true');
+        if (instructionsButton) {
+            instructionsButton.focus();
+        }
+    }
+
+    function handleInstructionsKeydown(event) {
+        if (event.key === 'Escape' && instructionsModal && instructionsModal.classList.contains('is-visible')) {
+            event.preventDefault();
+            closeInstructionsModal();
+        }
     }
 
     // --- INICIALIZACIÓN ---

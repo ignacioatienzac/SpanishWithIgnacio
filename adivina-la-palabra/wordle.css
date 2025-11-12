@@ -42,23 +42,6 @@
 }
 
 
-.game-intro h1 {
-    font-size: 3rem;
-    font-family: 'Montserrat', sans-serif;
-    color: var(--secondary-color);
-}
-
-.game-description {
-    line-height: 1.7;
-    max-width: 650px;
-    color: var(--text-color);
-    text-align: justify;
-}
-
-.game-description p {
-    margin-bottom: 1rem;
-}
-
 .level-selector {
     display: flex;
     justify-content: center;
@@ -125,27 +108,6 @@
     box-shadow: none;
 }
 
-
-.level-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 1rem;
-    text-align: left;
-    padding-left: 2rem;
-}
-
-.level-list li {
-    padding: 0.25rem 0;
-    margin-bottom: 0.25rem;
-    font-weight: bold;
-}
-
-.level-list .level-a1 { color: var(--color-a1); }
-.level-list .level-a2 { color: var(--color-a2); }
-.level-list .level-b1 { color: var(--color-b1); }
-.level-list .level-b2 { color: var(--color-b2); }
-.level-list .level-c1 { color: var(--color-c1); }
-.level-list .level-c2 { color: var(--color-c2); }
 
 
 /* ####################################################

@@ -1,24 +1,3 @@
-.students-hero {
-    padding: 3rem 2rem 1rem;
-    text-align: center;
-}
-
-.students-hero__container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.students-hero__container h1 {
-    font-size: 2.5rem;
-    color: var(--secondary-color);
-    margin-bottom: 0.75rem;
-}
-
-.students-hero__container p {
-    font-size: 1.1rem;
-    color: var(--text-color);
-}
-
 .tabs-section {
     padding: 2rem;
 }
@@ -110,10 +89,6 @@
 }
 
 @media (max-width: 768px) {
-    .students-hero__container h1 {
-        font-size: 2rem;
-    }
-
     .tab-button {
         padding: 0.5rem 1.2rem;
     }

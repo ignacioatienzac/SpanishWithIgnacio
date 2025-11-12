@@ -49,7 +49,12 @@
 
                     <div class="game-controls">
                         <h2 id="game-level-title">Level A1</h2>
-                        <button id="calendar-button" title="Elegir otro día">📅</button>
+                        <div class="game-controls__actions">
+                            <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
+                                ℹ️ Instructions
+                            </button>
+                            <button id="calendar-button" title="Elegir otro día" aria-label="Elegir otro día">📅</button>
+                        </div>
                     </div>
 
                     <div class="game-grid">
@@ -82,6 +87,22 @@
 
         </section>
     </main>
+
+    <div class="instructions-modal" id="instructions-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="instructions-title">
+        <div class="instructions-modal__overlay" data-close="true"></div>
+        <div class="instructions-modal__content" role="document">
+            <button type="button" class="instructions-modal__close" id="instructions-close" aria-label="Close instructions">✕</button>
+            <h3 id="instructions-title">How to play</h3>
+            <p>Guess the hidden Spanish word in six tries. Each guess must have the correct number of letters.</p>
+            <ul>
+                <li>Type your guess using the on-screen keyboard or your own keyboard, then press ENTER to submit.</li>
+                <li>Tile colors show your progress: green is correct, yellow means the letter is in the word but in a different spot, and gray means it is not in the word.</li>
+                <li>Use the ⌫ key to delete letters before submitting.</li>
+            </ul>
+            <p class="instructions-modal__note">Hints unlock after your third attempt. When the “Get a clue!” button becomes active, press it to reveal them.</p>
+            <p>Have fun and keep practicing your Spanish vocabulary!</p>
+        </div>
+    </div>
 
 </body>
 </html>

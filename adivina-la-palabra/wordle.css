@@ -252,11 +252,46 @@
     margin-bottom: -1rem; /* Acercarlo al tablero */
 }
 
+.game-controls__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .game-controls h2 {
     font-family: 'Oswald', sans-serif;
     color: var(--secondary-color);
     font-size: 2rem;
     margin: 0;
+}
+
+.instructions-button {
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1d8cf8, #3358f4);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.instructions-button:hover,
+.instructions-button:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(51, 88, 244, 0.35);
+    outline: none;
+}
+
+.instructions-button:focus-visible {
+    outline: 3px solid rgba(51, 88, 244, 0.6);
+    outline-offset: 3px;
 }
 
 #calendar-button {
@@ -271,6 +306,101 @@
 
 #calendar-button:hover {
     background-color: rgba(0,0,0,0.05);
+}
+
+.instructions-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.instructions-modal.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.instructions-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.instructions-modal__content {
+    position: relative;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 2rem;
+    max-width: min(480px, 90vw);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    color: #1f1f1f;
+    line-height: 1.6;
+    z-index: 1;
+}
+
+.instructions-modal__content h3 {
+    margin-top: 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    color: var(--secondary-color);
+}
+
+.instructions-modal__content ul {
+    padding-left: 1.2rem;
+    margin: 1rem 0;
+}
+
+.instructions-modal__content li {
+    margin-bottom: 0.5rem;
+}
+
+.instructions-modal__note {
+    font-weight: 600;
+    color: #3358f4;
+}
+
+.instructions-modal__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    border: none;
+    background: transparent;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #5a5a5a;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.instructions-modal__close:hover,
+.instructions-modal__close:focus {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000000;
+    outline: none;
+}
+
+.instructions-modal__close:focus-visible {
+    outline: 3px solid rgba(51, 88, 244, 0.6);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .instructions-modal__content {
+        padding: 1.5rem 1.25rem 1.75rem;
+    }
+
+    .instructions-button {
+        font-size: 0.85rem;
+        padding: 0.45rem 0.8rem;
+    }
 }
 
 

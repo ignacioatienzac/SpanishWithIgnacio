@@ -39,7 +39,7 @@ body {
 }
 
 #game-container {
-    flex: 3; /* Ocupa 3/4 de la altura */
+    flex: 3.5; /* Ocupa un poco más del alto disponible */
     background-color: #87CEEB; /* Color cielo */
     position: relative;
     overflow: hidden;

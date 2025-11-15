@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-K">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡El poder de los verbos! / The power of verbs!</title>
+    <!-- Enlace a la hoja de estilos -->
+    <link rel="stylesheet" href="style.css">
+    <!-- El script se carga al final del body -->
+</head>
+<body>
+
+    <!-- PANTALLA DE SELECCIÓN -->
+    <div id="selection-overlay" class="overlay">
+        <div class="selection-box">
+            <div class="selection-steps">
+                <!-- Paso 1: Elegir Tiempo -->
+                <div id="tense-selection" class="selection-panel">
+                    <h1 class="selection-title">Choose your tense</h1>
+                    <div class="selection-buttons">
+                        <button data-tense="presente" class="btn btn-tense">Present Tense</button>
+                        <button data-tense="presente continuo" data-label="Present Continuous" class="btn btn-tense">Present Continuous</button>
+                        <button data-tense="pretérito perfecto" data-label="Present Perfect" class="btn btn-tense">Present Perfect</button>
+                        <button data-tense="indefinido" class="btn btn-tense">Indefinite Tense</button>
+                        <button data-tense="imperfecto" class="btn btn-tense">Imperfect Tense</button>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Elegir Tipo de Verbo -->
+                <div id="type-selection" class="selection-panel hidden">
+                    <h1 class="selection-title">Choose verb type</h1>
+                    <div class="selection-buttons">
+                        <button data-type="regular" class="btn btn-type">Regular Verbs</button>
+                        <button data-type="irregular" class="btn btn-type">Irregular Verbs</button>
+                        <button data-type="regular-irregular" class="btn btn-type">Regular and Irregular Verbs</button>
+                    </div>
+                </div>
+
+                <!-- Paso 3: Elegir Modo -->
+                <div id="mode-selection" class="selection-panel hidden">
+                    <h1 class="selection-title">Choose mode</h1>
+                    <div class="selection-buttons">
+                        <button data-mode="choice" class="btn btn-mode">Choice Mode</button>
+                        <button data-mode="write" class="btn btn-mode">Write Mode</button>
+                    </div>
+                    <p id="mode-restriction-message" class="mode-restriction-message"></p>
+                </div>
+
+                <!-- Paso 4: Elegir Dificultad -->
+                <div id="difficulty-selection" class="selection-panel hidden">
+                    <h1 class="selection-title">Choose difficulty</h1>
+                    <div class="selection-buttons">
+                        <button data-difficulty="facil" class="btn btn-difficulty">Easy</button>
+                        <button data-difficulty="intermedio" class="btn btn-difficulty">Intermediate</button>
+                        <button data-difficulty="dificil" class="btn btn-difficulty">Hard</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-game-button" class="btn btn-start" disabled>
+                Start Game
+            </button>
+            <div id="selection-error" class="selection-error-message"></div>
+        </div>
+    </div>
+
+
+    <!-- Contenedor principal de la aplicación (oculto al inicio) -->
+    <div id="app-container" class="hidden">
+
+        <!-- 1. ZONA DEL JUEGO (ARRIBA) -->
+        <div id="game-container">
+            <canvas id="game-canvas"></canvas>
+            <!-- Overlay de Game Over -->
+            <div id="game-over-overlay" class="overlay hidden">
+                <h1 class="game-over-title">¡FIN DEL JUEGO!</h1>
+                <p class="game-over-subtitle">Los monstruos han superado tus defensas.</p>
+                <p class="game-over-score">Puntuación Final: <span id="final-score">0</span></p>
+                <button id="restart-button" class="btn btn-restart">
+                    <span>volver a empezar</span>
+                    <span>start again</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. ZONA DEL MINI-JUEGO (ABAJO) -->
+        <div id="minigame-container">
+            <h2 class="minigame-title">¡El poder de los verbos! / The power of verbs!</h2>
+            <p>Conjuga los verbos para aumentar tu poder de ataque / conjugate verbs to increase your attacking power.</p>
+            <div class="write-mode-instructions">
+                <div class="key-instructions">
+                    <span class="key-equation">
+                        <span class="keycap">1</span>
+                        <span class="key-symbol">=</span>
+                        <span class="keycap">á</span>
+                    </span>
+                    <span class="key-equation">
+                        <span class="keycap">2</span>
+                        <span class="key-symbol">=</span>
+                        <span class="keycap">é</span>
+                    </span>
+                    <span class="key-equation">
+                        <span class="keycap">3</span>
+                        <span class="key-symbol">=</span>
+                        <span class="keycap">í</span>
+                    </span>
+                    <span class="key-equation">
+                        <span class="keycap">4</span>
+                        <span class="key-symbol">=</span>
+                        <span class="keycap">ó</span>
+                    </span>
+                    <span class="key-equation">
+                        <span class="keycap">5</span>
+                        <span class="key-symbol">=</span>
+                        <span class="keycap">ú</span>
+                    </span>
+                </div>
+            </div>
+
+            <div id="write-mode-container" class="minigame-mode">
+                <!-- Pregunta del mini-juego -->
+                <div id="minigame-prompt">
+                    <span>Conjugar</span>
+                    <span id="verb">...</span>
+                    <span>en</span>
+                    <span id="tense">...</span>
+                    <span>para</span>
+                    <span id="pronoun">...</span>
+                    <span>:</span>
+                </div>
+
+                <!-- Respuesta del jugador -->
+                <div class="answer-group">
+                    <input type="text" id="answer-input" placeholder="Tu respuesta...">
+                    <button id="submit-answer" class="btn btn-submit">
+                        Comprobar
+                    </button>
+                </div>
+            </div>
+
+            <div id="choice-mode-container" class="minigame-mode hidden">
+                <div id="choice-grid" class="choice-grid"></div>
+                <div id="choice-prompt" class="choice-prompt">
+                    <span id="choice-verb">...</span>
+                    <span>+</span>
+                    <span id="choice-pronoun">...</span>
+                </div>
+            </div>
+
+            <button id="quick-restart-button" class="quick-restart-button" type="button">
+                <span>empezar de nuevo</span>
+                <span>start again</span>
+            </button>
+
+            <div id="quick-restart-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quick-restart-title">
+                <div class="modal-content">
+                    <h2 id="quick-restart-title" class="modal-title">¿Qué quieres hacer?</h2>
+                    <div class="modal-options">
+                        <button id="quick-restart-same" class="modal-option" type="button">
+                            <span>Repetir con los mismos ajustes</span>
+                            <span>Repeat with the same settings</span>
+                        </button>
+                        <button id="quick-restart-different" class="modal-option" type="button">
+                            <span>Repetir con ajustes diferentes</span>
+                            <span>Repeat with different settings</span>
+                        </button>
+                        <button id="quick-restart-cancel" class="modal-option" type="button">
+                            <span>Cancelar</span>
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje de feedback -->
+            <div id="minigame-message"></div>
+        </div>
+    </div>
+
+    <!-- Enlace al script del juego -->
+    <script src="script.js"></script>
+</body>
+</html>

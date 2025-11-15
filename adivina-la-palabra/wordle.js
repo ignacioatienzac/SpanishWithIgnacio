@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
         A2: '../data/wordle-a2-palabras.json',
     };
     const SUPPORTED_LEVELS = Object.keys(LEVEL_FILE_MAP);
+    const HINT_FILE_MAP = {
+        A1: './pistas-a1.json',
+        A2: './pistas-a2.json',
+    };
 
 
     // --- SELECTORES DEL DOM ---
@@ -60,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLevel = null;
     const hintDictionary = new Map();
     let hintDataLoaded = false;
+    let loadedHintLevel = null;
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
@@ -363,6 +368,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             wordDataLoaded = true;
             loadedLevel = normalizedLevel;
+            hintDictionary.clear();
+            hintDataLoaded = false;
+            loadedHintLevel = null;
             return true; // Éxito
 
         } catch (error) {
@@ -373,39 +381,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function ensureHintData() {
-        if (hintDataLoaded) {
+        const activeLevel = typeof currentLevel === 'string' ? currentLevel.toUpperCase() : 'A1';
+
+        if (hintDataLoaded && loadedHintLevel === activeLevel) {
             return true;
         }
 
-        const palabrasFuente = typeof baseDePalabras !== 'undefined'
-            ? baseDePalabras
-            : (typeof window !== 'undefined' ? window.baseDePalabras : undefined);
-
-        if (!Array.isArray(palabrasFuente)) {
-            console.error('No se encontró la base de pistas en pistas-a1.js.');
+        const hintFile = HINT_FILE_MAP[activeLevel];
+        if (!hintFile) {
+            console.warn(`No hay archivo de pistas configurado para el nivel ${activeLevel}.`);
+            hintDictionary.clear();
+            hintDataLoaded = false;
+            loadedHintLevel = null;
             return false;
         }
 
-        palabrasFuente.forEach(entry => {
-            if (!entry || typeof entry.palabra !== 'string') return;
+        try {
+            const response = await fetch(hintFile);
+            if (!response.ok) {
+                throw new Error(`No se pudo cargar ${hintFile}`);
+            }
 
-            const normalized = sanitizeWordForHints(entry.palabra);
-            if (!normalized) return;
-            if (normalized.length < MIN_WORD_LENGTH || normalized.length > MAX_WORD_LENGTH) return;
+            const hintData = await response.json();
 
-            const hints = [entry.pista1, entry.pista2, entry.pista3]
-                .filter(text => typeof text === 'string' && text.trim())
-                .map(text => text.trim());
+            hintDictionary.clear();
 
-            if (!hints.length) return;
+            const registerHints = (word, hintEntry) => {
+                if (!word || typeof word !== 'string' || !hintEntry) return;
 
-            const limitedHints = hints.slice(0, 3);
-            hintDictionary.set(normalized, limitedHints);
-        });
+                const normalized = sanitizeWordForHints(word);
+                if (!normalized) return;
+                if (normalized.length < MIN_WORD_LENGTH || normalized.length > MAX_WORD_LENGTH) return;
 
-        hintDataLoaded = true;
-        console.log(`Loaded hints for ${hintDictionary.size} words from pistas-a1.js.`);
-        return true;
+                const hints = [hintEntry.pista1, hintEntry.pista2, hintEntry.pista3]
+                    .filter(text => typeof text === 'string' && text.trim())
+                    .map(text => text.trim());
+
+                if (!hints.length) return;
+
+                hintDictionary.set(normalized, hints.slice(0, 3));
+            };
+
+            if (Array.isArray(hintData)) {
+                hintData.forEach(entry => {
+                    if (!entry || typeof entry !== 'object') return;
+                    registerHints(entry.palabra, entry);
+                });
+            } else if (hintData && typeof hintData === 'object') {
+                Object.entries(hintData).forEach(([word, entry]) => {
+                    if (!entry || typeof entry !== 'object') return;
+                    registerHints(word, entry);
+                });
+            } else {
+                throw new Error('Formato de pistas no reconocido.');
+            }
+
+            hintDataLoaded = true;
+            loadedHintLevel = activeLevel;
+            console.log(`Loaded hints for ${hintDictionary.size} words from ${hintFile}.`);
+            return true;
+        } catch (error) {
+            console.error('Error al cargar las pistas:', error);
+            showToast('No se pudieron cargar las pistas para este nivel.');
+            hintDictionary.clear();
+            hintDataLoaded = false;
+            loadedHintLevel = null;
+            return false;
+        }
     }
 
     function prepareHintsForWord(word, hintsReady) {

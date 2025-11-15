@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let ultimoSpawn;
     let spawnRate; // en ms
     let alturaTerreno;
+    let alturaCesped;
+    let alturaTierra;
+    let margenInferiorTerreno;
+    let nivelSuelo;
     let gameLoopId; // Para poder detener el bucle del juego
     let castillo;
     let objetivoPuntuacion;
@@ -838,7 +842,21 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = canvas.clientHeight;
 
         // Resetear estado
-        alturaTerreno = canvas.height * 0.15; // 15% del canvas para el terreno
+        // Ajustar el terreno para que quede justo encima de la franja inferior del mini-juego
+        margenInferiorTerreno = Math.max(2, Math.round(canvas.height * 0.003));
+        alturaCesped = Math.max(8, Math.round(canvas.height * 0.015));
+        alturaTierra = Math.max(8, Math.round(canvas.height * 0.013));
+        alturaTerreno = alturaCesped + alturaTierra;
+
+        const espacioDisponibleSuelo = canvas.height - margenInferiorTerreno;
+        if (alturaTerreno > espacioDisponibleSuelo) {
+            const factorReduccion = espacioDisponibleSuelo / (alturaTerreno || 1);
+            alturaCesped = Math.floor(alturaCesped * factorReduccion);
+            alturaTierra = Math.floor(alturaTierra * factorReduccion);
+            alturaTerreno = alturaCesped + alturaTierra;
+        }
+
+        nivelSuelo = Math.max(0, canvas.height - margenInferiorTerreno - alturaTerreno);
         dificultadActual = difficultySettings[selectedDifficulty];
         if (!dificultadActual) {
             console.error('No se encontró configuración para la dificultad seleccionada.');
@@ -869,11 +887,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const heroeAncho = 48;
         const heroeAlto = 64;
         const castilloSprite = sprites.castillo;
-        const maxCastleHeight = Math.max(160, canvas.height - alturaTerreno - 40);
+        const maxCastleHeight = Math.max(160, nivelSuelo - 40);
         const castleHeight = Math.min(maxCastleHeight, 260);
         const castleWidth = castleHeight; // El sprite es cuadrado
         const castleX = 40;
-        const castleY = Math.max(0, canvas.height - alturaTerreno - castleHeight);
+        const castleY = Math.max(0, nivelSuelo - castleHeight);
 
         castillo = {
             x: castleX,
@@ -887,7 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         heroe = {
             x: castleX + castleWidth / 2 - heroeAncho / 2,
-            y: canvas.height - alturaTerreno - heroeAlto,
+            y: Math.max(0, nivelSuelo - heroeAlto),
             width: heroeAncho,
             height: heroeAlto,
             sprite: heroeSprite,
@@ -1087,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             typeId: enemyId
         };
 
-        monstruo.y = canvas.height - alturaTerreno - monstruo.height;
+        monstruo.y = Math.max(0, nivelSuelo - monstruo.height);
         monstruos.push(monstruo);
     }
 
@@ -1212,10 +1230,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dibujar terreno (césped)
         ctx.fillStyle = '#556B2F'; // Verde oscuro
-        ctx.fillRect(0, canvas.height - alturaTerreno, canvas.width, alturaTerreno);
+        const alturaCespedVisible = Math.max(0, Math.min(alturaCesped, canvas.height - nivelSuelo));
+        if (alturaCespedVisible > 0) {
+            ctx.fillRect(0, nivelSuelo, canvas.width, alturaCespedVisible);
+        }
         // Dibujar tierra
         ctx.fillStyle = '#8B4513'; // Marrón
-        ctx.fillRect(0, canvas.height - alturaTerreno + 20, canvas.width, alturaTerreno - 20);
+        const inicioTierra = nivelSuelo + alturaCespedVisible;
+        const alturaTierraVisible = Math.max(0, Math.min(alturaTierra, canvas.height - inicioTierra));
+        if (alturaTierraVisible > 0) {
+            ctx.fillRect(0, inicioTierra, canvas.width, alturaTierraVisible);
+        }
 
         // Dibujar castillo detrás del héroe
         dibujarCastillo();
@@ -1370,6 +1395,11 @@ document.addEventListener('DOMContentLoaded', () => {
         objetivoPuntuacion = 0;
         castillo = null;
         vidas = 0;
+        nivelSuelo = 0;
+        alturaTerreno = 0;
+        alturaCesped = 0;
+        alturaTierra = 0;
+        margenInferiorTerreno = 0;
 
         tenseButtons.forEach(btn => btn.classList.remove('btn-selected'));
         typeButtons.forEach(btn => btn.classList.remove('btn-selected'));

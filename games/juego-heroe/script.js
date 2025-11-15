@@ -869,11 +869,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const heroeAncho = 48;
         const heroeAlto = 64;
         const castilloSprite = sprites.castillo;
-        const maxCastleHeight = Math.max(160, canvas.height - alturaTerreno - 60);
+        const maxCastleHeight = Math.max(160, canvas.height - alturaTerreno - 40);
         const castleHeight = Math.min(maxCastleHeight, 260);
         const castleWidth = castleHeight; // El sprite es cuadrado
         const castleX = 40;
-        const castleY = Math.max(0, canvas.height - alturaTerreno - castleHeight + 20);
+        const castleY = Math.max(0, canvas.height - alturaTerreno - castleHeight);
 
         castillo = {
             x: castleX,

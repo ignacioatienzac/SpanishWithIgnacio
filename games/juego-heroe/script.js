@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const answerInput = document.getElementById('answer-input');
     const submitButton = document.getElementById('submit-answer');
     const messageEl = document.getElementById('minigame-message');
+    const choiceModeMessageEl = document.getElementById('choice-mode-message');
     const writeModeContainer = document.getElementById('write-mode-container');
     const choiceModeContainer = document.getElementById('choice-mode-container');
     const writeModeInstructions = document.querySelector('.write-mode-instructions');
@@ -84,6 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let dificultadActual;
     let choiceCells = [];
     let lastFocusedElementBeforeModal = null;
+
+    function updateFeedbackMessage(text = '', className = '') {
+        if (messageEl) {
+            messageEl.textContent = text;
+            messageEl.className = className;
+        }
+        if (choiceModeMessageEl) {
+            choiceModeMessageEl.textContent = text;
+            choiceModeMessageEl.className = className
+                ? `choice-mode-message ${className}`
+                : 'choice-mode-message';
+        }
+    }
 
     // --- 3. FUNCIÓN PRINCIPAL DE INICIO ---
 
@@ -681,8 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pronounEl.textContent = preguntaActual.pronoun;
 
         answerInput.value = '';
-        messageEl.textContent = '';
-        messageEl.className = '';
+        updateFeedbackMessage();
         answerInput.focus();
     }
 
@@ -701,8 +714,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         challengeVerbEl.textContent = preguntaActual.verb || '...';
         challengePronounEl.textContent = preguntaActual.pronoun || '...';
-        messageEl.textContent = '';
-        messageEl.className = '';
+        updateFeedbackMessage();
     }
 
     function manejarRespuestaCorrecta() {
@@ -714,16 +726,14 @@ document.addEventListener('DOMContentLoaded', () => {
             poderAtaqueMaximo = PODER_ATAQUE_MINIMO;
         }
         poderAtaqueMaximo = Math.max(poderAtaqueMaximo, poderAtaque);
-        messageEl.textContent = '¡CORRECTO! +1 Poder de Ataque';
-        messageEl.className = 'text-success';
+        updateFeedbackMessage('¡CORRECTO! +1 Poder de Ataque', 'text-success');
     }
 
     function manejarRespuestaIncorrecta() {
         poderAtaque = Math.max(PODER_ATAQUE_MINIMO, poderAtaque - 1);
-        messageEl.textContent = '¡Inténtalo de nuevo! / Try again!';
-        messageEl.className = 'text-error';
+        updateFeedbackMessage('¡Inténtalo de nuevo! / Try again!', 'text-error');
         setTimeout(() => {
-            if (!gameOver) messageEl.textContent = '';
+            if (!gameOver) updateFeedbackMessage();
         }, 2000);
     }
 
@@ -881,8 +891,7 @@ document.addEventListener('DOMContentLoaded', () => {
         spawnRate = dificultadActual.spawnRate;
         objetivoPuntuacion = dificultadActual.targetScore;
         castillo = null;
-        messageEl.textContent = '';
-        messageEl.className = '';
+        updateFeedbackMessage();
 
         configurarMinijuegoPorModo();
 
@@ -1334,8 +1343,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameOverOverlay.classList.remove('hidden');
         gameOverOverlay.style.display = 'flex'; // Asegurar que sea flex
-        messageEl.textContent = resultado === 'victoria' ? '¡El castillo sigue en pie!' : '¡El juego ha terminado!';
-        messageEl.className = resultado === 'victoria' ? 'text-success' : 'text-error';
+        updateFeedbackMessage(
+            resultado === 'victoria' ? '¡El castillo sigue en pie!' : '¡El juego ha terminado!',
+            resultado === 'victoria' ? 'text-success' : 'text-error'
+        );
     }
 
     function reiniciarPartidaConMismosAjustes() {
@@ -1353,8 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         verbos = verbosFiltrados;
         gameOver = false;
-        messageEl.textContent = '';
-        messageEl.className = '';
+        updateFeedbackMessage();
         gameOverOverlay.classList.add('hidden');
         gameOverOverlay.style.display = 'none';
         selectionOverlay.style.display = 'none';
@@ -1376,8 +1386,7 @@ document.addEventListener('DOMContentLoaded', () => {
         choiceCells = [];
         verbos = [];
         preguntaActual = {};
-        messageEl.textContent = '';
-        messageEl.className = '';
+        updateFeedbackMessage();
         answerInput.value = '';
         choiceGrid.innerHTML = '';
         choiceGrid.style.gridTemplateColumns = '';

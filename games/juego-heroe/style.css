@@ -410,25 +410,27 @@ body {
 
 .choice-info-card h3 {
     margin: 0 0 0.75rem;
-    font-size: clamp(1.35rem, 3vw, 1.9rem);
-    line-height: 1.3;
+    font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+    line-height: 1.25;
 }
 
 .choice-info-card p {
     margin: 0;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: clamp(0.9rem, 1.8vw, 0.95rem);
+    line-height: 1.5;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
 .lang-es {
-    font-size: 1.1em;
+    font-size: 1.05em;
+    color: #facc15;
     display: inline-block;
 }
 
 .lang-en {
-    font-size: 0.9em;
+    font-size: 0.85em;
+    color: #ffffff;
     display: inline-block;
 }
 

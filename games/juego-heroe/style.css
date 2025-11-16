@@ -246,6 +246,57 @@ body {
     color: #374151;
 }
 
+.write-mode-info-card {
+    width: 100%;
+    max-width: 580px;
+}
+
+.write-mode-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.write-mode-challenge {
+    width: 100%;
+}
+
+.write-tense-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.write-tense-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1f2937;
+}
+
+.write-tense-label-text {
+    font-family: 'Inter', sans-serif;
+}
+
+.write-tense-pill {
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-weight: 700;
+    text-transform: capitalize;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+    min-width: 220px;
+    text-align: center;
+}
+
 .key-instructions {
     display: flex;
     flex-wrap: wrap;

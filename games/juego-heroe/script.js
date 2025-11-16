@@ -675,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!verbos.length) return;
         preguntaActual = verbos[Math.floor(Math.random() * verbos.length)];
 
-        verbEl.textContent = `"${preguntaActual.verb}"`;
+        verbEl.textContent = preguntaActual.verb || '...';
         // Mostrar el nombre del tiempo verbal seleccionado por el usuario
         tenseEl.textContent = selectedTenseLabel || selectedTense;
         pronounEl.textContent = preguntaActual.pronoun;

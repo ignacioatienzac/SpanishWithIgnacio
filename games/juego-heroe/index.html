@@ -163,18 +163,24 @@
                         </div>
                         <div class="choice-info-panel">
                             <div class="choice-info-card">
-                                <h3>¡Salva al héroe! / Save the hero!</h3>
+                                <h3>¡El poder de los verbos!<br>/ The power of verbs!</h3>
                                 <p>
-                                    Conjuga la forma correcta para construir el escudo del héroe y detener a los monstruos.
+                                    <span class="lang-es">Conjuga los verbos correctamente para aumentar el poder del héroe y ayudarle a derrotar a los monstruos.</span>
+                                    <br><br>
+                                    <span class="lang-en">Conjugate the verbs correctly to increase the hero's power and help him defeat the monsters.</span>
                                 </p>
                             </div>
                         </div>
                         <div class="choice-side-panel">
-                            <p class="choice-side-title">infinitivo + pronombre</p>
-                            <div id="choice-prompt" class="choice-prompt">
-                                <span id="choice-verb">...</span>
-                                <span>+</span>
-                                <span id="choice-pronoun">...</span>
+                            <div class="challenge-container" aria-live="polite">
+                                <div class="challenge-part">
+                                    <span id="challenge-verb" class="challenge-text">...</span>
+                                    <div class="underline-box verb-underline"></div>
+                                </div>
+                                <div class="challenge-part">
+                                    <span id="challenge-pronoun" class="challenge-text">...</span>
+                                    <div class="underline-box pronoun-underline"></div>
+                                </div>
                             </div>
                             <button id="quick-restart-button" class="quick-restart-button" type="button">
                                 <span>empezar de nuevo</span>

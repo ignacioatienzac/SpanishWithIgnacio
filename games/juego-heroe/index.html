@@ -106,6 +106,17 @@
             <!-- 2. ZONA DEL MINI-JUEGO (ABAJO) -->
             <div id="minigame-container">
                 <div class="write-mode-instructions">
+                    <div class="choice-info-card write-mode-info-card">
+                        <h3>
+                            <span class="lang-es">¡El poder de los verbos!</span><br>
+                            <span class="lang-en">The power of verbs!</span>
+                        </h3>
+                        <p>
+                            <span class="lang-es">Conjuga los verbos correctamente y ayuda al héroe a derrotar a los monstruos.</span>
+                            <br>
+                            <span class="lang-en">Conjugate the verbs correctly and help the hero defeat the monsters.</span>
+                        </p>
+                    </div>
                     <div class="key-instructions">
                         <span class="key-equation">
                             <span class="keycap">1</span>
@@ -137,14 +148,24 @@
 
                 <div id="write-mode-container" class="minigame-mode">
                     <!-- Pregunta del mini-juego -->
-                    <div id="minigame-prompt">
-                        <span>Conjugar</span>
-                        <span id="verb">...</span>
-                        <span>en</span>
-                        <span id="tense">...</span>
-                        <span>para</span>
-                        <span id="pronoun">...</span>
-                        <span>:</span>
+                    <div class="write-mode-display">
+                        <div class="challenge-container write-mode-challenge" aria-live="polite">
+                            <div class="challenge-part">
+                                <span id="verb" class="challenge-text">...</span>
+                                <div class="underline-box verb-underline"></div>
+                            </div>
+                            <div class="challenge-part">
+                                <span id="pronoun" class="challenge-text">...</span>
+                                <div class="underline-box pronoun-underline"></div>
+                            </div>
+                        </div>
+                        <div class="write-tense-display">
+                            <div class="write-tense-label">
+                                <span class="write-tense-label-text">Tiempo seleccionado</span>
+                                <span class="write-tense-label-text">Selected tense</span>
+                            </div>
+                            <span id="tense" class="write-tense-pill">...</span>
+                        </div>
                     </div>
 
                     <!-- Respuesta del jugador -->

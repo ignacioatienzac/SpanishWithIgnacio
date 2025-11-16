@@ -105,71 +105,73 @@
 
             <!-- 2. ZONA DEL MINI-JUEGO (ABAJO) -->
             <div id="minigame-container">
-                <div class="write-mode-instructions">
-                    <div class="choice-info-card write-mode-info-card">
-                        <h3>
-                            <span class="lang-es">¡El poder de los verbos!</span><br>
-                            <span class="lang-en">The power of verbs!</span>
-                        </h3>
-                        <p>
-                            <span class="lang-es">Conjuga los verbos correctamente y ayuda al héroe a derrotar a los monstruos.</span>
-                            <br>
-                            <span class="lang-en">Conjugate the verbs correctly and help the hero defeat the monsters.</span>
-                        </p>
-                    </div>
-                    <div class="key-instructions">
-                        <span class="key-equation">
-                            <span class="keycap">1</span>
-                            <span class="key-symbol">=</span>
-                            <span class="keycap">á</span>
-                        </span>
-                        <span class="key-equation">
-                            <span class="keycap">2</span>
-                            <span class="key-symbol">=</span>
-                            <span class="keycap">é</span>
-                        </span>
-                        <span class="key-equation">
-                            <span class="keycap">3</span>
-                            <span class="key-symbol">=</span>
-                            <span class="keycap">í</span>
-                        </span>
-                        <span class="key-equation">
-                            <span class="keycap">4</span>
-                            <span class="key-symbol">=</span>
-                            <span class="keycap">ó</span>
-                        </span>
-                        <span class="key-equation">
-                            <span class="keycap">5</span>
-                            <span class="key-symbol">=</span>
-                            <span class="keycap">ú</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div id="write-mode-container" class="minigame-mode">
-                    <!-- Pregunta del mini-juego -->
-                    <div class="write-mode-display">
-                        <div class="challenge-container write-mode-challenge" aria-live="polite">
-                            <div class="challenge-part">
-                                <span id="verb" class="challenge-text">...</span>
-                                <div class="underline-box verb-underline"></div>
-                            </div>
-                            <div class="challenge-part">
-                                <span id="pronoun" class="challenge-text">...</span>
-                                <div class="underline-box pronoun-underline"></div>
-                            </div>
+                <div class="write-mode-layout">
+                    <div class="write-mode-instructions">
+                        <div class="choice-info-card write-mode-info-card">
+                            <h3>
+                                <span class="lang-es">¡El poder de los verbos!</span><br>
+                                <span class="lang-en">The power of verbs!</span>
+                            </h3>
+                            <p>
+                                <span class="lang-es">Conjuga los verbos correctamente y ayuda al héroe a derrotar a los monstruos.</span>
+                                <br>
+                                <span class="lang-en">Conjugate the verbs correctly and help the hero defeat the monsters.</span>
+                            </p>
                         </div>
-                        <div class="write-tense-display">
-                            <span id="tense" class="write-tense-pill">...</span>
+                        <div class="key-instructions">
+                            <span class="key-equation">
+                                <span class="keycap">1</span>
+                                <span class="key-symbol">=</span>
+                                <span class="keycap">á</span>
+                            </span>
+                            <span class="key-equation">
+                                <span class="keycap">2</span>
+                                <span class="key-symbol">=</span>
+                                <span class="keycap">é</span>
+                            </span>
+                            <span class="key-equation">
+                                <span class="keycap">3</span>
+                                <span class="key-symbol">=</span>
+                                <span class="keycap">í</span>
+                            </span>
+                            <span class="key-equation">
+                                <span class="keycap">4</span>
+                                <span class="key-symbol">=</span>
+                                <span class="keycap">ó</span>
+                            </span>
+                            <span class="key-equation">
+                                <span class="keycap">5</span>
+                                <span class="key-symbol">=</span>
+                                <span class="keycap">ú</span>
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Respuesta del jugador -->
-                    <div class="answer-group">
-                        <input type="text" id="answer-input" placeholder="Tu respuesta...">
-                        <button id="submit-answer" class="btn btn-submit">
-                            Comprobar
-                        </button>
+                    <div id="write-mode-container" class="minigame-mode">
+                        <!-- Pregunta del mini-juego -->
+                        <div class="write-mode-display">
+                            <div class="challenge-container write-mode-challenge" aria-live="polite">
+                                <div class="challenge-part">
+                                    <span id="verb" class="challenge-text">...</span>
+                                    <div class="underline-box verb-underline"></div>
+                                </div>
+                                <div class="challenge-part">
+                                    <span id="pronoun" class="challenge-text">...</span>
+                                    <div class="underline-box pronoun-underline"></div>
+                                </div>
+                            </div>
+                            <div class="write-tense-display">
+                                <span id="tense" class="write-tense-pill">...</span>
+                            </div>
+                        </div>
+
+                        <!-- Respuesta del jugador -->
+                        <div class="answer-group">
+                            <input type="text" id="answer-input" placeholder="Tu respuesta...">
+                            <button id="submit-answer" class="btn btn-submit">
+                                Comprobar
+                            </button>
+                        </div>
                     </div>
                 </div>
 

@@ -39,11 +39,11 @@ body {
 }
 
 #game-container {
-    flex: 0 0 clamp(220px, 42vh, 380px);
+    flex: 0 0 clamp(260px, 48vh, 420px);
     background-color: #87CEEB; /* Color cielo */
     position: relative;
     overflow: hidden;
-    min-height: clamp(220px, 42vh, 380px);
+    min-height: clamp(260px, 48vh, 420px);
 }
 
 #game-canvas {
@@ -59,10 +59,10 @@ body {
     box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
     padding: 1rem clamp(0.75rem, 4vw, 1.75rem) 1.25rem;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
     text-align: center;
     box-sizing: border-box;
 }
@@ -231,6 +231,20 @@ body {
     color: #1f2937;
 }
 
+.write-mode-layout {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+.write-mode-layout .write-mode-instructions,
+.write-mode-layout #write-mode-container {
+    flex: 1 1 320px;
+}
+
 .write-mode-instructions {
     display: flex;
     flex-direction: column;
@@ -238,6 +252,24 @@ body {
     gap: 0.5rem;
     max-width: 640px;
     margin-top: 0.25rem;
+    width: 100%;
+}
+
+#write-mode-container {
+    width: 100%;
+    max-width: 720px;
+}
+
+@media (max-width: 768px) {
+    .write-mode-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .write-mode-layout .write-mode-instructions,
+    .write-mode-layout #write-mode-container {
+        max-width: 100%;
+    }
 }
 
 .write-mode-instructions p {

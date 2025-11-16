@@ -159,18 +159,32 @@
                 </div>
 
                 <div id="choice-mode-container" class="minigame-mode hidden">
-                    <div id="choice-grid" class="choice-grid"></div>
-                    <div id="choice-prompt" class="choice-prompt">
-                        <span id="choice-verb">...</span>
-                        <span>+</span>
-                        <span id="choice-pronoun">...</span>
+                    <div class="choice-layout">
+                        <div class="choice-grid-panel">
+                            <div id="choice-grid" class="choice-grid"></div>
+                        </div>
+                        <div class="choice-info-panel">
+                            <div class="choice-info-card">
+                                <h3>¡Salva al héroe! / Save the hero!</h3>
+                                <p>
+                                    Conjuga la forma correcta para construir el escudo del héroe y detener a los monstruos.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="choice-side-panel">
+                            <p class="choice-side-title">infinitivo + pronombre</p>
+                            <div id="choice-prompt" class="choice-prompt">
+                                <span id="choice-verb">...</span>
+                                <span>+</span>
+                                <span id="choice-pronoun">...</span>
+                            </div>
+                            <button id="quick-restart-button" class="quick-restart-button" type="button">
+                                <span>empezar de nuevo</span>
+                                <span>start again</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <button id="quick-restart-button" class="quick-restart-button" type="button">
-                    <span>empezar de nuevo</span>
-                    <span>start again</span>
-                </button>
 
                 <div id="quick-restart-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quick-restart-title">
                     <div class="modal-content">

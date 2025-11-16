@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const choiceModeContainer = document.getElementById('choice-mode-container');
     const writeModeInstructions = document.querySelector('.write-mode-instructions');
     const choiceGrid = document.getElementById('choice-grid');
-    const choiceVerbEl = document.getElementById('choice-verb');
-    const choicePronounEl = document.getElementById('choice-pronoun');
+    const challengeVerbEl = document.getElementById('challenge-verb');
+    const challengePronounEl = document.getElementById('challenge-pronoun');
 
     // Overlays de UI
     const selectionOverlay = document.getElementById('selection-overlay');
@@ -699,8 +699,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const celdaObjetivo = disponibles[Math.floor(Math.random() * disponibles.length)];
         preguntaActual = { ...celdaObjetivo.question };
 
-        choiceVerbEl.textContent = preguntaActual.verb || '...';
-        choicePronounEl.textContent = preguntaActual.pronoun || '...';
+        challengeVerbEl.textContent = preguntaActual.verb || '...';
+        challengePronounEl.textContent = preguntaActual.pronoun || '...';
         messageEl.textContent = '';
         messageEl.className = '';
     }
@@ -794,8 +794,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 choiceGrid.appendChild(celda);
                 choiceCells.push(celdaData);
             }
-            choiceVerbEl.textContent = '...';
-            choicePronounEl.textContent = '...';
+            challengeVerbEl.textContent = '...';
+            challengePronounEl.textContent = '...';
             choiceCells.forEach(celdaData => asignarConjugacionChoice(celdaData));
         } else {
             writeModeContainer.classList.remove('hidden');
@@ -808,8 +808,8 @@ document.addEventListener('DOMContentLoaded', () => {
             choiceGrid.style.gridTemplateRows = '';
             choiceCells = [];
             answerInput.value = '';
-            choiceVerbEl.textContent = '...';
-            choicePronounEl.textContent = '...';
+            challengeVerbEl.textContent = '...';
+            challengePronounEl.textContent = '...';
         }
     }
 
@@ -1379,8 +1379,8 @@ document.addEventListener('DOMContentLoaded', () => {
         choiceGrid.innerHTML = '';
         choiceGrid.style.gridTemplateColumns = '';
         choiceGrid.style.gridTemplateRows = '';
-        choiceVerbEl.textContent = '...';
-        choicePronounEl.textContent = '...';
+        challengeVerbEl.textContent = '...';
+        challengePronounEl.textContent = '...';
         writeModeContainer.classList.remove('hidden');
         choiceModeContainer.classList.add('hidden');
         if (writeModeInstructions) {

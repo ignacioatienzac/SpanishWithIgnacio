@@ -419,6 +419,10 @@ body {
     align-items: stretch;
 }
 
+#choice-mode-container .choice-layout {
+    margin-top: clamp(-2.5rem, -4vh, -1.25rem);
+}
+
 .choice-grid-panel,
 .choice-info-panel,
 .choice-side-panel {
@@ -439,6 +443,10 @@ body {
 @media (max-width: 1024px) {
     .choice-layout {
         justify-content: center;
+    }
+
+    #choice-mode-container .choice-layout {
+        margin-top: clamp(-2rem, -4vh, -1rem);
     }
 
     .choice-info-panel { order: 1; }

@@ -100,6 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
         dificil: 8
     };
     const CHOICE_MODE_COLUMNS = {
+        facil: 2,
+        intermedio: 2,
+        dificil: 2
+    };
+    const CHOICE_MODE_ROWS = {
         facil: 3,
         intermedio: 4,
         dificil: 4
@@ -777,8 +782,9 @@ document.addEventListener('DOMContentLoaded', () => {
             choiceCells = [];
             const totalCeldas = CHOICE_MODE_GRID_SIZES[selectedDifficulty] || 6;
             const columnas = CHOICE_MODE_COLUMNS[selectedDifficulty] || Math.max(1, Math.floor(totalCeldas / 2));
+            const filas = CHOICE_MODE_ROWS[selectedDifficulty] || Math.ceil(totalCeldas / Math.max(columnas, 1));
             choiceGrid.style.gridTemplateColumns = `repeat(${columnas}, minmax(0, 1fr))`;
-            choiceGrid.style.gridTemplateRows = 'repeat(2, auto)';
+            choiceGrid.style.gridTemplateRows = `repeat(${filas}, minmax(0, 1fr))`;
             for (let i = 0; i < totalCeldas; i++) {
                 const celda = document.createElement('button');
                 celda.type = 'button';

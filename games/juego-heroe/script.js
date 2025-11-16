@@ -783,8 +783,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalCeldas = CHOICE_MODE_GRID_SIZES[selectedDifficulty] || 6;
             const columnas = CHOICE_MODE_COLUMNS[selectedDifficulty] || Math.max(1, Math.floor(totalCeldas / 2));
             const filas = CHOICE_MODE_ROWS[selectedDifficulty] || Math.ceil(totalCeldas / Math.max(columnas, 1));
+            const requiereCuadriculaCompacta = selectedDifficulty === 'intermedio' || selectedDifficulty === 'dificil';
             choiceGrid.style.gridTemplateColumns = `repeat(${columnas}, minmax(0, 1fr))`;
             choiceGrid.style.gridTemplateRows = `repeat(${filas}, minmax(0, 1fr))`;
+            choiceGrid.classList.toggle('choice-grid--compact', requiereCuadriculaCompacta);
             for (let i = 0; i < totalCeldas; i++) {
                 const celda = document.createElement('button');
                 celda.type = 'button';
@@ -806,6 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
             choiceGrid.innerHTML = '';
             choiceGrid.style.gridTemplateColumns = '';
             choiceGrid.style.gridTemplateRows = '';
+            choiceGrid.classList.remove('choice-grid--compact');
             choiceCells = [];
             answerInput.value = '';
             challengeVerbEl.textContent = '...';

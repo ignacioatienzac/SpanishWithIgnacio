@@ -1,1 +1,68 @@
 /* Estilos específicos para la página de gramática A1 */
+
+.grammar-hero {
+    padding: 4rem 2rem 2.5rem;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.12), rgba(192, 57, 43, 0.08));
+}
+
+.grammar-hero__container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.topics-section {
+    padding: 3rem 2rem 4rem;
+}
+
+.topics-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 2rem;
+}
+
+.topics-header {
+    text-align: center;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.topics-header h2 {
+    font-size: 2.25rem;
+    color: var(--secondary-color);
+}
+
+.topics-header p {
+    color: var(--text-color);
+}
+
+.topics-grid {
+    gap: 1.5rem;
+}
+
+.topic-card {
+    display: grid;
+    gap: 0.75rem;
+    align-items: start;
+    text-align: center;
+}
+
+.topic-card .resource-card {
+    width: 100%;
+}
+
+.topic-description {
+    color: var(--text-color);
+    font-size: 0.98rem;
+}
+
+@media (max-width: 640px) {
+    .grammar-hero__container h1 {
+        font-size: 2.1rem;
+    }
+
+    .topics-header h2 {
+        font-size: 1.9rem;
+    }
+}

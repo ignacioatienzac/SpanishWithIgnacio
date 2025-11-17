@@ -75,6 +75,8 @@
     font-size: 1.1rem;
     margin: 0;
     color: var(--secondary-color);
+    font-weight: 700;
+    transition: color 0.3s ease;
 }
 
 .resource-card__description {
@@ -82,6 +84,15 @@
     color: var(--text-color);
     font-size: 0.98rem;
     line-height: 1.6;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.resource-card.active:hover .resource-card__title,
+.resource-card.active:focus .resource-card__title,
+.resource-card.active:hover .resource-card__description,
+.resource-card.active:focus .resource-card__description {
+    color: #ffffff;
 }
 
 @media (max-width: 640px) {

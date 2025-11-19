@@ -2678,5 +2678,818 @@
     "genero": "masculino plural",
     "traduccion_ingles": "gloves",
     "frase_ejemplo": "Tengo frío en las manos, necesito guantes."
+  },
+  {
+    "palabra": "agua",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "water",
+    "frase_ejemplo": "Quiero una botella de agua, por favor."
+  },
+  {
+    "palabra": "café",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "coffee",
+    "frase_ejemplo": "Quiero un café con leche."
+  },
+  {
+    "palabra": "leche",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "milk",
+    "frase_ejemplo": "Bebo un vaso de leche antes de dormir."
+  },
+  {
+    "palabra": "té",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "tea",
+    "frase_ejemplo": "Prefiero té con limón."
+  },
+  {
+    "palabra": "zumo",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "juice",
+    "frase_ejemplo": "Me gusta el zumo de naranja natural."
+  },
+  {
+    "palabra": "vino",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "wine",
+    "frase_ejemplo": "Una copa de vino tinto, por favor."
+  },
+  {
+    "palabra": "cerveza",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "beer",
+    "frase_ejemplo": "Tomamos una cerveza en el bar."
+  },
+  {
+    "palabra": "pan",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "bread",
+    "frase_ejemplo": "Compro pan en la panadería."
+  },
+  {
+    "palabra": "huevo",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "egg",
+    "frase_ejemplo": "Necesito un huevo para la tortilla."
+  },
+  {
+    "palabra": "carne",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "meat",
+    "frase_ejemplo": "Hoy comemos carne con patatas."
+  },
+  {
+    "palabra": "pollo",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "chicken",
+    "frase_ejemplo": "El pollo asado está muy rico."
+  },
+  {
+    "palabra": "pescado",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "fish (food)",
+    "frase_ejemplo": "En España se come mucho pescado."
+  },
+  {
+    "palabra": "fruta",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "fruit",
+    "frase_ejemplo": "Es sano comer fruta todos los días."
+  },
+  {
+    "palabra": "manzana",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "apple",
+    "frase_ejemplo": "La manzana es roja o verde."
+  },
+  {
+    "palabra": "plátano",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "banana",
+    "frase_ejemplo": "El plátano es amarillo."
+  },
+  {
+    "palabra": "naranja",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "orange",
+    "frase_ejemplo": "Quiero una naranja de postre."
+  },
+  {
+    "palabra": "limón",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "lemon",
+    "frase_ejemplo": "El limón es muy ácido."
+  },
+  {
+    "palabra": "verdura",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "vegetables",
+    "frase_ejemplo": "La sopa tiene mucha verdura."
+  },
+  {
+    "palabra": "ensalada",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "salad",
+    "frase_ejemplo": "De primero quiero una ensalada."
+  },
+  {
+    "palabra": "tomate",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "tomato",
+    "frase_ejemplo": "El tomate es rojo."
+  },
+  {
+    "palabra": "patata",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "potato",
+    "frase_ejemplo": "Me gustan las patatas fritas."
+  },
+  {
+    "palabra": "arroz",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "rice",
+    "frase_ejemplo": "La paella lleva arroz."
+  },
+  {
+    "palabra": "pasta",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "pasta",
+    "frase_ejemplo": "Los italianos cocinan muy bien la pasta."
+  },
+  {
+    "palabra": "queso",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "cheese",
+    "frase_ejemplo": "Un bocadillo de queso."
+  },
+  {
+    "palabra": "azúcar",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "sugar",
+    "frase_ejemplo": "¿Quieres azúcar en el café?"
+  },
+  {
+    "palabra": "sal",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "femenino",
+    "traduccion_ingles": "salt",
+    "frase_ejemplo": "Pásame la sal, por favor."
+  },
+  {
+    "palabra": "aceite",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "oil",
+    "frase_ejemplo": "Aceite de oliva virgen extra."
+  },
+  {
+    "palabra": "chocolate",
+    "campo_lexico": "Comidas y Bebidas",
+    "genero": "masculino",
+    "traduccion_ingles": "chocolate",
+    "frase_ejemplo": "Me encanta el chocolate."
+  },
+  {
+    "palabra": "restaurante",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "restaurant",
+    "frase_ejemplo": "Cenamos en un restaurante italiano."
+  },
+  {
+    "palabra": "menú",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "menu (set menu)",
+    "frase_ejemplo": "¿Tienen menú del día?"
+  },
+  {
+    "palabra": "carta",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "menu (a la carte)",
+    "frase_ejemplo": "¿Me trae la carta, por favor?"
+  },
+  {
+    "palabra": "cuenta",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "bill / check",
+    "frase_ejemplo": "La cuenta, por favor."
+  },
+  {
+    "palabra": "camarero",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "waiter",
+    "frase_ejemplo": "El camarero trae la comida."
+  },
+  {
+    "palabra": "camarera",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "waitress",
+    "frase_ejemplo": "La camarera es muy simpática."
+  },
+  {
+    "palabra": "desayuno",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "breakfast",
+    "frase_ejemplo": "El desayuno es a las ocho."
+  },
+  {
+    "palabra": "almuerzo",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "lunch",
+    "frase_ejemplo": "El almuerzo es la comida principal."
+  },
+  {
+    "palabra": "cena",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "dinner",
+    "frase_ejemplo": "Preparo la cena para los amigos."
+  },
+  {
+    "palabra": "postre",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "dessert",
+    "frase_ejemplo": "¿Qué hay de postre?"
+  },
+  {
+    "palabra": "mesa",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "table",
+    "frase_ejemplo": "Quiero una mesa para dos personas."
+  },
+  {
+    "palabra": "plato",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "plate / dish",
+    "frase_ejemplo": "Este plato está caliente."
+  },
+  {
+    "palabra": "vaso",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "glass",
+    "frase_ejemplo": "Un vaso de agua, gracias."
+  },
+  {
+    "palabra": "taza",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "cup / mug",
+    "frase_ejemplo": "Una taza de café."
+  },
+  {
+    "palabra": "tenedor",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "fork",
+    "frase_ejemplo": "Como la carne con tenedor."
+  },
+  {
+    "palabra": "cuchillo",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino",
+    "traduccion_ingles": "knife",
+    "frase_ejemplo": "El cuchillo no corta bien."
+  },
+  {
+    "palabra": "cuchara",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "spoon",
+    "frase_ejemplo": "Como la sopa con cuchara."
+  },
+  {
+    "palabra": "servilleta",
+    "campo_lexico": "En el Restaurante",
+    "genero": "femenino",
+    "traduccion_ingles": "napkin",
+    "frase_ejemplo": "Límpiate con la servilleta."
+  },
+  {
+    "palabra": "rico",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino (adjetivo)",
+    "traduccion_ingles": "tasty / good",
+    "frase_ejemplo": "El pastel está muy rico."
+  },
+  {
+    "palabra": "delicioso",
+    "campo_lexico": "En el Restaurante",
+    "genero": "masculino (adjetivo)",
+    "traduccion_ingles": "delicious",
+    "frase_ejemplo": "La comida es deliciosa."
+  },
+  {
+    "palabra": "ser",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to be (permanent)",
+    "frase_ejemplo": "Yo soy español."
+  },
+  {
+    "palabra": "estar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to be (temporary/location)",
+    "frase_ejemplo": "Estoy en casa ahora."
+  },
+  {
+    "palabra": "tener",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to have",
+    "frase_ejemplo": "Tengo dos hermanos."
+  },
+  {
+    "palabra": "haber",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo (impersonal: hay)",
+    "traduccion_ingles": "there is / there are",
+    "frase_ejemplo": "Hay un libro en la mesa."
+  },
+  {
+    "palabra": "querer",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to want",
+    "frase_ejemplo": "Quiero un helado de chocolate."
+  },
+  {
+    "palabra": "poder",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to be able to / can",
+    "frase_ejemplo": "No puedo ir a la fiesta."
+  },
+  {
+    "palabra": "saber",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to know (facts/skills)",
+    "frase_ejemplo": "No sé la respuesta."
+  },
+  {
+    "palabra": "llamarse",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo reflexivo",
+    "traduccion_ingles": "to be called",
+    "frase_ejemplo": "Me llamo Ana."
+  },
+  {
+    "palabra": "hablar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to speak",
+    "frase_ejemplo": "Hablo español e inglés."
+  },
+  {
+    "palabra": "comer",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to eat",
+    "frase_ejemplo": "Como a las dos de la tarde."
+  },
+  {
+    "palabra": "beber",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to drink",
+    "frase_ejemplo": "Bebo mucha agua."
+  },
+  {
+    "palabra": "vivir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to live",
+    "frase_ejemplo": "Vivo en Madrid."
+  },
+  {
+    "palabra": "ir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to go",
+    "frase_ejemplo": "Voy al cine los viernes."
+  },
+  {
+    "palabra": "venir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to come",
+    "frase_ejemplo": "¿Vienes a mi casa?"
+  },
+  {
+    "palabra": "hacer",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to do / to make",
+    "frase_ejemplo": "Hago los deberes por la tarde."
+  },
+  {
+    "palabra": "dormir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to sleep",
+    "frase_ejemplo": "Duermo ocho horas al día."
+  },
+  {
+    "palabra": "levantarse",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo reflexivo",
+    "traduccion_ingles": "to get up",
+    "frase_ejemplo": "Me levanto a las siete."
+  },
+  {
+    "palabra": "ducharse",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo reflexivo",
+    "traduccion_ingles": "to take a shower",
+    "frase_ejemplo": "Me ducho por la mañana."
+  },
+  {
+    "palabra": "trabajar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to work",
+    "frase_ejemplo": "Mi padre trabaja en un banco."
+  },
+  {
+    "palabra": "gustar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to like",
+    "frase_ejemplo": "Me gusta el fútbol."
+  },
+  {
+    "palabra": "leer",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to read",
+    "frase_ejemplo": "Leo un libro interesante."
+  },
+  {
+    "palabra": "escribir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to write",
+    "frase_ejemplo": "Escribo un correo electrónico."
+  },
+  {
+    "palabra": "escuchar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to listen",
+    "frase_ejemplo": "Escucho música en el autobús."
+  },
+  {
+    "palabra": "mirar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to look / to watch",
+    "frase_ejemplo": "Mira la pizarra, por favor."
+  },
+  {
+    "palabra": "ver",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to see / to watch",
+    "frase_ejemplo": "Veo la televisión por la noche."
+  },
+  {
+    "palabra": "estudiar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to study",
+    "frase_ejemplo": "Estudio español en la escuela."
+  },
+  {
+    "palabra": "aprender",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to learn",
+    "frase_ejemplo": "Quiero aprender muchas palabras."
+  },
+  {
+    "palabra": "jugar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to play",
+    "frase_ejemplo": "Los niños juegan en el parque."
+  },
+  {
+    "palabra": "comprar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to buy",
+    "frase_ejemplo": "Compro comida en el supermercado."
+  },
+  {
+    "palabra": "viajar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to travel",
+    "frase_ejemplo": "Me gusta viajar en verano."
+  },
+  {
+    "palabra": "salir",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to go out / leave",
+    "frase_ejemplo": "Salgo con mis amigos el sábado."
+  },
+  {
+    "palabra": "llegar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to arrive",
+    "frase_ejemplo": "El tren llega a las cinco."
+  },
+  {
+    "palabra": "entrar",
+    "campo_lexico": "Verbos (Infinitivo)",
+    "genero": "verbo",
+    "traduccion_ingles": "to enter",
+    "frase_ejemplo": "Entra en la clase, por favor."
+  },
+  {
+    "palabra": "bien",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "invariable (adverbio)",
+    "traduccion_ingles": "well / good",
+    "frase_ejemplo": "Estoy muy bien, gracias."
+  },
+  {
+    "palabra": "mal",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "invariable (adverbio)",
+    "traduccion_ingles": "bad / poorly",
+    "frase_ejemplo": "Me siento mal hoy."
+  },
+  {
+    "palabra": "regular",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "invariable",
+    "traduccion_ingles": "so-so / okay",
+    "frase_ejemplo": "—¿Qué tal estás? —Regular."
+  },
+  {
+    "palabra": "contento",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "happy / content",
+    "frase_ejemplo": "Estoy contento con mi trabajo."
+  },
+  {
+    "palabra": "triste",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "invariable",
+    "traduccion_ingles": "sad",
+    "frase_ejemplo": "Ella está triste porque llueve."
+  },
+  {
+    "palabra": "cansado",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "tired",
+    "frase_ejemplo": "Estoy muy cansado, quiero dormir."
+  },
+  {
+    "palabra": "enfadado",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "angry",
+    "frase_ejemplo": "El profesor está enfadado."
+  },
+  {
+    "palabra": "nervioso",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "nervous",
+    "frase_ejemplo": "Estoy nervioso por el examen."
+  },
+  {
+    "palabra": "tranquilo",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "calm / relaxed",
+    "frase_ejemplo": "Este pueblo es muy tranquilo."
+  },
+  {
+    "palabra": "aburrido",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "bored",
+    "frase_ejemplo": "Estoy aburrido, no hay nada que hacer."
+  },
+  {
+    "palabra": "ocupado",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "busy",
+    "frase_ejemplo": "No puedo hablar, estoy ocupado."
+  },
+  {
+    "palabra": "enfermo",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino",
+    "traduccion_ingles": "sick / ill",
+    "frase_ejemplo": "No voy a trabajar, estoy enfermo."
+  },
+  {
+    "palabra": "hambre",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "femenino (se usa con 'tener')",
+    "traduccion_ingles": "hunger",
+    "frase_ejemplo": "Tengo hambre, ¿comemos?"
+  },
+  {
+    "palabra": "sed",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "femenino (se usa con 'tener')",
+    "traduccion_ingles": "thirst",
+    "frase_ejemplo": "Tengo sed, quiero agua."
+  },
+  {
+    "palabra": "frío",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino (se usa con 'tener')",
+    "traduccion_ingles": "cold",
+    "frase_ejemplo": "Tengo frío, cierra la ventana."
+  },
+  {
+    "palabra": "calor",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino (se usa con 'tener')",
+    "traduccion_ingles": "heat / hot",
+    "frase_ejemplo": "Tengo mucho calor en verano."
+  },
+  {
+    "palabra": "sueño",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino (se usa con 'tener')",
+    "traduccion_ingles": "sleepiness",
+    "frase_ejemplo": "Tengo sueño, me voy a la cama."
+  },
+  {
+    "palabra": "miedo",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "masculino (se usa con 'tener')",
+    "traduccion_ingles": "fear",
+    "frase_ejemplo": "Tengo miedo de los perros grandes."
+  },
+  {
+    "palabra": "prisa",
+    "campo_lexico": "Expresar Sentimientos",
+    "genero": "femenino (se usa con 'tener')",
+    "traduccion_ingles": "hurry",
+    "frase_ejemplo": "Rápido, tengo prisa."
+  },
+  {
+    "palabra": "aquí",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "here",
+    "frase_ejemplo": "Vivo aquí, en esta casa."
+  },
+  {
+    "palabra": "allí",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "there",
+    "frase_ejemplo": "La escuela está allí."
+  },
+  {
+    "palabra": "cerca",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "near / close",
+    "frase_ejemplo": "Mi trabajo está cerca de casa."
+  },
+  {
+    "palabra": "lejos",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "far",
+    "frase_ejemplo": "Japón está muy lejos."
+  },
+  {
+    "palabra": "a la derecha",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "expresión",
+    "traduccion_ingles": "to the right",
+    "frase_ejemplo": "El baño está a la derecha."
+  },
+  {
+    "palabra": "a la izquierda",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "expresión",
+    "traduccion_ingles": "to the left",
+    "frase_ejemplo": "Gira a la izquierda."
+  },
+  {
+    "palabra": "delante",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "in front",
+    "frase_ejemplo": "El jardín está delante de la casa."
+  },
+  {
+    "palabra": "detrás",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "behind",
+    "frase_ejemplo": "El gato está detrás del sofá."
+  },
+  {
+    "palabra": "enfrente",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "opposite / facing",
+    "frase_ejemplo": "Vivo enfrente del parque."
+  },
+  {
+    "palabra": "al lado",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "expresión",
+    "traduccion_ingles": "next to",
+    "frase_ejemplo": "El cine está al lado del banco."
+  },
+  {
+    "palabra": "encima",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "on top of",
+    "frase_ejemplo": "Las llaves están encima de la mesa."
+  },
+  {
+    "palabra": "debajo",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "under / underneath",
+    "frase_ejemplo": "El perro está debajo de la cama."
+  },
+  {
+    "palabra": "dentro",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "inside",
+    "frase_ejemplo": "El dinero está dentro de la cartera."
+  },
+  {
+    "palabra": "fuera",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "invariable",
+    "traduccion_ingles": "outside",
+    "frase_ejemplo": "Los niños juegan fuera."
+  },
+  {
+    "palabra": "entre",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "preposición",
+    "traduccion_ingles": "between",
+    "frase_ejemplo": "Estoy entre mi padre y mi madre."
+  },
+  {
+    "palabra": "en",
+    "campo_lexico": "Indicadores de Lugar",
+    "genero": "preposición",
+    "traduccion_ingles": "in / on / at",
+    "frase_ejemplo": "El libro está en la mochila."
   }
+]
 ]

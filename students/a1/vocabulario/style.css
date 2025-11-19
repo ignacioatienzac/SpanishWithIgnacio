@@ -1,0 +1,100 @@
+/* Estilos específicos para la página de vocabulario A1 */
+
+.topics-section {
+    padding: 3rem 2rem 4rem;
+}
+
+.topics-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 2rem;
+}
+
+.topics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.topic-card {
+    height: 100%;
+}
+
+.topic-card .resource-card {
+    width: 100%;
+}
+
+.resource-card--detailed {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    text-align: left;
+    overflow: hidden;
+}
+
+.resource-card__image {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.25), rgba(192, 57, 43, 0.18));
+}
+
+.resource-card__image--alphabet {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.25), rgba(192, 57, 43, 0.18));
+}
+
+.resource-card__image--basic-expressions {
+    background: linear-gradient(135deg, rgba(26, 188, 156, 0.25), rgba(52, 152, 219, 0.15));
+}
+
+.resource-card__image--countries {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.25), rgba(142, 68, 173, 0.15));
+}
+
+.resource-card__image--numbers {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.25), rgba(230, 126, 34, 0.15));
+}
+
+.resource-card__image--professions {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.25), rgba(52, 73, 94, 0.15));
+}
+
+.resource-card__image--weather {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(46, 204, 113, 0.18));
+}
+
+.resource-card__content {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.resource-card__title {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--secondary-color);
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.resource-card__description {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.resource-card.active:hover .resource-card__title,
+.resource-card.active:focus .resource-card__title,
+.resource-card.active:hover .resource-card__description,
+.resource-card.active:focus .resource-card__description {
+    color: #ffffff;
+}
+
+@media (max-width: 640px) {
+    .topics-section {
+        padding: 2.5rem 1.5rem 3rem;
+    }
+}

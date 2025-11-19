@@ -1,0 +1,612 @@
+[
+  {
+    "palabra": "yo",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "invariable",
+    "traduccion_ingles": "I",
+    "frase_ejemplo": "Yo soy estudiante de español."
+  },
+  {
+    "palabra": "tú",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "invariable",
+    "traduccion_ingles": "you (singular informal)",
+    "frase_ejemplo": "¿Tú vives en esta ciudad?"
+  },
+  {
+    "palabra": "él",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "masculino",
+    "traduccion_ingles": "he",
+    "frase_ejemplo": "Él es mi mejor amigo."
+  },
+  {
+    "palabra": "ella",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "femenino",
+    "traduccion_ingles": "she",
+    "frase_ejemplo": "Ella tiene veinticinco años."
+  },
+  {
+    "palabra": "usted",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "invariable",
+    "traduccion_ingles": "you (singular formal)",
+    "frase_ejemplo": "¿Usted es el profesor de historia?"
+  },
+  {
+    "palabra": "nosotros",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "masculino",
+    "traduccion_ingles": "we (masculine/mixed)",
+    "frase_ejemplo": "Nosotros vamos al cine mañana."
+  },
+  {
+    "palabra": "nosotras",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "femenino",
+    "traduccion_ingles": "we (feminine)",
+    "frase_ejemplo": "Nosotras somos hermanas."
+  },
+  {
+    "palabra": "vosotros",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "masculino",
+    "traduccion_ingles": "you (plural informal masculine/mixed)",
+    "frase_ejemplo": "¿Vosotros sois de España?"
+  },
+  {
+    "palabra": "vosotras",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "femenino",
+    "traduccion_ingles": "you (plural informal feminine)",
+    "frase_ejemplo": "Vosotras tenéis un coche muy bonito."
+  },
+  {
+    "palabra": "ellos",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "masculino",
+    "traduccion_ingles": "they (masculine/mixed)",
+    "frase_ejemplo": "Ellos comen en el restaurante."
+  },
+  {
+    "palabra": "ellas",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "femenino",
+    "traduccion_ingles": "they (feminine)",
+    "frase_ejemplo": "Ellas están muy contentas."
+  },
+  {
+    "palabra": "ustedes",
+    "campo_lexico": "Pronombres Personales",
+    "genero": "invariable",
+    "traduccion_ingles": "you (plural formal/informal Latin America)",
+    "frase_ejemplo": "Ustedes hablan muy bien."
+  }
+]
+[
+  {
+    "palabra": "español",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Spanish (nationality)",
+    "frase_ejemplo": "Mi amigo es español."
+  },
+  {
+    "palabra": "española",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Spanish (nationality)",
+    "frase_ejemplo": "La comida española es deliciosa."
+  },
+  {
+    "palabra": "mexicano",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Mexican",
+    "frase_ejemplo": "El cantante es mexicano."
+  },
+  {
+    "palabra": "mexicana",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Mexican",
+    "frase_ejemplo": "Ella es una actriz mexicana."
+  },
+  {
+    "palabra": "francés",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "French",
+    "frase_ejemplo": "Pierre es francés."
+  },
+  {
+    "palabra": "francesa",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "French",
+    "frase_ejemplo": "París es una ciudad francesa."
+  },
+  {
+    "palabra": "estadounidense",
+    "campo_lexico": "Nacionalidades",
+    "genero": "invariable",
+    "traduccion_ingles": "American (USA)",
+    "frase_ejemplo": "El presidente estadounidense habla hoy."
+  },
+  {
+    "palabra": "canadiense",
+    "campo_lexico": "Nacionalidades",
+    "genero": "invariable",
+    "traduccion_ingles": "Canadian",
+    "frase_ejemplo": "Mi vecino es canadiense."
+  },
+  {
+    "palabra": "inglés",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "English",
+    "frase_ejemplo": "El turista inglés busca el museo."
+  },
+  {
+    "palabra": "inglesa",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "English",
+    "frase_ejemplo": "La profesora de inglés es inglesa."
+  },
+  {
+    "palabra": "alemán",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "German",
+    "frase_ejemplo": "Tengo un coche alemán."
+  },
+  {
+    "palabra": "alemana",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "German",
+    "frase_ejemplo": "Claudia es alemana."
+  },
+  {
+    "palabra": "italiano",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Italian",
+    "frase_ejemplo": "Marco es italiano."
+  },
+  {
+    "palabra": "italiana",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Italian",
+    "frase_ejemplo": "La pasta italiana es famosa."
+  },
+  {
+    "palabra": "chino",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Chinese",
+    "frase_ejemplo": "Él estudia chino."
+  },
+  {
+    "palabra": "china",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Chinese",
+    "frase_ejemplo": "Ella es de una ciudad china."
+  },
+  {
+    "palabra": "japonés",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Japanese",
+    "frase_ejemplo": "El estudiante japonés es muy aplicado."
+  },
+  {
+    "palabra": "japonesa",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Japanese",
+    "frase_ejemplo": "La empresa es japonesa."
+  },
+  {
+    "palabra": "coreano",
+    "campo_lexico": "Nacionalidades",
+    "genero": "masculino",
+    "traduccion_ingles": "Korean",
+    "frase_ejemplo": "El grupo de música es coreano."
+  },
+  {
+    "palabra": "coreana",
+    "campo_lexico": "Nacionalidades",
+    "genero": "femenino",
+    "traduccion_ingles": "Korean",
+    "frase_ejemplo": "Mi compañera de piso es coreana."
+  }
+]
+[
+  {
+    "palabra": "hola",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "hello / hi",
+    "frase_ejemplo": "¡Hola! Me llamo Pedro."
+  },
+  {
+    "palabra": "buenos días",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "masculino plural",
+    "traduccion_ingles": "good morning",
+    "frase_ejemplo": "Buenos días, ¿cómo está usted?"
+  },
+  {
+    "palabra": "buenas tardes",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "femenino plural",
+    "traduccion_ingles": "good afternoon",
+    "frase_ejemplo": "Buenas tardes, quiero una mesa para dos."
+  },
+  {
+    "palabra": "buenas noches",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "femenino plural",
+    "traduccion_ingles": "good evening / good night",
+    "frase_ejemplo": "Me voy a dormir, buenas noches."
+  },
+  {
+    "palabra": "adiós",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "goodbye",
+    "frase_ejemplo": "Adiós, nos vemos el lunes."
+  },
+  {
+    "palabra": "hasta luego",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "see you later",
+    "frase_ejemplo": "Tengo clase ahora, ¡hasta luego!"
+  },
+  {
+    "palabra": "hasta mañana",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "see you tomorrow",
+    "frase_ejemplo": "Terminamos por hoy, hasta mañana."
+  },
+  {
+    "palabra": "por favor",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "please",
+    "frase_ejemplo": "Un café con leche, por favor."
+  },
+  {
+    "palabra": "gracias",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "thank you",
+    "frase_ejemplo": "Muchas gracias por tu ayuda."
+  },
+  {
+    "palabra": "de nada",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "you are welcome",
+    "frase_ejemplo": "—Gracias por todo. —De nada."
+  },
+  {
+    "palabra": "lo siento",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "I am sorry",
+    "frase_ejemplo": "Lo siento, no comprendo bien."
+  },
+  {
+    "palabra": "perdón",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "sorry / excuse me",
+    "frase_ejemplo": "Perdón, ¿puedes repetir?"
+  },
+  {
+    "palabra": "mucho gusto",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "nice to meet you",
+    "frase_ejemplo": "—Soy Ana. —Mucho gusto."
+  },
+  {
+    "palabra": "encantado",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "masculino",
+    "traduccion_ingles": "pleased to meet you (said by a male)",
+    "frase_ejemplo": "Hola, soy Juan, encantado."
+  },
+  {
+    "palabra": "encantada",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "femenino",
+    "traduccion_ingles": "pleased to meet you (said by a female)",
+    "frase_ejemplo": "Soy María, encantada de conocerte."
+  },
+  {
+    "palabra": "¿qué tal?",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "how are things? / how are you?",
+    "frase_ejemplo": "Hola Luis, ¿qué tal?"
+  },
+  {
+    "palabra": "¿cómo estás?",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "how are you? (informal)",
+    "frase_ejemplo": "¿Cómo estás hoy?"
+  },
+  {
+    "palabra": "¿cómo está usted?",
+    "campo_lexico": "Saludos y Despedidas",
+    "genero": "N/A",
+    "traduccion_ingles": "how are you? (formal)",
+    "frase_ejemplo": "Buenos días, señor García, ¿cómo está usted?"
+  }
+]
+[
+  {
+    "palabra": "qué",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "what",
+    "frase_ejemplo": "¿Qué es esto?"
+  },
+  {
+    "palabra": "quién",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable (singular)",
+    "traduccion_ingles": "who (singular)",
+    "frase_ejemplo": "¿Quién es ese hombre?"
+  },
+  {
+    "palabra": "quiénes",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable (plural)",
+    "traduccion_ingles": "who (plural)",
+    "frase_ejemplo": "¿Quiénes son tus amigos?"
+  },
+  {
+    "palabra": "dónde",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "where",
+    "frase_ejemplo": "¿Dónde vives?"
+  },
+  {
+    "palabra": "de dónde",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "where from",
+    "frase_ejemplo": "¿De dónde eres?"
+  },
+  {
+    "palabra": "cuándo",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "when",
+    "frase_ejemplo": "¿Cuándo es tu cumpleaños?"
+  },
+  {
+    "palabra": "cómo",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "how",
+    "frase_ejemplo": "¿Cómo te llamas?"
+  },
+  {
+    "palabra": "por qué",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable",
+    "traduccion_ingles": "why",
+    "frase_ejemplo": "¿Por qué estudias español?"
+  },
+  {
+    "palabra": "cuál",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable (singular)",
+    "traduccion_ingles": "which / what",
+    "frase_ejemplo": "¿Cuál es tu número de teléfono?"
+  },
+  {
+    "palabra": "cuáles",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "invariable (plural)",
+    "traduccion_ingles": "which / what (plural)",
+    "frase_ejemplo": "¿Cuáles son tus libros favoritos?"
+  },
+  {
+    "palabra": "cuánto",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "masculino singular",
+    "traduccion_ingles": "how much",
+    "frase_ejemplo": "¿Cuánto cuesta este pantalón?"
+  },
+  {
+    "palabra": "cuánta",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "femenino singular",
+    "traduccion_ingles": "how much",
+    "frase_ejemplo": "¿Cuánta gente hay en la fiesta?"
+  },
+  {
+    "palabra": "cuántos",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "masculino plural",
+    "traduccion_ingles": "how many",
+    "frase_ejemplo": "¿Cuántos años tienes?"
+  },
+  {
+    "palabra": "cuántas",
+    "campo_lexico": "Preguntas Básicas",
+    "genero": "femenino plural",
+    "traduccion_ingles": "how many",
+    "frase_ejemplo": "¿Cuántas hermanas tienes?"
+  }
+]
+[
+  {
+    "palabra": "familia",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "family",
+    "frase_ejemplo": "Tengo una familia muy grande."
+  },
+  {
+    "palabra": "padre",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "father",
+    "frase_ejemplo": "Mi padre trabaja en una oficina."
+  },
+  {
+    "palabra": "madre",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "mother",
+    "frase_ejemplo": "Mi madre se llama Elena."
+  },
+  {
+    "palabra": "padres",
+    "campo_lexico": "La Familia",
+    "genero": "masculino plural",
+    "traduccion_ingles": "parents",
+    "frase_ejemplo": "Mis padres viven en Valencia."
+  },
+  {
+    "palabra": "hijo",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "son",
+    "frase_ejemplo": "Ellos tienen un hijo inteligente."
+  },
+  {
+    "palabra": "hija",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "daughter",
+    "frase_ejemplo": "Su hija tiene cinco años."
+  },
+  {
+    "palabra": "hermano",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "brother",
+    "frase_ejemplo": "Tengo un hermano mayor."
+  },
+  {
+    "palabra": "hermana",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "sister",
+    "frase_ejemplo": "Mi hermana estudia medicina."
+  },
+  {
+    "palabra": "abuelo",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "grandfather",
+    "frase_ejemplo": "Mi abuelo lee el periódico."
+  },
+  {
+    "palabra": "abuela",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "grandmother",
+    "frase_ejemplo": "La abuela cocina muy bien."
+  },
+  {
+    "palabra": "tío",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "uncle",
+    "frase_ejemplo": "Mi tío Juan es muy alto."
+  },
+  {
+    "palabra": "tía",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "aunt",
+    "frase_ejemplo": "Visito a mi tía los domingos."
+  },
+  {
+    "palabra": "primo",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "cousin (male)",
+    "frase_ejemplo": "Mi primo vive en otra ciudad."
+  },
+  {
+    "palabra": "prima",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "cousin (female)",
+    "frase_ejemplo": "Mi prima es mi mejor amiga."
+  },
+  {
+    "palabra": "esposo",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "husband",
+    "frase_ejemplo": "Su esposo es profesor."
+  },
+  {
+    "palabra": "esposa",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "wife",
+    "frase_ejemplo": "Su esposa trabaja en el banco."
+  },
+  {
+    "palabra": "marido",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "husband",
+    "frase_ejemplo": "Mi marido está en casa."
+  },
+  {
+    "palabra": "mujer",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "wife (also: woman)",
+    "frase_ejemplo": "Su mujer se llama Carmen."
+  },
+  {
+    "palabra": "nieto",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "grandson",
+    "frase_ejemplo": "El abuelo pasea con su nieto."
+  },
+  {
+    "palabra": "nieta",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "granddaughter",
+    "frase_ejemplo": "Es la nieta favorita de la abuela."
+  },
+  {
+    "palabra": "sobrino",
+    "campo_lexico": "La Familia",
+    "genero": "masculino",
+    "traduccion_ingles": "nephew",
+    "frase_ejemplo": "Tengo un regalo para mi sobrino."
+  },
+  {
+    "palabra": "sobrina",
+    "campo_lexico": "La Familia",
+    "genero": "femenino",
+    "traduccion_ingles": "niece",
+    "frase_ejemplo": "Mi sobrina tiene tres años."
+  }
+]

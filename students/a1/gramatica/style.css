@@ -65,6 +65,27 @@
     background: linear-gradient(135deg, rgba(52, 152, 219, 0.25), rgba(192, 57, 43, 0.18));
 }
 
+.resource-card__image--present-tense {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(192, 57, 43, 0.16)),
+                url('./images/present-tense.png');
+    background-position: center;
+    background-size: cover;
+}
+
+.resource-card__image--reflexive-verbs {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(192, 57, 43, 0.16)),
+                url('./images/reflexive-verbs.png');
+    background-position: center;
+    background-size: cover;
+}
+
+.resource-card__image--direct-object {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(192, 57, 43, 0.16)),
+                url('./images/direct-object-pronouns.png');
+    background-position: center;
+    background-size: cover;
+}
+
 .resource-card__image--gustar {
     background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(192, 57, 43, 0.08)),
                 url('./images/gustar.png');

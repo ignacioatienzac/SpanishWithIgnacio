@@ -68,7 +68,7 @@
 .resource-card__image--gustar {
     background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(192, 57, 43, 0.08)),
                 url('./images/gustar.png');
-    background-position: center;
+    background-position: center 75%;
     background-size: cover;
 }
 

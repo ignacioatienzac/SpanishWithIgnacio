@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish with Ignacio - Professions</title>
+    <!-- Original Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* --- GENERAL STYLES --- */
+        :root {
+            --primary-color: #e53935; /* Spanish Red */
+            --secondary-color: #fb8c00; /* Orange */
+            --dark-color: #1f2937;
+            --light-bg: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: var(--dark-color);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .main-header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-script {
+            font-family: 'Satisfy', cursive;
+            color: var(--primary-color);
+            font-size: 1.2em;
+            margin-top: -5px;
+        }
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .main-nav ul {
+                gap: 1rem;
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* --- COMPONENT STYLES --- */
+        
+        /* Flashcards */
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .card-front {
+            background-color: white;
+            border: 2px solid #e5e7eb;
+        }
+
+        .card-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* Memory Game Cards */
+        .memory-card {
+            aspect-ratio: 1 / 1;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+
+        .memory-front, .memory-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: bold;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .memory-front {
+            background-color: #2d3748; /* Dark grey back of card */
+            color: white;
+            font-size: 2rem;
+        }
+
+        .memory-back {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            color: var(--dark-color);
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card.matched .memory-back {
+            background-color: #d1fae5; /* Light green */
+            border-color: #10b981;
+        }
+
+        /* Animation Classes */
+        .correct-anim {
+            animation: pulse-green 0.5s ease-in-out;
+            background-color: #d1fae5 !important; 
+        }
+        .incorrect-anim {
+            animation: shake-red 0.5s ease-in-out;
+            background-color: #fee2e2 !important;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake-red {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#" class="active">Professions</a></li>
+                    <li><a href="profesores/index.html">Teachers</a></li>
+                    <li><a href="games/index.html">Games</a></li>
+                    <li><a href="adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pb-20">
+        <!-- HERO SECTION -->
+        <section class="bg-white py-12 shadow-sm">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">The Professions</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Learn job titles in Spanish with our infographic, interactive games, and vocabulary exercises.</p>
+            </div>
+        </section>
+
+        <!-- ACTIVITY 1: INFOGRAPHIC -->
+        <section class="container mx-auto px-4 py-12">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-red-500 w-2 h-10 rounded-full"></div>
+                <h2 class="text-3xl font-bold text-gray-800">1. Study Guide</h2>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl shadow-md flex justify-center">
+                <!-- Placeholder for infographic -->
+                <img src="profesiones.png" alt="Professions Infographic" class="max-w-full h-auto rounded-lg border border-gray-200" onerror="this.src='https://placehold.co/800x600?text=Infografia+Profesiones+(Pending+Upload)';">
+            </div>
+        </section>
+
+        <!-- ACTIVITY 2: UNSCRAMBLE WORDS (New) -->
+        <section class="bg-orange-50 py-16">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center gap-3 mb-8 justify-center">
+                    <h2 class="text-3xl font-bold text-gray-800">2. Unscramble the Word</h2>
+                    <i class="fa-solid fa-puzzle-piece text-3xl text-orange-500"></i>
+                </div>
+
+                <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-lg p-8 text-center">
+                    <p class="text-gray-500 mb-6">Look at the icon and the scrambled letters. Type the correct profession in Spanish.</p>
+                    
+                    <div class="mb-6">
+                        <div id="scramble-icon" class="text-6xl text-orange-500 mb-4"></div>
+                        <div id="scramble-letters" class="text-3xl font-mono font-bold tracking-widest text-gray-800 bg-gray-100 py-3 rounded-lg"></div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="scramble-input" placeholder="Type here..." class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-orange-500 outline-none text-lg" autocomplete="off">
+                        <button onclick="checkScramble()" class="bg-orange-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-orange-600 transition">Check</button>
+                    </div>
+                    
+                    <p id="scramble-feedback" class="mt-4 font-bold text-lg min-h-[1.5rem]"></p>
+                    
+                    <button onclick="loadScrambleGame()" class="mt-4 text-sm text-gray-400 underline hover:text-gray-600">Skip / Next</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVITY 3: QUIZ (Old Activity 2) -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="flex items-center gap-3 mb-8 justify-center">
+                <h2 class="text-3xl font-bold text-gray-800">3. Quick Quiz</h2>
+                <i class="fa-solid fa-clipboard-question text-3xl text-blue-500"></i>
+            </div>
+
+            <div class="max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+                <div id="quiz-container">
+                    <div class="mb-6 text-center">
+                        <p class="text-gray-500 text-sm uppercase tracking-wide">How do you say this in Spanish?</p>
+                        <h3 id="quiz-question" class="text-3xl font-bold text-gray-800 my-4">Waitress</h3>
+                    </div>
+                    <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- JS Generated -->
+                    </div>
+                    <div id="quiz-feedback" class="mt-6 text-center font-bold h-6 text-lg"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVITY 4: MEMORY GAME (New) -->
+        <section class="bg-indigo-50 py-16">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center gap-3 mb-8 justify-center">
+                    <h2 class="text-3xl font-bold text-gray-800">4. Memory Game</h2>
+                    <i class="fa-solid fa-brain text-3xl text-indigo-500"></i>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-between items-center mb-4 px-4">
+                        <p class="text-gray-600">Find the pairs: <span class="font-bold">Spanish Word</span> ↔ <span class="font-bold">English Translation</span></p>
+                        <button onclick="initMemoryGame()" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 text-sm font-bold"><i class="fa-solid fa-rotate-right mr-2"></i>Restart</button>
+                    </div>
+                    
+                    <div id="memory-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 p-4">
+                        <!-- JS Generated Cards -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVITY 5: COMPLETE SENTENCE (Old 3) -->
+        <section class="container mx-auto px-4 py-12">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-yellow-500 w-2 h-10 rounded-full"></div>
+                <h2 class="text-3xl font-bold text-gray-800">5. Complete the Sentence</h2>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-6 max-w-3xl mx-auto shadow-sm">
+                <div id="sentence-game" class="text-center">
+                    <p class="text-lg mb-6 text-gray-600">Select the correct profession to complete the sentence.</p>
+                    
+                    <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                        <p id="sentence-text" class="text-2xl font-medium leading-relaxed">
+                            <!-- JS Generated -->
+                        </p>
+                    </div>
+
+                    <div id="sentence-options" class="flex flex-wrap justify-center gap-3">
+                        <!-- JS Generated -->
+                    </div>
+                    <p id="sentence-feedback" class="mt-4 font-bold text-green-600"></p>
+                </div>
+                <div class="text-center mt-6">
+                    <button onclick="loadSentenceGame()" class="text-sm text-gray-500 underline hover:text-gray-800">Next sentence <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVITY 6: FLASHCARDS (Old 4) -->
+        <section class="bg-gray-800 text-white py-16">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-2">6. Flashcards</h2>
+                <p class="text-gray-400 mb-10">Click the card to reveal the translation.</p>
+
+                <div class="flashcard-container" onclick="flipFlashcard(this)">
+                    <div class="flashcard">
+                        <div class="card-face card-front">
+                            <i class="fa-solid fa-language text-4xl text-red-500 mb-4"></i>
+                            <h3 id="fc-spanish" class="text-3xl font-bold text-gray-800">Cocinero</h3>
+                            <span class="text-gray-400 text-sm mt-2">(Spanish)</span>
+                        </div>
+                        <div class="card-face card-back">
+                            <i class="fa-solid fa-earth-americas text-4xl text-white mb-4"></i>
+                            <h3 id="fc-english" class="text-3xl font-bold">Cook / Chef</h3>
+                            <span class="text-white/80 text-sm mt-2">(English)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-6 mt-8">
+                    <button onclick="prevCard()" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-full transition"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                    <button onclick="nextCard()" class="bg-white text-gray-900 hover:bg-gray-200 px-6 py-3 rounded-full font-bold transition">Next <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <div class="container mx-auto">
+            <div class="logo mb-4">
+                <span class="text-xl font-black font-sans uppercase">Spanish with</span>
+                <span class="text-xl font-cursive text-red-500" style="font-family: 'Brush Script MT', cursive;">Ignacio</span>
+            </div>
+            <p class="text-gray-500 text-sm">&copy; 2025 Spanish with Ignacio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const vocabulario = [
+            { "palabra": "profesor", "genero": "masculino", "traduccion_ingles": "teacher (male)", "frase_ejemplo": "El profesor escribe en la pizarra." },
+            { "palabra": "profesora", "genero": "femenino", "traduccion_ingles": "teacher (female)", "frase_ejemplo": "La profesora de inglés es excelente." },
+            { "palabra": "estudiante", "genero": "invariable", "traduccion_ingles": "student", "frase_ejemplo": "Yo soy estudiante de español." },
+            { "palabra": "médico", "genero": "masculino", "traduccion_ingles": "doctor (male)", "frase_ejemplo": "El médico trabaja en el hospital." },
+            { "palabra": "médica", "genero": "femenino", "traduccion_ingles": "doctor (female)", "frase_ejemplo": "Mi madre es médica." },
+            { "palabra": "enfermero", "genero": "masculino", "traduccion_ingles": "nurse (male)", "frase_ejemplo": "El enfermero ayuda a los pacientes." },
+            { "palabra": "enfermera", "genero": "femenino", "traduccion_ingles": "nurse (female)", "frase_ejemplo": "La enfermera trabaja por la noche." },
+            { "palabra": "cocinero", "genero": "masculino", "traduccion_ingles": "cook / chef (male)", "frase_ejemplo": "El cocinero prepara una sopa." },
+            { "palabra": "cocinera", "genero": "femenino", "traduccion_ingles": "cook / chef (female)", "frase_ejemplo": "Ella es cocinera en un restaurante famoso." },
+            { "palabra": "policía", "genero": "invariable", "traduccion_ingles": "police officer", "frase_ejemplo": "El policía controla el tráfico." },
+            { "palabra": "camarero", "genero": "masculino", "traduccion_ingles": "waiter", "frase_ejemplo": "El camarero trae el menú." },
+            { "palabra": "camarera", "genero": "femenino", "traduccion_ingles": "waitress", "frase_ejemplo": "La camarera sirve el café." },
+            { "palabra": "dependiente", "genero": "masculino", "traduccion_ingles": "shop assistant (male)", "frase_ejemplo": "El dependiente vende ropa." },
+            { "palabra": "dependienta", "genero": "femenino", "traduccion_ingles": "shop assistant (female)", "frase_ejemplo": "Pregunta a la dependienta el precio." },
+            { "palabra": "secretario", "genero": "masculino", "traduccion_ingles": "secretary (male)", "frase_ejemplo": "El secretario contesta al teléfono." },
+            { "palabra": "secretaria", "genero": "femenino", "traduccion_ingles": "secretary (female)", "frase_ejemplo": "La secretaria organiza la agenda." },
+            { "palabra": "taxista", "genero": "invariable", "traduccion_ingles": "taxi driver", "frase_ejemplo": "El taxista conoce bien la ciudad." }
+        ];
+
+        // Helper to get Icons
+        function getIconForProfession(word) {
+            if(word.includes('profesor') || word.includes('estudiante')) return 'fa-chalkboard-user';
+            if(word.includes('médic') || word.includes('enfermer')) return 'fa-user-doctor';
+            if(word.includes('cociner')) return 'fa-utensils';
+            if(word.includes('policía')) return 'fa-shield-halved';
+            if(word.includes('camarer')) return 'fa-martini-glass';
+            if(word.includes('dependiente')) return 'fa-shop';
+            if(word.includes('secretari')) return 'fa-folder-open';
+            if(word.includes('taxista')) return 'fa-taxi';
+            return 'fa-user';
+        }
+
+        // --- 2. UNSCRAMBLE GAME LOGIC ---
+        let currentScrambleItem = null;
+
+        function loadScrambleGame() {
+            const randomIndex = Math.floor(Math.random() * vocabulario.length);
+            currentScrambleItem = vocabulario[randomIndex];
+            
+            // Scramble
+            const originalWord = currentScrambleItem.palabra;
+            const scrambled = originalWord.split('').sort(() => 0.5 - Math.random()).join('');
+            
+            // Update UI
+            document.getElementById('scramble-icon').innerHTML = `<i class="fa-solid ${getIconForProfession(originalWord)}"></i>`;
+            document.getElementById('scramble-letters').innerText = scrambled.split('').join(' '); // Add spaces for readability
+            document.getElementById('scramble-input').value = '';
+            document.getElementById('scramble-feedback').innerText = '';
+            document.getElementById('scramble-feedback').className = "mt-4 font-bold text-lg min-h-[1.5rem]";
+        }
+
+        function checkScramble() {
+            const userGuess = document.getElementById('scramble-input').value.trim().toLowerCase();
+            const correctWord = currentScrambleItem.palabra.toLowerCase();
+            const feedback = document.getElementById('scramble-feedback');
+
+            if (userGuess === correctWord) {
+                feedback.innerText = "Correct! Great job.";
+                feedback.className = "mt-4 font-bold text-lg text-green-600";
+                setTimeout(loadScrambleGame, 1500);
+            } else {
+                feedback.innerText = "Try again!";
+                feedback.className = "mt-4 font-bold text-lg text-red-500";
+            }
+        }
+        
+        // Trigger check on Enter key
+        document.getElementById('scramble-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") checkScramble();
+        });
+
+
+        // --- 3. QUIZ LOGIC ---
+        let currentQuizItem = null;
+
+        function loadQuiz() {
+            const randomIndex = Math.floor(Math.random() * vocabulario.length);
+            currentQuizItem = vocabulario[randomIndex];
+
+            document.getElementById('quiz-question').innerText = currentQuizItem.traduccion_ingles;
+            document.getElementById('quiz-feedback').innerText = "";
+            document.getElementById('quiz-feedback').className = "mt-6 text-center font-bold h-6 text-lg";
+
+            let options = [currentQuizItem];
+            while (options.length < 4) {
+                let randomOpt = vocabulario[Math.floor(Math.random() * vocabulario.length)];
+                if (!options.includes(randomOpt)) options.push(randomOpt);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-4 px-6 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-800 font-bold text-lg transition transform active:scale-95 capitalize";
+                btn.innerText = opt.palabra;
+                btn.onclick = () => checkQuizAnswer(btn, opt);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(btn, selectedOption) {
+            const feedback = document.getElementById('quiz-feedback');
+            const allBtns = document.querySelectorAll('#quiz-options button');
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selectedOption.palabra === currentQuizItem.palabra) {
+                btn.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+                btn.classList.add('bg-green-500', 'text-white', 'correct-anim');
+                feedback.innerText = "Correct!";
+                feedback.classList.add('text-green-600');
+                setTimeout(loadQuiz, 1500);
+            } else {
+                btn.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+                btn.classList.add('bg-red-500', 'text-white', 'incorrect-anim');
+                feedback.innerText = `Wrong. The answer was: ${currentQuizItem.palabra}`;
+                feedback.classList.add('text-red-600');
+                
+                allBtns.forEach(b => {
+                    if(b.innerText.toLowerCase() === currentQuizItem.palabra.toLowerCase()) {
+                        b.classList.add('bg-green-200', 'text-green-800');
+                    }
+                });
+                setTimeout(loadQuiz, 2500);
+            }
+        }
+
+        // --- 4. MEMORY GAME LOGIC ---
+        let memoryCards = [];
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+
+        function initMemoryGame() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            
+            // Pick 6 random pairs
+            let gameItems = [...vocabulario].sort(() => 0.5 - Math.random()).slice(0, 6);
+            
+            // Create card array (Sp and En)
+            let cardsData = [];
+            gameItems.forEach(item => {
+                cardsData.push({ type: 'spanish', text: item.palabra, id: item.palabra });
+                cardsData.push({ type: 'english', text: item.traduccion_ingles.split('(')[0].trim(), id: item.palabra }); // Simplify English text
+            });
+
+            // Shuffle cards
+            cardsData.sort(() => 0.5 - Math.random());
+
+            // Build HTML
+            cardsData.forEach(data => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.framework = data.id;
+
+                card.innerHTML = `
+                    <div class="memory-front"><i class="fa-solid fa-question"></i></div>
+                    <div class="memory-back text-sm md:text-base capitalize">${data.text}</div>
+                `;
+                
+                card.addEventListener('click', flipMemoryCard);
+                grid.appendChild(card);
+            });
+            
+            // Reset state
+            hasFlippedCard = false;
+            lockBoard = false;
+            firstCard = null;
+            secondCard = null;
+        }
+
+        function flipMemoryCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add('flip');
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            
+            // Remove listeners
+            firstCard.removeEventListener('click', flipMemoryCard);
+            secondCard.removeEventListener('click', flipMemoryCard);
+            resetBoard();
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flip');
+                secondCard.classList.remove('flip');
+                resetBoard();
+            }, 1000);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+
+        // --- 5. SENTENCE GAME LOGIC ---
+        let currentSentenceItem = null;
+
+        function loadSentenceGame() {
+            const randomIndex = Math.floor(Math.random() * vocabulario.length);
+            currentSentenceItem = vocabulario[randomIndex];
+
+            const regex = new RegExp(currentSentenceItem.palabra, "gi");
+            const fraseOculta = currentSentenceItem.frase_ejemplo.replace(regex, "_______");
+
+            document.getElementById('sentence-text').innerHTML = fraseOculta;
+            document.getElementById('sentence-feedback').innerText = "";
+
+            let options = [currentSentenceItem.palabra];
+            while (options.length < 3) {
+                let randomOpt = vocabulario[Math.floor(Math.random() * vocabulario.length)].palabra;
+                if (!options.includes(randomOpt)) options.push(randomOpt);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('sentence-options');
+            container.innerHTML = '';
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded-full font-semibold transition capitalize";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(opt === currentSentenceItem.palabra) {
+                        document.getElementById('sentence-text').innerHTML = currentSentenceItem.frase_ejemplo.replace(regex, `<span class='text-green-600 font-bold'>${currentSentenceItem.palabra}</span>`);
+                        document.getElementById('sentence-feedback').innerText = "Perfect!";
+                        document.getElementById('sentence-feedback').className = "mt-4 font-bold text-green-600";
+                    } else {
+                        document.getElementById('sentence-feedback').innerText = "Try again.";
+                        document.getElementById('sentence-feedback').className = "mt-4 font-bold text-red-500";
+                    }
+                }
+                container.appendChild(btn);
+            });
+        }
+
+
+        // --- 6. FLASHCARDS LOGIC ---
+        let currentCardIndex = 0;
+
+        function updateFlashcard() {
+            const item = vocabulario[currentCardIndex];
+            const cardElement = document.querySelector('.flashcard');
+            
+            cardElement.classList.remove('flipped');
+
+            setTimeout(() => {
+                document.getElementById('fc-spanish').innerText = item.palabra.charAt(0).toUpperCase() + item.palabra.slice(1);
+                document.getElementById('fc-english').innerText = item.traduccion_ingles;
+            }, 200);
+        }
+
+        function flipFlashcard(container) {
+            container.querySelector('.flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % vocabulario.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + vocabulario.length) % vocabulario.length;
+            updateFlashcard();
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            loadScrambleGame();
+            loadQuiz();
+            initMemoryGame();
+            loadSentenceGame();
+            updateFlashcard();
+        };
+
+    </script>
+</body>
+</html>

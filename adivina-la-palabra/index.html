@@ -36,60 +36,27 @@
         <section class="page-hero game-intro">
             <div class="page-hero__container">
                 <h1 class="page-hero__title">Guess the Word</h1>
+                <p class="page-hero__subtitle">Elige cómo quieres jugar</p>
             </div>
 
-            <div class="level-selector">
-                <button class="level-button level-a1" data-level="A1" type="button">
-                    <span class="level-code">A1</span>
-                    <span class="level-spanish">Principiante</span>
-                    <span class="level-english">Beginner</span>
-                </button>
-                <button class="level-button level-a2" data-level="A2" type="button">
-                    <span class="level-code">A2</span>
-                    <span class="level-spanish">Elemental</span>
-                    <span class="level-english">Elementary</span>
-                </button>
-                <button class="level-button level-b1" data-level="B1" type="button" disabled aria-disabled="true" title="Disponible próximamente">
-                    <span class="level-code">B1</span>
-                    <span class="level-spanish">Intermedio</span>
-                    <span class="level-english">Intermediate</span>
-                </button>
-                <button class="level-button level-b2" data-level="B2" type="button" disabled aria-disabled="true" title="Disponible próximamente">
-                    <span class="level-code">B2</span>
-                    <span class="level-spanish">Intermedio Alto</span>
-                    <span class="level-english">Upper-Intermediate</span>
-                </button>
-                <button class="level-button level-c1" data-level="C1" type="button" disabled aria-disabled="true" title="Disponible próximamente">
-                    <span class="level-code">C1</span>
-                    <span class="level-spanish">Avanzado</span>
-                    <span class="level-english">Advanced</span>
-                </button>
-                <button class="level-button level-c2" data-level="C2" type="button" disabled aria-disabled="true" title="Disponible próximamente">
-                    <span class="level-code">C2</span>
-                    <span class="level-spanish">Maestría</span>
-                    <span class="level-english">Proficient</span>
-                </button>
+            <div class="mode-selector">
+                <a class="mode-card" href="daily-puzzle.html">
+                    <div class="mode-card__header">Daily puzzle</div>
+                    <div class="mode-card__body">
+                        <p>Resuelve el reto del día eligiendo tu nivel y pon a prueba tu vocabulario.</p>
+                    </div>
+                    <span class="mode-card__cta">Jugar ahora</span>
+                </a>
+                <a class="mode-card" href="../mapa-aventura/index.html">
+                    <div class="mode-card__header">Adventure mode</div>
+                    <div class="mode-card__body">
+                        <p>Avanza por el mapa completando desafíos y desbloqueando nuevas misiones.</p>
+                    </div>
+                    <span class="mode-card__cta">Explorar el mapa</span>
+                </a>
             </div>
         </section>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const levelButtons = document.querySelectorAll('.level-button');
-            levelButtons.forEach(button => {
-                if (button.disabled || button.getAttribute('aria-disabled') === 'true') {
-                    return;
-                }
-
-                button.addEventListener('click', () => {
-                    const level = button.dataset.level;
-                    if (!level) return;
-                    // Redirige a game.html pasando el nivel como parámetro
-                    window.location.href = `game.html?level=${level}`;
-                });
-            });
-        });
-    </script>
 
 </body>
 </html>

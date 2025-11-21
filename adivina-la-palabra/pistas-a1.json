@@ -2722,5 +2722,773 @@
     "pista1": "It's a drink",
     "pista2": "A drink made from fruit (common in Spain); '____ de naranja'.",
     "pista3": "The word contains 'm', 'o', 'u', 'z'."
+  },
+  {
+    "palabra": "ABURRIDO",
+    "pista1": "It's an adjective",
+    "pista2": "The opposite of 'divertido' (fun); boring.",
+    "pista3": "The word contains one “a“, one “b“, one “d“, one “i“, one “o“, two “r“s, and one “u“."
+  },
+  {
+    "palabra": "ACEITE",
+    "pista1": "It's a food / ingredient",
+    "pista2": "A liquid fat used for cooking or on salads (e.g., olive ____).",
+    "pista3": "The word contains one “a“, one “c“, two “e“s, one “i“, and one “t“."
+  },
+  {
+    "palabra": "AEROPUERTO",
+    "pista1": "It's a place",
+    "pista2": "Where you go to catch a plane.",
+    "pista3": "The word contains one “a“, two “e“s, two “o“s, one “p“, two “r“s, one “t“, and one “u“."
+  },
+  {
+    "palabra": "ALEGRE",
+    "pista1": "It's an adjective",
+    "pista2": "Synonym for 'contento' or 'feliz'; cheerful.",
+    "pista3": "The word contains one “a“, two “e“s, one “g“, one “l“, and one “r“."
+  },
+  {
+    "palabra": "ALLI",
+    "pista1": "It's an adverb",
+    "pista2": "Indicates a place not near you; 'over there'.",
+    "pista3": "The word contains one “a“, one “i“, and two “l“s."
+  },
+  {
+    "palabra": "AMABLE",
+    "pista1": "It's an adjective",
+    "pista2": "Describes a person who is kind and polite.",
+    "pista3": "The word contains two “a“s, one “b“, one “e“, one “l“, and one “m“."
+  },
+  {
+    "palabra": "APRENDER",
+    "pista1": "It's a verb",
+    "pista2": "The action of acquiring knowledge; what students do.",
+    "pista3": "The word contains one “a“, one “d“, two “e“s, one “n“, one “p“, and two “r“s."
+  },
+  {
+    "palabra": "AQUI",
+    "pista1": "It's an adverb",
+    "pista2": "Indicates the place where you are now; 'here'.",
+    "pista3": "The word contains one “a“, one “i“, one “q“, and one “u“."
+  },
+  {
+    "palabra": "ARMARIO",
+    "pista1": "It's a piece of furniture",
+    "pista2": "A large cabinet where you hang your clothes.",
+    "pista3": "The word contains two “a“s, one “i“, one “m“, one “o“, and two “r“s."
+  },
+  {
+    "palabra": "AUTOBUS",
+    "pista1": "It's a type of transport",
+    "pista2": "A large vehicle that carries many passengers on the road.",
+    "pista3": "The word contains one “a“, one “b“, one “o“, one “s“, one “t“, and two “u“s."
+  },
+  {
+    "palabra": "AVION",
+    "pista1": "It's a type of transport",
+    "pista2": "A vehicle that flies in the sky.",
+    "pista3": "The word contains one “a“, one “i“, one “n“, one “o“, and one “v“."
+  },
+  {
+    "palabra": "AZUCAR",
+    "pista1": "It's a food / ingredient",
+    "pista2": "A sweet white powder you put in coffee or cakes.",
+    "pista3": "The word contains two “a“s, one “c“, one “r“, one “u“, and one “z“."
+  },
+  {
+    "palabra": "BAÑO",
+    "pista1": "It's a room",
+    "pista2": "The room where the shower and toilet are.",
+    "pista3": "The word contains one “a“, one “b“, one “o“, and one “ñ“."
+  },
+  {
+    "palabra": "BARBA",
+    "pista1": "It's a body part",
+    "pista2": "Hair that grows on a man's chin and cheeks.",
+    "pista3": "The word contains two “a“s, two “b“s, and one “r“."
+  },
+  {
+    "palabra": "BARCO",
+    "pista1": "It's a type of transport",
+    "pista2": "A vehicle that travels on water.",
+    "pista3": "The word contains one “a“, one “b“, one “c“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "BARRIO",
+    "pista1": "It's a place",
+    "pista2": "A specific area or district within a city.",
+    "pista3": "The word contains one “a“, one “b“, one “i“, one “o“, and two “r“s."
+  },
+  {
+    "palabra": "BICICLETA",
+    "pista1": "It's a type of transport",
+    "pista2": "It has two wheels and you move it by pedaling.",
+    "pista3": "The word contains one “a“, one “b“, two “c“s, one “e“, two “i“s, one “l“, and one “t“."
+  },
+  {
+    "palabra": "BOLIGRAFO",
+    "pista1": "It's an object",
+    "pista2": "You use this to write with ink (not a pencil).",
+    "pista3": "The word contains one “a“, one “b“, one “f“, one “g“, one “i“, one “l“, two “o“s, and one “r“."
+  },
+  {
+    "palabra": "BOLSO",
+    "pista1": "It's an object",
+    "pista2": "A bag used (usually by women) to carry personal items.",
+    "pista3": "The word contains one “b“, one “l“, two “o“s, and one “s“."
+  },
+  {
+    "palabra": "BUFANDA",
+    "pista1": "It's a piece of clothing",
+    "pista2": "You wear it around your neck when it is cold.",
+    "pista3": "The word contains two “a“s, one “b“, one “d“, one “f“, one “n“, and one “u“."
+  },
+  {
+    "palabra": "CANADIENSE",
+    "pista1": "It's a nationality",
+    "pista2": "A person from Canada.",
+    "pista3": "The word contains two “a“s, one “c“, one “d“, two “e“s, one “i“, two “n“s, and one “s“."
+  },
+  {
+    "palabra": "CANSADO",
+    "pista1": "It's an adjective",
+    "pista2": "How you feel when you need to sleep or rest.",
+    "pista3": "The word contains two “a“s, one “c“, one “d“, one “n“, one “o“, and one “s“."
+  },
+  {
+    "palabra": "CARTA",
+    "pista1": "It's an object",
+    "pista2": "A written message sent by post; or a menu in a restaurant.",
+    "pista3": "The word contains two “a“s, one “c“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "CARTERA",
+    "pista1": "It's an object",
+    "pista2": "A small case to hold your money and cards.",
+    "pista3": "The word contains two “a“s, one “c“, one “e“, two “r“s, and one “t“."
+  },
+  {
+    "palabra": "CATORCE",
+    "pista1": "It's a number",
+    "pista2": "The number 14 (diez más cuatro).",
+    "pista3": "The word contains one “a“, two “c“s, one “e“, one “o“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "CENA",
+    "pista1": "It's a meal",
+    "pista2": "The last meal of the day, in the evening.",
+    "pista3": "The word contains one “a“, one “c“, one “e“, and one “n“."
+  },
+  {
+    "palabra": "CHOCOLATE",
+    "pista1": "It's a food",
+    "pista2": "A sweet brown food made from cocoa.",
+    "pista3": "The word contains one “a“, two “c“s, one “e“, one “h“, one “l“, two “o“s, and one “t“."
+  },
+  {
+    "palabra": "CINCUENTA",
+    "pista1": "It's a number",
+    "pista2": "The number 50 (cinco por diez).",
+    "pista3": "The word contains one “a“, two “c“s, one “e“, one “i“, two “n“s, one “t“, and one “u“."
+  },
+  {
+    "palabra": "COMEDOR",
+    "pista1": "It's a room",
+    "pista2": "The room in a house where people eat meals.",
+    "pista3": "The word contains one “c“, one “d“, one “e“, one “m“, two “o“s, and one “r“."
+  },
+  {
+    "palabra": "CONTENTO",
+    "pista1": "It's an adjective",
+    "pista2": "Synonym for 'feliz'; happy.",
+    "pista3": "The word contains one “c“, one “e“, two “n“s, two “o“s, and two “t“s."
+  },
+  {
+    "palabra": "COREANA",
+    "pista1": "It's a nationality",
+    "pista2": "A person from Korea (feminine).",
+    "pista3": "The word contains two “a“s, one “c“, one “e“, one “n“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "COREANO",
+    "pista1": "It's a nationality",
+    "pista2": "A person from Korea (masculine).",
+    "pista3": "The word contains one “a“, one “c“, one “e“, one “n“, two “o“s, and one “r“."
+  },
+  {
+    "palabra": "CUCHARA",
+    "pista1": "It's an object (cutlery)",
+    "pista2": "You use this to eat soup.",
+    "pista3": "The word contains two “a“s, two “c“s, one “h“, one “r“, and one “u“."
+  },
+  {
+    "palabra": "CUCHILLO",
+    "pista1": "It's an object (cutlery)",
+    "pista2": "You use this to cut meat.",
+    "pista3": "The word contains two “c“s, one “h“, one “i“, two “l“s, one “o“, and one “u“."
+  },
+  {
+    "palabra": "CUENTA",
+    "pista1": "It's a noun",
+    "pista2": "The paper with the price you pay at a restaurant ('La ____, por favor').",
+    "pista3": "The word contains one “a“, one “c“, one “e“, one “n“, one “t“, and one “u“."
+  },
+  {
+    "palabra": "DEBAJO",
+    "pista1": "It's a preposition",
+    "pista2": "The opposite of 'encima' (on top); 'under'.",
+    "pista3": "The word contains one “a“, one “b“, one “d“, one “e“, one “j“, and one “o“."
+  },
+  {
+    "palabra": "DELANTE",
+    "pista1": "It's a preposition",
+    "pista2": "The opposite of 'detrás' (behind); 'in front'.",
+    "pista3": "The word contains one “a“, one “d“, two “e“s, one “l“, one “n“, and one “t“."
+  },
+  {
+    "palabra": "DELICIOSO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes food that tastes very good.",
+    "pista3": "The word contains one “c“, one “d“, one “e“, two “i“s, one “l“, two “o“s, and one “s“."
+  },
+  {
+    "palabra": "DENTRO",
+    "pista1": "It's a preposition",
+    "pista2": "The opposite of 'fuera'; 'inside'.",
+    "pista3": "The word contains one “d“, one “e“, one “n“, one “o“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "DETRAS",
+    "pista1": "It's a preposition",
+    "pista2": "The opposite of 'delante'; 'behind'.",
+    "pista3": "The word contains one “a“, one “d“, one “e“, one “r“, one “s“, and one “t“."
+  },
+  {
+    "palabra": "DINERO",
+    "pista1": "It's a noun",
+    "pista2": "Coins and paper notes used to buy things.",
+    "pista3": "The word contains one “d“, one “e“, one “i“, one “n“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "DIVERTIDO",
+    "pista1": "It's an adjective",
+    "pista2": "The opposite of 'aburrido'; fun.",
+    "pista3": "The word contains two “d“s, one “e“, two “i“s, one “o“, one “r“, one “t“, and one “v“."
+  },
+  {
+    "palabra": "DORMITORIO",
+    "pista1": "It's a room",
+    "pista2": "Synonym for 'habitación'; the room where you sleep.",
+    "pista3": "The word contains one “d“, two “i“s, one “m“, three “o“s, two “r“s, and one “t“."
+  },
+  {
+    "palabra": "EL",
+    "pista1": "It's a pronoun",
+    "pista2": "'He' (pronoun); usually written with an accent (él).",
+    "pista3": "The word contains one “e“ and one “l“."
+  },
+  {
+    "palabra": "EN",
+    "pista1": "It's a preposition",
+    "pista2": "Means 'in', 'on', or 'at' (e.g., 'Estoy ____ casa').",
+    "pista3": "The word contains one “e“ and one “n“."
+  },
+  {
+    "palabra": "ENCIMA",
+    "pista1": "It's a preposition",
+    "pista2": "The opposite of 'debajo' (under); 'on top of'.",
+    "pista3": "The word contains one “a“, one “c“, one “e“, one “i“, one “m“, and one “n“."
+  },
+  {
+    "palabra": "ENFADADO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes someone who is angry.",
+    "pista3": "The word contains two “a“s, two “d“s, one “e“, one “f“, one “n“, and one “o“."
+  },
+  {
+    "palabra": "ENFERMERA",
+    "pista1": "It's a profession",
+    "pista2": "A woman who cares for sick people in a hospital.",
+    "pista3": "The word contains one “a“, three “e“s, one “f“, one “m“, one “n“, and two “r“s."
+  },
+  {
+    "palabra": "ENFERMERO",
+    "pista1": "It's a profession",
+    "pista2": "A man who cares for sick people in a hospital.",
+    "pista3": "The word contains three “e“s, one “f“, one “m“, one “n“, one “o“, and two “r“s."
+  },
+  {
+    "palabra": "ENFERMO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes someone who is not healthy; sick.",
+    "pista3": "The word contains two “e“s, one “f“, one “m“, one “n“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "ENFRENTE",
+    "pista1": "It's a preposition",
+    "pista2": "Opposite or facing something.",
+    "pista3": "The word contains three “e“s, one “f“, two “n“s, one “r“, and one “t“."
+  },
+  {
+    "palabra": "ENSALADA",
+    "pista1": "It's a food",
+    "pista2": "A cold dish of mixed vegetables, usually with lettuce and tomato.",
+    "pista3": "The word contains three “a“s, one “d“, one “e“, one “l“, one “n“, and one “s“."
+  },
+  {
+    "palabra": "ENTRAR",
+    "pista1": "It's a verb",
+    "pista2": "The opposite of 'salir' (to leave); to come in.",
+    "pista3": "The word contains one “a“, one “e“, one “n“, two “r“s, and one “t“."
+  },
+  {
+    "palabra": "ENTRE",
+    "pista1": "It's a preposition",
+    "pista2": "In the middle of two things ('between').",
+    "pista3": "The word contains two “e“s, one “n“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "ESPEJO",
+    "pista1": "It's an object",
+    "pista2": "You look in this to see your reflection.",
+    "pista3": "The word contains two “e“s, one “j“, one “o“, one “p“, and one “s“."
+  },
+  {
+    "palabra": "ESTACION",
+    "pista1": "It's a place",
+    "pista2": "Where trains or buses stop for passengers.",
+    "pista3": "The word contains one “a“, one “c“, one “e“, one “i“, one “n“, one “o“, one “s“, and one “t“."
+  },
+  {
+    "palabra": "ESTANTERIA",
+    "pista1": "It's a piece of furniture",
+    "pista2": "Used to hold books or decorations (shelves).",
+    "pista3": "The word contains two “a“s, two “e“s, one “i“, one “n“, one “r“, one “s“, and two “t“s."
+  },
+  {
+    "palabra": "FARMACIA",
+    "pista1": "It's a place",
+    "pista2": "A shop where you buy medicine.",
+    "pista3": "The word contains three “a“s, one “c“, one “f“, one “i“, one “m“, and one “r“."
+  },
+  {
+    "palabra": "FELIZ",
+    "pista1": "It's an adjective",
+    "pista2": "Synonym for 'contento'; happy.",
+    "pista3": "The word contains one “e“, one “f“, one “i“, one “l“, and one “z“."
+  },
+  {
+    "palabra": "FUERA",
+    "pista1": "It's an adverb",
+    "pista2": "The opposite of 'dentro'; 'outside'.",
+    "pista3": "The word contains one “a“, one “e“, one “f“, one “r“, and one “u“."
+  },
+  {
+    "palabra": "GORRO",
+    "pista1": "It's a piece of clothing",
+    "pista2": "A warm hat you wear in winter.",
+    "pista3": "The word contains one “g“, two “o“s, and two “r“s."
+  },
+  {
+    "palabra": "GUANTES",
+    "pista1": "It's a piece of clothing",
+    "pista2": "You wear these on your hands when it is cold.",
+    "pista3": "The word contains one “a“, one “e“, one “g“, one “n“, one “s“, one “t“, and one “u“."
+  },
+  {
+    "palabra": "HABITACION",
+    "pista1": "It's a room",
+    "pista2": "A general word for a room; or a bedroom.",
+    "pista3": "The word contains two “a“s, one “b“, one “c“, one “h“, two “i“s, one “n“, one “o“, and one “t“."
+  },
+  {
+    "palabra": "HAMBRE",
+    "pista1": "It's a noun",
+    "pista2": "The feeling of needing to eat ('Tengo ____').",
+    "pista3": "The word contains one “a“, one “b“, one “e“, one “h“, one “m“, and one “r“."
+  },
+  {
+    "palabra": "IR",
+    "pista1": "It's a verb",
+    "pista2": "The opposite of 'venir'; 'to go'.",
+    "pista3": "The word contains one “i“ and one “r“."
+  },
+  {
+    "palabra": "JARDIN",
+    "pista1": "It's a place",
+    "pista2": "An area with grass and flowers outside a house.",
+    "pista3": "The word contains one “a“, one “d“, one “i“, one “j“, one “n“, and one “r“."
+  },
+  {
+    "palabra": "LAMPARA",
+    "pista1": "It's an object",
+    "pista2": "An electric light that stands on a table or floor.",
+    "pista3": "The word contains three “a“s, one “l“, one “m“, one “p“, and one “r“."
+  },
+  {
+    "palabra": "LAVADORA",
+    "pista1": "It's an appliance",
+    "pista2": "A machine used to wash clothes.",
+    "pista3": "The word contains three “a“s, one “d“, one “l“, one “o“, one “r“, and one “v“."
+  },
+  {
+    "palabra": "LEJOS",
+    "pista1": "It's an adverb",
+    "pista2": "The opposite of 'cerca'; 'far'.",
+    "pista3": "The word contains one “e“, one “j“, one “l“, one “o“, and one “s“."
+  },
+  {
+    "palabra": "LIMON",
+    "pista1": "It's a fruit",
+    "pista2": "A yellow, sour citrus fruit.",
+    "pista3": "The word contains one “i“, one “l“, one “m“, one “n“, and one “o“."
+  },
+  {
+    "palabra": "LLAVE",
+    "pista1": "It's an object",
+    "pista2": "A metal tool used to lock or unlock a door.",
+    "pista3": "The word contains one “a“, one “e“, two “l“s, and one “v“."
+  },
+  {
+    "palabra": "LLEGAR",
+    "pista1": "It's a verb",
+    "pista2": "To arrive at a destination.",
+    "pista3": "The word contains one “a“, one “e“, one “g“, two “l“s, and one “r“."
+  },
+  {
+    "palabra": "LLUVIA",
+    "pista1": "It's related to weather",
+    "pista2": "Water falling from the sky.",
+    "pista3": "The word contains one “a“, one “i“, two “l“s, one “u“, and one “v“."
+  },
+  {
+    "palabra": "MALO",
+    "pista1": "It's an adjective",
+    "pista2": "The opposite of 'bueno' (good).",
+    "pista3": "The word contains one “a“, one “l“, one “m“, and one “o“."
+  },
+  {
+    "palabra": "MANZANA",
+    "pista1": "It's a fruit",
+    "pista2": "A round fruit that can be red, green, or yellow.",
+    "pista3": "The word contains three “a“s, one “m“, two “n“s, and one “z“."
+  },
+  {
+    "palabra": "MENU",
+    "pista1": "It's a noun",
+    "pista2": "A fixed list of food options in a restaurant ('____ del día').",
+    "pista3": "The word contains one “e“, one “m“, one “n“, and one “u“."
+  },
+  {
+    "palabra": "MERCADO",
+    "pista1": "It's a place",
+    "pista2": "A public place to buy fresh food (fruit, vegetables, meat).",
+    "pista3": "The word contains one “a“, one “c“, one “d“, one “e“, one “m“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "METRO",
+    "pista1": "It's a type of transport",
+    "pista2": "An underground train system in a city.",
+    "pista3": "The word contains one “e“, one “m“, one “o“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "MIEDO",
+    "pista1": "It's a noun",
+    "pista2": "The feeling of being afraid ('Tengo ____').",
+    "pista3": "The word contains one “d“, one “e“, one “i“, one “m“, and one “o“."
+  },
+  {
+    "palabra": "MOTO",
+    "pista1": "It's a type of transport",
+    "pista2": "Short for 'motocicleta'; a vehicle with two wheels and an engine.",
+    "pista3": "The word contains one “m“, two “o“s, and one “t“."
+  },
+  {
+    "palabra": "MOVIL",
+    "pista1": "It's an object",
+    "pista2": "A portable telephone (cell phone).",
+    "pista3": "The word contains one “i“, one “l“, one “m“, one “o“, and one “v“."
+  },
+  {
+    "palabra": "MUSEO",
+    "pista1": "It's a place",
+    "pista2": "A building where you look at art or history.",
+    "pista3": "The word contains one “e“, one “m“, one “o“, one “s“, and one “u“."
+  },
+  {
+    "palabra": "NERVIOSO",
+    "pista1": "It's an adjective",
+    "pista2": "The opposite of 'tranquilo'; anxious or worried.",
+    "pista3": "The word contains one “e“, one “i“, one “n“, two “o“s, one “r“, one “s“, and one “v“."
+  },
+  {
+    "palabra": "NEVERA",
+    "pista1": "It's an appliance",
+    "pista2": "A machine that keeps food cold; fridge.",
+    "pista3": "The word contains one “a“, two “e“s, one “n“, one “r“, and one “v“."
+  },
+  {
+    "palabra": "NUBE",
+    "pista1": "It's related to weather",
+    "pista2": "A white or grey mass in the sky that brings rain.",
+    "pista3": "The word contains one “b“, one “e“, one “n“, and one “u“."
+  },
+  {
+    "palabra": "OCUPADO",
+    "pista1": "It's an adjective",
+    "pista2": "Having a lot of things to do; opposite of 'free'.",
+    "pista3": "The word contains one “a“, one “c“, one “d“, two “o“s, one “p“, and one “u“."
+  },
+  {
+    "palabra": "OJOS",
+    "pista1": "It's a body part",
+    "pista2": "You use these to see.",
+    "pista3": "The word contains one “j“, two “o“s, and one “s“."
+  },
+  {
+    "palabra": "ORDENADOR",
+    "pista1": "It's an object",
+    "pista2": "An electronic machine for work or internet (computer).",
+    "pista3": "The word contains one “a“, two “d“s, one “e“, one “n“, two “o“s, and two “r“s."
+  },
+  {
+    "palabra": "PARAGUAS",
+    "pista1": "It's an object",
+    "pista2": "You use this to protect yourself from the rain.",
+    "pista3": "The word contains three “a“s, one “g“, one “p“, one “r“, one “s“, and one “u“."
+  },
+  {
+    "palabra": "PARED",
+    "pista1": "It's part of a house",
+    "pista2": "The vertical side of a room; you hang pictures on it.",
+    "pista3": "The word contains one “a“, one “d“, one “e“, one “p“, and one “r“."
+  },
+  {
+    "palabra": "PARQUE",
+    "pista1": "It's a place",
+    "pista2": "A green public area with trees in a city.",
+    "pista3": "The word contains one “a“, one “e“, one “p“, one “q“, one “r“, and one “u“."
+  },
+  {
+    "palabra": "PATATA",
+    "pista1": "It's a food",
+    "pista2": "A vegetable that grows underground; used for chips or fries.",
+    "pista3": "The word contains three “a“s, one “p“, and two “t“s."
+  },
+  {
+    "palabra": "PLATANO",
+    "pista1": "It's a fruit",
+    "pista2": "A long, yellow curved fruit.",
+    "pista3": "The word contains two “a“s, one “l“, one “n“, one “o“, one “p“, and one “t“."
+  },
+  {
+    "palabra": "PLATO",
+    "pista1": "It's an object",
+    "pista2": "You put food on this to eat.",
+    "pista3": "The word contains one “a“, one “l“, one “o“, one “p“, and one “t“."
+  },
+  {
+    "palabra": "POLICIA",
+    "pista1": "It's a profession",
+    "pista2": "A person who protects the public and enforces laws.",
+    "pista3": "The word contains one “a“, one “c“, two “i“s, one “l“, one “o“, and one “p“."
+  },
+  {
+    "palabra": "POSTRE",
+    "pista1": "It's a food",
+    "pista2": "Sweet food eaten at the end of a meal.",
+    "pista3": "The word contains one “e“, one “o“, one “p“, one “r“, one “s“, and one “t“."
+  },
+  {
+    "palabra": "PRISA",
+    "pista1": "It's a noun",
+    "pista2": "The need to move quickly ('Tengo ____' = I am in a hurry).",
+    "pista3": "The word contains one “a“, one “i“, one “p“, one “r“, and one “s“."
+  },
+  {
+    "palabra": "RELOJ",
+    "pista1": "It's an object",
+    "pista2": "Used to tell the time; you wear it on your wrist or put it on a wall.",
+    "pista3": "The word contains one “e“, one “j“, one “l“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "RICO",
+    "pista1": "It's an adjective",
+    "pista2": "Means 'tasty' (for food) or 'rich' (having lots of money).",
+    "pista3": "The word contains one “c“, one “i“, one “o“, and one “r“."
+  },
+  {
+    "palabra": "SAL",
+    "pista1": "It's a food / ingredient",
+    "pista2": "White grains used to make food salty.",
+    "pista3": "The word contains one “a“, one “l“, and one “s“."
+  },
+  {
+    "palabra": "SALON",
+    "pista1": "It's a room",
+    "pista2": "The living room; where the sofa and TV usually are.",
+    "pista3": "The word contains one “a“, one “l“, one “n“, one “o“, and one “s“."
+  },
+  {
+    "palabra": "SECRETARIA",
+    "pista1": "It's a profession",
+    "pista2": "A woman who works in an office helping with administration.",
+    "pista3": "The word contains two “a“s, one “c“, two “e“s, one “i“, two “r“s, one “s“, and one “t“."
+  },
+  {
+    "palabra": "SECRETARIO",
+    "pista1": "It's a profession",
+    "pista2": "A man who works in an office helping with administration.",
+    "pista3": "The word contains one “a“, one “c“, two “e“s, one “i“, one “o“, two “r“s, one “s“, and one “t“."
+  },
+  {
+    "palabra": "SED",
+    "pista1": "It's a noun",
+    "pista2": "The feeling of needing to drink ('Tengo ____').",
+    "pista3": "The word contains one “d“, one “e“, and one “s“."
+  },
+  {
+    "palabra": "SERIO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes someone who is not joking or laughing often.",
+    "pista3": "The word contains one “e“, one “i“, one “o“, one “r“, and one “s“."
+  },
+  {
+    "palabra": "SERVILLETA",
+    "pista1": "It's an object",
+    "pista2": "Paper or cloth used to clean your mouth while eating.",
+    "pista3": "The word contains one “a“, two “e“s, one “i“, two “l“s, one “r“, one “s“, one “t“, and one “v“."
+  },
+  {
+    "palabra": "SOFA",
+    "pista1": "It's a piece of furniture",
+    "pista2": "A large, comfortable seat for two or more people.",
+    "pista3": "The word contains one “a“, one “f“, one “o“, and one “s“."
+  },
+  {
+    "palabra": "SUELO",
+    "pista1": "It's part of a room",
+    "pista2": "The floor; the part of the room you walk on.",
+    "pista3": "The word contains one “e“, one “l“, one “o“, one “s“, and one “u“."
+  },
+  {
+    "palabra": "SUEÑO",
+    "pista1": "It's a noun",
+    "pista2": "The feeling of needing to sleep ('Tengo ____').",
+    "pista3": "The word contains one “e“, one “o“, one “s“, one “u“, and one “ñ“."
+  },
+  {
+    "palabra": "TARJETA",
+    "pista1": "It's an object",
+    "pista2": "A small plastic object used to pay (credit/debit ____).",
+    "pista3": "The word contains two “a“s, one “e“, one “j“, one “r“, and two “t“s."
+  },
+  {
+    "palabra": "TAXI",
+    "pista1": "It's a type of transport",
+    "pista2": "A car with a driver that you pay to take you somewhere.",
+    "pista3": "The word contains one “a“, one “i“, one “t“, and one “x“."
+  },
+  {
+    "palabra": "TAXISTA",
+    "pista1": "It's a profession",
+    "pista2": "A person who drives a taxi.",
+    "pista3": "The word contains two “a“s, one “i“, one “s“, two “t“s, and one “x“."
+  },
+  {
+    "palabra": "TAZA",
+    "pista1": "It's an object",
+    "pista2": "You drink coffee or tea from this.",
+    "pista3": "The word contains two “a“s, one “t“, and one “z“."
+  },
+  {
+    "palabra": "TE",
+    "pista1": "It's a drink",
+    "pista2": "A hot drink made with leaves and water.",
+    "pista3": "The word contains one “e“ and one “t“."
+  },
+  {
+    "palabra": "TENEDOR",
+    "pista1": "It's an object (cutlery)",
+    "pista2": "You use this to pick up solid food.",
+    "pista3": "The word contains one “d“, two “e“s, one “n“, one “o“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "TIMIDO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes a person who is nervous to talk to others; shy.",
+    "pista3": "The word contains one “d“, two “i“s, one “m“, one “o“, and one “t“."
+  },
+  {
+    "palabra": "TOMATE",
+    "pista1": "It's a food",
+    "pista2": "A red fruit/vegetable used in salads and sauces.",
+    "pista3": "The word contains one “a“, one “e“, one “m“, one “o“, and two “t“s."
+  },
+  {
+    "palabra": "TORMENTA",
+    "pista1": "It's related to weather",
+    "pista2": "Bad weather with rain, thunder, and lightning.",
+    "pista3": "The word contains one “a“, one “e“, one “m“, one “n“, one “o“, one “r“, and two “t“s."
+  },
+  {
+    "palabra": "TRANQUILO",
+    "pista1": "It's an adjective",
+    "pista2": "Synonym for 'calm'; not nervous.",
+    "pista3": "The word contains one “a“, one “i“, one “l“, one “n“, one “o“, one “q“, one “r“, one “t“, and one “u“."
+  },
+  {
+    "palabra": "TREN",
+    "pista1": "It's a type of transport",
+    "pista2": "A vehicle that travels on rails (tracks).",
+    "pista3": "The word contains one “e“, one “n“, one “r“, and one “t“."
+  },
+  {
+    "palabra": "TRISTE",
+    "pista1": "It's an adjective",
+    "pista2": "The opposite of 'feliz'; unhappy or sad.",
+    "pista3": "The word contains one “e“, one “i“, one “r“, one “s“, and two “t“s."
+  },
+  {
+    "palabra": "TU",
+    "pista1": "It's a pronoun",
+    "pista2": "'You' (singular, informal).",
+    "pista3": "The word contains one “t“ and one “u“."
+  },
+  {
+    "palabra": "VAGO",
+    "pista1": "It's an adjective",
+    "pista2": "Describes a person who does not like to work; lazy.",
+    "pista3": "The word contains one “a“, one “g“, one “o“, and one “v“."
+  },
+  {
+    "palabra": "VAQUEROS",
+    "pista1": "It's a piece of clothing",
+    "pista2": "Blue trousers made of denim (jeans).",
+    "pista3": "The word contains one “a“, one “e“, one “o“, one “q“, one “r“, one “s“, one “u“, and one “v“."
+  },
+  {
+    "palabra": "VASO",
+    "pista1": "It's an object",
+    "pista2": "A glass container for drinking water.",
+    "pista3": "The word contains one “a“, one “o“, one “s“, and one “v“."
+  },
+  {
+    "palabra": "VIOLETA",
+    "pista1": "It's a color",
+    "pista2": "A mix of red and blue; purple.",
+    "pista3": "The word contains one “a“, one “e“, one “i“, one “l“, one “o“, one “t“, and one “v“."
+  },
+  {
+    "palabra": "YO",
+    "pista1": "It's a pronoun",
+    "pista2": "The subject pronoun for 'I'.",
+    "pista3": "The word contains one “o“ and one “y“."
+  },
+  {
+    "palabra": "ZAPATILLAS",
+    "pista1": "It's a piece of clothing",
+    "pista2": "Comfortable shoes for sports or for wearing at home.",
+    "pista3": "The word contains three “a“s, one “i“, two “l“s, one “p“, one “s“, one “t“, and one “z“."
   }
 ]

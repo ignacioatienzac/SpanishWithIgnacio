@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.site-header {
+  padding: 1.5rem;
+  background-color: #f5f5f5;
+  text-align: center;
+}

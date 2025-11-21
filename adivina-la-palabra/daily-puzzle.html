@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina la Palabra - Spanish with Ignacio</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="wordle.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    </head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../students/index.html">Students</a></li>
+                    <li><a href="../profesores/index.html">Teachers</a></li>
+                    <li><a href="../games/index.html">Games</a></li>
+                    <li><a href="index.html" class="active">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wordle-main">
+        <section class="page-hero game-intro">
+            <div class="page-hero__container">
+                <h1 class="page-hero__title">Guess the Word</h1>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-button level-a1" data-level="A1" type="button">
+                    <span class="level-code">A1</span>
+                    <span class="level-spanish">Principiante</span>
+                    <span class="level-english">Beginner</span>
+                </button>
+                <button class="level-button level-a2" data-level="A2" type="button">
+                    <span class="level-code">A2</span>
+                    <span class="level-spanish">Elemental</span>
+                    <span class="level-english">Elementary</span>
+                </button>
+                <button class="level-button level-b1" data-level="B1" type="button" disabled aria-disabled="true" title="Disponible próximamente">
+                    <span class="level-code">B1</span>
+                    <span class="level-spanish">Intermedio</span>
+                    <span class="level-english">Intermediate</span>
+                </button>
+                <button class="level-button level-b2" data-level="B2" type="button" disabled aria-disabled="true" title="Disponible próximamente">
+                    <span class="level-code">B2</span>
+                    <span class="level-spanish">Intermedio Alto</span>
+                    <span class="level-english">Upper-Intermediate</span>
+                </button>
+                <button class="level-button level-c1" data-level="C1" type="button" disabled aria-disabled="true" title="Disponible próximamente">
+                    <span class="level-code">C1</span>
+                    <span class="level-spanish">Avanzado</span>
+                    <span class="level-english">Advanced</span>
+                </button>
+                <button class="level-button level-c2" data-level="C2" type="button" disabled aria-disabled="true" title="Disponible próximamente">
+                    <span class="level-code">C2</span>
+                    <span class="level-spanish">Maestría</span>
+                    <span class="level-english">Proficient</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const levelButtons = document.querySelectorAll('.level-button');
+            levelButtons.forEach(button => {
+                if (button.disabled || button.getAttribute('aria-disabled') === 'true') {
+                    return;
+                }
+
+                button.addEventListener('click', () => {
+                    const level = button.dataset.level;
+                    if (!level) return;
+                    // Redirige a game.html pasando el nivel como parámetro
+                    window.location.href = `game.html?level=${level}`;
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

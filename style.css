@@ -163,30 +163,51 @@ body {
 .language-switcher__button {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(44, 62, 80, 0.2);
-    background: #ffffff;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #ff8a00, #e52e71);
     cursor: pointer;
     font-weight: 700;
-    color: var(--secondary-color);
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    min-height: 38px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .language-switcher__button:focus-visible,
 .language-switcher__button:hover {
-    background-color: rgba(192, 57, 43, 0.08);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
 }
 
-.language-switcher__flag {
-    font-size: 1.1rem;
+.language-switcher__icon {
+    font-size: 1.05rem;
+    line-height: 1;
 }
 
 .language-switcher__chevron {
     font-size: 0.8rem;
-    color: rgba(44, 62, 80, 0.7);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.language-switcher__label,
+.language-switcher__flag {
+    display: none;
+}
+
+.language-switcher__sr-label {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap;
 }
 
 .language-switcher__menu {
@@ -276,6 +297,8 @@ body {
         align-items: center;
         width: 100%;
         position: relative;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
     }
 
     .logo {
@@ -284,10 +307,9 @@ body {
 
     .menu-toggle {
         display: flex;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        position: static;
+        transform: none;
+        margin-left: 0.25rem;
     }
 
     .language-switcher--desktop {
@@ -296,6 +318,12 @@ body {
 
     .language-switcher--mobile {
         display: block;
+        margin-left: auto;
+        order: 2;
+    }
+
+    .menu-toggle {
+        order: 3;
     }
 
     .main-nav {

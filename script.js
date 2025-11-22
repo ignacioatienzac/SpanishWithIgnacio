@@ -222,16 +222,21 @@ function injectLanguageStyles() {
     style.textContent = `
     .language-switcher { position: relative; }
     .language-switcher--mobile { display: none; }
-    .language-switcher__button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(44, 62, 80, 0.2); background: #ffffff; cursor: pointer; font-weight: 700; color: #2c3e50; }
-    .language-switcher__flag { font-size: 1.1rem; }
-    .language-switcher__chevron { font-size: 0.8rem; color: rgba(44, 62, 80, 0.7); }
+    .language-switcher__button { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 10px 14px; border-radius: 999px; border: none; background: linear-gradient(135deg, #ff8a00, #e52e71); cursor: pointer; font-weight: 700; color: #ffffff; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); min-height: 38px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .language-switcher__button:focus-visible, .language-switcher__button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16); }
+    .language-switcher__icon { font-size: 1.05rem; line-height: 1; }
+    .language-switcher__chevron { font-size: 0.8rem; color: rgba(255, 255, 255, 0.9); }
+    .language-switcher__label, .language-switcher__flag { display: none; }
+    .language-switcher__sr-label { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; white-space: nowrap; }
     .language-switcher__menu { position: absolute; top: calc(100% + 6px); left: 0; background: #ffffff; border-radius: 10px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); padding: 6px; min-width: 160px; z-index: 20; display: none; }
     .language-switcher__menu[aria-hidden="false"] { display: block; }
     .language-switcher__option { width: 100%; padding: 10px 12px; border: none; background: transparent; display: flex; align-items: center; gap: 0.6rem; border-radius: 8px; cursor: pointer; color: #2c3e50; font-weight: 600; text-align: left; }
     .language-switcher__option[aria-selected="true"] { background: rgba(192, 57, 43, 0.16); }
     @media (max-width: 768px) {
       .language-switcher--desktop { display: none; }
-      .language-switcher--mobile { display: block; margin-right: 0.75rem; }
+      .language-switcher--mobile { display: block; margin-left: auto; order: 2; }
+      .menu-toggle { order: 3; }
+      .header-container { flex-wrap: nowrap; gap: 0.5rem; }
     }
     `;
     document.head.appendChild(style);
@@ -247,9 +252,9 @@ function createLanguageSwitcher(isMobile) {
     button.setAttribute('aria-expanded', 'false');
     button.setAttribute('aria-haspopup', 'listbox');
     button.dataset.languageToggle = 'true';
-    button.innerHTML = `<span class="language-switcher__flag" aria-hidden="true">${LANGUAGE_OPTIONS.es.flag}</span>
-        <span class="language-switcher__label">${LANGUAGE_OPTIONS.es.label}</span>
-        <span class="language-switcher__chevron" aria-hidden="true">▾</span>`;
+    button.innerHTML = `<span class="language-switcher__icon" aria-hidden="true">🌐</span>
+        <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+        <span class="language-switcher__sr-label">${LANGUAGE_OPTIONS.es.label}</span>`;
 
     const menu = document.createElement('div');
     menu.className = 'language-switcher__menu';
@@ -287,13 +292,20 @@ function ensureLanguageSwitchers() {
     }
 }
 
+function renderLanguageButton(button, language) {
+    const label = language === 'es' ? LANGUAGE_OPTIONS.es.label : LANGUAGE_OPTIONS.en.label;
+    button.innerHTML = `<span class="language-switcher__icon" aria-hidden="true">🌐</span>
+        <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+        <span class="language-switcher__sr-label">${label}</span>`;
+    button.setAttribute('aria-label', `${label} language menu`);
+}
+
 function updateLanguageButtons(language) {
     const buttons = document.querySelectorAll('.language-switcher__button');
     const options = document.querySelectorAll('.language-switcher__option');
 
     buttons.forEach(button => {
-        button.querySelector('.language-switcher__flag').textContent = LANGUAGE_OPTIONS[language].flag;
-        button.querySelector('.language-switcher__label').textContent = language === 'es' ? 'Español' : 'English';
+        renderLanguageButton(button, language);
         button.setAttribute('aria-expanded', 'false');
         const menu = button.nextElementSibling;
         if (menu) {

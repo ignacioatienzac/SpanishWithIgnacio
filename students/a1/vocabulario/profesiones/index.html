@@ -119,6 +119,7 @@
             .header-container {
                 flex-wrap: wrap;
                 align-items: center;
+                position: relative;
             }
 
             .logo {
@@ -127,7 +128,10 @@
 
             .menu-toggle {
                 display: flex;
-                margin-left: auto;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .main-nav {

@@ -196,6 +196,7 @@ body {
     .header-container {
         align-items: center;
         width: 100%;
+        position: relative;
     }
 
     .logo {
@@ -204,8 +205,10 @@ body {
 
     .menu-toggle {
         display: flex;
-        margin-left: auto;
-        order: 2;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .main-nav {

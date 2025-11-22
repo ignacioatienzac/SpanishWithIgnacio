@@ -178,12 +178,8 @@ function translateElement(element, language) {
             element.textContent = translatedText;
         }
     } else {
-        // Default to English values
-        if (hasHtmlTranslation || htmlTranslations[storedHtml]) {
-            element.innerHTML = storedHtml;
-        } else {
-            element.textContent = storedText;
-        }
+        // Default to English values (restore original structure when present)
+        element.innerHTML = storedHtml;
     }
 }
 

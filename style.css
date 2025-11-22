@@ -32,6 +32,10 @@ body {
     line-height: 1.6;
 }
 
+html[data-lang-initializing="true"] body {
+    visibility: hidden;
+}
+
 .page-hero {
     padding: 3rem 2rem 1rem;
     text-align: center;

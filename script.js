@@ -3,121 +3,15 @@
 console.log("Welcome to Spanish with Ignacio! Script loaded correctly.");
 
 const LANGUAGE_STORAGE_KEY = 'swi-language-preference';
+const LANGUAGE_DATA_URL = '/data/translations-es.json';
 const LANGUAGE_OPTIONS = {
     es: { label: 'Español', flag: '🇪🇸' },
     en: { label: 'English', flag: '🇬🇧' }
 };
 
-const textTranslations = {
-    // Navigation
-    'Home': 'Inicio',
-    'Students': 'Estudiantes',
-    'Teachers': 'Profesores',
-    'Games': 'Juegos',
-    'Guess the word': 'Adivina la palabra',
-
-    // Home
-    'Learn Spanish with Spanish With Ignacio!': '¡Aprende español con Spanish With Ignacio!',
-
-    // Students main page
-    'Resources for students': 'Recursos para estudiantes',
-    'Select your level to access personalized activities and materials.': 'Selecciona tu nivel para acceder a actividades y materiales personalizados.',
-    'Grammar 📘': 'Gramática 📘',
-    'Vocabulary 🧠': 'Vocabulario 🧠',
-    'Listening 🎧': 'Comprensión auditiva 🎧',
-    'Reading 📖': 'Lectura 📖',
-    'Writing ✍️': 'Escritura ✍️',
-
-    // Students A1 Grammar
-    'Present tense': 'Presente de indicativo',
-    'Learn step by step how to talk about what you do each day, what you like, and simple things about yourself.': 'Aprende paso a paso a hablar de lo que haces cada día, lo que te gusta y detalles sencillos sobre ti.',
-    'Reflexive verbs': 'Verbos reflexivos',
-    'Discover why some verbs end in “se” and practice how to use them to say what you do for yourself.': 'Descubre por qué algunos verbos terminan en “se” y practica cómo usarlos para decir lo que haces por ti mismo.',
-    'Direct object pronouns': 'Pronombres de objeto directo',
-    'Learn to swap people or things for pronouns like lo and la so you can speak in a short, clear way.': 'Aprende a sustituir personas o cosas por pronombres como lo y la para hablar de forma breve y clara.',
-    'Verb “gustar”': 'Verbo “gustar”',
-    'Understand in a simple way how to use gustar to say what you like and what you do not, without complications.': 'Comprende de forma sencilla cómo usar gustar para decir lo que te gusta y lo que no, sin complicaciones.',
-
-    // Students A1 Vocabulary
-    'The alphabet': 'El abecedario',
-    'Learn how to pronounce every letter of the Spanish alphabet and practice their order with guided activities.': 'Aprende a pronunciar cada letra del alfabeto español y practica su orden con actividades guiadas.',
-    'Basic expressions to start talking': 'Expresiones básicas para empezar a hablar',
-    'Discover greetings, farewells, and essential phrases to start conversations confidently from day one.': 'Descubre saludos, despedidas y frases esenciales para iniciar conversaciones con confianza desde el primer día.',
-    'Countries and nationalities': 'Países y nacionalidades',
-    'Match countries with their demonyms and practice introducing yourself and talking about others accurately.': 'Relaciona países con sus gentilicios y practica cómo presentarte y hablar de otras personas con precisión.',
-    'Numbers (0-100)': 'Números (0-100)',
-    'Review basic numbers with listening and writing exercises to talk about ages, prices, and quantities.': 'Repasa los números básicos con ejercicios de escucha y escritura para hablar de edades, precios y cantidades.',
-    'Professions': 'Profesiones',
-    'Expand your work vocabulary with visual flashcards and model phrases to talk about professions and workplaces.': 'Amplía tu vocabulario laboral con tarjetas visuales y frases modelo para hablar de profesiones y lugares de trabajo.',
-    'The weather': 'El clima',
-    'Practice common expressions to describe the weather and plan activities based on the temperature or season.': 'Practica expresiones comunes para describir el tiempo y planear actividades según la temperatura o la estación.',
-
-    // Teachers page
-    'Resources for teachers': 'Recursos para profesores',
-    'Support your classes with ready-to-use activities, dynamic strategies, and digital tools created by Ignacio.': 'Apoya tus clases con actividades listas para usar, estrategias dinámicas y herramientas digitales creadas por Ignacio.',
-    'Explore downloadable materials, activity ideas, and templates to keep your students motivated.': 'Explora materiales descargables, ideas de actividades y plantillas para mantener motivados a tus estudiantes.',
-    'Lesson plans': 'Planes de clase',
-    'Complete sequences with objectives, steps, and extra resources for every CEFR level.': 'Secuencias completas con objetivos, pasos y recursos adicionales para cada nivel del MCER.',
-    'Interactive activities': 'Actividades interactivas',
-    'Digital games, guided debates, and cooperative tasks ready to share with your groups.': 'Juegos digitales, debates guiados y tareas cooperativas listas para compartir con tus grupos.',
-    'Printable material': 'Material imprimible',
-    'Worksheets, vocabulary cards, and graphic organizers in PDF to print or edit.': 'Fichas, tarjetas de vocabulario y organizadores gráficos en PDF para imprimir o editar.',
-    'Training': 'Formación',
-    'Update your teaching skills with practical workshops and professional collaboration spaces.': 'Actualiza tus habilidades docentes con talleres prácticos y espacios de colaboración profesional.',
-    'Live sessions': 'Sesiones en vivo',
-    'Join monthly sessions with Ignacio to analyze real cases and share best practices.': 'Únete a sesiones mensuales con Ignacio para analizar casos reales y compartir buenas prácticas.',
-    'More information': 'Más información',
-    'Next session: "Designing activities for real communication." Includes a recording and downloadable materials.': 'Próxima sesión: "Diseñar actividades para la comunicación real". Incluye grabación y materiales descargables.',
-    'Self-paced course': 'Curso a tu ritmo',
-    'Advance at your own pace with modules on assessment, gamification, and effective feedback.': 'Avanza a tu propio ritmo con módulos sobre evaluación, gamificación y retroalimentación efectiva.',
-    'Includes short videos, editable templates, and private forums to resolve questions with other teachers.': 'Incluye vídeos cortos, plantillas editables y foros privados para resolver dudas con otros docentes.',
-    'Teaching community': 'Comunidad docente',
-    'Share resources, organize class exchanges, and receive feedback from colleagues.': 'Comparte recursos, organiza intercambios de clase y recibe retroalimentación de colegas.',
-    'Access a private space with monthly challenges, newsletters, and co-creation sessions for materials.': 'Accede a un espacio privado con retos mensuales, boletines y sesiones de cocreación de materiales.',
-
-    // Games page
-    'Interactive games': 'Juegos interactivos',
-    'Practice your Spanish with digital activities designed for each level.': 'Practica tu español con actividades digitales diseñadas para cada nivel.',
-    'Guess the Word': 'Adivina la palabra',
-    'Challenge yourself with a Wordle-style game to grow your Spanish vocabulary level by level.': 'Rétate con un juego tipo Wordle para ampliar tu vocabulario de español nivel a nivel.',
-    'The power of verbs!': '¡El poder de los verbos!',
-    'Defend the kingdom by conjugating Spanish verbs and power up your hero with every correct answer.': 'Defiende el reino conjugando verbos en español y fortalece a tu héroe con cada respuesta correcta.',
-
-    // Guess the Word index
-    'Choose how you want to play': 'Elige cómo quieres jugar',
-    'Daily puzzle': 'Reto diario',
-    'Solve the challenge of the day by choosing your level and testing your vocabulary.': 'Resuelve el desafío del día eligiendo tu nivel y poniendo a prueba tu vocabulario.',
-    'Play now': 'Jugar ahora',
-    'Adventure mode': 'Modo aventura',
-    'Advance through the map by completing challenges and unlocking new missions.': 'Avanza por el mapa completando desafíos y desbloqueando nuevas misiones.',
-    'Explore the map': 'Explora el mapa',
-
-    // Guess the Word daily
-    'Beginner': 'Principiante',
-    'Elementary': 'Elemental',
-    'Intermediate': 'Intermedio',
-    'Upper-Intermediate': 'Intermedio alto',
-    'Advanced': 'Avanzado',
-    'Proficient': 'Competente',
-    'Available soon': 'Disponible pronto'
-};
-
-const titleTranslations = {
-    'Spanish with Ignacio - Home': 'Spanish with Ignacio - Inicio',
-    'Spanish with Ignacio - Students': 'Spanish with Ignacio - Estudiantes',
-    'Spanish with Ignacio - Teachers': 'Spanish with Ignacio - Profesores',
-    'Spanish with Ignacio - Games': 'Spanish with Ignacio - Juegos',
-    'Adivina la Palabra - Spanish with Ignacio': 'Adivina la Palabra - Spanish with Ignacio',
-    'Spanish with Ignacio - Adventure mode': 'Spanish with Ignacio - Modo aventura',
-    'Spanish with Ignacio - Students A1 Grammar': 'Spanish with Ignacio - Estudiantes A1 Gramática',
-    'Spanish with Ignacio - Students A1 Vocabulary': 'Spanish with Ignacio - Estudiantes A1 Vocabulario',
-    'Spanish with Ignacio - Professions': 'Spanish with Ignacio - Profesiones',
-    'Guess the Word - Game': 'Adivina la palabra - Juego'
-};
-
-const htmlTranslations = {
-    'Learn to swap people or things for pronouns like <em>lo</em> and <em>la</em> so you can speak in a short, clear way.': 'Aprende a sustituir personas o cosas por pronombres como <em>lo</em> y <em>la</em> para hablar de forma breve y clara.'
-};
+let cachedSpanishTranslations = null;
+let spanishTranslationsPromise = null;
+let translatableElementsCache = null;
 
 const translatableSelectors = [
     '[data-i18n-es]',
@@ -142,12 +36,35 @@ const translatableSelectors = [
     '.level-button span'
 ];
 
-function selectTranslatableElements() {
+async function loadSpanishTranslations() {
+    if (cachedSpanishTranslations) return cachedSpanishTranslations;
+    if (!spanishTranslationsPromise) {
+        spanishTranslationsPromise = fetch(LANGUAGE_DATA_URL)
+            .then(response => response.ok ? response.json() : { textTranslations: {}, titleTranslations: {}, htmlTranslations: {} })
+            .catch(() => ({ textTranslations: {}, titleTranslations: {}, htmlTranslations: {} }))
+            .then(data => {
+                cachedSpanishTranslations = {
+                    textTranslations: data.textTranslations || {},
+                    titleTranslations: data.titleTranslations || {},
+                    htmlTranslations: data.htmlTranslations || {}
+                };
+                return cachedSpanishTranslations;
+            });
+    }
+
+    return spanishTranslationsPromise;
+}
+
+function getTranslatableElements() {
+    if (translatableElementsCache) return translatableElementsCache;
+
     const elements = new Set();
     translatableSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(el => elements.add(el));
     });
-    return Array.from(elements);
+
+    translatableElementsCache = Array.from(elements);
+    return translatableElementsCache;
 }
 
 function storeOriginalText(element) {
@@ -159,57 +76,72 @@ function storeOriginalText(element) {
     }
 }
 
-function translateElement(element, language) {
-    const hasHtmlTranslation = element.hasAttribute('data-i18n-es-html');
+function updateElementContent(element, content, useHtml = false) {
+    if (useHtml) {
+        if (element.innerHTML !== content) {
+            element.innerHTML = content;
+        }
+        return;
+    }
+
+    if (element.textContent !== content) {
+        element.textContent = content;
+    }
+}
+
+function translateElement(element, language, translations) {
     const storedHtml = element.dataset.i18nEnHtml || element.innerHTML.trim();
     const storedText = element.dataset.i18nEn || element.textContent.trim();
 
     if (language === 'es') {
         const dataHtml = element.dataset.i18nEsHtml;
         const dataText = element.dataset.i18nEs;
-        const htmlKey = storedHtml;
-        const textKey = storedText;
-        const translatedHtml = dataHtml || htmlTranslations[htmlKey];
-        const translatedText = dataText || textTranslations[textKey];
+        const translatedHtml = dataHtml || (translations.htmlTranslations && translations.htmlTranslations[storedHtml]);
+        const translatedText = dataText || (translations.textTranslations && translations.textTranslations[storedText]);
 
         if (translatedHtml) {
-            element.innerHTML = translatedHtml;
+            updateElementContent(element, translatedHtml, true);
         } else if (translatedText) {
-            element.textContent = translatedText;
+            updateElementContent(element, translatedText);
         }
     } else {
-        // Default to English values (restore original structure when present)
-        element.innerHTML = storedHtml;
+        updateElementContent(element, storedHtml, true);
     }
 }
 
-function applyLanguage(language) {
+async function applyLanguage(language) {
     const normalizedLang = language === 'es' ? 'es' : 'en';
     document.documentElement.lang = normalizedLang;
-    const targets = selectTranslatableElements();
-    targets.forEach(element => {
-        storeOriginalText(element);
-        translateElement(element, normalizedLang);
-    });
+    try {
+        const translations = normalizedLang === 'es'
+            ? await loadSpanishTranslations()
+            : { textTranslations: {}, htmlTranslations: {}, titleTranslations: {} };
+        const targets = getTranslatableElements();
 
-    const titleElement = document.querySelector('title');
-    if (titleElement) {
-        if (!titleElement.dataset.i18nEnTitle) {
-            titleElement.dataset.i18nEnTitle = titleElement.textContent.trim();
+        targets.forEach(element => {
+            storeOriginalText(element);
+            translateElement(element, normalizedLang, translations);
+        });
+
+        const titleElement = document.querySelector('title');
+        if (titleElement) {
+            if (!titleElement.dataset.i18nEnTitle) {
+                titleElement.dataset.i18nEnTitle = titleElement.textContent.trim();
+            }
+
+            const spanishTitle = titleElement.dataset.i18nEs || translations.titleTranslations[titleElement.dataset.i18nEnTitle];
+            if (normalizedLang === 'es' && spanishTitle) {
+                updateElementContent(titleElement, spanishTitle);
+            } else if (normalizedLang === 'en' && titleElement.dataset.i18nEnTitle) {
+                updateElementContent(titleElement, titleElement.dataset.i18nEnTitle);
+            }
         }
 
-        const spanishTitle = titleElement.dataset.i18nEs || titleTranslations[titleElement.dataset.i18nEnTitle];
-        if (normalizedLang === 'es' && spanishTitle) {
-            titleElement.textContent = spanishTitle;
-        } else if (normalizedLang === 'en' && titleElement.dataset.i18nEnTitle) {
-            titleElement.textContent = titleElement.dataset.i18nEnTitle;
-        }
+        updateLanguageButtons(normalizedLang);
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLang);
+    } finally {
+        document.documentElement.removeAttribute('data-lang-initializing');
     }
-
-    updateLanguageButtons(normalizedLang);
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLang);
-
-    document.documentElement.removeAttribute('data-lang-initializing');
 }
 
 function injectLanguageStyles() {
@@ -340,7 +272,7 @@ function setupLanguageSwitcher() {
     options.forEach(option => {
         option.addEventListener('click', event => {
             const selectedLanguage = option.dataset.languageOption;
-            applyLanguage(selectedLanguage);
+            applyLanguage(selectedLanguage).catch(error => console.error('Language switch failed', error));
             event.stopPropagation();
         });
     });
@@ -353,7 +285,7 @@ function setupLanguageSwitcher() {
     });
 
     const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'es';
-    applyLanguage(savedLanguage);
+    applyLanguage(savedLanguage).catch(error => console.error('Initial language apply failed', error));
 }
 
 // Navigation toggle for mobile devices

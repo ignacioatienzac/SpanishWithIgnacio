@@ -151,6 +151,85 @@ body {
     color: #ffffff;
 }
 
+.language-switcher {
+    position: relative;
+}
+
+.language-switcher--mobile {
+    display: none;
+    margin-right: 0.75rem;
+}
+
+.language-switcher__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(44, 62, 80, 0.2);
+    background: #ffffff;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--secondary-color);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.language-switcher__button:focus-visible,
+.language-switcher__button:hover {
+    background-color: rgba(192, 57, 43, 0.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.language-switcher__flag {
+    font-size: 1.1rem;
+}
+
+.language-switcher__chevron {
+    font-size: 0.8rem;
+    color: rgba(44, 62, 80, 0.7);
+}
+
+.language-switcher__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    padding: 6px;
+    min-width: 160px;
+    z-index: 20;
+    display: none;
+}
+
+.language-switcher__menu[aria-hidden="false"] {
+    display: block;
+}
+
+.language-switcher__option {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-align: left;
+}
+
+.language-switcher__option:hover,
+.language-switcher__option:focus-visible {
+    background: rgba(192, 57, 43, 0.1);
+}
+
+.language-switcher__option[aria-selected="true"] {
+    background: rgba(192, 57, 43, 0.16);
+}
+
 /* Hero Section (Picture and Text) */
 .hero-section {
     padding: 4rem 2rem;
@@ -209,6 +288,14 @@ body {
         right: 0;
         top: 50%;
         transform: translateY(-50%);
+    }
+
+    .language-switcher--desktop {
+        display: none;
+    }
+
+    .language-switcher--mobile {
+        display: block;
     }
 
     .main-nav {

@@ -615,6 +615,33 @@
     }
 }
 
+@media (max-width: 600px) {
+    .game-container {
+        touch-action: manipulation;
+    }
+
+    .game-keyboard {
+        gap: 8px;
+    }
+
+    .keyboard-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .keyboard-key {
+        flex: 1;
+        min-height: 58px;
+        height: auto;
+        margin: 0;
+        touch-action: manipulation;
+    }
+
+    .keyboard-key.large {
+        flex: 1.5;
+    }
+}
+
 
 /* --- Notificaciones (Toast) --- */
 .toast-container {

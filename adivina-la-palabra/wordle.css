@@ -595,6 +595,26 @@
 .keyboard-key.present { background-color: var(--color-present); color: #ffffff; }
 .keyboard-key.absent { background-color: var(--color-absent); color: #ffffff; }
 
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-keyboard {
+        max-width: 100%;
+        padding: 0 10px;
+        gap: 6px;
+    }
+
+    .keyboard-row {
+        gap: 4px;
+    }
+
+    .keyboard-key,
+    .keyboard-key.large {
+        flex: 1 1 0;
+        height: 46px;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+}
+
 
 /* --- Notificaciones (Toast) --- */
 .toast-container {

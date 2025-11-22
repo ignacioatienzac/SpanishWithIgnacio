@@ -58,12 +58,10 @@ async function loadSpanishTranslations() {
 function getTranslatableElements() {
     if (translatableElementsCache) return translatableElementsCache;
 
-    const elements = new Set();
-    translatableSelectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => elements.add(el));
-    });
+    const combinedSelector = translatableSelectors.join(',');
+    const uniqueElements = new Set(document.querySelectorAll(combinedSelector));
 
-    translatableElementsCache = Array.from(elements);
+    translatableElementsCache = Array.from(uniqueElements);
     return translatableElementsCache;
 }
 
@@ -111,6 +109,12 @@ function translateElement(element, language, translations) {
 
 async function applyLanguage(language) {
     const normalizedLang = language === 'es' ? 'es' : 'en';
+    const isSameLanguage = document.documentElement.lang === normalizedLang;
+
+    if (isSameLanguage && !document.documentElement.hasAttribute('data-lang-initializing')) {
+        updateLanguageButtons(normalizedLang);
+        return;
+    }
     document.documentElement.lang = normalizedLang;
     try {
         const translations = normalizedLang === 'es'

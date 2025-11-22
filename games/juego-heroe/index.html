@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡El poder de los verbos! / The power of verbs!</title>
+    <title>The power of verbs!</title>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
                 <span class="logo-main">Spanish with</span>
                 <span class="logo-script">Ignacio</span>
             </div>
-            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Abrir menú de navegación">
+            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
                 <span class="menu-toggle__bar"></span>
                 <span class="menu-toggle__bar"></span>
                 <span class="menu-toggle__bar"></span>
@@ -98,12 +98,11 @@
                 <canvas id="game-canvas"></canvas>
                 <!-- Overlay de Game Over -->
                 <div id="game-over-overlay" class="overlay hidden">
-                    <h1 class="game-over-title">¡FIN DEL JUEGO!</h1>
-                    <p class="game-over-subtitle">Los monstruos han superado tus defensas.</p>
-                    <p class="game-over-score">Puntuación Final: <span id="final-score">0</span></p>
+                    <h1 class="game-over-title">GAME OVER!</h1>
+                    <p class="game-over-subtitle">The monsters have broken through your defenses.</p>
+                    <p class="game-over-score">Final score: <span id="final-score">0</span></p>
                     <button id="restart-button" class="btn btn-restart">
-                        <span>volver a empezar</span>
-                        <span>start again</span>
+                        <span>Start again</span>
                     </button>
                 </div>
             </div>
@@ -113,15 +112,8 @@
                 <div class="write-mode-layout">
                     <div class="write-mode-instructions">
                         <div class="choice-info-card write-mode-info-card">
-                            <h3>
-                                <span class="lang-es">¡El poder de los verbos!</span><br>
-                                <span class="lang-en">The power of verbs!</span>
-                            </h3>
-                            <p>
-                                <span class="lang-es">Conjuga los verbos correctamente y ayuda al héroe a derrotar a los monstruos.</span>
-                                <br>
-                                <span class="lang-en">Conjugate the verbs correctly and help the hero defeat the monsters.</span>
-                            </p>
+                            <h3>The power of verbs!</h3>
+                            <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
                         </div>
                         <div class="key-instructions">
                             <span class="key-equation">
@@ -172,9 +164,9 @@
 
                         <!-- Respuesta del jugador -->
                         <div class="answer-group">
-                            <input type="text" id="answer-input" placeholder="Tu respuesta...">
+                            <input type="text" id="answer-input" placeholder="Your answer...">
                             <button id="submit-answer" class="btn btn-submit">
-                                Comprobar
+                                Check
                             </button>
                         </div>
 
@@ -190,15 +182,8 @@
                         </div>
                         <div class="choice-info-panel">
                             <div class="choice-info-card">
-                                <h3>
-                                    <span class="lang-es">¡El poder de los verbos!</span><br>
-                                    <span class="lang-en">The power of verbs!</span>
-                                </h3>
-                                <p>
-                                    <span class="lang-es">Conjuga los verbos correctamente y ayuda al héroe a derrotar a los monstruos.</span>
-                                    <br>
-                                    <span class="lang-en">Conjugate the verbs correctly and help the hero defeat the monsters.</span>
-                                </p>
+                                <h3>The power of verbs!</h3>
+                                <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
                             </div>
                         </div>
                         <div class="choice-side-panel">
@@ -213,8 +198,7 @@
                                 </div>
                             </div>
                             <button id="quick-restart-button" class="quick-restart-button" type="button">
-                                <span>empezar de nuevo</span>
-                                <span>start again</span>
+                                <span>Start again</span>
                             </button>
                             <div id="choice-mode-message" class="choice-mode-message" aria-live="polite"></div>
                         </div>
@@ -223,18 +207,15 @@
 
                 <div id="quick-restart-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quick-restart-title">
                     <div class="modal-content">
-                        <h2 id="quick-restart-title" class="modal-title">¿Qué quieres hacer?</h2>
+                        <h2 id="quick-restart-title" class="modal-title">What would you like to do?</h2>
                         <div class="modal-options">
                             <button id="quick-restart-same" class="modal-option" type="button">
-                                <span>Repetir con los mismos ajustes</span>
                                 <span>Repeat with the same settings</span>
                             </button>
                             <button id="quick-restart-different" class="modal-option" type="button">
-                                <span>Repetir con ajustes diferentes</span>
                                 <span>Repeat with different settings</span>
                             </button>
                             <button id="quick-restart-cancel" class="modal-option" type="button">
-                                <span>Cancelar</span>
                                 <span>Cancel</span>
                             </button>
                         </div>

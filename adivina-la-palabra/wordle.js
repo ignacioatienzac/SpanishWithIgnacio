@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const requestedLevel = (urlParams.get('level') || 'A1').toUpperCase();
         if (!SUPPORTED_LEVELS.includes(requestedLevel)) {
-            showToast('Ese nivel aún no está disponible. Mostrando nivel A1.');
+            showToast('That level is not available yet. Showing level A1.');
             currentLevel = 'A1';
         } else {
             currentLevel = requestedLevel;
@@ -172,18 +172,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (isToday(selectedDate)) {
-                console.log("Cargando juego para hoy.");
+                console.log("Loading today\"s game.");
                 loadGameForDate(selectedDate);
                 return;
             }
 
             if (IS_PREMIUM_USER) {
-                console.log("Usuario premium, cargando día anterior:", dateStr);
+                console.log("Premium user detected, loading a previous day:", dateStr);
                 loadGameForDate(selectedDate);
                 return;
             }
 
-            showToast('Solo los suscriptores pueden jugar días anteriores.');
+            showToast('Only subscribers can play previous days.');
             if (revertSelection) revertSelection();
         };
 
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        console.warn('flatpickr no está disponible. Usando selector nativo de fechas.');
+        console.warn('flatpickr is not available. Using the native date picker.');
         const fallbackInput = document.createElement('input');
         fallbackInput.type = 'date';
         fallbackInput.id = calendarButton.id;
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fallbackInput.min = normalizeDate(sixtyDaysAgo);
         fallbackInput.max = normalizeDate(today);
         fallbackInput.value = normalizeDate(today);
-        fallbackInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Elegir otro día');
+        fallbackInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Choose another day');
 
         fallbackInput.style.position = 'absolute';
         fallbackInput.style.opacity = '0';
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selection = getWordForDate(date);
         if (!selection) {
-            showToast('No se encontró una palabra para esta fecha.');
+            showToast('No word was found for this date.');
             console.error('No target word available for the selected date.');
             return;
         }
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hintsReady = await ensureHintData();
         prepareHintsForWord(targetWord, hintsReady);
 
-        console.log(`Palabra para ${date.toDateString()}: ${targetWord}`);
+        console.log(`Word for ${date.toDateString()}: ${targetWord}`);
 
         isGameActive = true;
         startInteraction();
@@ -287,8 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const answerListFilename = LEVEL_FILE_MAP[normalizedLevel];
         if (!answerListFilename) {
-            console.error(`No se encontró un archivo de respuestas para el nivel ${normalizedLevel}.`);
-            showToast('Ese nivel aún no está disponible.');
+            console.error(`No answer file was found for level ${normalizedLevel}.`);
+            showToast('That level is not available yet.');
             return false;
         }
 
@@ -301,12 +301,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const answerResponse = await fetch(answerListFilename);
-            if (!answerResponse.ok) throw new Error(`No se pudo cargar ${answerListFilename}`);
+            if (!answerResponse.ok) throw new Error(`Could not load ${answerListFilename}`);
 
             const validationResponses = await Promise.all(validationFiles.map(file => fetch(file.filename)));
             validationResponses.forEach((response, index) => {
                 if (!response.ok) {
-                    throw new Error(`No se pudo cargar ${validationFiles[index].filename}`);
+                    throw new Error(`Could not load ${validationFiles[index].filename}`);
                 }
             });
 
@@ -347,15 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     validationSetsByLength.set(length, validationSet);
                 }
 
-                console.log(`Lista de validación (${length} letras) cargada:`, validationSet.size, "palabras");
+                console.log(`Validation list (${length} letters) loaded:`, validationSet.size, "words");
             });
 
             combinedAnswerList = uniqueNormalizedAnswers.filter(word => validationSetsByLength.has(word.length));
             combinedAnswerList = shuffleArrayDeterministic(combinedAnswerList, getSeedForLevel(normalizedLevel));
 
             if (combinedAnswerList.length === 0) {
-                showToast('No se encontraron palabras de respuesta.');
-                console.error('La lista de respuestas no contiene palabras válidas.');
+                showToast('No answer words were found.');
+                console.error('The answer list does not contain valid words.');
                 return false;
             }
 
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Lista de respuestas (${length} letras) cargada:`, answersForLength.length, 'palabras');
             });
 
-            console.log('Total de palabras disponibles:', combinedAnswerList.length);
+            console.log('Total available words:', combinedAnswerList.length);
 
             wordDataLoaded = true;
             loadedLevel = normalizedLevel;
@@ -374,8 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return true; // Éxito
 
         } catch (error) {
-            console.error("Error al cargar las listas de palabras:", error);
-            showToast('Error al iniciar el juego.');
+            console.error("Error loading the word lists:", error);
+            showToast('Error starting the game.');
             return false;
         }
     }
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hintFile = HINT_FILE_MAP[activeLevel];
         if (!hintFile) {
-            console.warn(`No hay archivo de pistas configurado para el nivel ${activeLevel}.`);
+            console.warn(`No hint file is configured for level ${activeLevel}.`);
             hintDictionary.clear();
             hintDataLoaded = false;
             loadedHintLevel = null;
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(hintFile);
             if (!response.ok) {
-                throw new Error(`No se pudo cargar ${hintFile}`);
+                throw new Error(`Could not load ${hintFile}`);
             }
 
             const hintData = await response.json();
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     registerHints(word, entry);
                 });
             } else {
-                throw new Error('Formato de pistas no reconocido.');
+                throw new Error('Unrecognized hint format.');
             }
 
             hintDataLoaded = true;
@@ -441,8 +441,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Loaded hints for ${hintDictionary.size} words from ${hintFile}.`);
             return true;
         } catch (error) {
-            console.error('Error al cargar las pistas:', error);
-            showToast('No se pudieron cargar las pistas para este nivel.');
+            console.error('Error loading the hints:', error);
+            showToast('The hints for this level could not be loaded.');
             hintDictionary.clear();
             hintDataLoaded = false;
             loadedHintLevel = null;
@@ -712,7 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isGameActive) return;
 
         if (currentColIndex < currentWordLength) {
-            showToast('Faltan letras');
+            showToast('Missing letters');
             shakeRow();
             return;
         }
@@ -720,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const guess = getCurrentGuess();
         console.log("Current guess:", guess);
         
-        // Limpiar el toast de "Comprobando..." si existiera
+        // Clear any existing "checking..." toast
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
@@ -869,13 +869,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCIONES DE FEEDBACK ---
 
     function showToast(message, duration = 2000) {
-        // Limpiar el toast de "cargando" si existe
+        // Clear any "loading" toast if it exists
         const loadingToast = document.getElementById('toast-loading');
         if (loadingToast) {
             loadingToast.remove();
         }
 
-        if (duration < 3000 && message !== 'Comprobando diccionario...') {
+        if (duration < 3000 && message !== 'Checking dictionary...') {
              const existingToasts = toastContainer.querySelectorAll('.toast:not(#toast-loading)');
              existingToasts.forEach(t => t.remove());
         }
@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.textContent = message;
         toastContainer.prepend(toast);
 
-        if (message === 'Comprobando diccionario...') {
+        if (message === 'Checking dictionary...') {
             toast.id = "toast-loading";
         } else {
             setTimeout(() => {

@@ -212,6 +212,8 @@ function applyLanguage(language) {
 
     updateLanguageButtons(normalizedLang);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLang);
+
+    document.documentElement.removeAttribute('data-lang-initializing');
 }
 
 function injectLanguageStyles() {

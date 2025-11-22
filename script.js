@@ -1,7 +1,7 @@
 // Spanish with Ignacio - Main JavaScript File
 
 // This console log will show up in the browser's developer tools to confirm the script is loaded.
-console.log("¡Bienvenido a Español con Ignacio! Script loaded correctly.");
+console.log("Welcome to Spanish with Ignacio! Script loaded correctly.");
 
 // Navigation toggle for mobile devices
 const menuToggle = document.querySelector('.menu-toggle');

@@ -479,6 +479,7 @@
         const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
         const LAST_COMPLETED_STORAGE_KEY = 'wordleQuestLastCompletedLevel';
         const TRANSITION_END_STORAGE_KEY = 'wordleQuestTransitionEnd';
+        const LAST_PLAYED_STORAGE_KEY = 'wordleQuestLastPlayedLevel';
         const ADVENTURE_TRANSITION_DURATION_MS = 700;
         let currentSelectedLevel = null;
 
@@ -561,6 +562,10 @@
             localStorage.setItem(LEVEL_STORAGE_KEY, String(levelNumber));
         }
 
+        function persistLastPlayedLevel(levelNumber) {
+            localStorage.setItem(LAST_PLAYED_STORAGE_KEY, String(levelNumber));
+        }
+
         function applyLevelProgress(targetCurrentLevel, options = {}) {
             const nodes = Array.from(document.querySelectorAll('.level-node'));
 
@@ -633,12 +638,19 @@
 
             const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
             const lastCompletedLevel = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
+            const lastPlayedLevel = Number(localStorage.getItem(LAST_PLAYED_STORAGE_KEY));
+            const hasCompletedLevel = Number.isFinite(lastCompletedLevel);
             const defaultLevel = getCurrentLevelNumber() || 1;
             const maxLevel = Math.max(...nodes.map(node => Number(node.dataset.level)));
             const sanitizedLevel = Number.isNaN(savedLevel) || savedLevel < 1 ? defaultLevel : savedLevel;
-            const validatedLevel = Math.min(Math.max(sanitizedLevel, 1), maxLevel);
+            const validatedLevel = hasCompletedLevel
+                ? Math.min(Math.max(sanitizedLevel, 1), maxLevel)
+                : 1;
+            const heroTargetLevel = Number.isNaN(lastPlayedLevel)
+                ? (hasCompletedLevel ? lastCompletedLevel : 1)
+                : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
 
-            applyLevelProgress(validatedLevel, { heroLevelOverride: lastCompletedLevel });
+            applyLevelProgress(validatedLevel, { heroLevelOverride: heroTargetLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
         }
 
@@ -649,6 +661,7 @@
             const currentLevel = Number(currentNode.dataset.level);
             currentNode.classList.remove('current');
             currentNode.classList.add('completed');
+            persistLastPlayedLevel(currentLevel);
 
             const nextLevelNumber = currentLevel + 1;
             const nextNode = getLevelNodeByNumber(nextLevelNumber);
@@ -657,7 +670,7 @@
                 nextNode.classList.remove('locked', 'completed');
                 nextNode.classList.add('current');
 
-                playUnlockEffect(nextNode).then(() => moveHeroToNode(nextNode));
+                playUnlockEffect(nextNode).then(() => moveHeroToNode(currentNode));
 
                 persistLevelProgress(nextLevelNumber);
                 currentSelectedLevel = nextLevelNumber;
@@ -702,6 +715,7 @@
                 return;
             }
 
+            persistLastPlayedLevel(currentSelectedLevel);
             const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;
             window.location.href = url;
         }

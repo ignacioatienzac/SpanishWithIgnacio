@@ -668,9 +668,8 @@
 
         function startPuzzle() {
             if (currentSelectedLevel) {
-                // AQUÍ ES DONDE CONECTARÍAS CON TU JUEGO DE PUZLES
-                alert(`¡Cargando el puzle Wordle del Nivel ${currentSelectedLevel}!`);
-                // Ejemplo: window.location.href = 'puzzle.html?level=' + currentSelectedLevel;
+                const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;
+                window.location.href = url;
             }
         }
 

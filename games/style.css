@@ -185,6 +185,10 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         max-width: 1280px;
     }
+
+    .game-card {
+        aspect-ratio: 10 / 4;
+    }
 }
 
 @media (max-width: 768px) {

@@ -25,12 +25,18 @@
             <div class="language-switcher language-switcher--mobile">
                 <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
                     <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
-                    <span class="language-switcher__label">Español</span>
                     <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                    <span class="language-switcher__sr-label">Español</span>
                 </button>
                 <div class="language-switcher__menu" role="listbox" aria-hidden="true">
-                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es">🇪🇸 Español</button>
-                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en">🇬🇧 English</button>
+                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                        <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                        <span class="language-switcher__sr-label">Español</span>
+                    </button>
+                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                        <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                        <span class="language-switcher__sr-label">English</span>
+                    </button>
                 </div>
             </div>
 
@@ -44,12 +50,18 @@
                     <li class="language-switcher language-switcher--desktop">
                         <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
                             <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
-                            <span class="language-switcher__label">Español</span>
                             <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                            <span class="language-switcher__sr-label">Español</span>
                         </button>
                         <div class="language-switcher__menu" role="listbox" aria-hidden="true">
-                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es">🇪🇸 Español</button>
-                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en">🇬🇧 English</button>
+                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                <span class="language-switcher__sr-label">English</span>
+                            </button>
                         </div>
                     </li>
                     <li><a href="../index.html" data-i18n-es="Inicio">Home</a></li>

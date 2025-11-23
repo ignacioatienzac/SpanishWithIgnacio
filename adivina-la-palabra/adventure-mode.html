@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../language-init.js"></script>
+    <title>Adivina la Palabra - Spanish with Ignacio</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="wordle.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    </head>
+<body>
+
+    <header class="main-header">
+    <div class="header-container">
+        <div class="logo">
+            <span class="logo-main">Spanish with</span>
+            <span class="logo-script">Ignacio</span>
+        </div>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+        </button>
+        <nav class="main-nav" id="primary-navigation">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../students/index.html">Students</a></li>
+                    <li><a href="../profesores/index.html">Teachers</a></li>
+                    <li><a href="../games/index.html">Games</a></li>
+                    <li><a href="index.html" class="active">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wordle-main">
+        <section class="page-hero game-intro">
+            <div class="page-hero__container">
+                <h1 class="page-hero__title">Guess the Word</h1>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-button level-a1" data-target="../mapa-aventura/index.html" type="button">
+                    <span class="level-code">A1</span>
+                    <span class="level-spanish">Beginner</span>
+                    <span class="level-english">Beginner</span>
+                </button>
+                <button class="level-button level-a2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">A2</span>
+                    <span class="level-spanish">Elementary</span>
+                    <span class="level-english">Elementary</span>
+                </button>
+                <button class="level-button level-b1" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">B1</span>
+                    <span class="level-spanish">Intermediate</span>
+                    <span class="level-english">Intermediate</span>
+                </button>
+                <button class="level-button level-b2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">B2</span>
+                    <span class="level-spanish">Upper-Intermediate</span>
+                    <span class="level-english">Upper-Intermediate</span>
+                </button>
+                <button class="level-button level-c1" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C1</span>
+                    <span class="level-spanish">Advanced</span>
+                    <span class="level-english">Advanced</span>
+                </button>
+                <button class="level-button level-c2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C2</span>
+                    <span class="level-spanish">Proficient</span>
+                    <span class="level-english">Proficient</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="../script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const adventureButton = document.querySelector('.level-button.level-a1');
+            if (adventureButton) {
+                adventureButton.addEventListener('click', () => {
+                    const target = adventureButton.dataset.target;
+                    if (target) {
+                        window.location.href = target;
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

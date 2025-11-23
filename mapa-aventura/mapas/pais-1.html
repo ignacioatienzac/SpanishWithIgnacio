@@ -478,6 +478,7 @@
 
     <script>
         const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
+        const LAST_COMPLETED_STORAGE_KEY = 'wordleQuestLastCompletedLevel';
         let currentSelectedLevel = null;
 
         function getLevelNodeByNumber(number) {
@@ -494,6 +495,11 @@
         function getCurrentLevelNumber() {
             const currentNode = document.querySelector('.level-node.current');
             return currentNode ? Number(currentNode.dataset.level) : null;
+        }
+
+        function getMaxLevelNumber() {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+            return nodes.length ? Math.max(...nodes.map(node => Number(node.dataset.level))) : 10;
         }
 
         function playUnlockEffect(node) {
@@ -575,6 +581,20 @@
             currentSelectedLevel = targetCurrentLevel;
         }
 
+        function animateReturnFromGame(targetLevel) {
+            const lastCompleted = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
+            const shouldAnimateUnlock = !Number.isNaN(lastCompleted) && targetLevel === lastCompleted + 1;
+
+            if (!Number.isNaN(lastCompleted)) {
+                localStorage.removeItem(LAST_COMPLETED_STORAGE_KEY);
+            }
+
+            if (!shouldAnimateUnlock) return;
+
+            const targetNode = getLevelNodeByNumber(targetLevel);
+            playUnlockEffect(targetNode).then(() => moveHeroToNode(targetNode));
+        }
+
         function loadSavedProgress() {
             const nodes = Array.from(document.querySelectorAll('.level-node'));
             if (!nodes.length) return;
@@ -586,6 +606,7 @@
             const validatedLevel = Math.min(Math.max(sanitizedLevel, 1), maxLevel);
 
             applyLevelProgress(validatedLevel);
+            animateReturnFromGame(validatedLevel);
         }
 
         function completeCurrentLevel() {

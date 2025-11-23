@@ -462,6 +462,105 @@
     outline-offset: 3px;
 }
 
+/* Adventure mode result modal */
+.adventure-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.adventure-modal.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.adventure-modal__dialog {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.75rem;
+    max-width: min(440px, 92vw);
+    width: 100%;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    position: relative;
+}
+
+.adventure-modal__title {
+    margin: 0 0 0.5rem 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+}
+
+.adventure-modal__message {
+    margin: 0 0 1.25rem 0;
+    color: #3a3a3a;
+    line-height: 1.5;
+}
+
+.adventure-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.adventure-modal__button {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.adventure-modal__button:hover,
+.adventure-modal__button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    outline: none;
+}
+
+.adventure-modal__button--primary {
+    background: linear-gradient(135deg, #1d8cf8, #3358f4);
+    color: #ffffff;
+}
+
+.adventure-modal__button--secondary {
+    background: #f1f3f5;
+    color: #1f1f1f;
+}
+
+.adventure-modal__button--secondary:hover,
+.adventure-modal__button--secondary:focus-visible {
+    background: #e8ebef;
+}
+
+.adventure-transition {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(29, 140, 248, 0.8), rgba(51, 88, 244, 0.85));
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1300;
+    transition: opacity 0.35s ease;
+}
+
+.adventure-transition.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 @media (max-width: 600px) {
     .instructions-modal__content {
         padding: 1.5rem 1.25rem 1.75rem;

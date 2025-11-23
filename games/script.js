@@ -22,16 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     disabledCards.forEach((card) => {
-        const message = card.dataset.message || 'This game will be available soon.';
+        const englishMessage = card.dataset.message || 'This game will be available soon.';
+        const spanishMessage = card.dataset.messageEs || englishMessage;
 
         card.addEventListener('click', (event) => {
             event.preventDefault();
+            const language = document.documentElement.lang === 'es' ? 'es' : 'en';
+            const message = language === 'es' ? spanishMessage : englishMessage;
             announce(message);
         });
 
         card.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
+                const language = document.documentElement.lang === 'es' ? 'es' : 'en';
+                const message = language === 'es' ? spanishMessage : englishMessage;
                 announce(message);
             }
         });

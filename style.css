@@ -132,6 +132,7 @@ html[data-lang-initializing="true"] body {
     display: flex;
     flex-wrap: wrap; /* Para que los botones se reajusten */
     justify-content: center; /* Centra los botones si se parten en dos líneas */
+    align-items: center;
 }
 
 .main-nav ul li {
@@ -264,6 +265,18 @@ html[data-lang-initializing="true"] body {
 .language-switcher__option-flag {
     font-size: 1.5rem;
     line-height: 1;
+}
+
+@media (min-width: 769px) {
+    .language-switcher--desktop .language-switcher__button {
+        background: linear-gradient(135deg, #6d8098, #566c84);
+        color: #ffffff;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .language-switcher--desktop .language-switcher__menu {
+        background: linear-gradient(135deg, #6d8098, #566c84);
+    }
 }
 
 /* Hero Section (Picture and Text) */

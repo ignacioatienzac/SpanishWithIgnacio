@@ -164,22 +164,22 @@ function injectLanguageStyles() {
     style.textContent = `
     .language-switcher { position: relative; }
     .language-switcher--mobile { display: none; }
-    .language-switcher__button { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 10px 14px; border-radius: 999px; border: none; background: linear-gradient(145deg, #0b2342, #0f3b7c); cursor: pointer; font-weight: 700; color: #ffffff; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); min-height: 38px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .language-switcher__button:focus-visible, .language-switcher__button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16); }
+    .language-switcher__button { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 10px 14px; border-radius: 999px; border: none; background: linear-gradient(145deg, #f2f4f7, #d9dde3); cursor: pointer; font-weight: 700; color: #1f2933; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); min-height: 38px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .language-switcher__button:focus-visible, .language-switcher__button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12); }
     .language-switcher__icon { font-size: 1.05rem; line-height: 1; }
-    .language-switcher__chevron { font-size: 0.8rem; color: rgba(255, 255, 255, 0.9); }
+    .language-switcher__chevron { font-size: 0.8rem; color: rgba(47, 60, 71, 0.85); }
     .language-switcher__label { display: none; }
     .language-switcher__flag { display: inline-flex; font-size: 1.3rem; line-height: 1; }
     .language-switcher__sr-label { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; white-space: nowrap; }
-    .language-switcher__menu { position: absolute; top: calc(100% + 6px); left: 0; background: linear-gradient(145deg, #0b2342, #0f3b7c); border-radius: 10px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); padding: 8px 10px; min-width: 160px; z-index: 20; display: none; }
+    .language-switcher__menu { position: absolute; top: calc(100% + 6px); left: 0; background: linear-gradient(145deg, #f2f4f7, #d9dde3); border-radius: 10px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); padding: 8px 10px; min-width: 160px; z-index: 20; display: none; }
     .language-switcher__menu[aria-hidden="false"] { display: block; }
-    .language-switcher__option { width: 100%; padding: 10px 12px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; gap: 0.35rem; border-radius: 8px; cursor: pointer; color: #ffffff; font-weight: 700; text-align: center; }
-    .language-switcher__option:hover, .language-switcher__option:focus-visible { background: rgba(255, 255, 255, 0.08); }
-    .language-switcher__option[aria-selected="true"] { background: rgba(255, 255, 255, 0.16); }
+    .language-switcher__option { width: 100%; padding: 10px 12px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; gap: 0.35rem; border-radius: 8px; cursor: pointer; color: #1f2933; font-weight: 700; text-align: center; }
+    .language-switcher__option:hover, .language-switcher__option:focus-visible { background: rgba(31, 41, 51, 0.06); }
+    .language-switcher__option[aria-selected="true"] { background: rgba(31, 41, 51, 0.12); }
     .language-switcher__option-flag { font-size: 1.5rem; line-height: 1; }
     @media (min-width: 769px) {
-      .language-switcher--desktop .language-switcher__button { background: linear-gradient(135deg, #6d8098, #566c84); color: #ffffff; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); }
-      .language-switcher--desktop .language-switcher__menu { background: linear-gradient(135deg, #6d8098, #566c84); }
+      .language-switcher--desktop .language-switcher__button { background: linear-gradient(135deg, #f2f4f7, #d9dde3); color: #1f2933; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); }
+      .language-switcher--desktop .language-switcher__menu { background: linear-gradient(135deg, #f2f4f7, #d9dde3); }
     }
     @media (max-width: 768px) {
       .language-switcher--desktop { display: none; }

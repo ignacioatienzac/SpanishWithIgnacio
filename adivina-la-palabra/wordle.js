@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         A1: './pistas-a1.json',
         A2: './pistas-a2.json',
     };
+    const ADVENTURE_VOCAB_PATH = '../mapa-aventura/vocabulary-a1.json';
+    const ADVENTURE_BOSS_KEY_PREFIX = 'wordleQuestAdventureBoss';
 
 
     // --- SELECTORES DEL DOM ---
@@ -69,10 +71,158 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
     let guessesMade = 0;
+    let isAdventureMode = false;
+    let adventureMapId = 1;
+    let adventureLevelNumber = 1;
+    let adventureVocabulary = null;
+    let adventureBossIndex = 0;
+    let activeAdventureEntry = null;
 
     function sanitizeWordForHints(word) {
         if (typeof word !== 'string') return '';
         return normalizeWord(word).replace(/[^A-ZÑ]/g, '');
+    }
+
+    function getAdventureBossKey(mapId) {
+        const id = Number.isFinite(mapId) ? mapId : 1;
+        return `${ADVENTURE_BOSS_KEY_PREFIX}-${id}`;
+    }
+
+    function filterAdventureList(words) {
+        if (!Array.isArray(words)) return [];
+        return words
+            .map(word => normalizeWord(word))
+            .filter(word => word.length >= MIN_WORD_LENGTH && word.length <= MAX_WORD_LENGTH);
+    }
+
+    async function loadAdventureVocabulary(mapId) {
+        if (adventureVocabulary) return adventureVocabulary;
+
+        try {
+            const response = await fetch(ADVENTURE_VOCAB_PATH);
+            if (!response.ok) {
+                throw new Error(`Could not load ${ADVENTURE_VOCAB_PATH}`);
+            }
+
+            const data = await response.json();
+            if (!Array.isArray(data)) {
+                throw new Error('Vocabulary file is not an array');
+            }
+
+            adventureVocabulary = data;
+            return adventureVocabulary;
+        } catch (error) {
+            console.error('Error loading adventure vocabulary:', error);
+            showToast('No se pudo cargar el vocabulario de aventura.');
+            return null;
+        }
+    }
+
+    function findAdventureEntry(mapId) {
+        if (!Array.isArray(adventureVocabulary)) return null;
+        const paddedName = `nivel ${String(mapId || 1).padStart(2, '0')}`;
+
+        return adventureVocabulary.find(entry => {
+            if (!entry || typeof entry !== 'object') return false;
+            const matchesId = Number(entry.id) === Number(mapId);
+            const matchesName = typeof entry.nombre === 'string' && entry.nombre.toLowerCase() === paddedName;
+            return matchesId || matchesName;
+        }) || adventureVocabulary[0];
+    }
+
+    function getAdventureWord(entry, levelNumber) {
+        if (!entry) return null;
+
+        const vocabList = filterAdventureList(entry.vocabulario);
+        const bossList = filterAdventureList(entry.jefe);
+
+        if (levelNumber === 10) {
+            if (!bossList.length) return null;
+            adventureBossIndex = adventureBossIndex % bossList.length;
+            return bossList[adventureBossIndex];
+        }
+
+        if (!vocabList.length) return null;
+        const levelIndex = Math.max(0, (levelNumber || 1) - 1);
+        const cappedIndex = levelIndex % vocabList.length;
+        return vocabList[cappedIndex];
+    }
+
+    function saveBossProgress() {
+        try {
+            const key = getAdventureBossKey(adventureMapId);
+            localStorage.setItem(key, String(adventureBossIndex));
+        } catch (error) {
+            console.warn('Could not save boss progress:', error);
+        }
+    }
+
+    function loadBossProgress() {
+        try {
+            const key = getAdventureBossKey(adventureMapId);
+            const stored = Number(localStorage.getItem(key));
+            if (!Number.isNaN(stored) && stored >= 0) {
+                adventureBossIndex = stored;
+            }
+        } catch (error) {
+            console.warn('Could not load boss progress:', error);
+        }
+    }
+
+    function advanceBossWord(entry) {
+        const bossList = filterAdventureList(entry?.jefe);
+        if (!bossList.length) return null;
+        adventureBossIndex = (adventureBossIndex + 1) % bossList.length;
+        saveBossProgress();
+        return bossList[adventureBossIndex];
+    }
+
+    function restartAdventureAttempt(nextWord) {
+        if (nextWord) {
+            targetWord = nextWord;
+            currentWordLength = nextWord.length;
+        }
+
+        guessesMade = 0;
+        resetBoard(currentWordLength);
+        prepareHintsForWord(targetWord, hintDataLoaded);
+        isGameActive = true;
+        startInteraction();
+        updateClueAvailability();
+    }
+
+    async function loadAdventureGame() {
+        stopInteraction();
+        showToast('Cargando nivel de aventura...', 2000);
+
+        const vocabData = await loadAdventureVocabulary(adventureMapId);
+        if (!vocabData) return;
+
+        activeAdventureEntry = findAdventureEntry(adventureMapId);
+        loadBossProgress();
+
+        const success = await loadWordLists(currentLevel);
+        if (!success) return;
+
+        const selectedWord = getAdventureWord(activeAdventureEntry, adventureLevelNumber);
+        if (!selectedWord) {
+            showToast('No hay palabra configurada para este nivel.');
+            return;
+        }
+
+        targetWord = selectedWord;
+        currentWordLength = selectedWord.length;
+        if (adventureLevelNumber === 10) {
+            saveBossProgress();
+        }
+
+        resetBoard(currentWordLength);
+        const hintsReady = await ensureHintData();
+        prepareHintsForWord(targetWord, hintsReady);
+
+        isGameActive = true;
+        startInteraction();
+        updateClueAvailability();
     }
 
     function clearClueMessages() {
@@ -141,6 +291,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeGame() {
         console.log("Initializing game setup...");
         const urlParams = new URLSearchParams(window.location.search);
+        const requestedMode = (urlParams.get('mode') || '').toLowerCase();
+        isAdventureMode = requestedMode === 'adventure';
+
+        if (isAdventureMode) {
+            adventureMapId = Number(urlParams.get('map')) || 1;
+            adventureLevelNumber = Number(urlParams.get('level')) || 1;
+            adventureBossIndex = 0;
+            loadBossProgress();
+
+            currentLevel = 'A1';
+            levelTitle.textContent = `Mapa ${adventureMapId} · Nivel ${adventureLevelNumber}`;
+
+            if (calendarButton) {
+                calendarButton.style.display = 'none';
+                calendarButton.setAttribute('aria-hidden', 'true');
+                calendarButton.setAttribute('disabled', 'true');
+            }
+
+            loadAdventureGame();
+            return;
+        }
+
         const requestedLevel = (urlParams.get('level') || 'A1').toUpperCase();
         if (!SUPPORTED_LEVELS.includes(requestedLevel)) {
             showToast('That level is not available yet. Showing level A1.');
@@ -150,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         levelTitle.textContent = `Level ${currentLevel}`;
-        
+
         setupCalendar();
         loadGameForDate(new Date());
     }
@@ -848,6 +1020,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
+            if (isAdventureMode) {
+                if (adventureLevelNumber === 10 && activeAdventureEntry) {
+                    const nextBossWord = advanceBossWord(activeAdventureEntry) || targetWord;
+                    showToast('El jefe cambia su palabra. ¡Inténtalo de nuevo!', 4000);
+                    restartAdventureAttempt(nextBossWord);
+                    return false;
+                }
+
+                showToast('Inténtalo de nuevo', 3000);
+                restartAdventureAttempt(targetWord);
+                return false;
+            }
+
             showToast('Want to try again?', 5000);
             stopInteraction();
             console.log("Game outcome: LOSS");

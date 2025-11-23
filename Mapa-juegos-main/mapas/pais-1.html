@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivel 1: Bahía de las Vocales</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #2b3e50; /* Mismo azul océano */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow: hidden;
+            gap: 20px;
+            padding: 10px 0 20px;
+            box-sizing: border-box;
+        }
+
+        header.page-header {
+            width: 100%;
+            height: 90px;
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            width: 1200px;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        #level-map-container {
+            position: relative;
+            width: 1200px;
+            max-width: calc(100vw - 40px);
+            height: calc(100vh - 90px - 70px);
+            max-height: calc(100vh - 90px - 70px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            background: radial-gradient(circle, #4a69bd 0%, #2b3e50 100%);
+        }
+
+        /* Botón de volver */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #2b3e50;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 100;
+            border: 2px solid #2b3e50;
+            transition: transform 0.2s;
+        }
+        .back-btn:hover { transform: scale(1.05); }
+
+        /* SVG Ajustado */
+        svg {
+            width: 100%;
+            height: 100%;
+            /* El drop-shadow da sensación de isla flotante */
+            filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.4)); 
+        }
+
+        /* Terreno */
+        .land-mass {
+            fill: #eebb99;
+            stroke: #8d6e63;
+            stroke-width: 1px; /* Más fino porque estamos "zoomeados" */
+            stroke-linejoin: round;
+        }
+
+        /* Elementos decorativos del terreno (montañas, árboles simples) */
+        .decoration {
+            fill: #cd8c5c; /* Un tono más oscuro de tierra */
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Elementos de escenario */
+        .tree-canopy {
+            fill: #62b36f;
+            stroke: #3f7c47;
+            stroke-width: 1px;
+        }
+        .tree-trunk {
+            fill: #8d6e63;
+        }
+        .lake {
+            fill: #5dade2;
+            stroke: #2980b9;
+            stroke-width: 1px;
+            opacity: 0.85;
+        }
+
+        /* El camino */
+        .path-connector {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2px;
+            stroke-dasharray: 5, 5;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* --- NODOS DE NIVEL --- */
+        .level-node {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .level-circle {
+            fill: #ffd86b;
+            stroke: #c47a1c;
+            stroke-width: 2px;
+            r: 7; /* Radio del círculo */
+            filter: drop-shadow(0 2px 0 #8a4d0f) drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+        }
+
+        .level-number {
+            font-size: 6px;
+            font-weight: bold;
+            fill: #2c3e50;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+
+        /* ESTADOS DE LOS NIVELES */
+        
+        /* 1. Completado (Verde) */
+        .level-node.completed .level-circle {
+            fill: #64e38a;
+            stroke: #1f7f43;
+        }
+        .level-node.completed .level-number { fill: white; }
+
+        /* 2. Actual / Disponible (Amarillo pulsante) */
+        .level-node.current .level-circle {
+            fill: #ffef7a;
+            stroke: #f5a623;
+            stroke-width: 3px;
+        }
+        .level-node.current {
+            animation: pulse 2s infinite;
+        }
+        
+        /* 3. Bloqueado (Gris) */
+        .level-node.locked {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .level-node.locked .level-circle {
+            fill: #d1d5d8;
+            stroke: #7f8c8d;
+        }
+
+        /* 4. Jefe Final (Nivel 10) */
+        .level-node.boss .level-circle {
+            r: 11; /* Más grande */
+            fill: #ff7f7f;
+            stroke: #c0392b;
+        }
+        .level-node.boss .level-number { font-size: 9px; fill: white; }
+
+        /* Efecto Hover */
+        .level-node:not(.locked):hover {
+            transform: scale(1.5); /* Crece bastante */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Panel de Información del Nivel */
+        #level-panel {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 8px solid #f1c40f;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: none; /* Oculto al inicio */
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .btn-play {
+            width: 100%;
+            padding: 10px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-play:hover { background: #219150; }
+
+        .hero-character {
+            transition: transform 0.3s ease;
+        }
+
+        .hero-token {
+            transition: x 1s ease-in-out, y 1s ease-in-out;
+            pointer-events: none;
+        }
+
+        /* Botón temporal para simular victoria y avanzar niveles */
+        .simulate-victory-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(39, 174, 96, 0.95);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+            z-index: 200;
+        }
+        .simulate-victory-btn:hover {
+            background: rgba(33, 150, 83, 0.95);
+            transform: translateY(-2px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="header-content">
+            <div>Wordle Quest</div>
+            <div>Bahía de las Vocales</div>
+        </div>
+    </header>
+
+    <div id="level-map-container">
+        
+        <a href="../index.html" class="back-btn">← Volver al mapa principal</a>
+
+        <!-- 
+            VIEWBOX MAGIA:
+            El viewBox original era "0 0 1000 700".
+            El País 1 está aproximadamente entre X:50-250 y Y:450-650.
+            Ajustamos el viewBox para hacer "zoom" en esa zona: "30 440 240 240".
+            Esto hace que el país ocupe todo el contenedor.
+        -->
+        <svg viewBox="30 440 240 240" xmlns="http://www.w3.org/2000/svg">
+            
+            <!-- La Tierra (Mismo path que el archivo anterior) -->
+            <path class="land-mass" d="M 50 600 L 200 650 L 250 500 L 150 450 L 50 500 Z" />
+
+            <!-- Decoración simple: Unos triángulos como montañas/árboles integrados -->
+            <path class="decoration" d="M 80 580 L 90 560 L 100 580 Z" />
+            <path class="decoration" d="M 180 600 L 190 580 L 200 600 Z" />
+            <path class="decoration" d="M 140 480 L 150 460 L 160 480 Z" />
+
+            <!-- Árboles y lagos simples -->
+            <g class="tree">
+                <rect class="tree-trunk" x="110" y="610" width="6" height="10" />
+                <circle class="tree-canopy" cx="113" cy="606" r="8" />
+                <circle class="tree-canopy" cx="118" cy="608" r="7" />
+            </g>
+            <g class="tree">
+                <rect class="tree-trunk" x="205" y="545" width="6" height="10" />
+                <circle class="tree-canopy" cx="208" cy="541" r="8" />
+                <circle class="tree-canopy" cx="213" cy="543" r="7" />
+            </g>
+            <g class="tree">
+                <rect class="tree-trunk" x="155" y="520" width="6" height="9" />
+                <circle class="tree-canopy" cx="158" cy="516" r="7" />
+                <circle class="tree-canopy" cx="163" cy="518" r="6" />
+            </g>
+
+            <ellipse class="lake" cx="95" cy="500" rx="12" ry="7" />
+
+            <!-- CONECTOR DE CAMINO (Dashed Line) -->
+            <!-- Conecta las coordenadas de los 10 puntos -->
+            <path class="path-connector" d="
+                M 82 520
+                L 112 550
+                L 92 590
+                L 142 610
+                L 192 620
+                L 212 570
+                L 232 520
+                L 202 490
+                L 162 470
+                L 132 480
+            " />
+
+            <!-- 
+                NIVELES (PUNTOS)
+                Coordenadas calculadas para estar dentro de la forma.
+            -->
+
+            <!-- Nivel 1: Completado -->
+            <text x="82" y="510" class="level-number">1</text>
+            <g class="level-node completed" data-level="1" onclick="selectLevel(1, 'Inicio del Viaje')">
+                <circle cx="82" cy="520" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 2: Completado -->
+            <text x="112" y="540" class="level-number">2</text>
+            <g class="level-node completed" data-level="2" onclick="selectLevel(2, 'El Sendero Bajo')">
+                <circle cx="112" cy="550" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 3: Actual (Jugando ahora) -->
+            <text x="92" y="580" class="level-number">3</text>
+            <g class="level-node current" data-level="3" onclick="selectLevel(3, 'Cruce de Vientos')">
+                <circle cx="92" cy="590" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 4: Bloqueado -->
+            <text x="142" y="600" class="level-number">4</text>
+            <g class="level-node locked" data-level="4" onclick="selectLevel(4, 'Cueva Oscura')">
+                <circle cx="142" cy="610" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 5 -->
+            <text x="192" y="610" class="level-number">5</text>
+            <g class="level-node locked" data-level="5" onclick="selectLevel(5, 'Mirador Sur')">
+                <circle cx="192" cy="620" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 6 -->
+            <text x="212" y="560" class="level-number">6</text>
+            <g class="level-node locked" data-level="6" onclick="selectLevel(6, 'El Puente')">
+                <circle cx="212" cy="570" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 7 -->
+            <text x="232" y="510" class="level-number">7</text>
+            <g class="level-node locked" data-level="7" onclick="selectLevel(7, 'Paso Estrecho')">
+                <circle cx="232" cy="520" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 8 -->
+            <text x="202" y="480" class="level-number">8</text>
+            <g class="level-node locked" data-level="8" onclick="selectLevel(8, 'Lago Escondido')">
+                <circle cx="202" cy="490" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 9 -->
+            <text x="162" y="460" class="level-number">9</text>
+            <g class="level-node locked" data-level="9" onclick="selectLevel(9, 'Ante la Puerta')">
+                <circle cx="162" cy="470" r="6" class="level-circle" />
+            </g>
+
+            <!-- Nivel 10: JEFE -->
+            <text x="132" y="470" class="level-number">10</text>
+            <g class="level-node locked boss" data-level="10" onclick="selectLevel(10, 'GUARDIÁN DE LA BAHÍA')">
+                <circle cx="132" cy="480" r="10" class="level-circle" />
+            </g>
+
+            <image
+                id="hero-token"
+                class="hero-character hero-token"
+                href="../personajes/Protagonista-1.png"
+                x="82"
+                y="580"
+                width="20"
+                height="20"
+            />
+
+        </svg>
+
+        <!-- Panel Flotante de Información -->
+        <div id="level-panel">
+            <h3 id="panel-title" style="margin: 0 0 10px 0; color: #2c3e50;">Nivel X</h3>
+            <p id="panel-status" style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 14px;">Estado...</p>
+            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
+                <span>⭐</span><span>⭐</span><span style="opacity: 0.3">⭐</span>
+            </div>
+            <button id="btn-action" class="btn-play" onclick="startPuzzle()">Jugar Nivel</button>
+        </div>
+
+    </div>
+
+    <button class="simulate-victory-btn" onclick="completeCurrentLevel()">Simular Victoria</button>
+
+    <script>
+        const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
+        let currentSelectedLevel = null;
+
+        function getLevelNodeByNumber(number) {
+            return document.querySelector(`.level-node[data-level="${number}"]`);
+        }
+
+        function getLevelStatus(node) {
+            if (!node) return 'locked';
+            if (node.classList.contains('locked')) return 'locked';
+            if (node.classList.contains('completed')) return 'completed';
+            return 'current';
+        }
+
+        function getCurrentLevelNumber() {
+            const currentNode = document.querySelector('.level-node.current');
+            return currentNode ? Number(currentNode.dataset.level) : null;
+        }
+
+        function moveHeroToNode(node) {
+            if (!node) return;
+
+            const circle = node.querySelector('circle');
+            const hero = document.getElementById('hero-token');
+
+            if (!circle || !hero) return;
+
+            const cx = Number(circle.getAttribute('cx'));
+            const cy = Number(circle.getAttribute('cy'));
+            const offsetX = Number(hero.getAttribute('width')) / 2;
+            const offsetY = Number(hero.getAttribute('height')) / 2;
+            const verticalLift = 10;
+
+            hero.setAttribute('x', cx - offsetX);
+            hero.setAttribute('y', cy - offsetY - verticalLift);
+        }
+
+        function persistLevelProgress(levelNumber) {
+            localStorage.setItem(LEVEL_STORAGE_KEY, String(levelNumber));
+        }
+
+        function applyLevelProgress(targetCurrentLevel) {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+
+            nodes.forEach(node => {
+                const level = Number(node.dataset.level);
+                node.classList.remove('completed', 'current', 'locked');
+
+                if (level < targetCurrentLevel) {
+                    node.classList.add('completed');
+                } else if (level === targetCurrentLevel) {
+                    node.classList.add('current');
+                } else {
+                    node.classList.add('locked');
+                }
+            });
+
+            const currentNode = getLevelNodeByNumber(targetCurrentLevel);
+            moveHeroToNode(currentNode);
+            currentSelectedLevel = targetCurrentLevel;
+        }
+
+        function loadSavedProgress() {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+            if (!nodes.length) return;
+
+            const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
+            const defaultLevel = getCurrentLevelNumber() || 1;
+            const maxLevel = Math.max(...nodes.map(node => Number(node.dataset.level)));
+            const sanitizedLevel = Number.isNaN(savedLevel) || savedLevel < 1 ? defaultLevel : savedLevel;
+            const validatedLevel = Math.min(Math.max(sanitizedLevel, 1), maxLevel);
+
+            applyLevelProgress(validatedLevel);
+        }
+
+        function completeCurrentLevel() {
+            const currentNode = document.querySelector('.level-node.current');
+            if (!currentNode) return;
+
+            const currentLevel = Number(currentNode.dataset.level);
+            currentNode.classList.remove('current');
+            currentNode.classList.add('completed');
+
+            const nextLevelNumber = currentLevel + 1;
+            const nextNode = getLevelNodeByNumber(nextLevelNumber);
+
+            if (nextNode) {
+                nextNode.classList.remove('locked', 'completed');
+                nextNode.classList.add('current');
+                moveHeroToNode(nextNode);
+                persistLevelProgress(nextLevelNumber);
+                currentSelectedLevel = nextLevelNumber;
+            } else {
+                moveHeroToNode(currentNode);
+                persistLevelProgress(currentLevel);
+                currentSelectedLevel = currentLevel;
+            }
+        }
+
+        function selectLevel(number, title, status) {
+            const panel = document.getElementById('level-panel');
+            const titleEl = document.getElementById('panel-title');
+            const statusEl = document.getElementById('panel-status');
+            const btn = document.getElementById('btn-action');
+            const node = getLevelNodeByNumber(number);
+
+            const resolvedStatus = status || getLevelStatus(node);
+            currentSelectedLevel = number;
+
+            titleEl.innerText = `Nivel ${number}: ${title}`;
+
+            if (resolvedStatus === 'locked') {
+                statusEl.innerText = "🔒 Este nivel está bloqueado.";
+                statusEl.style.color = "#e74c3c";
+                btn.style.background = "#95a5a6";
+                btn.innerText = "Bloqueado";
+                btn.disabled = true;
+                btn.style.cursor = "not-allowed";
+            } else if (resolvedStatus === 'completed') {
+                statusEl.innerText = "✅ ¡Ya completado!";
+                statusEl.style.color = "#27ae60";
+                btn.style.background = "#2980b9";
+                btn.innerText = "Rejugar";
+                btn.disabled = false;
+                btn.style.cursor = "pointer";
+            } else {
+                statusEl.innerText = "🔥 Nivel actual";
+                statusEl.style.color = "#f39c12";
+                btn.style.background = "#27ae60";
+                btn.innerText = "Jugar Ahora";
+                btn.disabled = false;
+                btn.style.cursor = "pointer";
+            }
+
+            panel.style.display = 'block';
+        }
+
+        function launchPuzzleFromPath(number, title, status) {
+            const node = getLevelNodeByNumber(number);
+            const resolvedStatus = status || getLevelStatus(node);
+
+            selectLevel(number, title, resolvedStatus);
+
+            if (resolvedStatus === 'locked') {
+                alert(`El nivel ${number} está bloqueado. Completa los anteriores para desbloquearlo.`);
+                return;
+            }
+
+            startPuzzle();
+        }
+
+        function startPuzzle() {
+            if (currentSelectedLevel) {
+                // AQUÍ ES DONDE CONECTARÍAS CON TU JUEGO DE PUZLES
+                alert(`¡Cargando el puzle Wordle del Nivel ${currentSelectedLevel}!`);
+                // Ejemplo: window.location.href = 'puzzle.html?level=' + currentSelectedLevel;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSavedProgress);
+    </script>
+</body>
+</html>

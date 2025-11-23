@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Quest - Mapa Mundial</title>
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        body {
+            margin: 0;
+            background-color: #2b3e50; /* Azul océano profundo */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow: hidden;
+            gap: 20px;
+            padding: 10px 0 20px;
+            box-sizing: border-box;
+        }
+
+        header.page-header {
+            width: 100%;
+            height: 90px;
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            width: 1200px;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        /* Contenedor del juego */
+        #game-container {
+            position: relative;
+            width: 1200px;
+            max-width: calc(100vw - 40px);
+            height: calc(100vh - 90px - 70px);
+            max-height: calc(100vh - 90px - 70px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            background: radial-gradient(circle, #4a69bd 0%, #2b3e50 100%); /* Océano con profundidad */
+        }
+
+        /* --- ESTILOS DEL SVG --- */
+        svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.3)); /* Sombra general del continente */
+        }
+
+        /* El grupo de cada país */
+        .region {
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote suave */
+        }
+
+        /* La forma del país (path) */
+        .land {
+            fill: #eebb99; /* Color tierra base */
+            stroke: #8d6e63; /* Fronteras */
+            stroke-width: 3px;
+            stroke-linejoin: round;
+            transition: fill 0.3s;
+        }
+
+        /* El número de nivel */
+        .label {
+            font-size: 24px;
+            font-weight: 900;
+            fill: #5d4037;
+            pointer-events: none; /* Ignorar clicks en el texto */
+            text-anchor: middle;
+            opacity: 0.7;
+        }
+
+        /* --- INTERACCIÓN HOVER --- */
+        .region:hover {
+            transform: translateY(-5px) scale(1.02); /* Se eleva y crece un poco */
+            z-index: 10; /* Asegura que se vea por encima de otros */
+        }
+
+        .region:hover .land {
+            fill: #f1c40f; /* Amarillo dorado al seleccionar */
+            stroke: #fff;
+            filter: drop-shadow(0 0 15px rgba(241, 196, 15, 0.6)); /* Resplandor */
+        }
+        
+        .region:hover .label {
+            fill: #000;
+            opacity: 1;
+        }
+
+        /* --- LA RUTA (Línea punteada) --- */
+        .path-line {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 4;
+            stroke-dasharray: 10, 10;
+            stroke-linecap: round;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* --- ELEMENTOS DECORATIVOS (Olas) --- */
+        .wave {
+            fill: none;
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        /* --- MODAL DE SIMULACIÓN (Para demostrar el click) --- */
+        #modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            border: 4px solid #f1c40f;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 { margin-top: 0; color: #2c3e50; }
+        p { color: #7f8c8d; }
+
+        /* --- VERSIÓN HORIZONTAL SOLO PARA MÓVIL (PAISAJES) --- */
+        @media screen and (max-width: 767px) and (orientation: landscape) {
+            body {
+                flex-direction: row;
+                align-items: stretch;
+                justify-content: center;
+                gap: 12px;
+                padding: 10px;
+            }
+
+            header.page-header {
+                width: 200px;
+                height: calc(100vh - 20px);
+                border-radius: 18px;
+                justify-content: center;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            }
+
+            .header-content {
+                height: 100%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 10px;
+                text-align: left;
+            }
+
+            #game-container {
+                width: calc(100vw - 230px);
+                max-width: none;
+                height: calc(100vh - 20px);
+                max-height: none;
+                border-radius: 18px;
+            }
+
+            svg {
+                height: 100%;
+                object-fit: contain;
+                transform: rotate(90deg);
+                transform-origin: center;
+            }
+
+            /* Mantiene los números en orientación natural al rotar el mapa */
+            .label {
+                transform: rotate(-90deg);
+                transform-box: fill-box;
+                transform-origin: center;
+            }
+
+            /* Mantiene los elementos flotantes legibles en el nuevo layout */
+            #game-container > div[style*="position: absolute"] {
+                left: 16px !important;
+                top: 16px !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="header-content">
+            <div>Wordle Quest</div>
+            <div>Mapa Mundial</div>
+        </div>
+    </header>
+
+    <div id="game-container">
+        
+        <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+            <!-- Decoración: Olas simples -->
+            <path class="wave" d="M 50 50 Q 70 30 90 50 T 130 50" />
+            <path class="wave" d="M 800 600 Q 820 580 840 600 T 880 600" />
+            <path class="wave" d="M 200 600 Q 220 580 240 600 T 280 600" />
+
+            <!-- TRAYECTORIA (Dibujada debajo de los países) -->
+            <!-- Conecta los centros aproximados de las regiones 1 a 10 -->
+            <path class="path-line" d="
+                M 150 550 
+                L 300 500 
+                L 450 550 
+                L 600 450 
+                L 750 500 
+                L 850 350 
+                L 700 250 
+                L 500 200 
+                L 300 250 
+                L 500 100
+            " />
+
+            <!-- 
+                PAÍSES / REGIONES
+                Cada 'path' tiene coordenadas para encajar con sus vecinos.
+                
+                **CAMBIO AQUÍ**: El Nivel 1 ahora lleva a 'mapas/pais-1.html'
+            -->
+
+            <!-- Nivel 1: La Península Inicial (ACTIVO) -->
+            <g class="region" onclick="window.location.href='mapas/pais-1.html'">
+                <path class="land" d="M 50 600 L 200 650 L 250 500 L 150 450 L 50 500 Z" />
+                <text x="140" y="560" class="label">1</text>
+            </g>
+
+            <!-- Nivel 2: El Bosque Bajo -->
+            <g class="region" onclick="enterRegion(2, 'Bosque de Sílabas')">
+                <path class="land" d="M 200 650 L 400 620 L 380 450 L 250 500 Z" />
+                <text x="300" y="560" class="label">2</text>
+            </g>
+
+            <!-- Nivel 3: El Cabo Sur -->
+            <g class="region" onclick="enterRegion(3, 'Cabo Consonante')">
+                <path class="land" d="M 400 620 L 600 650 L 550 500 L 380 450 Z" />
+                <text x="480" y="580" class="label">3</text>
+            </g>
+
+            <!-- Nivel 4: Llanuras Centrales -->
+            <g class="region" onclick="enterRegion(4, 'Llanuras del Léxico')">
+                <path class="land" d="M 550 500 L 600 650 L 750 550 L 680 350 L 500 400 Z" />
+                <text x="620" y="500" class="label">4</text>
+            </g>
+
+            <!-- Nivel 5: La Costa Este -->
+            <g class="region" onclick="enterRegion(5, 'Costa Gramática')">
+                <path class="land" d="M 750 550 L 950 500 L 900 300 L 680 350 Z" />
+                <text x="820" y="450" class="label">5</text>
+            </g>
+
+            <!-- Nivel 6: Archipiélago o Península Alta -->
+            <g class="region" onclick="enterRegion(6, 'Península Sintaxis')">
+                <path class="land" d="M 900 300 L 950 150 L 750 200 L 680 350 Z" />
+                <text x="850" y="250" class="label">6</text>
+            </g>
+
+            <!-- Nivel 7: El Valle Interior -->
+            <g class="region" onclick="enterRegion(7, 'Valle Verbo')">
+                <path class="land" d="M 680 350 L 750 200 L 550 150 L 500 400 Z" />
+                <text x="620" y="280" class="label">7</text>
+            </g>
+
+            <!-- Nivel 8: Tierras Altas del Oeste -->
+            <g class="region" onclick="enterRegion(8, 'Montes Mayúsculos')">
+                <path class="land" d="M 500 400 L 550 150 L 350 100 L 250 250 L 380 450 Z" />
+                <text x="400" y="280" class="label">8</text>
+            </g>
+
+            <!-- Nivel 9: La Cordillera -->
+            <g class="region" onclick="enterRegion(9, 'Pico Párrafo')">
+                <path class="land" d="M 250 250 L 350 100 L 200 50 L 100 200 L 150 450 Z" />
+                <text x="220" y="200" class="label">9</text>
+            </g>
+
+            <!-- Nivel 10: El Volcán / Castillo Final -->
+            <g class="region" onclick="enterRegion(10, 'El Castillo Final')">
+                <!-- Una forma distinta para el final, más picuda/importante -->
+                <path class="land" style="fill: #d35400;" d="M 350 100 L 550 150 L 600 50 L 450 10 Z" />
+                <text x="480" y="100" class="label" style="fill: white;">10</text>
+            </g>
+
+        </svg>
+
+        <!-- Título flotante -->
+        <div style="position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 10px; border: 2px solid #5d4037;">
+            <h2 style="margin:0; color: #5d4037;">Mapa del Continente</h2>
+            <small style="color: #5d4037;">Haz click para explorar</small>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="modal-overlay">
+            <div class="modal-content">
+                <h1 id="modal-title">Región X</h1>
+                <p>Aquí verías el mapa detallado de esta región con sus 10 niveles internos.</p>
+                <div style="margin: 20px 0; font-size: 40px;">⚔️</div>
+                <button onclick="closeModal()">Volver al Mapa</button>
+                <button onclick="alert('¡Cargando niveles de Wordle!')">Jugar Niveles</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Script simple para manejar la simulación de click (Solo para países 2-10)
+        function enterRegion(id, name) {
+            const modal = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            
+            title.innerText = name; // Cambia el título según el país clickeado
+            modal.style.display = 'flex'; // Muestra el modal
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

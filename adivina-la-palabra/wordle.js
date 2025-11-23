@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_BOSS_KEY_PREFIX = 'wordleQuestAdventureBoss';
     const ADVENTURE_PROGRESS_KEY = 'wordleQuestCurrentLevel';
     const ADVENTURE_COMPLETED_LEVEL_KEY = 'wordleQuestLastCompletedLevel';
+    const ADVENTURE_TRANSITION_DURATION_MS = 700;
 
 
     // --- SELECTORES DEL DOM ---
@@ -163,11 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startAdventureTransition(targetUrl) {
         const overlay = getAdventureTransition();
-        overlay.classList.add('is-active');
+        document.body.classList.add('adventure-sliding');
+
+        requestAnimationFrame(() => overlay.classList.add('is-active'));
 
         setTimeout(() => {
             window.location.href = targetUrl;
-        }, 400);
+        }, ADVENTURE_TRANSITION_DURATION_MS);
     }
 
     function recordAdventureCompletion() {

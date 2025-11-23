@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const ADVENTURE_VOCAB_PATH = '../mapa-aventura/vocabulary-a1.json';
     const ADVENTURE_BOSS_KEY_PREFIX = 'wordleQuestAdventureBoss';
+    const ADVENTURE_PROGRESS_KEY = 'wordleQuestCurrentLevel';
+    const ADVENTURE_COMPLETED_LEVEL_KEY = 'wordleQuestLastCompletedLevel';
 
 
     // --- SELECTORES DEL DOM ---
@@ -77,10 +79,163 @@ document.addEventListener('DOMContentLoaded', () => {
     let adventureVocabulary = null;
     let adventureBossIndex = 0;
     let activeAdventureEntry = null;
+    let adventureModal = null;
+    let adventureTransition = null;
 
     function sanitizeWordForHints(word) {
         if (typeof word !== 'string') return '';
         return normalizeWord(word).replace(/[^A-ZÑ]/g, '');
+    }
+
+    function getAdventureMapUrl(mapId) {
+        const sanitizedMap = Number.isFinite(mapId) && mapId > 0 ? mapId : 1;
+        return `../mapa-aventura/mapas/pais-${sanitizedMap}.html`;
+    }
+
+    function getGeneralMapUrl() {
+        return '../mapa-aventura/index.html';
+    }
+
+    function ensureAdventureModal() {
+        if (adventureModal) return adventureModal;
+
+        adventureModal = document.createElement('div');
+        adventureModal.className = 'adventure-modal';
+        adventureModal.innerHTML = `
+            <div class="adventure-modal__dialog">
+                <h3 class="adventure-modal__title"></h3>
+                <p class="adventure-modal__message"></p>
+                <div class="adventure-modal__actions"></div>
+            </div>
+        `;
+
+        document.body.appendChild(adventureModal);
+        return adventureModal;
+    }
+
+    function hideAdventureModal() {
+        if (!adventureModal) return;
+        adventureModal.classList.remove('is-visible');
+
+        const actionsContainer = adventureModal.querySelector('.adventure-modal__actions');
+        if (actionsContainer) {
+            actionsContainer.innerHTML = '';
+        }
+    }
+
+    function showAdventureModal({ title = '', message = '', actions = [] }) {
+        const modal = ensureAdventureModal();
+        const titleEl = modal.querySelector('.adventure-modal__title');
+        const messageEl = modal.querySelector('.adventure-modal__message');
+        const actionsContainer = modal.querySelector('.adventure-modal__actions');
+
+        if (titleEl) titleEl.textContent = title;
+        if (messageEl) messageEl.textContent = message;
+
+        if (actionsContainer) {
+            actionsContainer.innerHTML = '';
+            actions.forEach(action => {
+                const button = document.createElement('button');
+                button.className = `adventure-modal__button ${action.variant === 'secondary' ? 'adventure-modal__button--secondary' : 'adventure-modal__button--primary'}`;
+                button.type = 'button';
+                button.textContent = action.label;
+                button.addEventListener('click', () => {
+                    if (action.dismiss !== false) hideAdventureModal();
+                    if (typeof action.onClick === 'function') {
+                        action.onClick();
+                    }
+                });
+                actionsContainer.appendChild(button);
+            });
+        }
+
+        requestAnimationFrame(() => modal.classList.add('is-visible'));
+    }
+
+    function getAdventureTransition() {
+        if (adventureTransition) return adventureTransition;
+
+        adventureTransition = document.createElement('div');
+        adventureTransition.className = 'adventure-transition';
+        document.body.appendChild(adventureTransition);
+        return adventureTransition;
+    }
+
+    function startAdventureTransition(targetUrl) {
+        const overlay = getAdventureTransition();
+        overlay.classList.add('is-active');
+
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 400);
+    }
+
+    function recordAdventureCompletion() {
+        try {
+            const nextLevel = Math.min(adventureLevelNumber + 1, 10);
+            localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(nextLevel));
+            localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+        } catch (error) {
+            console.warn('No se pudo guardar el progreso de aventura:', error);
+        }
+    }
+
+    function handleAdventureWin() {
+        recordAdventureCompletion();
+
+        if (adventureLevelNumber === 10) {
+            showAdventureModal({
+                title: '¡Felicidades, has completado el primer mapa!',
+                message: '¿Qué deseas hacer a continuación?',
+                actions: [
+                    {
+                        label: 'Continuar en este mapa',
+                        variant: 'primary',
+                        onClick: () => startAdventureTransition(getAdventureMapUrl(adventureMapId)),
+                    },
+                    {
+                        label: 'Volver al mapa general',
+                        variant: 'secondary',
+                        onClick: () => startAdventureTransition(getGeneralMapUrl()),
+                    },
+                ],
+            });
+            return;
+        }
+
+        showAdventureModal({
+            title: '¡Buen trabajo!',
+            message: 'Has completado la palabra. Volviendo al mapa...',
+            actions: [],
+        });
+
+        setTimeout(() => {
+            startAdventureTransition(getAdventureMapUrl(adventureMapId));
+        }, 2000);
+    }
+
+    function handleAdventureFailure() {
+        stopInteraction();
+        const nextAttemptWord = adventureLevelNumber === 10 && activeAdventureEntry
+            ? advanceBossWord(activeAdventureEntry) || targetWord
+            : targetWord;
+
+        showAdventureModal({
+            title: 'No acertaste esta vez',
+            message: 'Elige una opción para continuar.',
+            actions: [
+                {
+                    label: 'Repetir juego',
+                    variant: 'primary',
+                    onClick: () => restartAdventureAttempt(nextAttemptWord),
+                },
+                {
+                    label: 'Volver al mapa',
+                    variant: 'secondary',
+                    onClick: () => startAdventureTransition(getAdventureMapUrl(adventureMapId)),
+                },
+            ],
+        });
     }
 
     function getAdventureBossKey(mapId) {
@@ -1010,31 +1165,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
-            showToast('Well done! 🥳', 5000);
             stopInteraction();
             danceWin();
             console.log("Game outcome: WIN");
             updateClueAvailability();
+
+            if (isAdventureMode) {
+                handleAdventureWin();
+            } else {
+                showToast('Well done! 🥳', 5000);
+            }
+
             return true; // Juego terminado
         }
 
         // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
-            if (isAdventureMode) {
-                if (adventureLevelNumber === 10 && activeAdventureEntry) {
-                    const nextBossWord = advanceBossWord(activeAdventureEntry) || targetWord;
-                    showToast('El jefe cambia su palabra. ¡Inténtalo de nuevo!', 4000);
-                    restartAdventureAttempt(nextBossWord);
-                    return false;
-                }
+            stopInteraction();
 
-                showToast('Inténtalo de nuevo', 3000);
-                restartAdventureAttempt(targetWord);
-                return false;
+            if (isAdventureMode) {
+                handleAdventureFailure();
+                return true;
             }
 
             showToast('Want to try again?', 5000);
-            stopInteraction();
             console.log("Game outcome: LOSS");
             updateClueAvailability();
             return true; // Juego terminado

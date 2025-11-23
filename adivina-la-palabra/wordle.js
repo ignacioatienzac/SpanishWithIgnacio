@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_BOSS_KEY_PREFIX = 'wordleQuestAdventureBoss';
     const ADVENTURE_PROGRESS_KEY = 'wordleQuestCurrentLevel';
     const ADVENTURE_COMPLETED_LEVEL_KEY = 'wordleQuestLastCompletedLevel';
+    const ADVENTURE_TRANSITION_END_KEY = 'wordleQuestTransitionEnd';
     const ADVENTURE_TRANSITION_DURATION_MS = 700;
 
 
@@ -165,6 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function startAdventureTransition(targetUrl) {
         const overlay = getAdventureTransition();
         document.body.classList.add('adventure-sliding');
+
+        try {
+            const expectedEnd = Date.now() + ADVENTURE_TRANSITION_DURATION_MS;
+            localStorage.setItem(ADVENTURE_TRANSITION_END_KEY, String(expectedEnd));
+        } catch (error) {
+            console.warn('No se pudo guardar el final de la transición:', error);
+        }
 
         requestAnimationFrame(() => overlay.classList.add('is-active'));
 

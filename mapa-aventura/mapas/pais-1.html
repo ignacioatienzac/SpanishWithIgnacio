@@ -393,21 +393,21 @@
                 Coordenadas calculadas para estar dentro de la forma.
             -->
 
-            <!-- Nivel 1: Completado -->
+            <!-- Nivel 1: Disponible al iniciar -->
             <text x="82" y="510" class="level-number">1</text>
-            <g class="level-node completed" data-level="1" onclick="selectLevel(1, 'Inicio del Viaje')">
+            <g class="level-node current" data-level="1" onclick="selectLevel(1, 'Inicio del Viaje')">
                 <circle cx="82" cy="520" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 2: Completado -->
+            <!-- Nivel 2: Bloqueado inicialmente -->
             <text x="112" y="540" class="level-number">2</text>
-            <g class="level-node completed" data-level="2" onclick="selectLevel(2, 'El Sendero Bajo')">
+            <g class="level-node locked" data-level="2" onclick="selectLevel(2, 'El Sendero Bajo')">
                 <circle cx="112" cy="550" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 3: Actual (Jugando ahora) -->
+            <!-- Nivel 3: Bloqueado inicialmente -->
             <text x="92" y="580" class="level-number">3</text>
-            <g class="level-node current" data-level="3" onclick="selectLevel(3, 'Cruce de Vientos')">
+            <g class="level-node locked" data-level="3" onclick="selectLevel(3, 'Cruce de Vientos')">
                 <circle cx="92" cy="590" r="6" class="level-circle" />
             </g>
 
@@ -478,6 +478,7 @@
     <script>
         const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
         const LAST_COMPLETED_STORAGE_KEY = 'wordleQuestLastCompletedLevel';
+        const TRANSITION_END_STORAGE_KEY = 'wordleQuestTransitionEnd';
         const ADVENTURE_TRANSITION_DURATION_MS = 700;
         let currentSelectedLevel = null;
 
@@ -599,13 +600,31 @@
             if (!shouldAnimateUnlock) return;
 
             const targetNode = getLevelNodeByNumber(targetLevel);
-            const startUnlockDelay = ADVENTURE_TRANSITION_DURATION_MS + 1000;
+            const previousNode = getLevelNodeByNumber(targetLevel - 1);
+            const storedTransitionEnd = Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY));
+            const remainingTransitionDelay = Number.isNaN(storedTransitionEnd)
+                ? ADVENTURE_TRANSITION_DURATION_MS
+                : Math.max(0, storedTransitionEnd - Date.now());
+
+            if (!Number.isNaN(storedTransitionEnd)) {
+                localStorage.removeItem(TRANSITION_END_STORAGE_KEY);
+            }
+
+            if (previousNode) {
+                previousNode.classList.remove('current');
+                previousNode.classList.add('completed');
+                moveHeroToNode(previousNode);
+            }
+
+            if (targetNode) {
+                targetNode.classList.remove('completed', 'current');
+                targetNode.classList.add('locked');
+            }
 
             setTimeout(() => {
                 playUnlockEffect(targetNode)
-                    .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
-                    .then(() => moveHeroToNode(targetNode));
-            }, startUnlockDelay);
+                    .then(() => applyLevelProgress(targetLevel));
+            }, remainingTransitionDelay);
         }
 
         function loadSavedProgress() {

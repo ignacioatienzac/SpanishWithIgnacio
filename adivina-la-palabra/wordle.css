@@ -549,16 +549,33 @@
 .adventure-transition {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, rgba(29, 140, 248, 0.8), rgba(51, 88, 244, 0.85));
+    background: linear-gradient(135deg, rgba(29, 140, 248, 0.85), rgba(51, 88, 244, 0.9));
     opacity: 0;
     pointer-events: none;
     z-index: 1300;
-    transition: opacity 0.35s ease;
+    transform: translateX(0);
+    transition: transform 0.7s ease, opacity 0.7s ease;
 }
 
 .adventure-transition.is-active {
     opacity: 1;
     pointer-events: auto;
+    transform: translateX(-100%);
+}
+
+body.adventure-sliding {
+    overflow: hidden;
+}
+
+body.adventure-sliding > *:not(.adventure-transition) {
+    animation: adventureSlideOut 0.7s ease forwards;
+}
+
+@keyframes adventureSlideOut {
+    to {
+        transform: translateX(-120%);
+        opacity: 0.9;
+    }
 }
 
 @media (max-width: 600px) {

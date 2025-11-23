@@ -207,34 +207,38 @@
             position: absolute;
             bottom: 30px;
             right: 30px;
-            width: 250px;
+            width: 220px;
             background: white;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 8px solid #f1c40f;
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid #f1c40f;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            display: none; /* Oculto al inicio */
-            animation: slideUp 0.3s ease;
+            display: none;
+            animation: slideUp 0.25s ease;
         }
 
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
+            from { transform: translateY(12px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .btn-play {
             width: 100%;
-            padding: 10px;
+            padding: 14px 10px;
             background: #27ae60;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
         }
         .btn-play:hover { background: #219150; }
+        .btn-play:disabled,
+        .btn-play.btn-play--disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
 
         .hero-character {
             transition: transform 0.3s ease;
@@ -463,12 +467,7 @@
 
         <!-- Panel Flotante de Información -->
         <div id="level-panel">
-            <h3 id="panel-title" style="margin: 0 0 10px 0; color: #2c3e50;">Nivel X</h3>
-            <p id="panel-status" style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 14px;">Estado...</p>
-            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
-                <span>⭐</span><span>⭐</span><span style="opacity: 0.3">⭐</span>
-            </div>
-            <button id="btn-action" class="btn-play" onclick="startPuzzle()">Jugar Nivel</button>
+            <button id="btn-action" class="btn-play" onclick="startPuzzle()">Jugar este nivel</button>
         </div>
 
     </div>
@@ -479,6 +478,7 @@
     <script>
         const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
         const LAST_COMPLETED_STORAGE_KEY = 'wordleQuestLastCompletedLevel';
+        const ADVENTURE_TRANSITION_DURATION_MS = 700;
         let currentSelectedLevel = null;
 
         function getLevelNodeByNumber(number) {
@@ -560,7 +560,7 @@
             localStorage.setItem(LEVEL_STORAGE_KEY, String(levelNumber));
         }
 
-        function applyLevelProgress(targetCurrentLevel) {
+        function applyLevelProgress(targetCurrentLevel, options = {}) {
             const nodes = Array.from(document.querySelectorAll('.level-node'));
 
             nodes.forEach(node => {
@@ -576,23 +576,36 @@
                 }
             });
 
-            const currentNode = getLevelNodeByNumber(targetCurrentLevel);
+            const maxLevel = nodes.length ? Math.max(...nodes.map(node => Number(node.dataset.level))) : 10;
+            const heroTargetLevel = Number.isFinite(options.heroLevelOverride)
+                ? Math.min(Math.max(options.heroLevelOverride, 1), maxLevel)
+                : targetCurrentLevel;
+            const currentNode = getLevelNodeByNumber(heroTargetLevel);
             moveHeroToNode(currentNode);
             currentSelectedLevel = targetCurrentLevel;
         }
 
-        function animateReturnFromGame(targetLevel) {
-            const lastCompleted = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
-            const shouldAnimateUnlock = !Number.isNaN(lastCompleted) && targetLevel === lastCompleted + 1;
+        function animateReturnFromGame(targetLevel, lastCompletedLevel) {
+            const storedCompletion = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
+            const completionLevel = Number.isFinite(lastCompletedLevel)
+                ? lastCompletedLevel
+                : (!Number.isNaN(storedCompletion) ? storedCompletion : null);
+            const shouldAnimateUnlock = Number.isFinite(completionLevel) && targetLevel === completionLevel + 1;
 
-            if (!Number.isNaN(lastCompleted)) {
+            if (!Number.isNaN(storedCompletion)) {
                 localStorage.removeItem(LAST_COMPLETED_STORAGE_KEY);
             }
 
             if (!shouldAnimateUnlock) return;
 
             const targetNode = getLevelNodeByNumber(targetLevel);
-            playUnlockEffect(targetNode).then(() => moveHeroToNode(targetNode));
+            const startUnlockDelay = ADVENTURE_TRANSITION_DURATION_MS + 1000;
+
+            setTimeout(() => {
+                playUnlockEffect(targetNode)
+                    .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
+                    .then(() => moveHeroToNode(targetNode));
+            }, startUnlockDelay);
         }
 
         function loadSavedProgress() {
@@ -600,13 +613,14 @@
             if (!nodes.length) return;
 
             const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
+            const lastCompletedLevel = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
             const defaultLevel = getCurrentLevelNumber() || 1;
             const maxLevel = Math.max(...nodes.map(node => Number(node.dataset.level)));
             const sanitizedLevel = Number.isNaN(savedLevel) || savedLevel < 1 ? defaultLevel : savedLevel;
             const validatedLevel = Math.min(Math.max(sanitizedLevel, 1), maxLevel);
 
-            applyLevelProgress(validatedLevel);
-            animateReturnFromGame(validatedLevel);
+            applyLevelProgress(validatedLevel, { heroLevelOverride: lastCompletedLevel });
+            animateReturnFromGame(validatedLevel, lastCompletedLevel);
         }
 
         function completeCurrentLevel() {
@@ -637,38 +651,15 @@
 
         function selectLevel(number, title, status) {
             const panel = document.getElementById('level-panel');
-            const titleEl = document.getElementById('panel-title');
-            const statusEl = document.getElementById('panel-status');
             const btn = document.getElementById('btn-action');
             const node = getLevelNodeByNumber(number);
 
             const resolvedStatus = status || getLevelStatus(node);
             currentSelectedLevel = number;
 
-            titleEl.innerText = `Nivel ${number}: ${title}`;
-
-            if (resolvedStatus === 'locked') {
-                statusEl.innerText = "🔒 Este nivel está bloqueado.";
-                statusEl.style.color = "#e74c3c";
-                btn.style.background = "#95a5a6";
-                btn.innerText = "Bloqueado";
-                btn.disabled = true;
-                btn.style.cursor = "not-allowed";
-            } else if (resolvedStatus === 'completed') {
-                statusEl.innerText = "✅ ¡Ya completado!";
-                statusEl.style.color = "#27ae60";
-                btn.style.background = "#2980b9";
-                btn.innerText = "Rejugar";
-                btn.disabled = false;
-                btn.style.cursor = "pointer";
-            } else {
-                statusEl.innerText = "🔥 Nivel actual";
-                statusEl.style.color = "#f39c12";
-                btn.style.background = "#27ae60";
-                btn.innerText = "Jugar Ahora";
-                btn.disabled = false;
-                btn.style.cursor = "pointer";
-            }
+            btn.innerText = 'Jugar este nivel';
+            btn.disabled = resolvedStatus === 'locked';
+            btn.classList.toggle('btn-play--disabled', resolvedStatus === 'locked');
 
             panel.style.display = 'block';
         }
@@ -680,7 +671,6 @@
             selectLevel(number, title, resolvedStatus);
 
             if (resolvedStatus === 'locked') {
-                alert(`El nivel ${number} está bloqueado. Completa los anteriores para desbloquearlo.`);
                 return;
             }
 
@@ -688,10 +678,13 @@
         }
 
         function startPuzzle() {
-            if (currentSelectedLevel) {
-                const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;
-                window.location.href = url;
+            const selectedNode = getLevelNodeByNumber(currentSelectedLevel);
+            if (!currentSelectedLevel || !selectedNode || selectedNode.classList.contains('locked')) {
+                return;
             }
+
+            const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;
+            window.location.href = url;
         }
 
         document.addEventListener('DOMContentLoaded', loadSavedProgress);

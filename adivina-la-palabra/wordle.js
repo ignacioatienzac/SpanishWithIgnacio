@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_PROGRESS_KEY = 'wordleQuestCurrentLevel';
     const ADVENTURE_COMPLETED_LEVEL_KEY = 'wordleQuestLastCompletedLevel';
     const ADVENTURE_TRANSITION_END_KEY = 'wordleQuestTransitionEnd';
+    const ADVENTURE_LAST_PLAYED_KEY = 'wordleQuestLastPlayedLevel';
     const ADVENTURE_TRANSITION_DURATION_MS = 700;
 
 
@@ -186,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextLevel = Math.min(adventureLevelNumber + 1, 10);
             localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(nextLevel));
             localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+            localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
         } catch (error) {
             console.warn('No se pudo guardar el progreso de aventura:', error);
         }
@@ -463,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isAdventureMode) {
             adventureMapId = Number(urlParams.get('map')) || 1;
             adventureLevelNumber = Number(urlParams.get('level')) || 1;
+            localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
             adventureBossIndex = 0;
             document.body.classList.toggle('adventure-map-1-bg', adventureMapId === 1);
             loadBossProgress();

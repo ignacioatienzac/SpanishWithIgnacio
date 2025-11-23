@@ -62,6 +62,12 @@ function getTranslatableElements() {
     const uniqueElements = Array.from(new Set(document.querySelectorAll(combinedSelector)));
 
     translatableElementsCache = uniqueElements.filter((element, _, collection) => {
+        const isCardElement = element.closest('.game-card') || element.closest('.mode-card');
+
+        if (isCardElement) {
+            return true;
+        }
+
         return !collection.some(other => other !== element && other.contains(element));
     });
     return translatableElementsCache;

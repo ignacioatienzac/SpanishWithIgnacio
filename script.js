@@ -177,6 +177,10 @@ function injectLanguageStyles() {
     .language-switcher__option:hover, .language-switcher__option:focus-visible { background: rgba(255, 255, 255, 0.08); }
     .language-switcher__option[aria-selected="true"] { background: rgba(255, 255, 255, 0.16); }
     .language-switcher__option-flag { font-size: 1.5rem; line-height: 1; }
+    @media (min-width: 769px) {
+      .language-switcher--desktop .language-switcher__button { background: linear-gradient(135deg, #6d8098, #566c84); color: #ffffff; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); }
+      .language-switcher--desktop .language-switcher__menu { background: linear-gradient(135deg, #6d8098, #566c84); }
+    }
     @media (max-width: 768px) {
       .language-switcher--desktop { display: none; }
       .language-switcher--mobile { display: block; margin-left: auto; order: 2; }
@@ -235,7 +239,7 @@ function ensureLanguageSwitchers() {
 
     if (navList && !navList.querySelector('.language-switcher--desktop')) {
         const desktopSwitcher = createLanguageSwitcher(false);
-        navList.insertBefore(desktopSwitcher, navList.firstElementChild);
+        navList.appendChild(desktopSwitcher);
     }
 }
 

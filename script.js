@@ -59,9 +59,11 @@ function getTranslatableElements() {
     if (translatableElementsCache) return translatableElementsCache;
 
     const combinedSelector = translatableSelectors.join(',');
-    const uniqueElements = new Set(document.querySelectorAll(combinedSelector));
+    const uniqueElements = Array.from(new Set(document.querySelectorAll(combinedSelector)));
 
-    translatableElementsCache = Array.from(uniqueElements);
+    translatableElementsCache = uniqueElements.filter((element, _, collection) => {
+        return !collection.some(other => other !== element && other.contains(element));
+    });
     return translatableElementsCache;
 }
 

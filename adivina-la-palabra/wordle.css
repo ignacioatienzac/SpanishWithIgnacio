@@ -185,6 +185,13 @@
     --text-color-dark: #000000;
 }
 
+body.adventure-map-1-bg {
+    background-image: url('../mapa-aventura/images/fondo-mapa-1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .level-button.level-a1 { background-color: var(--color-a1); }
 .level-button.level-a2 { background-color: var(--color-a2); }
 .level-button.level-b1 { background-color: var(--color-b1); }

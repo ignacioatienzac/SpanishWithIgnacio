@@ -464,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
             adventureMapId = Number(urlParams.get('map')) || 1;
             adventureLevelNumber = Number(urlParams.get('level')) || 1;
             adventureBossIndex = 0;
+            document.body.classList.toggle('adventure-map-1-bg', adventureMapId === 1);
             loadBossProgress();
 
             currentLevel = 'A1';
@@ -478,6 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loadAdventureGame();
             return;
         }
+
+        document.body.classList.remove('adventure-map-1-bg');
 
         const requestedLevel = (urlParams.get('level') || 'A1').toUpperCase();
         if (!SUPPORTED_LEVELS.includes(requestedLevel)) {

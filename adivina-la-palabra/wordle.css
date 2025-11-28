@@ -229,6 +229,14 @@ body.adventure-map-1-bg {
     gap: 2rem;
 }
 
+body.adventure-map-1-bg .game-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+}
+
 .game-main-area {
     width: 100%;
     display: flex;

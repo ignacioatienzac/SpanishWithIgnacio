@@ -464,8 +464,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isAdventureMode) {
             adventureMapId = Number(urlParams.get('map')) || 1;
-            adventureLevelNumber = Number(urlParams.get('level')) || 1;
-            localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
+            const requestedLevelNumber = Number(urlParams.get('level'));
+            const storedLastPlayedLevel = Number(localStorage.getItem(ADVENTURE_LAST_PLAYED_KEY));
+            const storedCompletedLevel = Number(localStorage.getItem(ADVENTURE_COMPLETED_LEVEL_KEY));
+            const maxAdventureLevel = 10;
+            const fallbackLevel = Number.isFinite(storedLastPlayedLevel)
+                ? storedLastPlayedLevel
+                : Number.isFinite(storedCompletedLevel)
+                    ? storedCompletedLevel
+                    : 1;
+
+            const sanitizedRequestedLevel = Number.isFinite(requestedLevelNumber) && requestedLevelNumber > 0
+                ? Math.min(requestedLevelNumber, maxAdventureLevel)
+                : null;
+
+            const sanitizedFallbackLevel = Math.min(Math.max(fallbackLevel, 1), maxAdventureLevel);
+
+            adventureLevelNumber = sanitizedRequestedLevel || sanitizedFallbackLevel;
             adventureBossIndex = 0;
             document.body.classList.toggle('adventure-map-1-bg', adventureMapId === 1);
             loadBossProgress();

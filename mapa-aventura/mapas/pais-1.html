@@ -469,11 +469,6 @@
 
         </svg>
 
-        <!-- Panel Flotante de Información -->
-        <div id="level-panel">
-            <button id="btn-action" class="btn-play" onclick="startPuzzle()">Jugar este nivel</button>
-        </div>
-
     </div>
 
     <button class="simulate-victory-btn" onclick="completeCurrentLevel()">Simular Victoria</button>
@@ -782,18 +777,10 @@
         }
 
         function selectLevel(number, title, status) {
-            const panel = document.getElementById('level-panel');
-            const btn = document.getElementById('btn-action');
             const node = getLevelNodeByNumber(number);
 
             const resolvedStatus = status || getLevelStatus(node);
             currentSelectedLevel = number;
-
-            btn.innerText = 'Jugar este nivel';
-            btn.disabled = resolvedStatus === 'locked';
-            btn.classList.toggle('btn-play--disabled', resolvedStatus === 'locked');
-
-            panel.style.display = 'block';
 
             if (resolvedStatus !== 'locked') {
                 startPuzzle();

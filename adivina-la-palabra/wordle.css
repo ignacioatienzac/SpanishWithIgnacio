@@ -330,6 +330,10 @@ body.adventure-map-1-bg .game-container {
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+.adventure-map-button[aria-hidden="false"] {
+    display: block;
+}
+
 .adventure-map-button.is-visible {
     display: block;
 }

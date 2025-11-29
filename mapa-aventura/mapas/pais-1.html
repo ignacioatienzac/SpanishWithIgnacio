@@ -203,44 +203,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Panel de Información del Nivel */
-        #level-panel {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 220px;
-            background: white;
-            padding: 14px;
-            border-radius: 14px;
-            border: 2px solid #f1c40f;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            display: none;
-            animation: slideUp 0.25s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(12px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .btn-play {
-            width: 100%;
-            padding: 14px 10px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-play:hover { background: #219150; }
-        .btn-play:disabled,
-        .btn-play.btn-play--disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-        }
-
         .hero-character {
             transition: transform 0.3s ease;
         }
@@ -448,11 +410,6 @@
             />
 
         </svg>
-
-        <!-- Panel Flotante de Información -->
-        <div id="level-panel">
-            <button id="btn-action" class="btn-play" onclick="startPuzzle()">Jugar este nivel</button>
-        </div>
 
     </div>
 
@@ -761,18 +718,10 @@
         }
 
         function selectLevel(number, title, status) {
-            const panel = document.getElementById('level-panel');
-            const btn = document.getElementById('btn-action');
             const node = getLevelNodeByNumber(number);
 
             const resolvedStatus = status || getLevelStatus(node);
             currentSelectedLevel = number;
-
-            btn.innerText = 'Jugar este nivel';
-            btn.disabled = resolvedStatus === 'locked';
-            btn.classList.toggle('btn-play--disabled', resolvedStatus === 'locked');
-
-            panel.style.display = 'block';
 
             if (resolvedStatus !== 'locked') {
                 startPuzzle();

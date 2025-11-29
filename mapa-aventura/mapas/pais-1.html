@@ -250,6 +250,10 @@
             pointer-events: none;
         }
 
+        .hero-token--no-transition {
+            transition: none !important;
+        }
+
         /* Botón temporal para simular victoria y avanzar niveles */
         .simulate-victory-btn {
             position: fixed;
@@ -703,6 +707,7 @@
             const nodes = Array.from(document.querySelectorAll('.level-node'));
             if (!nodes.length) return;
 
+            const hero = document.getElementById('hero-token');
             const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
             const lastCompletedLevel = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
             const lastPlayedLevel = Number(localStorage.getItem(LAST_PLAYED_STORAGE_KEY));
@@ -734,9 +739,19 @@
                 heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
             }
 
+            if (hero) {
+                hero.classList.add('hero-token--no-transition');
+            }
+
             moveHeroToLevel(heroStartingLevel);
             applyLevelProgress(validatedLevel, { heroLevelOverride: heroStartingLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
+
+            requestAnimationFrame(() => {
+                if (hero) {
+                    hero.classList.remove('hero-token--no-transition');
+                }
+            });
         }
 
         function completeCurrentLevel() {

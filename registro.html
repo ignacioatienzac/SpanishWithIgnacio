@@ -131,6 +131,7 @@
           await setDoc(doc(db, "usuarios", credential.user.uid), {
             email,
             nickname,
+            plan: "gratis",
             createdAt: serverTimestamp()
           });
 

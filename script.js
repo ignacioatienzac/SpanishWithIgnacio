@@ -31,8 +31,8 @@ const ACCOUNT_COPY = {
         loggedOut: {
             button: 'Mi cuenta',
             options: [
-                { label: 'iniciar sesión', action: 'signup' },
-                { label: 'registrarse', action: 'signin' }
+                { label: 'Registrarse', action: 'signup' },
+                { label: 'Iniciar sesión', action: 'signin' }
             ]
         },
         loggedIn: {
@@ -210,7 +210,7 @@ function handleAccountAction(action) {
     }
 
     if (action === 'signup' || action === 'signin') {
-        window.location.href = '/registro.html';
+        window.location.href = action === 'signup' ? '/registro.html' : '/ingresar.html';
         return;
     }
 

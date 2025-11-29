@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelTitle = document.getElementById('game-level-title');
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
+    const adventureMapButton = document.getElementById('adventure-map-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
@@ -55,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     instructionsCloseButton.addEventListener('click', closeInstructionsModal);
     instructionsOverlay.addEventListener('click', closeInstructionsModal);
     document.addEventListener('keydown', handleInstructionsKeydown);
+    if (adventureMapButton) {
+        adventureMapButton.addEventListener('click', handleAdventureMapReturn);
+    }
 
     // --- ESTADO DEL JUEGO ---
     const answerListsByLength = new Map();
@@ -180,6 +184,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             window.location.href = targetUrl;
         }, ADVENTURE_TRANSITION_DURATION_MS);
+    }
+
+    function handleAdventureMapReturn() {
+        if (!isAdventureMode || adventureMapId !== 1) return;
+
+        startAdventureTransition(getAdventureMapUrl(1));
     }
 
     function recordAdventureCompletion() {
@@ -493,6 +503,12 @@ document.addEventListener('DOMContentLoaded', () => {
             adventureLevelNumber = sanitizedRequestedLevel || sanitizedFallbackLevel;
             adventureBossIndex = 0;
             document.body.classList.toggle('adventure-map-1-bg', adventureMapId === 1);
+            if (adventureMapButton) {
+                const isMapOne = adventureMapId === 1;
+                adventureMapButton.classList.toggle('is-visible', isMapOne);
+                adventureMapButton.toggleAttribute('disabled', !isMapOne);
+                adventureMapButton.setAttribute('aria-hidden', String(!isMapOne));
+            }
             loadBossProgress();
 
             currentLevel = 'A1';
@@ -506,6 +522,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             loadAdventureGame();
             return;
+        }
+
+        if (adventureMapButton) {
+            adventureMapButton.classList.remove('is-visible');
+            adventureMapButton.setAttribute('disabled', 'true');
+            adventureMapButton.setAttribute('aria-hidden', 'true');
         }
 
         document.body.classList.remove('adventure-map-1-bg');

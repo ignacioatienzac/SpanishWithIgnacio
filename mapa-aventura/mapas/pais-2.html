@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../language-init.js"></script>
+    <title>Nivel 2: Bosque de Sílabas</title>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="../../script.js" defer></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #243443;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            overflow: hidden;
+            gap: 20px;
+            padding: 10px 0 20px;
+            box-sizing: border-box;
+        }
+
+        main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #level-map-container {
+            position: relative;
+            width: 1200px;
+            max-width: calc(100vw - 40px);
+            height: calc(100vh - 200px);
+            max-height: calc(100vh - 200px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            background: radial-gradient(circle, #395776 0%, #243443 100%);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #2b3e50;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 100;
+            border: 2px solid #2b3e50;
+            transition: transform 0.2s;
+        }
+        .back-btn:hover { transform: scale(1.05); }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.4));
+        }
+
+        .land-mass {
+            fill: #e7c091;
+            stroke: #8d6e63;
+            stroke-width: 1px;
+            stroke-linejoin: round;
+        }
+
+        .decoration {
+            fill: #c48957;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .tree-canopy {
+            fill: #6abf8a;
+            stroke: #3f7c47;
+            stroke-width: 1px;
+        }
+        .tree-trunk { fill: #8d6e63; }
+
+        .lake {
+            fill: #5dade2;
+            stroke: #2980b9;
+            stroke-width: 1px;
+            opacity: 0.85;
+        }
+
+        .path-connector {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2px;
+            stroke-dasharray: 5, 5;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .level-node {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .level-circle {
+            fill: #ffd86b;
+            stroke: #c47a1c;
+            stroke-width: 2px;
+            r: 7;
+            filter: drop-shadow(0 2px 0 #8a4d0f) drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+        }
+
+        .level-number {
+            font-size: 6px;
+            font-weight: bold;
+            fill: #2c3e50;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+
+        .level-node.completed .level-circle {
+            fill: #64e38a;
+            stroke: #1f7f43;
+        }
+        .level-node.completed .level-number { fill: white; }
+
+        .level-node.current .level-circle {
+            fill: #ffef7a;
+            stroke: #f5a623;
+            stroke-width: 3px;
+        }
+        .level-node.current {
+            animation: pulse 2s infinite;
+        }
+
+        .level-node.unlock-effect {
+            animation: unlockGrow 0.9s ease-out, unlockPulse 0.6s ease-out 0.9s 1;
+        }
+
+        .level-node.locked {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .level-node.locked .level-circle {
+            fill: #d1d5d8;
+            stroke: #7f8c8d;
+        }
+
+        .level-node.boss .level-circle {
+            r: 11;
+            fill: #ff7f7f;
+            stroke: #c0392b;
+        }
+        .level-node.boss .level-number { font-size: 9px; fill: white; }
+
+        .level-node:not(.locked):hover {
+            transform: scale(1.5);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes unlockGrow {
+            0% { transform: scale(0.9); }
+            60% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes unlockPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        .hero-character { transition: transform 0.3s ease; }
+
+        .hero-token {
+            transition: x 1s ease-in-out, y 1s ease-in-out;
+            pointer-events: none;
+        }
+
+        .hero-token--no-transition { transition: none !important; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+
+            <div class="language-switcher language-switcher--mobile">
+                <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                    <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                    <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                    <span class="language-switcher__sr-label">Español</span>
+                </button>
+                <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                        <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                        <span class="language-switcher__sr-label">Español</span>
+                    </button>
+                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                        <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                        <span class="language-switcher__sr-label">English</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+            </button>
+            <nav class="main-nav" id="primary-navigation">
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../students/index.html">Students</a></li>
+                    <li><a href="../../games/index.html">Games</a></li>
+                    <li><a href="../../adivina-la-palabra/index.html">Guess the word</a></li>
+                    <li class="language-switcher language-switcher--desktop">
+                        <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                            <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                            <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                            <span class="language-switcher__sr-label">Español</span>
+                        </button>
+                        <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                <span class="language-switcher__sr-label">English</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="level-map-container">
+
+        <a href="../index.html" class="back-btn">← Volver al mapa principal</a>
+
+        <svg viewBox="185 440 250 240" xmlns="http://www.w3.org/2000/svg">
+
+            <path class="land-mass" d="M 200 650 L 400 620 L 380 450 L 250 500 Z" />
+
+            <path class="decoration" d="M 230 540 L 240 520 L 250 540 Z" />
+            <path class="decoration" d="M 330 590 L 340 565 L 350 590 Z" />
+            <path class="decoration" d="M 360 525 L 372 500 L 384 525 Z" />
+
+            <g class="tree">
+                <rect class="tree-trunk" x="232" y="548" width="6" height="9" />
+                <circle class="tree-canopy" cx="235" cy="545" r="8" />
+                <circle class="tree-canopy" cx="241" cy="547" r="7" />
+            </g>
+            <g class="tree">
+                <rect class="tree-trunk" x="316" y="583" width="6" height="9" />
+                <circle class="tree-canopy" cx="319" cy="580" r="8" />
+                <circle class="tree-canopy" cx="325" cy="582" r="7" />
+            </g>
+            <g class="tree">
+                <rect class="tree-trunk" x="350" y="520" width="6" height="9" />
+                <circle class="tree-canopy" cx="353" cy="517" r="8" />
+                <circle class="tree-canopy" cx="359" cy="519" r="7" />
+            </g>
+
+            <ellipse class="lake" cx="275" cy="555" rx="10" ry="6" />
+
+            <path class="path-connector" d="
+                M 230 560
+                L 240 590
+                L 270 610
+                L 310 600
+                L 340 570
+                L 360 540
+                L 340 500
+                L 310 480
+                L 270 505
+                L 290 530
+            " />
+
+            <text x="230" y="550" class="level-number">1</text>
+            <g class="level-node current" data-level="1" onclick="selectLevel(1, 'MADRE')">
+                <circle cx="230" cy="560" r="6" class="level-circle" />
+            </g>
+
+            <text x="240" y="580" class="level-number">2</text>
+            <g class="level-node locked" data-level="2" onclick="selectLevel(2, 'PADRE')">
+                <circle cx="240" cy="590" r="6" class="level-circle" />
+            </g>
+
+            <text x="270" y="600" class="level-number">3</text>
+            <g class="level-node locked" data-level="3" onclick="selectLevel(3, 'AMIGO')">
+                <circle cx="270" cy="610" r="6" class="level-circle" />
+            </g>
+
+            <text x="310" y="590" class="level-number">4</text>
+            <g class="level-node locked" data-level="4" onclick="selectLevel(4, 'LIBRO')">
+                <circle cx="310" cy="600" r="6" class="level-circle" />
+            </g>
+
+            <text x="340" y="560" class="level-number">5</text>
+            <g class="level-node locked" data-level="5" onclick="selectLevel(5, 'PELO')">
+                <circle cx="340" cy="570" r="6" class="level-circle" />
+            </g>
+
+            <text x="360" y="530" class="level-number">6</text>
+            <g class="level-node locked" data-level="6" onclick="selectLevel(6, 'ROJO')">
+                <circle cx="360" cy="540" r="6" class="level-circle" />
+            </g>
+
+            <text x="340" y="490" class="level-number">7</text>
+            <g class="level-node locked" data-level="7" onclick="selectLevel(7, 'AZUL')">
+                <circle cx="340" cy="500" r="6" class="level-circle" />
+            </g>
+
+            <text x="310" y="470" class="level-number">8</text>
+            <g class="level-node locked" data-level="8" onclick="selectLevel(8, 'ALTO')">
+                <circle cx="310" cy="480" r="6" class="level-circle" />
+            </g>
+
+            <text x="270" y="495" class="level-number">9</text>
+            <g class="level-node locked" data-level="9" onclick="selectLevel(9, 'COMER')">
+                <circle cx="270" cy="505" r="6" class="level-circle" />
+            </g>
+
+            <text x="290" y="520" class="level-number">10</text>
+            <g class="level-node locked boss" data-level="10" onclick="selectLevel(10, 'PERDON')">
+                <circle cx="290" cy="530" r="10" class="level-circle" />
+            </g>
+
+            <image
+                id="hero-token"
+                class="hero-character hero-token"
+                href="../personajes/Protagonista-1.png"
+                x="230"
+                y="600"
+                width="20"
+                height="20"
+            />
+
+        </svg>
+
+    </div>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__content">
+            <div class="site-footer__section site-footer__section--contact">
+                <p class="site-footer__contact">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</p>
+            </div>
+            <div class="site-footer__section site-footer__section--brand">
+                <p class="site-footer__brand">Spanish with Ignacio</p>
+            </div>
+            <div class="site-footer__section site-footer__section--social" aria-label="Redes sociales">
+                <a class="site-footer__social-link" href="https://www.instagram.com/spanishwithignacio/" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.youtube.com/@SpanishwithIgnacio" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.facebook.com/people/Spanish-With-Ignacio/61560429119394/" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.threads.com/@spanishwithignacio?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const LEVEL_STORAGE_KEY = 'wordleQuestCurrentLevel';
+        const LAST_COMPLETED_STORAGE_KEY = 'wordleQuestLastCompletedLevel';
+        const TRANSITION_END_STORAGE_KEY = 'wordleQuestTransitionEnd';
+        const LAST_PLAYED_STORAGE_KEY = 'wordleQuestLastPlayedLevel';
+        const ADVENTURE_TRANSITION_DURATION_MS = 700;
+        let currentSelectedLevel = null;
+        let heroCurrentLevel = null;
+        let isLaunchingPuzzle = false;
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function getLevelNodeByNumber(number) {
+            return document.querySelector(`.level-node[data-level="${number}"]`);
+        }
+
+        function getLevelStatus(node) {
+            if (!node) return 'locked';
+            if (node.classList.contains('locked')) return 'locked';
+            if (node.classList.contains('completed')) return 'completed';
+            return 'current';
+        }
+
+        function getCurrentLevelNumber() {
+            const currentNode = document.querySelector('.level-node.current');
+            return currentNode ? Number(currentNode.dataset.level) : null;
+        }
+
+        function getMaxLevelNumber() {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+            return nodes.length ? Math.max(...nodes.map(node => Number(node.dataset.level))) : 10;
+        }
+
+        function playUnlockEffect(node) {
+            return new Promise(resolve => {
+                let finished = false;
+
+                if (!node) {
+                    resolve();
+                    return;
+                }
+
+                node.classList.remove('unlock-effect');
+                void node.offsetWidth;
+                node.classList.add('unlock-effect');
+
+                const fallback = setTimeout(() => {
+                    if (finished) return;
+                    finished = true;
+                    node.removeEventListener('animationend', handleAnimationEnd);
+                    node.classList.remove('unlock-effect');
+                    resolve();
+                }, 2000);
+
+                const handleAnimationEnd = (event) => {
+                    if (event.animationName !== 'unlockPulse') return;
+
+                    if (finished) return;
+                    finished = true;
+                    node.classList.remove('unlock-effect');
+                    node.removeEventListener('animationend', handleAnimationEnd);
+                    clearTimeout(fallback);
+                    resolve();
+                };
+
+                node.addEventListener('animationend', handleAnimationEnd);
+            });
+        }
+
+        function moveHeroToNode(node) {
+            if (!node) return;
+
+            const circle = node.querySelector('circle');
+            const hero = document.getElementById('hero-token');
+
+            if (!circle || !hero) return;
+
+            const cx = Number(circle.getAttribute('cx'));
+            const cy = Number(circle.getAttribute('cy'));
+
+            hero.setAttribute('x', cx - 10);
+            hero.setAttribute('y', cy - 30);
+        }
+
+        function moveHeroToLevel(levelNumber) {
+            const targetNode = getLevelNodeByNumber(levelNumber);
+            moveHeroToNode(targetNode);
+        }
+
+        function persistLevelProgress(levelNumber) {
+            localStorage.setItem(LEVEL_STORAGE_KEY, levelNumber);
+        }
+
+        function persistLastPlayedLevel(levelNumber) {
+            localStorage.setItem(LAST_PLAYED_STORAGE_KEY, levelNumber);
+        }
+
+        function persistTransitionEnd(time) {
+            localStorage.setItem(TRANSITION_END_STORAGE_KEY, time);
+        }
+
+        function applyLevelProgress(unlockUpToLevel, options = {}) {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+            const heroLevelOverride = options.heroLevelOverride;
+
+            nodes.forEach(node => {
+                const level = Number(node.dataset.level);
+
+                if (level < unlockUpToLevel) {
+                    node.classList.remove('locked');
+                    node.classList.add('completed');
+                } else if (level === unlockUpToLevel) {
+                    node.classList.remove('locked', 'completed');
+                    node.classList.add('current');
+                } else {
+                    node.classList.add('locked');
+                    node.classList.remove('completed', 'current');
+                }
+            });
+
+            const heroTargetLevel = heroLevelOverride || unlockUpToLevel;
+            moveHeroToLevel(heroTargetLevel);
+        }
+
+        async function travelHeroToLevel(levelNumber) {
+            const hero = document.getElementById('hero-token');
+            const targetNode = getLevelNodeByNumber(levelNumber);
+            if (!hero || !targetNode) return;
+
+            hero.classList.remove('hero-token--no-transition');
+            moveHeroToNode(targetNode);
+            heroCurrentLevel = levelNumber;
+
+            await wait(ADVENTURE_TRANSITION_DURATION_MS);
+        }
+
+        function animateReturnFromGame(currentLevel, lastCompletedLevel) {
+            const hasTransitionData = Number.isFinite(Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY)));
+            if (!hasTransitionData) return;
+
+            const hero = document.getElementById('hero-token');
+            if (!hero) return;
+
+            hero.classList.add('hero-token--no-transition');
+            moveHeroToLevel(lastCompletedLevel || currentLevel);
+
+            requestAnimationFrame(() => {
+                hero.classList.remove('hero-token--no-transition');
+            });
+        }
+
+        function loadSavedProgress() {
+            const nodes = Array.from(document.querySelectorAll('.level-node'));
+            if (!nodes.length) return;
+
+            const hero = document.getElementById('hero-token');
+            const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
+            const lastCompletedLevel = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
+            const lastPlayedLevel = Number(localStorage.getItem(LAST_PLAYED_STORAGE_KEY));
+            const hasCompletedLevel = Number.isFinite(lastCompletedLevel);
+            const defaultLevel = getCurrentLevelNumber() || 1;
+            const maxLevel = Math.max(...nodes.map(node => Number(node.dataset.level)));
+            const sanitizedLevel = Number.isNaN(savedLevel) || savedLevel < 1 ? defaultLevel : savedLevel;
+            const validatedLevel = hasCompletedLevel
+                ? Math.min(Math.max(sanitizedLevel, 1), maxLevel)
+                : 1;
+            const clampedCompletionLevel = Number.isFinite(lastCompletedLevel)
+                ? Math.min(Math.max(lastCompletedLevel, 1), maxLevel)
+                : null;
+            const clampedLastPlayedLevel = Number.isFinite(lastPlayedLevel)
+                ? Math.min(Math.max(lastPlayedLevel, 1), maxLevel)
+                : null;
+            const hasTransitionData = Number.isFinite(Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY)));
+            const isMapCompleted = hasCompletedLevel && lastCompletedLevel >= maxLevel;
+
+            let heroStartingLevel;
+
+            if (hasTransitionData && clampedCompletionLevel) {
+                heroStartingLevel = clampedCompletionLevel;
+            } else if (!hasTransitionData) {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            } else if (clampedLastPlayedLevel) {
+                heroStartingLevel = clampedLastPlayedLevel;
+            } else {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            }
+
+            if (hero) {
+                hero.classList.add('hero-token--no-transition');
+            }
+
+            moveHeroToLevel(heroStartingLevel);
+            applyLevelProgress(validatedLevel, { heroLevelOverride: heroStartingLevel });
+            animateReturnFromGame(validatedLevel, lastCompletedLevel);
+
+            requestAnimationFrame(() => {
+                if (hero) {
+                    hero.classList.remove('hero-token--no-transition');
+                }
+            });
+        }
+
+        function completeCurrentLevel() {
+            const currentNode = document.querySelector('.level-node.current');
+            if (!currentNode) return;
+
+            const currentLevel = Number(currentNode.dataset.level);
+            currentNode.classList.remove('current');
+            currentNode.classList.add('completed');
+            persistLastPlayedLevel(currentLevel);
+
+            const nextLevelNumber = currentLevel + 1;
+            const nextNode = getLevelNodeByNumber(nextLevelNumber);
+
+            if (nextNode) {
+                nextNode.classList.remove('locked', 'completed');
+                nextNode.classList.add('current');
+
+                playUnlockEffect(nextNode).then(() => moveHeroToNode(currentNode));
+
+                persistLevelProgress(nextLevelNumber);
+                currentSelectedLevel = nextLevelNumber;
+            } else {
+                moveHeroToNode(currentNode);
+                persistLevelProgress(currentLevel);
+                currentSelectedLevel = currentLevel;
+            }
+        }
+
+        function selectLevel(number, title, status) {
+            const node = getLevelNodeByNumber(number);
+
+            const resolvedStatus = status || getLevelStatus(node);
+            currentSelectedLevel = number;
+
+            if (resolvedStatus !== 'locked') {
+                startPuzzle();
+            }
+        }
+
+        function launchPuzzleFromPath(number, title, status) {
+            const node = getLevelNodeByNumber(number);
+            const resolvedStatus = status || getLevelStatus(node);
+
+            selectLevel(number, title, resolvedStatus);
+
+            if (resolvedStatus === 'locked') {
+                return;
+            }
+
+            startPuzzle();
+        }
+
+        async function startPuzzle() {
+            const selectedNode = getLevelNodeByNumber(currentSelectedLevel);
+            if (!currentSelectedLevel || !selectedNode || selectedNode.classList.contains('locked')) {
+                return;
+            }
+
+            if (isLaunchingPuzzle) return;
+            isLaunchingPuzzle = true;
+
+            await travelHeroToLevel(currentSelectedLevel);
+
+            persistLastPlayedLevel(currentSelectedLevel);
+            const url = `../../adivina-la-palabra/game.html?mode=adventure&map=2&level=${currentSelectedLevel}`;
+            window.location.href = url;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSavedProgress);
+    </script>
+</body>
+</html>

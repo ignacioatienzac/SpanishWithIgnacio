@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0 auto;
+        max-width: 500px;
+        padding: 2rem;
+        line-height: 1.5;
+      }
+      form {
+        display: grid;
+        gap: 1rem;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 600;
+        gap: 0.5rem;
+      }
+      input[type="email"],
+      input[type="password"],
+      input[type="text"] {
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+      button {
+        padding: 0.8rem 1.2rem;
+        background: #0077cc;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 0.95rem;
+        color: #444;
+      }
+      .error {
+        color: #b3261e;
+      }
+      .success {
+        color: #0b8f3a;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Crea tu cuenta</h1>
+    <p class="status" id="auth-status">Verificando sesión...</p>
+
+    <form id="registro-form">
+      <label>
+        Email
+        <input type="email" name="email" id="email" autocomplete="email" required />
+      </label>
+      <label>
+        Contraseña
+        <input
+          type="password"
+          name="password"
+          id="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        />
+      </label>
+      <label>
+        Nickname
+        <input type="text" name="nickname" id="nickname" maxlength="50" required />
+      </label>
+      <label style="flex-direction: row; align-items: center; gap: 0.5rem; font-weight: 400">
+        <input type="checkbox" name="privacy" id="privacy" required />
+        Acepto la política de privacidad
+      </label>
+      <button type="submit" id="submit">Registrarme</button>
+      <p id="mensaje" role="alert"></p>
+    </form>
+
+    <script type="module">
+      import { auth, db, onAuthChange } from "./firebase-config.js";
+      import {
+        createUserWithEmailAndPassword,
+        updateProfile
+      } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import {
+        doc,
+        serverTimestamp,
+        setDoc
+      } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+      const form = document.getElementById("registro-form");
+      const mensaje = document.getElementById("mensaje");
+      const submitButton = document.getElementById("submit");
+      const authStatus = document.getElementById("auth-status");
+
+      const setMessage = (text, type = "") => {
+        mensaje.textContent = text;
+        mensaje.className = type;
+      };
+
+      onAuthChange((user) => {
+        authStatus.textContent = user
+          ? `Sesión activa: ${user.email}`
+          : "No hay sesión iniciada";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setMessage("");
+        submitButton.disabled = true;
+
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const nickname = form.nickname.value.trim();
+
+        try {
+          const credential = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(credential.user, { displayName: nickname });
+
+          await setDoc(doc(db, "usuarios", credential.user.uid), {
+            email,
+            nickname,
+            createdAt: serverTimestamp()
+          });
+
+          setMessage("Registro completado con éxito.", "success");
+          form.reset();
+        } catch (error) {
+          console.error("Error al registrar:", error);
+          setMessage(error.message || "No se pudo completar el registro.", "error");
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -136,6 +136,9 @@
 
           setMessage("Registro completado con éxito.", "success");
           form.reset();
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1500);
         } catch (error) {
           console.error("Error al registrar:", error);
           setMessage(error.message || "No se pudo completar el registro.", "error");

@@ -494,6 +494,35 @@ html[data-lang-initializing="true"] body {
     color: rgba(52, 73, 94, 0.8);
 }
 
+.site-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #dfe4ea;
+    color: var(--secondary-color);
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.site-footer__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.site-footer__brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+}
+
+.site-footer__tagline {
+    font-size: 0.95rem;
+    color: rgba(44, 62, 80, 0.85);
+}
+
 @media (max-width: 600px) {
     .wordle-level {
         width: 140px;

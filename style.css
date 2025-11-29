@@ -30,6 +30,13 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 html[data-lang-initializing="true"] body {
@@ -495,9 +502,9 @@ html[data-lang-initializing="true"] body {
 }
 
 .site-footer {
-    background-color: #ffffff;
-    border-top: 1px solid #dfe4ea;
-    color: var(--secondary-color);
+    background-color: #0f172a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
     padding: 1.5rem 1rem;
     margin-top: 2rem;
     width: 100%;
@@ -520,7 +527,7 @@ html[data-lang-initializing="true"] body {
 
 .site-footer__tagline {
     font-size: 0.95rem;
-    color: rgba(44, 62, 80, 0.85);
+    color: rgba(248, 250, 252, 0.85);
 }
 
 @media (max-width: 600px) {

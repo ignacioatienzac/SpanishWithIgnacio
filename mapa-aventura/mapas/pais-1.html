@@ -688,10 +688,14 @@
             const validatedLevel = hasCompletedLevel
                 ? Math.min(Math.max(sanitizedLevel, 1), maxLevel)
                 : 1;
+            const initialHeroLevel = Number.isNaN(lastPlayedLevel)
+                ? (hasCompletedLevel ? lastCompletedLevel : defaultLevel)
+                : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
             const heroTargetLevel = Number.isNaN(lastPlayedLevel)
                 ? (hasCompletedLevel ? lastCompletedLevel : 1)
                 : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
 
+            moveHeroToLevel(initialHeroLevel);
             applyLevelProgress(validatedLevel, { heroLevelOverride: heroTargetLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
         }

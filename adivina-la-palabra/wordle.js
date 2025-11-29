@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelTitle = document.getElementById('game-level-title');
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
+    const adventureMapButton = document.getElementById('adventure-map-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
@@ -55,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     instructionsCloseButton.addEventListener('click', closeInstructionsModal);
     instructionsOverlay.addEventListener('click', closeInstructionsModal);
     document.addEventListener('keydown', handleInstructionsKeydown);
+    if (adventureMapButton) {
+        adventureMapButton.addEventListener('click', handleAdventureMapReturn);
+    }
 
     // --- ESTADO DEL JUEGO ---
     const answerListsByLength = new Map();
@@ -182,11 +186,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }, ADVENTURE_TRANSITION_DURATION_MS);
     }
 
+    function handleAdventureMapReturn() {
+        if (!isAdventureMode || adventureMapId !== 1) return;
+
+        startAdventureTransition(getAdventureMapUrl(1));
+    }
+
     function recordAdventureCompletion() {
         try {
+            const storedProgress = Number(localStorage.getItem(ADVENTURE_PROGRESS_KEY));
+            const storedCompletedLevel = Number(localStorage.getItem(ADVENTURE_COMPLETED_LEVEL_KEY));
             const nextLevel = Math.min(adventureLevelNumber + 1, 10);
-            localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(nextLevel));
-            localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+            const newProgressLevel = Number.isFinite(storedProgress)
+                ? Math.max(storedProgress, nextLevel)
+                : nextLevel;
+
+            localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(newProgressLevel));
+
+            if (!Number.isFinite(storedCompletedLevel) || adventureLevelNumber > storedCompletedLevel) {
+                localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+            }
+
             localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
         } catch (error) {
             console.warn('No se pudo guardar el progreso de aventura:', error);
@@ -464,10 +484,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isAdventureMode) {
             adventureMapId = Number(urlParams.get('map')) || 1;
-            adventureLevelNumber = Number(urlParams.get('level')) || 1;
-            localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
+            const requestedLevelNumber = Number(urlParams.get('level'));
+            const storedLastPlayedLevel = Number(localStorage.getItem(ADVENTURE_LAST_PLAYED_KEY));
+            const storedCompletedLevel = Number(localStorage.getItem(ADVENTURE_COMPLETED_LEVEL_KEY));
+            const maxAdventureLevel = 10;
+            const fallbackLevel = Number.isFinite(storedLastPlayedLevel)
+                ? storedLastPlayedLevel
+                : Number.isFinite(storedCompletedLevel)
+                    ? storedCompletedLevel
+                    : 1;
+
+            const sanitizedRequestedLevel = Number.isFinite(requestedLevelNumber) && requestedLevelNumber > 0
+                ? Math.min(requestedLevelNumber, maxAdventureLevel)
+                : null;
+
+            const sanitizedFallbackLevel = Math.min(Math.max(fallbackLevel, 1), maxAdventureLevel);
+
+            adventureLevelNumber = sanitizedRequestedLevel || sanitizedFallbackLevel;
             adventureBossIndex = 0;
             document.body.classList.toggle('adventure-map-1-bg', adventureMapId === 1);
+            if (adventureMapButton) {
+                const isMapOne = adventureMapId === 1;
+                adventureMapButton.classList.toggle('is-visible', isMapOne);
+                adventureMapButton.toggleAttribute('disabled', !isMapOne);
+                adventureMapButton.setAttribute('aria-hidden', String(!isMapOne));
+            }
             loadBossProgress();
 
             currentLevel = 'A1';
@@ -481,6 +522,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             loadAdventureGame();
             return;
+        }
+
+        if (adventureMapButton) {
+            adventureMapButton.classList.remove('is-visible');
+            adventureMapButton.setAttribute('disabled', 'true');
+            adventureMapButton.setAttribute('aria-hidden', 'true');
         }
 
         document.body.classList.remove('adventure-map-1-bg');

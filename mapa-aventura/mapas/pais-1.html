@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../../language-init.js"></script>
     <title>Nivel 1: Bahía de las Vocales</title>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -482,6 +483,12 @@
         const LAST_PLAYED_STORAGE_KEY = 'wordleQuestLastPlayedLevel';
         const ADVENTURE_TRANSITION_DURATION_MS = 700;
         let currentSelectedLevel = null;
+        let heroCurrentLevel = null;
+        let isLaunchingPuzzle = false;
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
         function getLevelNodeByNumber(number) {
             return document.querySelector(`.level-node[data-level="${number}"]`);
@@ -556,6 +563,42 @@
 
             hero.setAttribute('x', cx - offsetX);
             hero.setAttribute('y', cy - offsetY - verticalLift);
+            heroCurrentLevel = Number(node.dataset.level) || heroCurrentLevel;
+        }
+
+        function moveHeroToLevel(levelNumber) {
+            const node = getLevelNodeByNumber(levelNumber);
+            moveHeroToNode(node);
+        }
+
+        function buildTravelPath(startLevel, targetLevel) {
+            if (!Number.isFinite(startLevel) || !Number.isFinite(targetLevel) || startLevel === targetLevel) {
+                return [];
+            }
+
+            const step = startLevel < targetLevel ? 1 : -1;
+            const path = [];
+
+            for (let level = startLevel + step; step > 0 ? level <= targetLevel : level >= targetLevel; level += step) {
+                path.push(level);
+            }
+
+            return path;
+        }
+
+        async function travelHeroToLevel(targetLevel) {
+            const startingLevel = heroCurrentLevel || getCurrentLevelNumber() || 1;
+            const path = buildTravelPath(startingLevel, targetLevel);
+
+            if (!path.length) {
+                moveHeroToLevel(targetLevel);
+                return;
+            }
+
+            for (const level of path) {
+                moveHeroToLevel(level);
+                await wait(700);
+            }
         }
 
         function persistLevelProgress(levelNumber) {
@@ -646,11 +689,29 @@
             const validatedLevel = hasCompletedLevel
                 ? Math.min(Math.max(sanitizedLevel, 1), maxLevel)
                 : 1;
-            const heroTargetLevel = Number.isNaN(lastPlayedLevel)
-                ? (hasCompletedLevel ? lastCompletedLevel : 1)
-                : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
+            const clampedCompletionLevel = Number.isFinite(lastCompletedLevel)
+                ? Math.min(Math.max(lastCompletedLevel, 1), maxLevel)
+                : null;
+            const clampedLastPlayedLevel = Number.isFinite(lastPlayedLevel)
+                ? Math.min(Math.max(lastPlayedLevel, 1), maxLevel)
+                : null;
+            const hasTransitionData = Number.isFinite(Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY)));
+            const isMapCompleted = hasCompletedLevel && lastCompletedLevel >= maxLevel;
 
-            applyLevelProgress(validatedLevel, { heroLevelOverride: heroTargetLevel });
+            let heroStartingLevel;
+
+            if (hasTransitionData && clampedCompletionLevel) {
+                heroStartingLevel = clampedCompletionLevel;
+            } else if (!hasTransitionData) {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            } else if (clampedLastPlayedLevel) {
+                heroStartingLevel = clampedLastPlayedLevel;
+            } else {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            }
+
+            moveHeroToLevel(heroStartingLevel);
+            applyLevelProgress(validatedLevel, { heroLevelOverride: heroStartingLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
         }
 
@@ -694,6 +755,10 @@
             btn.classList.toggle('btn-play--disabled', resolvedStatus === 'locked');
 
             panel.style.display = 'block';
+
+            if (resolvedStatus !== 'locked') {
+                startPuzzle();
+            }
         }
 
         function launchPuzzleFromPath(number, title, status) {
@@ -709,11 +774,16 @@
             startPuzzle();
         }
 
-        function startPuzzle() {
+        async function startPuzzle() {
             const selectedNode = getLevelNodeByNumber(currentSelectedLevel);
             if (!currentSelectedLevel || !selectedNode || selectedNode.classList.contains('locked')) {
                 return;
             }
+
+            if (isLaunchingPuzzle) return;
+            isLaunchingPuzzle = true;
+
+            await travelHeroToLevel(currentSelectedLevel);
 
             persistLastPlayedLevel(currentSelectedLevel);
             const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;

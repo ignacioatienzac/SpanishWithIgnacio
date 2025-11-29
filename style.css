@@ -132,6 +132,9 @@ html[data-lang-initializing="true"] body {
 /* Navigation Buttons */
 .main-nav {
     transition: max-height 0.35s ease, opacity 0.35s ease;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 
 .main-nav ul {
@@ -140,6 +143,8 @@ html[data-lang-initializing="true"] body {
     flex-wrap: wrap; /* Para que los botones se reajusten */
     justify-content: center; /* Centra los botones si se parten en dos líneas */
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .main-nav ul li {

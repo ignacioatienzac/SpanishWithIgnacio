@@ -250,24 +250,8 @@
             pointer-events: none;
         }
 
-        /* Botón temporal para simular victoria y avanzar niveles */
-        .simulate-victory-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(39, 174, 96, 0.95);
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-            z-index: 200;
-        }
-        .simulate-victory-btn:hover {
-            background: rgba(33, 150, 83, 0.95);
-            transform: translateY(-2px);
+        .hero-token--no-transition {
+            transition: none !important;
         }
 
     </style>
@@ -308,7 +292,6 @@
                 <ul>
                     <li><a href="../../index.html">Home</a></li>
                     <li><a href="../../students/index.html">Students</a></li>
-                    <li><a href="../../profesores/index.html">Teachers</a></li>
                     <li><a href="../../games/index.html">Games</a></li>
                     <li><a href="../../adivina-la-palabra/index.html">Guess the word</a></li>
                     <li class="language-switcher language-switcher--desktop">
@@ -473,7 +456,6 @@
 
     </div>
 
-    <button class="simulate-victory-btn" onclick="completeCurrentLevel()">Simular Victoria</button>
     </main>
 
     <footer class="site-footer">
@@ -704,6 +686,7 @@
             const nodes = Array.from(document.querySelectorAll('.level-node'));
             if (!nodes.length) return;
 
+            const hero = document.getElementById('hero-token');
             const savedLevel = Number(localStorage.getItem(LEVEL_STORAGE_KEY));
             const lastCompletedLevel = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
             const lastPlayedLevel = Number(localStorage.getItem(LAST_PLAYED_STORAGE_KEY));
@@ -735,9 +718,19 @@
                 heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
             }
 
+            if (hero) {
+                hero.classList.add('hero-token--no-transition');
+            }
+
             moveHeroToLevel(heroStartingLevel);
             applyLevelProgress(validatedLevel, { heroLevelOverride: heroStartingLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
+
+            requestAnimationFrame(() => {
+                if (hero) {
+                    hero.classList.remove('hero-token--no-transition');
+                }
+            });
         }
 
         function completeCurrentLevel() {

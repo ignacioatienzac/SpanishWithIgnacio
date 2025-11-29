@@ -9,9 +9,50 @@ const LANGUAGE_OPTIONS = {
     en: { label: 'English', flag: '🇬🇧' }
 };
 
+const ACCOUNT_COPY = {
+    en: {
+        loggedOut: {
+            button: 'My account',
+            options: [
+                { label: 'Sign up', action: 'signup' },
+                { label: 'Sign in', action: 'signin' }
+            ]
+        },
+        loggedIn: {
+            button: 'My account',
+            options: [
+                { label: 'See my account', action: 'see-account' },
+                { label: 'Choose my avatar', action: 'choose-avatar' },
+                { label: 'Sign out', action: 'sign-out' }
+            ]
+        }
+    },
+    es: {
+        loggedOut: {
+            button: 'Mi cuenta',
+            options: [
+                { label: 'Registrarse', action: 'signup' },
+                { label: 'Iniciar sesión', action: 'signin' }
+            ]
+        },
+        loggedIn: {
+            button: 'Mi cuenta',
+            options: [
+                { label: 'Ver mi cuenta', action: 'see-account' },
+                { label: 'Elegir mi avatar', action: 'choose-avatar' },
+                { label: 'Cerrar sesión', action: 'sign-out' }
+            ]
+        }
+    }
+};
+
 let cachedSpanishTranslations = null;
 let spanishTranslationsPromise = null;
 let translatableElementsCache = null;
+let currentLanguage = document.documentElement.lang === 'en' ? 'en' : 'es';
+let firebaseModulePromise = null;
+let accountMenus = [];
+let currentUser = null;
 
 const translatableSelectors = [
     '[data-i18n-es]',
@@ -35,6 +76,23 @@ const translatableSelectors = [
     '.mode-card__cta',
     '.level-button span'
 ];
+
+function getFirebaseModule() {
+    if (!firebaseModulePromise) {
+        firebaseModulePromise = import('/firebase-config.js').catch(error => {
+            console.error('Unable to load Firebase configuration', error);
+            return null;
+        });
+    }
+
+    return firebaseModulePromise;
+}
+
+function getUserInitial(user) {
+    if (!user) return '+';
+    const source = user.displayName || user.email || '';
+    return source.trim().charAt(0).toUpperCase() || '+';
+}
 
 async function loadSpanishTranslations() {
     if (cachedSpanishTranslations) return cachedSpanishTranslations;
@@ -71,6 +129,163 @@ function getTranslatableElements() {
         return !collection.some(other => other !== element && other.contains(element));
     });
     return translatableElementsCache;
+}
+
+function createAccountMenuWrapper(isMobile) {
+    const element = document.createElement(isMobile ? 'div' : 'li');
+    element.className = `account-menu account-menu--${isMobile ? 'mobile' : 'desktop'}`;
+    element.dataset.accountMenu = isMobile ? 'mobile' : 'desktop';
+    return element;
+}
+
+function ensureAccountMenuSlots() {
+    const headerContainer = document.querySelector('.header-container');
+    const navList = document.querySelector('.main-nav ul');
+
+    if (headerContainer && !headerContainer.querySelector('[data-account-menu="mobile"]')) {
+        const mobileMenu = createAccountMenuWrapper(true);
+        const menuToggle = headerContainer.querySelector('.menu-toggle');
+        headerContainer.insertBefore(mobileMenu, menuToggle || headerContainer.lastElementChild?.nextSibling || null);
+    }
+
+    if (navList && !navList.querySelector('[data-account-menu="desktop"]')) {
+        const desktopMenu = createAccountMenuWrapper(false);
+        navList.appendChild(desktopMenu);
+    }
+}
+
+function closeAccountMenus() {
+    accountMenus.forEach(menu => {
+        menu.button.setAttribute('aria-expanded', 'false');
+        menu.dropdown.setAttribute('aria-hidden', 'true');
+    });
+}
+
+function buildDropdownOptions(menu, copy) {
+    menu.dropdown.innerHTML = '';
+
+    copy.options.forEach(option => {
+        const optionButton = document.createElement('button');
+        optionButton.type = 'button';
+        optionButton.className = 'account-menu__option';
+        optionButton.dataset.accountAction = option.action;
+        optionButton.textContent = option.label;
+        optionButton.addEventListener('click', event => {
+            event.stopPropagation();
+            handleAccountAction(option.action);
+            closeAccountMenus();
+        });
+        menu.dropdown.appendChild(optionButton);
+    });
+}
+
+function renderAccountMenu(menu) {
+    const stateCopy = currentUser ? ACCOUNT_COPY[currentLanguage].loggedIn : ACCOUNT_COPY[currentLanguage].loggedOut;
+    menu.button.setAttribute('aria-label', stateCopy.button);
+    menu.label.textContent = stateCopy.button;
+
+    if (currentUser) {
+        menu.badge.textContent = getUserInitial(currentUser);
+        menu.badge.removeAttribute('aria-hidden');
+        menu.button.classList.add('account-menu__button--authenticated');
+    } else {
+        menu.badge.textContent = '+';
+        menu.badge.setAttribute('aria-hidden', 'true');
+        menu.button.classList.remove('account-menu__button--authenticated');
+    }
+
+    buildDropdownOptions(menu, stateCopy);
+}
+
+function renderAllAccountMenus() {
+    accountMenus.forEach(renderAccountMenu);
+}
+
+function handleAccountAction(action) {
+    if (action === 'sign-out') {
+        getFirebaseModule()
+            .then(module => module?.signOutUser?.())
+            .catch(error => console.error('Sign out failed', error));
+        return;
+    }
+
+    if (action === 'signup' || action === 'signin') {
+        window.location.href = action === 'signup' ? '/registro.html' : '/ingresar.html';
+        return;
+    }
+
+    // Placeholder actions for upcoming features
+    if (action === 'see-account' || action === 'choose-avatar') {
+        console.info(`Action ${action} will be implemented soon.`);
+    }
+}
+
+function createAccountMenu(element) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'account-menu__button';
+    button.setAttribute('aria-expanded', 'false');
+
+    const badge = document.createElement('span');
+    badge.className = 'account-menu__badge';
+    badge.setAttribute('aria-hidden', 'true');
+
+    const label = document.createElement('span');
+    label.className = 'account-menu__label';
+
+    const chevron = document.createElement('span');
+    chevron.className = 'account-menu__chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    chevron.textContent = '▾';
+
+    button.appendChild(badge);
+    button.appendChild(label);
+    button.appendChild(chevron);
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'account-menu__dropdown';
+    dropdown.setAttribute('aria-hidden', 'true');
+
+    button.addEventListener('click', event => {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        closeAccountMenus();
+        button.setAttribute('aria-expanded', String(!isExpanded));
+        dropdown.setAttribute('aria-hidden', String(isExpanded));
+        event.stopPropagation();
+    });
+
+    element.appendChild(button);
+    element.appendChild(dropdown);
+
+    const menuRecord = { root: element, button, badge, label, dropdown };
+    accountMenus.push(menuRecord);
+    renderAccountMenu(menuRecord);
+}
+
+function setupAccountMenus() {
+    ensureAccountMenuSlots();
+    const menuElements = document.querySelectorAll('[data-account-menu]');
+    menuElements.forEach(element => {
+        if (!accountMenus.some(menu => menu.root === element)) {
+            createAccountMenu(element);
+        }
+    });
+
+    document.addEventListener('click', event => {
+        if (!event.target.closest('[data-account-menu]')) {
+            closeAccountMenus();
+        }
+    });
+}
+
+function observeAuthChanges() {
+    getFirebaseModule().then(module => {
+        if (!module?.onAuthChange) return;
+        module.onAuthChange(user => {
+            currentUser = user;
+            renderAllAccountMenus();
+        });
+    });
 }
 
 function storeOriginalText(element) {
@@ -121,9 +336,12 @@ async function applyLanguage(language) {
 
     if (isSameLanguage && !document.documentElement.hasAttribute('data-lang-initializing')) {
         updateLanguageButtons(normalizedLang);
+        currentLanguage = normalizedLang;
+        renderAllAccountMenus();
         return;
     }
     document.documentElement.lang = normalizedLang;
+    currentLanguage = normalizedLang;
     try {
         const translations = normalizedLang === 'es'
             ? await loadSpanishTranslations()
@@ -150,6 +368,7 @@ async function applyLanguage(language) {
         }
 
         updateLanguageButtons(normalizedLang);
+        renderAllAccountMenus();
         localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLang);
     } finally {
         document.documentElement.removeAttribute('data-lang-initializing');
@@ -332,6 +551,8 @@ function setupNavigationToggle() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupAccountMenus();
     setupNavigationToggle();
     setupLanguageSwitcher();
+    observeAuthChanges();
 });

@@ -233,8 +233,14 @@ function createAccountMenu(element) {
     const label = document.createElement('span');
     label.className = 'account-menu__label';
 
+    const chevron = document.createElement('span');
+    chevron.className = 'account-menu__chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    chevron.textContent = '▾';
+
     button.appendChild(badge);
     button.appendChild(label);
+    button.appendChild(chevron);
 
     const dropdown = document.createElement('div');
     dropdown.className = 'account-menu__dropdown';

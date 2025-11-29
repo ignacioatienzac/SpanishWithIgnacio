@@ -688,15 +688,29 @@
             const validatedLevel = hasCompletedLevel
                 ? Math.min(Math.max(sanitizedLevel, 1), maxLevel)
                 : 1;
-            const initialHeroLevel = Number.isNaN(lastPlayedLevel)
-                ? (hasCompletedLevel ? lastCompletedLevel : defaultLevel)
-                : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
-            const heroTargetLevel = Number.isNaN(lastPlayedLevel)
-                ? (hasCompletedLevel ? lastCompletedLevel : 1)
-                : Math.min(Math.max(lastPlayedLevel, 1), maxLevel);
+            const clampedCompletionLevel = Number.isFinite(lastCompletedLevel)
+                ? Math.min(Math.max(lastCompletedLevel, 1), maxLevel)
+                : null;
+            const clampedLastPlayedLevel = Number.isFinite(lastPlayedLevel)
+                ? Math.min(Math.max(lastPlayedLevel, 1), maxLevel)
+                : null;
+            const hasTransitionData = Number.isFinite(Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY)));
+            const isMapCompleted = hasCompletedLevel && lastCompletedLevel >= maxLevel;
 
-            moveHeroToLevel(initialHeroLevel);
-            applyLevelProgress(validatedLevel, { heroLevelOverride: heroTargetLevel });
+            let heroStartingLevel;
+
+            if (hasTransitionData && clampedCompletionLevel) {
+                heroStartingLevel = clampedCompletionLevel;
+            } else if (!hasTransitionData) {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            } else if (clampedLastPlayedLevel) {
+                heroStartingLevel = clampedLastPlayedLevel;
+            } else {
+                heroStartingLevel = isMapCompleted ? 1 : validatedLevel;
+            }
+
+            moveHeroToLevel(heroStartingLevel);
+            applyLevelProgress(validatedLevel, { heroLevelOverride: heroStartingLevel });
             animateReturnFromGame(validatedLevel, lastCompletedLevel);
         }
 

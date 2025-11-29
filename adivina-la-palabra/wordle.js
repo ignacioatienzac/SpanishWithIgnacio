@@ -184,9 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function recordAdventureCompletion() {
         try {
+            const storedProgress = Number(localStorage.getItem(ADVENTURE_PROGRESS_KEY));
+            const storedCompletedLevel = Number(localStorage.getItem(ADVENTURE_COMPLETED_LEVEL_KEY));
             const nextLevel = Math.min(adventureLevelNumber + 1, 10);
-            localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(nextLevel));
-            localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+            const newProgressLevel = Number.isFinite(storedProgress)
+                ? Math.max(storedProgress, nextLevel)
+                : nextLevel;
+
+            localStorage.setItem(ADVENTURE_PROGRESS_KEY, String(newProgressLevel));
+
+            if (!Number.isFinite(storedCompletedLevel) || adventureLevelNumber > storedCompletedLevel) {
+                localStorage.setItem(ADVENTURE_COMPLETED_LEVEL_KEY, String(adventureLevelNumber));
+            }
+
             localStorage.setItem(ADVENTURE_LAST_PLAYED_KEY, String(adventureLevelNumber));
         } catch (error) {
             console.warn('No se pudo guardar el progreso de aventura:', error);

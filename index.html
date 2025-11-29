@@ -39,6 +39,11 @@
                 </div>
             </div>
 
+            <a class="user-avatar user-avatar--mobile" href="registro.html" aria-label="Regístrate o gestiona tu cuenta" data-user-avatar>
+                <span class="user-avatar__initial" aria-hidden="true" data-user-avatar-initial>+</span>
+                <span class="user-avatar__sr-label" data-user-avatar-label>Regístrate</span>
+            </a>
+
             <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
                 <span class="menu-toggle__bar"></span>
                 <span class="menu-toggle__bar"></span>
@@ -67,6 +72,12 @@
                                 <span class="language-switcher__sr-label">English</span>
                             </button>
                         </div>
+                    </li>
+                    <li class="user-avatar__list-item">
+                        <a class="user-avatar" href="registro.html" aria-label="Regístrate o gestiona tu cuenta" data-user-avatar>
+                            <span class="user-avatar__initial" aria-hidden="true" data-user-avatar-initial>+</span>
+                            <span class="user-avatar__sr-label" data-user-avatar-label>Regístrate</span>
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -111,6 +122,42 @@
             </div>
         </div>
     </footer>
+
+    <script type="module">
+        import { onAuthChange } from './firebase-config.js';
+
+        const avatarLinks = document.querySelectorAll('[data-user-avatar]');
+        const avatarInitials = document.querySelectorAll('[data-user-avatar-initial]');
+        const avatarLabels = document.querySelectorAll('[data-user-avatar-label]');
+
+        const getInitial = (user) => {
+            if (!user) return '+';
+            const source = user.displayName || user.email || '';
+            return source.trim().charAt(0).toUpperCase() || '+';
+        };
+
+        const updateAvatar = (user) => {
+            const initial = getInitial(user);
+            avatarInitials.forEach((element) => {
+                element.textContent = initial;
+            });
+
+            const label = user
+                ? `Cuenta de ${user.displayName || user.email}`
+                : 'Regístrate';
+
+            avatarLabels.forEach((element) => {
+                element.textContent = label;
+            });
+
+            avatarLinks.forEach((link) => {
+                link.setAttribute('aria-label', user ? label : 'Regístrate o gestiona tu cuenta');
+                link.href = 'registro.html';
+            });
+        };
+
+        onAuthChange(updateAvatar);
+    </script>
 
 </body>
 </html>

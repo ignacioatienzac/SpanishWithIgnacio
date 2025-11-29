@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./language-init.js"></script>
-    <title data-i18n-es="Spanish with Ignacio - Registrarse">Spanish with Ignacio - Sign up</title>
+    <title data-i18n-es="Spanish with Ignacio - Iniciar sesión">Spanish with Ignacio - Sign in</title>
     <link rel="icon" type="image/png" href="./images/favicon.png" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,34 +76,19 @@
 
     <main class="auth-page">
       <section class="auth-card">
-        <h1 data-i18n-es="Crea tu cuenta">Create your account</h1>
+        <h1 data-i18n-es="Accede a tu cuenta">Sign in to your account</h1>
         <p class="auth-status" id="auth-status" data-i18n-es="Verificando sesión...">Checking your session...</p>
 
-        <form id="registro-form" class="auth-form">
+        <form id="signin-form" class="auth-form">
           <label class="auth-label">
-            <span data-i18n-es="Email">Email</span>
-            <input type="email" name="email" id="email" autocomplete="email" required />
+            <span data-i18n-es="Correo o nickname">Email or nickname</span>
+            <input type="text" name="identifier" id="identifier" autocomplete="username" required />
           </label>
           <label class="auth-label">
             <span data-i18n-es="Contraseña">Password</span>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              minlength="6"
-              autocomplete="new-password"
-              required
-            />
+            <input type="password" name="password" id="password" autocomplete="current-password" required />
           </label>
-          <label class="auth-label">
-            <span data-i18n-es="Nickname">Nickname</span>
-            <input type="text" name="nickname" id="nickname" maxlength="50" required />
-          </label>
-          <label class="auth-checkbox">
-            <input type="checkbox" name="privacy" id="privacy" required />
-            <span data-i18n-es="Acepto la política de privacidad">I accept the privacy policy</span>
-          </label>
-          <button type="submit" id="submit" class="auth-button" data-i18n-es="Registrarme">Sign up</button>
+          <button type="submit" id="submit" class="auth-button" data-i18n-es="Iniciar sesión">Sign in</button>
           <p id="mensaje" role="alert" class="auth-message"></p>
         </form>
       </section>
@@ -139,10 +124,10 @@
 
     <script type="module">
       import { auth, db, onAuthChange } from "./firebase-config.js";
-      import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-      import { doc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { collection, getDocs, limit, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-      const form = document.getElementById("registro-form");
+      const form = document.getElementById("signin-form");
       const mensaje = document.getElementById("mensaje");
       const submitButton = document.getElementById("submit");
       const authStatus = document.getElementById("auth-status");
@@ -158,34 +143,44 @@
           : "No active session";
       });
 
+      async function resolveEmail(identifier) {
+        if (identifier.includes("@")) {
+          return identifier;
+        }
+
+        const nicknameQuery = query(
+          collection(db, "usuarios"),
+          where("nickname", "==", identifier),
+          limit(1)
+        );
+        const snapshot = await getDocs(nicknameQuery);
+
+        if (snapshot.empty) {
+          throw new Error("No encontramos una cuenta con ese nickname.");
+        }
+
+        const userData = snapshot.docs[0].data();
+        return userData.email;
+      }
+
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         setMessage("");
         submitButton.disabled = true;
 
-        const email = form.email.value.trim();
+        const identifier = form.identifier.value.trim();
         const password = form.password.value;
-        const nickname = form.nickname.value.trim();
 
         try {
-          const credential = await createUserWithEmailAndPassword(auth, email, password);
-          await updateProfile(credential.user, { displayName: nickname });
-
-          await setDoc(doc(db, "usuarios", credential.user.uid), {
-            email,
-            nickname,
-            plan: "gratis",
-            createdAt: serverTimestamp(),
-          });
-
-          setMessage("Registration completed successfully.", "success");
-          form.reset();
+          const email = await resolveEmail(identifier);
+          await signInWithEmailAndPassword(auth, email, password);
+          setMessage("Sign-in successful. Redirecting...", "success");
           setTimeout(() => {
             window.location.href = "/";
-          }, 1500);
+          }, 1000);
         } catch (error) {
-          console.error("Error al registrar:", error);
-          setMessage(error.message || "No se pudo completar el registro.", "error");
+          console.error("Error al iniciar sesión:", error);
+          setMessage(error.message || "No pudimos iniciar sesión. Inténtalo de nuevo.", "error");
         } finally {
           submitButton.disabled = false;
         }

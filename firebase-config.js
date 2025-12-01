@@ -4,7 +4,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAmxdm07zPOSauBNeCM4dxWOVw2PyCw1Zk",
+  apiKey: "AIzaSyBnWlIxqNDWd0IK5pzeINS-jF0rA9iUh90",
   authDomain: "spanishwithignacio-43149.firebaseapp.com",
   projectId: "spanishwithignacio-43149",
   storageBucket: "spanishwithignacio-43149.firebasestorage.app",

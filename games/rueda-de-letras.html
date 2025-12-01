@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../language-init.js"></script>
+    <title>Rueda de letras - Spanish with Ignacio</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../adivina-la-palabra/wordle.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+            </button>
+            <nav class="main-nav" id="primary-navigation">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../students/index.html">Students</a></li>
+                    <li><a href="index.html" class="active">Games</a></li>
+                    <li><a href="../adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wordle-main">
+        <section class="page-hero game-intro">
+            <div class="page-hero__container">
+                <h1 class="page-hero__title" data-i18n-es="Selecciona tu nivel">Select your level</h1>
+            </div>
+
+            <div class="level-selector">
+                <button class="level-button level-a1" data-level="A1" type="button">
+                    <span class="level-code">A1</span>
+                    <span class="level-spanish" data-i18n-es="Principiante">Beginner</span>
+                    <span class="level-english" data-i18n-es="Principiante">Beginner</span>
+                </button>
+                <button class="level-button level-a2" data-level="A2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">A2</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+                <button class="level-button level-b1" data-level="B1" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">B1</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+                <button class="level-button level-b2" data-level="B2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">B2</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+                <button class="level-button level-c1" data-level="C1" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C1</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+                <button class="level-button level-c2" data-level="C2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C2</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__content">
+            <div class="site-footer__section site-footer__section--contact">
+                <p class="site-footer__contact">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</p>
+            </div>
+            <div class="site-footer__section site-footer__section--brand">
+                <p class="site-footer__brand">Spanish with Ignacio</p>
+            </div>
+            <div class="site-footer__section site-footer__section--social" aria-label="Redes sociales">
+                <a class="site-footer__social-link" href="https://www.instagram.com/spanishwithignacio/" target="_blank" rel="noopener noreferrer">
+                    <img src="../images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.youtube.com/@SpanishwithIgnacio" target="_blank" rel="noopener noreferrer">
+                    <img src="../images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.facebook.com/people/Spanish-With-Ignacio/61560429119394/" target="_blank" rel="noopener noreferrer">
+                    <img src="../images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.threads.com/@spanishwithignacio?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener noreferrer">
+                    <img src="../images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const levelButtons = document.querySelectorAll('.level-button');
+
+            levelButtons.forEach(button => {
+                if (button.disabled || button.getAttribute('aria-disabled') === 'true') {
+                    return;
+                }
+
+                button.addEventListener('click', () => {
+                    window.location.href = './la-rueda-de-letras/index.html';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

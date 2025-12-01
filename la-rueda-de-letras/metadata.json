@@ -1,0 +1,5 @@
+{
+  "name": "Crossword Anagram Game",
+  "description": "An interactive crossword puzzle game where you build words from a wheel of letters. Features modified vocabulary with emojis.",
+  "requestFramePermissions": []
+}

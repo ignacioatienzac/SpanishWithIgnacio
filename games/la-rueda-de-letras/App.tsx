@@ -202,7 +202,7 @@ function App() {
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto w-full max-w-6xl mx-auto p-4 flex flex-col md:flex-row gap-8 items-start justify-center">
+            <main className="flex-1 overflow-y-auto w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-6 md:gap-10 items-start justify-center md:justify-between">
                 
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center w-full h-64 text-slate-500">
@@ -214,7 +214,7 @@ function App() {
                 ) : (
                     <>
                         {/* Left Column: Grid */}
-                        <div className="flex-1 flex flex-col items-center w-full">
+                        <div className="flex-1 md:flex-[1.25] flex flex-col items-center w-full">
                             <CrosswordGrid 
                                 gameState={gameState} 
                                 solvedWords={solvedWords} 
@@ -238,7 +238,7 @@ function App() {
                         </div>
 
                         {/* Right Column: Controls & Wheel */}
-                        <div className="flex-none w-full md:w-80 flex flex-col items-center gap-6">
+                        <div className="flex-none w-full md:w-80 lg:w-96 flex flex-col items-center gap-6">
                             
                             {/* Word Wheel - Moved down with mt-16 */}
                             <div className="mt-16 mb-4">

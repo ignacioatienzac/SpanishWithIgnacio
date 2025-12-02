@@ -3,8 +3,6 @@ import { generateCrosswordLogic, normalize } from './utils';
 import { GameState, PlacedWord, FlyingLetter } from './types';
 import CrosswordGrid from './components/CrosswordGrid';
 import WordWheel from './components/WordWheel';
-import Header from './components/Header';
-import Footer from './components/Footer';
 import CalendarButton from './components/CalendarButton';
 import { playSound } from './audio';
 
@@ -159,8 +157,6 @@ function App() {
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative">
-            
-            <Header />
 
             {/* Animation Overlay */}
             {flyingLetters.map((item) => (
@@ -323,7 +319,6 @@ function App() {
                 )}
             </main>
 
-            <Footer />
         </div>
     );
 }

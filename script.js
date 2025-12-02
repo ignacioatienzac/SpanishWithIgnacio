@@ -550,9 +550,29 @@ function setupNavigationToggle() {
     }
 }
 
+function setupLogoNavigation() {
+    const handleLogoClick = event => {
+        event.preventDefault();
+        window.location.href = '/index.html';
+    };
+
+    document.querySelectorAll('.logo').forEach(logoElement => {
+        logoElement.addEventListener('click', handleLogoClick);
+
+        if (logoElement instanceof HTMLAnchorElement) {
+            logoElement.href = '/index.html';
+        }
+
+        if (!logoElement.style.cursor) {
+            logoElement.style.cursor = 'pointer';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupAccountMenus();
     setupNavigationToggle();
+    setupLogoNavigation();
     setupLanguageSwitcher();
     observeAuthChanges();
 });

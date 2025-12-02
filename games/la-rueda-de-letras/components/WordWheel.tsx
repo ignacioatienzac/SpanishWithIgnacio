@@ -165,9 +165,9 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
                 {feedbackMessage}
             </div>
 
-            <div 
+            <div
                 ref={containerRef}
-                className="relative bg-white/80 rounded-full shadow-xl select-none touch-none transition-all duration-300"
+                className="relative word-wheel-shell select-none touch-none transition-all duration-300"
                 style={{ width: containerSize, height: containerSize }}
             >
                 <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
@@ -199,9 +199,9 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
                             key={item.id}
                             id={`wheel-letter-${index}`}
                             data-index={index}
-                            className={`absolute ${letterSizeClass} rounded-full flex items-center justify-center font-bold shadow-md cursor-pointer transition-transform duration-100 z-20 
-                                ${isSelected ? 'bg-[#c0392b] text-white scale-110' : 'bg-white text-[#c0392b]'}
-                                ${isShaking ? 'animate-shake bg-red-600 text-white' : ''}
+                            className={`absolute ${letterSizeClass} word-wheel-letter flex items-center justify-center font-bold cursor-pointer transition-transform duration-150 z-20
+                                ${isSelected ? 'word-wheel-letter--selected scale-110' : ''}
+                                ${isShaking ? 'animate-shake word-wheel-letter--error' : ''}
                             `}
                             style={{ 
                                 left: pos.x - letterOffsetPos, 

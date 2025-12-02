@@ -42,7 +42,7 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
         const sizeClasses = "w-11 h-11 md:w-10 md:h-10";
 
         if (!cellData) {
-            return <div key={key} className={sizeClasses}></div>;
+            return <div key={key} className={`${sizeClasses} pointer-events-none opacity-0`}></div>;
         }
 
         const isRevealed = cellData.words.some(w => solvedWords.has(w.id));
@@ -100,8 +100,8 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
     };
 
     return (
-        <div 
-            className="grid gap-1 p-2 bg-slate-300 rounded-lg shadow-inner overflow-auto max-w-full max-h-[60vh]"
+        <div
+            className="grid gap-1 p-2 bg-transparent rounded-lg overflow-auto max-w-full max-h-[60vh]"
             style={{
                 gridTemplateColumns: `repeat(${gridWidth}, min-content)`,
                 gridTemplateRows: `repeat(${gridHeight}, min-content)`

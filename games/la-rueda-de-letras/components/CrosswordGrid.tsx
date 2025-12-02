@@ -37,9 +37,9 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
         const cellData = gridMap.get(key);
 
         // Responsive sizing:
-        // Mobile: w-11 h-11 (44px)
-        // Desktop (md): w-10 h-10 (40px)
-        const sizeClasses = "w-11 h-11 md:w-10 md:h-10";
+        // Mobile: w-12 h-12 (48px)
+        // Desktop (md): w-11 h-11 (44px)
+        const sizeClasses = "w-12 h-12 md:w-11 md:h-11";
 
         if (!cellData) {
             return <div key={key} className={`${sizeClasses} pointer-events-none opacity-0`}></div>;

@@ -14,3 +14,49 @@ body {
     background-size: 24px 24px;
     background-attachment: fixed;
 }
+
+.word-wheel-shell {
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.word-wheel-letter {
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 0 #E2E8F0;
+    color: var(--primary-color);
+    font-weight: 700;
+    transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.word-wheel-letter:hover,
+.word-wheel-letter:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #E2E8F0;
+}
+
+.word-wheel-letter--selected {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: #f4a28a;
+    box-shadow: 0 4px 0 #9c341f;
+}
+
+.word-wheel-letter--selected:hover,
+.word-wheel-letter--selected:active {
+    box-shadow: 0 1px 0 #9c341f;
+}
+
+.word-wheel-letter--error {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #fecdd3;
+    box-shadow: 0 4px 0 #b91c1c;
+}
+
+.word-wheel-letter--error:hover,
+.word-wheel-letter--error:active {
+    box-shadow: 0 1px 0 #b91c1c;
+}

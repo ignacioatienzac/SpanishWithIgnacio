@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import React, { useState, useEffect, useCallback } from 'react';
-import { generateCrosswordLogic } from './utils';
-import CrosswordGrid from './components/CrosswordGrid';
-import WordWheel from './components/WordWheel';
-import CalendarButton from './components/CalendarButton';
-import { playSound } from './audio';
+import { generateCrosswordLogic } from './utils.js';
+import CrosswordGrid from './components/CrosswordGrid.js';
+import WordWheel from './components/WordWheel.js';
+import CalendarButton from './components/CalendarButton.js';
+import { playSound } from './audio.js';
 function App() {
     const [gameState, setGameState] = useState(null);
     const [solvedWords, setSolvedWords] = useState(new Set());

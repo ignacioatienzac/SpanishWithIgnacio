@@ -29,7 +29,7 @@ const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
         // Desktop (md): w-10 h-10 (40px)
         const sizeClasses = "w-11 h-11 md:w-10 md:h-10";
         if (!cellData) {
-            return _jsx("div", { className: sizeClasses }, key);
+            return _jsx("div", { className: `${sizeClasses} pointer-events-none opacity-0` }, key);
         }
         const isRevealed = cellData.words.some(w => solvedWords.has(w.id));
         // Progressive animation delay logic
@@ -63,7 +63,7 @@ const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
                     transition-colors duration-300
                 `, children: [startNumbers && (_jsx("span", { className: "absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.55rem] leading-none text-slate-500 font-bold z-10", children: startNumbers })), _jsx("span", { className: isRevealed ? 'animate-flip' : '', style: { animationDelay: isRevealed ? animationDelay : '0s' }, children: isRevealed ? cellData.char : '' })] }, key));
     };
-    return (_jsx("div", { className: "grid gap-1 p-2 bg-slate-300 rounded-lg shadow-inner overflow-auto max-w-full max-h-[60vh]", style: {
+    return (_jsx("div", { className: "grid gap-1 p-2 bg-transparent rounded-lg overflow-auto max-w-full max-h-[60vh]", style: {
             gridTemplateColumns: `repeat(${gridWidth}, min-content)`,
             gridTemplateRows: `repeat(${gridHeight}, min-content)`
         }, children: Array.from({ length: gridHeight }).map((_, y) => (Array.from({ length: gridWidth }).map((_, x) => renderCell(x, y)))) }));

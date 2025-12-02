@@ -1,4 +1,4 @@
-import { VOCABULARIO } from './data.js';
+import { VOCABULARIO } from './data';
 // --- SEEDED RNG LOGIC ---
 class SeededRNG {
     constructor(seed) {

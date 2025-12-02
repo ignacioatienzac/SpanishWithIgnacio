@@ -1,12 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import React, { useState, useEffect, useCallback } from 'react';
-import { generateCrosswordLogic } from './utils.js';
-import CrosswordGrid from './components/CrosswordGrid.js';
-import WordWheel from './components/WordWheel.js';
-import Header from './components/Header.js';
-import Footer from './components/Footer.js';
-import CalendarButton from './components/CalendarButton.js';
-import { playSound } from './audio.js';
+import { generateCrosswordLogic } from './utils';
+import CrosswordGrid from './components/CrosswordGrid';
+import WordWheel from './components/WordWheel';
+import CalendarButton from './components/CalendarButton';
+import { playSound } from './audio';
 function App() {
     const [gameState, setGameState] = useState(null);
     const [solvedWords, setSolvedWords] = useState(new Set());
@@ -136,7 +134,7 @@ function App() {
     const gameTitle = gameDateStr
         ? `Juego del ${new Date(gameDateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`
         : "Juego Aleatorio";
-    return (_jsxs("div", { className: "min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative", children: [_jsx(Header, {}), flyingLetters.map((item) => (_jsxs("div", { className: "fixed z-50 flex items-center justify-center bg-[#c0392b] text-white rounded-full font-bold shadow-lg pointer-events-none", style: {
+    return (_jsxs("div", { className: "min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative", children: [flyingLetters.map((item) => (_jsxs("div", { className: "fixed z-50 flex items-center justify-center bg-[#c0392b] text-white rounded-full font-bold shadow-lg pointer-events-none", style: {
                     width: '40px',
                     height: '40px',
                     left: 0,
@@ -167,6 +165,6 @@ function App() {
                                                                 const isSolved = solvedWords.has(wordId);
                                                                 const globalIndex = gameState.words.indexOf(w) + 1;
                                                                 return (_jsxs("li", { className: `text-sm ${isSolved ? 'text-green-600 line-through decoration-2' : 'text-slate-700'}`, children: [_jsx("span", { className: "inline-block bg-slate-200 text-slate-600 text-xs font-bold rounded px-1.5 mr-2", children: globalIndex }), w.wordObj.traduccion_ingles] }, i));
-                                                            }) })] })] }))] })] })] })) }), _jsx(Footer, {})] }));
+                                                            }) })] })] }))] })] })] })) })] }));
 }
 export default App;

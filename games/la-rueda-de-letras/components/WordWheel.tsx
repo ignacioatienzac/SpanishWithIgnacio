@@ -27,8 +27,8 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
         const handleResize = () => {
             const mobile = window.innerWidth < 768; // Tailwind 'md' breakpoint
             setIsMobile(mobile);
-            // Mobile: slightly larger for comfort, Desktop: modestly increased for clarity
-            setContainerSize(mobile ? 360 : 240);
+            // Mobile keeps generous sizing; desktop version is expanded for better visibility
+            setContainerSize(mobile ? 360 : 340);
         };
 
         // Initial set
@@ -143,13 +143,13 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
 
     // Adjust radius based on container size and letter size offset
     // Mobile letters are bigger, so we need more padding
-    const letterOffset = isMobile ? 48 : 32; 
-    const radius = containerSize / 2 - letterOffset; 
+    const letterOffset = isMobile ? 48 : 50;
+    const radius = containerSize / 2 - letterOffset;
     const center = containerSize / 2;
-    
+
     // Dynamic styles for letters based on device size
-    const letterSizeClass = isMobile ? 'w-14 h-14 text-2xl' : 'w-10 h-10 text-lg';
-    const letterOffsetPos = isMobile ? 28 : 20; // Half of width/height
+    const letterSizeClass = isMobile ? 'w-14 h-14 text-2xl' : 'w-12 h-12 text-xl';
+    const letterOffsetPos = isMobile ? 28 : 24; // Half of width/height
 
     const currentWordDisplay = selectedIndices.map(i => letters[i].char).join('');
 

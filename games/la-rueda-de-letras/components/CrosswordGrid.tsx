@@ -38,8 +38,8 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
 
         // Responsive sizing:
         // Mobile: w-12 h-12 (48px)
-        // Desktop (md): w-11 h-11 (44px)
-        const sizeClasses = "w-12 h-12 md:w-11 md:h-11";
+        // Desktop (md): w-14 h-14 (56px)
+        const sizeClasses = "w-12 h-12 md:w-14 md:h-14";
 
         if (!cellData) {
             return <div key={key} className={`${sizeClasses} pointer-events-none opacity-0`}></div>;
@@ -85,7 +85,7 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
                 `}
             >
                 {startNumbers && (
-                    <span className="absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.55rem] leading-none text-slate-500 font-bold z-10">
+                    <span className="absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.7rem] leading-none text-slate-500 font-bold z-10">
                         {startNumbers}
                     </span>
                 )}
@@ -101,10 +101,11 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
 
     return (
         <div
-            className="grid gap-1 p-2 bg-transparent rounded-lg overflow-auto max-w-full max-h-[60vh]"
+            className="grid gap-1.5 md:gap-2 p-3 bg-transparent rounded-lg overflow-auto max-w-full max-h-[70vh]"
             style={{
                 gridTemplateColumns: `repeat(${gridWidth}, min-content)`,
-                gridTemplateRows: `repeat(${gridHeight}, min-content)`
+                gridTemplateRows: `repeat(${gridHeight}, min-content)`,
+                maxWidth: 'min(96vw, 1100px)'
             }}
         >
             {Array.from({ length: gridHeight }).map((_, y) => (

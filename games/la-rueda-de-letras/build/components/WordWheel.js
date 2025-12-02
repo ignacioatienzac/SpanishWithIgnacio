@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState, useRef, useEffect } from 'react';
-import { shuffleArray } from '../utils';
-import { playSound } from '../audio';
+import { shuffleArray } from '../utils.js';
+import { playSound } from '../audio.js';
 const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
     const [letters, setLetters] = useState([]);
     const [selectedIndices, setSelectedIndices] = useState([]);

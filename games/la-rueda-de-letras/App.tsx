@@ -152,7 +152,7 @@ function App() {
     const gameTitle = `Juego del ${new Date(gameDateStr).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'})}`;
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative">
+        <div className="min-h-screen flex flex-col font-sans text-slate-800 relative">
 
             {/* Animation Overlay */}
             {flyingLetters.map((item) => (

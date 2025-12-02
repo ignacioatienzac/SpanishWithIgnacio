@@ -129,7 +129,7 @@ function App() {
     const allSolved = gameState && gameState.words.length === solvedWords.size;
     // Formatting title based on mode
     const gameTitle = `Juego del ${new Date(gameDateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`;
-    return (_jsxs("div", { className: "min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative", children: [flyingLetters.map((item) => (_jsxs("div", { className: "fixed z-50 flex items-center justify-center bg-[#c0392b] text-white rounded-full font-bold shadow-lg pointer-events-none", style: {
+    return (_jsxs("div", { className: "min-h-screen flex flex-col font-sans text-slate-800 relative", children: [flyingLetters.map((item) => (_jsxs("div", { className: "fixed z-50 flex items-center justify-center bg-[#c0392b] text-white rounded-full font-bold shadow-lg pointer-events-none", style: {
                     width: '40px',
                     height: '40px',
                     left: 0,

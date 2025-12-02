@@ -6,6 +6,8 @@ import WordWheel from './components/WordWheel';
 import CalendarButton from './components/CalendarButton';
 import { playSound } from './audio';
 
+const getTodayDateString = () => new Date().toISOString().split('T')[0];
+
 function App() {
     const [gameState, setGameState] = useState<GameState | null>(null);
     const [solvedWords, setSolvedWords] = useState<Set<string>>(new Set());
@@ -14,16 +16,16 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [flyingLetters, setFlyingLetters] = useState<FlyingLetter[]>([]);
     
-    // Date state: undefined means "Random Mode", string means "Daily Mode"
-    const [gameDateStr, setGameDateStr] = useState<string | undefined>(undefined);
+    const [gameDateStr, setGameDateStr] = useState<string>(getTodayDateString());
 
     const startNewGame = useCallback((dateStr?: string) => {
         setIsLoading(true);
-        setGameDateStr(dateStr); // If undefined, it's random
+        const targetDateStr = dateStr ?? getTodayDateString();
+        setGameDateStr(targetDateStr);
 
         // Small timeout to allow UI to show loading state if needed
         setTimeout(() => {
-            const newState = generateCrosswordLogic(dateStr);
+            const newState = generateCrosswordLogic(targetDateStr);
             if (newState) {
                 setGameState(newState);
                 setSolvedWords(new Set());
@@ -35,21 +37,17 @@ function App() {
         }, 50);
     }, []);
 
-    // Initial load: Start with Today's game or Random? 
-    // Let's start with Random as per original flow, or Today if we want Daily focus.
-    // Let's stick to initial random load to not change default behavior abruptly, 
-    // unless user selects calendar.
     useEffect(() => {
-        startNewGame(); 
+        startNewGame(getTodayDateString());
     }, [startNewGame]);
 
     const handleCalendarSelect = (dateStr: string) => {
         startNewGame(dateStr);
     };
 
-    const handleRandomGame = () => {
+    const handleRestartGame = () => {
         playSound('newGame');
-        startNewGame(undefined); // undefined triggers random seed
+        startNewGame(gameDateStr);
     };
 
     const handleWordSubmit = (wordAttempt: string, indicesFromWheel: number[]) => {
@@ -151,9 +149,7 @@ function App() {
     const allSolved = gameState && gameState.words.length === solvedWords.size;
 
     // Formatting title based on mode
-    const gameTitle = gameDateStr 
-        ? `Juego del ${new Date(gameDateStr).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'})}`
-        : "Juego Aleatorio";
+    const gameTitle = `Juego del ${new Date(gameDateStr).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'})}`;
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 relative">
@@ -198,17 +194,10 @@ function App() {
                  </div>
                  
                  <div className="flex items-center gap-2">
-                     <CalendarButton 
-                        onSelectDate={handleCalendarSelect} 
+                     <CalendarButton
+                        onSelectDate={handleCalendarSelect}
                         currentSelectedDate={gameDateStr}
                      />
-                     <button 
-                        onClick={handleRandomGame}
-                        className="bg-[#c0392b] text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-[#a93226] transition-transform active:scale-95 shadow-md flex items-center gap-2"
-                    >
-                        <span>🔄</span>
-                        <span className="hidden md:inline">Aleatorio</span>
-                    </button>
                  </div>
             </div>
 
@@ -237,11 +226,11 @@ function App() {
                                     <h2 className="text-2xl font-bold mb-2">¡Felicidades! 🎉</h2>
                                     <p>Has completado el crucigrama.</p>
                                     <div className="flex justify-center gap-4 mt-3">
-                                        <button 
-                                            onClick={handleRandomGame}
+                                        <button
+                                            onClick={handleRestartGame}
                                             className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700"
                                         >
-                                            Jugar otro nivel
+                                            Reiniciar crucigrama
                                         </button>
                                     </div>
                                 </div>

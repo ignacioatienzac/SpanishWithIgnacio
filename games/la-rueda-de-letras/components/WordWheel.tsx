@@ -17,7 +17,7 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
     const [shakeIndices, setShakeIndices] = useState<Set<number>>(new Set());
     
     // Responsive sizing state
-    const [containerSize, setContainerSize] = useState(200);
+    const [containerSize, setContainerSize] = useState(240);
     const [isMobile, setIsMobile] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -27,8 +27,8 @@ const WordWheel: React.FC<WordWheelProps> = ({ baseWord, onWordSubmit, onShake }
         const handleResize = () => {
             const mobile = window.innerWidth < 768; // Tailwind 'md' breakpoint
             setIsMobile(mobile);
-            // Mobile: 320px (fills most phone screens well), Desktop: 200px (original)
-            setContainerSize(mobile ? 320 : 200);
+            // Mobile: slightly larger for comfort, Desktop: modestly increased for clarity
+            setContainerSize(mobile ? 360 : 240);
         };
 
         // Initial set

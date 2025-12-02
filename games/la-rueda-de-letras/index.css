@@ -1,0 +1,16 @@
+:root {
+    --primary-color: #C04E38;
+    --bg-color: #FDFBF7;
+    --text-color: #2D3748;
+    --accent-color: #E2E8F0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    background-image:
+        radial-gradient(circle at 1px 1px, rgba(45, 55, 72, 0.08) 1px, transparent 0),
+        radial-gradient(circle at 10px 10px, rgba(192, 78, 56, 0.06) 1px, transparent 0);
+    background-size: 24px 24px;
+    background-attachment: fixed;
+}

@@ -179,6 +179,8 @@
     --color-correct: #538d4e;
     --color-present: #b59f3b;
     --color-absent: #787c7e;
+    --color-win-background: #d8f3dc;
+    --color-win-text: #1b4332;
     --tile-border-idle: #d3d6da; /* Borde gris claro */
     --tile-border-active: #86888a; /* Borde gris medio */
     --text-color-light: #ffffff;
@@ -712,6 +714,14 @@ body.adventure-sliding > *:not(.adventure-transition) {
 .grid-tile.correct { background-color: var(--color-correct); }
 .grid-tile.present { background-color: var(--color-present); }
 .grid-tile.absent { background-color: var(--color-absent); }
+.grid-tile.correct.win {
+    background-color: var(--color-win-background);
+    color: var(--color-win-text);
+    border-color: var(--color-win-text);
+}
+.grid-tile.correct.win::before {
+    color: var(--color-win-text);
+}
 
 .grid-tile.flip {
     animation: flipReveal 0.8s ease forwards;
@@ -726,6 +736,9 @@ body.adventure-sliding > *:not(.adventure-transition) {
 
 /* Estado: Animación de error (palabra no válida) */
 .game-grid.shake {
+    animation: shake 0.5s;
+}
+.grid-tile.shake {
     animation: shake 0.5s;
 }
 

@@ -141,9 +141,11 @@ button.ghost:hover { background: #e5e7eb; }
     position: relative;
     background: transparent;
     color: var(--text);
+}
+.cell.used {
+    background: #fff;
     border: 1px solid #d1d5db;
 }
-.cell.used { background: #fff; }
 .cell.solved { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
 .cell .number { position: absolute; top: 4px; left: 6px; font-size: 10px; color: var(--muted); }
 

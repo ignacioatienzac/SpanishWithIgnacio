@@ -2,153 +2,69 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <script src="../../language-init.js"></script>
-    <title data-i18n-es="Rueda de letras">Rueda de letras</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
-
-    <link rel="icon" type="image/png" href="../../images/favicon.png">
-    <link rel="stylesheet" href="../../style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom Keyframes for specific game animations */
-        @keyframes flipIn {
-            0% { transform: rotateY(90deg); }
-            50% { transform: rotateY(-10deg); }
-            100% { transform: rotateY(0deg); }
-        }
-        .animate-flip {
-            animation: flipIn 0.6s ease forwards;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-        .animate-shake {
-            animation: shake 0.4s ease-in-out;
-        }
-
-        /* Prevent pull-to-refresh and selection on mobile for better game feel */
-        body {
-            overscroll-behavior-y: contain;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-    </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.3.1",
-        "react-dom": "https://esm.sh/react-dom@18.3.1",
-        "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-        "react/": "https://esm.sh/react@18.3.1/",
-        "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime"
-      }
-    }
-    </script>
-    <link rel="stylesheet" href="./index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Rueda de Letras</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-800 min-h-screen flex flex-col">
-    <header class="main-header">
-        <div class="header-container">
-            <a class="logo" href="../../index.html">
-                <span class="logo-main">Spanish with</span>
-                <span class="logo-script">Ignacio</span>
-            </a>
-
-            <div class="language-switcher language-switcher--mobile">
-                <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
-                    <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
-                    <span class="language-switcher__chevron" aria-hidden="true">▾</span>
-                    <span class="language-switcher__sr-label">Español</span>
-                </button>
-                <div class="language-switcher__menu" role="listbox" aria-hidden="true">
-                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
-                        <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
-                        <span class="language-switcher__sr-label">Español</span>
-                    </button>
-                    <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
-                        <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
-                        <span class="language-switcher__sr-label">English</span>
-                    </button>
-                </div>
-            </div>
-
-            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
-                <span class="menu-toggle__bar"></span>
-                <span class="menu-toggle__bar"></span>
-                <span class="menu-toggle__bar"></span>
-            </button>
-            <nav class="main-nav" id="primary-navigation">
-                <ul>
-                    <li><a href="../../index.html" data-i18n-es="Inicio">Home</a></li>
-                    <li><a href="../../students/index.html" data-i18n-es="Estudiantes">Students</a></li>
-                    <li><a href="../index.html" class="active" data-i18n-es="Juegos">Games</a></li>
-                    <li><a href="../../adivina-la-palabra/index.html" data-i18n-es="Adivina la palabra">Guess the word</a></li>
-                    <li class="language-switcher language-switcher--desktop">
-                        <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
-                            <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
-                            <span class="language-switcher__chevron" aria-hidden="true">▾</span>
-                            <span class="language-switcher__sr-label">Español</span>
-                        </button>
-                        <div class="language-switcher__menu" role="listbox" aria-hidden="true">
-                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
-                                <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
-                                <span class="language-switcher__sr-label">Español</span>
-                            </button>
-                            <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
-                                <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
-                                <span class="language-switcher__sr-label">English</span>
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>La Rueda de Letras</h1>
+            <p>Forma palabras con la rueda, complétalas en el crucigrama y descubre todas las pistas del día.</p>
         </div>
     </header>
 
-    <main class="flex-1 w-full">
-        <div id="root"></div>
+    <main class="container">
+        <section class="toolbar">
+            <div class="date-control">
+                <label for="datePicker">Selecciona un día</label>
+                <input type="date" id="datePicker">
+                <button id="loadPuzzle">Cargar reto</button>
+            </div>
+            <div class="actions">
+                <button id="revealBase" class="ghost">Pista palabra base</button>
+                <button id="toggleClues" class="ghost">Mostrar pistas</button>
+            </div>
+        </section>
+
+        <section class="game-layout">
+            <div class="grid-card">
+                <div class="card-header">
+                    <div>
+                        <p class="eyebrow">Crucigrama diario</p>
+                        <h2 id="puzzleTitle">Juego del día</h2>
+                    </div>
+                    <div class="badge" id="progressBadge">0 / 0</div>
+                </div>
+                <div id="grid" class="crossword"></div>
+                <div id="victory" class="victory hidden">¡Felicidades! Has completado el crucigrama 🎉</div>
+            </div>
+
+            <div class="sidebar">
+                <div class="wheel-card">
+                    <p class="eyebrow">Rueda de letras</p>
+                    <h3>Arma palabras</h3>
+                    <div id="wheel" class="wheel"></div>
+                    <div class="guess-display" id="currentGuess">&nbsp;</div>
+                    <div class="wheel-actions">
+                        <button id="shuffle">Mezclar</button>
+                        <button id="backspace" class="ghost">Borrar</button>
+                        <button id="submit">Comprobar</button>
+                    </div>
+                    <p id="feedback" class="feedback"></p>
+                </div>
+
+                <div class="clues-card">
+                    <div class="card-header">
+                        <p class="eyebrow">Pistas</p>
+                        <h3>Traducciones</h3>
+                    </div>
+                    <div id="clueList" class="clues hidden"></div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="site-footer__content">
-            <div class="site-footer__section site-footer__section--contact">
-                <p class="site-footer__contact">
-                    <span class="site-footer__contact--desktop">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</span>
-                    <span class="site-footer__contact--mobile">Contact:<br><a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a></span>
-                </p>
-            </div>
-            <div class="site-footer__section site-footer__section--brand">
-                <p class="site-footer__brand">Spanish with Ignacio</p>
-            </div>
-            <div class="site-footer__section site-footer__section--social" aria-label="Redes sociales">
-                <a class="site-footer__social-link" href="https://www.instagram.com/spanishwithignacio/" target="_blank" rel="noopener noreferrer">
-                    <img src="../../images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
-                </a>
-                <a class="site-footer__social-link" href="https://www.youtube.com/@SpanishwithIgnacio" target="_blank" rel="noopener noreferrer">
-                    <img src="../../images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
-                </a>
-                <a class="site-footer__social-link" href="https://www.facebook.com/people/Spanish-With-Ignacio/61560429119394/" target="_blank" rel="noopener noreferrer">
-                    <img src="../../images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
-                </a>
-                <a class="site-footer__social-link" href="https://www.threads.com/@spanishwithignacio?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener noreferrer">
-                    <img src="../../images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
-                </a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../../script.js" defer></script>
-    <script type="module" src="./build/index.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

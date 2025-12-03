@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
     const { words, gridWidth, gridHeight, gridOffsetX, gridOffsetY } = gameState;
     // Build the grid map for rendering

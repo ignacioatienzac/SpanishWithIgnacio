@@ -1120,7 +1120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Usamos la lista de validación completa para la longitud actual
         const validationSet = validationSetsByLength.get(currentWordLength) || new Set();
         if (!validationSet.has(guess)) {
-            showToast('Not in word list');
+            showToast('La palabra no está en el juego');
             shakeRow();
             console.log(`Submit failed: Word "${guess}" not in validation list.`);
             return;
@@ -1229,6 +1229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // y 'false' si el juego debe continuar.
     function checkWinLoss(guess) {
         if (guess === targetWord) {
+            highlightWinningRow();
             stopInteraction();
             danceWin();
             console.log("Game outcome: WIN");
@@ -1302,9 +1303,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function shakeRow() {
         console.log("Shaking current row:", currentRowIndex);
-        grid.classList.remove('shake');
+        const rowStart = currentRowIndex * currentWordLength;
+        const rowTiles = allTiles.slice(rowStart, rowStart + currentWordLength);
+
+        rowTiles.forEach(tile => tile.classList.remove('shake'));
         void grid.offsetWidth; // Forzar reflow
-        grid.classList.add('shake');
+        rowTiles.forEach(tile => tile.classList.add('shake'));
+    }
+
+    function highlightWinningRow() {
+        const rowStart = currentRowIndex * currentWordLength;
+        const rowTiles = allTiles.slice(rowStart, rowStart + currentWordLength);
+
+        rowTiles.forEach(tile => {
+            tile.classList.add('win');
+            tile.style.color = 'var(--color-win-text)';
+        });
     }
 
     function updateClueAvailability() {

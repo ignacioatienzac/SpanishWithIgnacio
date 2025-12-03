@@ -202,8 +202,9 @@ function App() {
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-6 md:gap-10 items-start justify-center md:justify-between">
-                
+            <main className="flex-1 w-full flex items-center justify-center">
+                <div className="w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-center md:justify-between">
+
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center w-full h-64 text-slate-500">
                         <div className="w-12 h-12 border-4 border-red-200 border-t-[#c0392b] rounded-full animate-spin mb-4"></div>
@@ -215,9 +216,9 @@ function App() {
                     <>
                         {/* Left Column: Grid */}
                         <div className="flex-1 md:flex-[1.25] flex flex-col items-center w-full">
-                            <CrosswordGrid 
-                                gameState={gameState} 
-                                solvedWords={solvedWords} 
+                            <CrosswordGrid
+                                gameState={gameState}
+                                solvedWords={solvedWords}
                                 lastSolvedIds={lastSolvedIds}
                             />
                             
@@ -238,36 +239,39 @@ function App() {
                         </div>
 
                         {/* Right Column: Controls & Wheel */}
-                        <div className="flex-none w-full md:w-80 lg:w-96 flex flex-col items-center gap-6">
-                            
-                            {/* Word Wheel - Moved down with mt-16 */}
-                            <div className="mt-16 mb-4">
-                                <WordWheel 
-                                    baseWord={gameState.baseWordNormalized} 
+                        <div className="flex-none w-full md:w-80 lg:w-96 flex flex-col items-center gap-6 md:pt-4">
+
+                            {/* Word Wheel */}
+                            <div className="w-full flex justify-center">
+                                <WordWheel
+                                    baseWord={gameState.baseWordNormalized}
                                     onWordSubmit={handleWordSubmit}
                                     onShake={() => {}}
                                 />
                             </div>
 
                             {/* Clues Panel */}
-                            <div className="w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                                <div className="p-4 bg-red-50 border-b border-red-100 flex justify-between items-center">
-                                    <button 
+                            <div className="w-full flex flex-col items-end gap-3">
+                                <div className="bg-white/95 rounded-full shadow-lg border border-slate-100 px-4 py-3 flex items-center gap-3">
+                                    <button
                                         onClick={handleSolveBaseWord}
-                                        className="text-xs font-bold text-[#c0392b] hover:underline"
+                                        className="text-xs md:text-sm font-bold text-[#c0392b] hover:text-[#a83221] flex items-center gap-2"
                                     >
-                                        💡 Pista Palabra Base
+                                        <span aria-hidden>💡</span>
+                                        <span>Pista Palabra Base</span>
                                     </button>
-                                    <button 
+                                    <div className="h-6 w-px bg-slate-200" aria-hidden />
+                                    <button
                                         onClick={toggleClues}
-                                        className="text-sm font-bold text-slate-600 hover:text-[#c0392b] flex items-center gap-1"
+                                        className="text-sm font-semibold text-slate-700 hover:text-[#c0392b] flex items-center gap-2"
                                     >
-                                        {showClues ? '🙈 Ocultar' : '👀 Ver Pistas'}
+                                        <span aria-hidden>{showClues ? '🙈' : '👀'}</span>
+                                        <span>{showClues ? 'Ocultar Pistas' : 'Ver Pistas'}</span>
                                     </button>
                                 </div>
-                                
+
                                 {showClues && (
-                                    <div className="p-4 max-h-60 overflow-y-auto space-y-4">
+                                    <div className="w-full bg-white rounded-2xl shadow-md border border-slate-100 p-4 max-h-60 overflow-y-auto space-y-4">
                                         <div>
                                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Horizontales</h3>
                                             <ul className="space-y-2">
@@ -306,6 +310,7 @@ function App() {
                         </div>
                     </>
                 )}
+                </div>
             </main>
 
         </div>

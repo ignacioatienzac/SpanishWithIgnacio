@@ -63,3 +63,19 @@ body {
 .word-wheel-letter--error:active {
     box-shadow: 0 1px 0 #b91c1c;
 }
+
+.word-wheel-shuffle {
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 0 #E2E8F0;
+    color: var(--primary-color);
+    transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.word-wheel-shuffle:hover,
+.word-wheel-shuffle:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #E2E8F0;
+    background: #fff7f5;
+}

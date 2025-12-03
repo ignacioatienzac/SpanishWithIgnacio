@@ -421,7 +421,10 @@ function normalizeDate(dateObj) {
     if (!(dateObj instanceof Date) || Number.isNaN(dateObj)) return '';
     const dateCopy = new Date(dateObj);
     dateCopy.setHours(0, 0, 0, 0);
-    return dateCopy.toISOString().split('T')[0];
+    const year = dateCopy.getFullYear();
+    const month = String(dateCopy.getMonth() + 1).padStart(2, '0');
+    const day = String(dateCopy.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function parseDateFromStr(dateStr) {

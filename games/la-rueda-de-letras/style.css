@@ -63,16 +63,23 @@ body {
     flex-wrap: wrap;
 }
 
+.calendar-button {
+    background: none;
+    border: none;
+    font-size: 2.2rem;
+    padding: 6px;
+    border-radius: 10px;
+    box-shadow: none;
+    color: inherit;
+}
+
+.calendar-button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
 label {
     font-weight: 600;
     color: var(--muted);
-}
-
-input[type="date"] {
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
 }
 
 button {

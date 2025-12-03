@@ -3,14 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../language-init.js"></script>
     <title>La Rueda de Letras</title>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="../../script.js" defer></script>
 </head>
 <body>
-    <header class="hero">
-        <div class="container">
-            <h1>La Rueda de Letras</h1>
-            <p>Forma palabras con la rueda, complétalas en el crucigrama y descubre todas las pistas del día.</p>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-main">Spanish with</span>
+                <span class="logo-script">Ignacio</span>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+                <span class="menu-toggle__bar"></span>
+            </button>
+            <nav class="main-nav" id="primary-navigation">
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../students/index.html">Students</a></li>
+                    <li><a href="../index.html" class="active">Games</a></li>
+                    <li><a href="../../adivina-la-palabra/index.html">Guess the word</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
@@ -64,6 +86,31 @@
             </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__content">
+            <div class="site-footer__section site-footer__section--contact">
+                <p class="site-footer__contact">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</p>
+            </div>
+            <div class="site-footer__section site-footer__section--brand">
+                <p class="site-footer__brand">Spanish with Ignacio</p>
+            </div>
+            <div class="site-footer__section site-footer__section--social" aria-label="Redes sociales">
+                <a class="site-footer__social-link" href="https://www.instagram.com/spanishwithignacio/" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.youtube.com/@SpanishwithIgnacio" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.facebook.com/people/Spanish-With-Ignacio/61560429119394/" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
+                </a>
+                <a class="site-footer__social-link" href="https://www.threads.com/@spanishwithignacio?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener noreferrer">
+                    <img src="../../images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

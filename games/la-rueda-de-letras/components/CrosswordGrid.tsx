@@ -33,7 +33,7 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
         const absX = x + gridOffsetX;
         const absY = y + gridOffsetY;
         const key = `${absX},${absY}`;
-        const cellId = `cell-${absX}-${absY}`; 
+        const cellId = `cell-${absX}-${absY}`;
         const cellData = gridMap.get(key);
 
         // Responsive sizing:
@@ -73,16 +73,38 @@ const CrosswordGrid: React.FC<CrosswordGridProps> = ({ gameState, solvedWords, l
             .map(w => w.idx)
             .join('/');
 
+        const baseCellStyle: React.CSSProperties = {
+            borderRadius: '8px',
+            transition: 'all 0.3s ease',
+            border: '1px solid rgba(226, 232, 240, 0.85)'
+        };
+
+        const unrevealedStyle: React.CSSProperties = {
+            background: 'rgba(255, 255, 255, 0.7)',
+            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.05)',
+            color: 'transparent'
+        };
+
+        const revealedStyle: React.CSSProperties = {
+            background: '#ffffff',
+            boxShadow: 'none',
+            filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12))',
+            color: '#0f172a',
+            fontFamily: '"Baloo 2", "Poppins", "Inter", sans-serif'
+        };
+
         return (
-            <div 
-                key={key} 
+            <div
+                key={key}
                 id={cellId}
                 className={`
-                    relative ${sizeClasses} flex items-center justify-center 
-                    text-2xl md:text-xl font-bold uppercase rounded-md shadow-sm border border-slate-300
-                    ${isRevealed ? 'bg-green-500 text-white border-green-600' : 'bg-white text-transparent'}
-                    transition-colors duration-300
+                    relative ${sizeClasses} flex items-center justify-center
+                    text-2xl md:text-xl font-semibold uppercase
                 `}
+                style={{
+                    ...baseCellStyle,
+                    ...(isRevealed ? revealedStyle : unrevealedStyle)
+                }}
             >
                 {startNumbers && (
                     <span className="absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.7rem] leading-none text-slate-500 font-bold z-10">

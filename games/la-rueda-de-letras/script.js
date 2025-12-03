@@ -417,6 +417,25 @@ function dateToSeededRng(dateStr) {
     };
 }
 
+function normalizeDate(dateObj) {
+    if (!(dateObj instanceof Date) || Number.isNaN(dateObj)) return '';
+    const dateCopy = new Date(dateObj);
+    dateCopy.setHours(0, 0, 0, 0);
+    return dateCopy.toISOString().split('T')[0];
+}
+
+function parseDateFromStr(dateStr) {
+    if (!dateStr) return null;
+    const parsed = new Date(`${dateStr}T00:00:00`);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function subtractDays(dateObj, days) {
+    const copy = new Date(dateObj);
+    copy.setDate(copy.getDate() - days);
+    return copy;
+}
+
 function getCharFrequency(str) {
     const freq = {};
     for (const char of str) {
@@ -638,8 +657,7 @@ const clueListEl = document.getElementById('clueList');
 const victoryEl = document.getElementById('victory');
 const progressEl = document.getElementById('progressBadge');
 const puzzleTitleEl = document.getElementById('puzzleTitle');
-const datePicker = document.getElementById('datePicker');
-const loadBtn = document.getElementById('loadPuzzle');
+const calendarButton = document.getElementById('calendar-button');
 const revealBtn = document.getElementById('revealBase');
 const toggleCluesBtn = document.getElementById('toggleClues');
 const shuffleBtn = document.getElementById('shuffle');
@@ -653,6 +671,8 @@ let wheelOrder = [];
 let showClues = false;
 let linePath = null;
 let dragState = { active: false };
+let currentDateStr = '';
+let fallbackDateInput = null;
 
 const WHEEL_CENTER = 120;
 const WHEEL_RADIUS = 90;
@@ -915,14 +935,79 @@ function renderAll() {
     updateProgress();
 }
 
-function setToday() {
+function setupCalendar() {
+    if (!calendarButton) return;
+
     const today = new Date();
-    const str = today.toISOString().split('T')[0];
-    datePicker.value = str;
-    return str;
+    today.setHours(0, 0, 0, 0);
+    const sixtyDaysAgo = subtractDays(today, 60);
+
+    const handleDateSelection = (selectedDate, revertSelection) => {
+        if (!selectedDate) return;
+        const normalized = normalizeDate(selectedDate);
+        if (!normalized) return;
+        if (normalized === currentDateStr) {
+            if (revertSelection) revertSelection();
+            return;
+        }
+
+        loadPuzzle(normalized);
+    };
+
+    if (typeof flatpickr === 'function') {
+        flatpickr(calendarButton, {
+            maxDate: today,
+            minDate: sixtyDaysAgo,
+            defaultDate: parseDateFromStr(currentDateStr) || today,
+            disableMobile: "true",
+            dateFormat: "Y-m-d",
+            onChange(selectedDates, _dateStr, instance) {
+                const selectedDate = selectedDates[0];
+                handleDateSelection(selectedDate, () => instance.setDate(currentDateStr));
+            },
+        });
+        return;
+    }
+
+    console.warn('flatpickr is not available. Using the native date picker.');
+    fallbackDateInput = document.createElement('input');
+    fallbackDateInput.type = 'date';
+    fallbackDateInput.min = normalizeDate(sixtyDaysAgo);
+    fallbackDateInput.max = normalizeDate(today);
+    fallbackDateInput.value = currentDateStr;
+    fallbackDateInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Elige otro día');
+
+    fallbackDateInput.style.position = 'absolute';
+    fallbackDateInput.style.opacity = '0';
+    fallbackDateInput.style.pointerEvents = 'none';
+    fallbackDateInput.style.width = '0';
+    fallbackDateInput.style.height = '0';
+
+    calendarButton.parentNode.insertBefore(fallbackDateInput, calendarButton.nextSibling);
+
+    calendarButton.addEventListener('click', () => {
+        if (typeof fallbackDateInput.showPicker === 'function') {
+            fallbackDateInput.showPicker();
+        } else {
+            fallbackDateInput.focus();
+        }
+    });
+
+    fallbackDateInput.addEventListener('change', (event) => {
+        const dateStr = event.target.value;
+        if (!dateStr) return;
+        const parsed = parseDateFromStr(dateStr);
+        handleDateSelection(parsed, () => {
+            event.target.value = currentDateStr;
+        });
+    });
 }
 
 function loadPuzzle(dateStr) {
+    currentDateStr = dateStr;
+    if (fallbackDateInput) {
+        fallbackDateInput.value = dateStr;
+    }
     const state = generateCrosswordLogic(dateStr);
     gameState = state;
     solvedWords = new Set();
@@ -949,11 +1034,6 @@ function shuffleWheel() {
     wheelOrder = shuffleArray(indices);
     renderWheel();
 }
-
-loadBtn.addEventListener('click', () => {
-    const dateStr = datePicker.value || setToday();
-    loadPuzzle(dateStr);
-});
 
 revealBtn.addEventListener('click', revealBaseWord);
 
@@ -989,5 +1069,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-const initialDate = setToday();
-loadPuzzle(initialDate);
+currentDateStr = normalizeDate(new Date());
+setupCalendar();
+loadPuzzle(currentDateStr);

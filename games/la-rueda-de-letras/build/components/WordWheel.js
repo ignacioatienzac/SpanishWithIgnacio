@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState, useRef, useEffect } from 'react';
-import { shuffleArray } from '../utils.js';
-import { playSound } from '../audio.js';
+import { useState, useRef, useEffect } from 'react';
+import { shuffleArray } from '../utils';
+import { playSound } from '../audio';
 const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
     const [letters, setLetters] = useState([]);
     const [selectedIndices, setSelectedIndices] = useState([]);
@@ -10,7 +10,7 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
     const [feedbackMessage, setFeedbackMessage] = useState(null);
     const [shakeIndices, setShakeIndices] = useState(new Set());
     // Responsive sizing state
-    const [containerSize, setContainerSize] = useState(200);
+    const [containerSize, setContainerSize] = useState(240);
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef(null);
     // Handle resizing logic
@@ -18,8 +18,8 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
         const handleResize = () => {
             const mobile = window.innerWidth < 768; // Tailwind 'md' breakpoint
             setIsMobile(mobile);
-            // Mobile: 320px (fills most phone screens well), Desktop: 200px (original)
-            setContainerSize(mobile ? 320 : 200);
+            // Mobile keeps generous sizing; desktop version is expanded for better visibility
+            setContainerSize(mobile ? 360 : 340);
         };
         // Initial set
         handleResize();
@@ -121,27 +121,27 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
     }, [isDragging, selectedIndices, letters]);
     // Adjust radius based on container size and letter size offset
     // Mobile letters are bigger, so we need more padding
-    const letterOffset = isMobile ? 48 : 32;
+    const letterOffset = isMobile ? 48 : 50;
     const radius = containerSize / 2 - letterOffset;
     const center = containerSize / 2;
     // Dynamic styles for letters based on device size
-    const letterSizeClass = isMobile ? 'w-14 h-14 text-2xl' : 'w-10 h-10 text-lg';
-    const letterOffsetPos = isMobile ? 28 : 20; // Half of width/height
+    const letterSizeClass = isMobile ? 'w-14 h-14 text-2xl' : 'w-12 h-12 text-xl';
+    const letterOffsetPos = isMobile ? 28 : 24; // Half of width/height
     const currentWordDisplay = selectedIndices.map(i => letters[i].char).join('');
-    return (_jsxs("div", { className: "relative flex flex-col items-center", children: [_jsx("div", { className: `absolute -top-14 bg-slate-800 text-white px-6 py-3 rounded-full font-bold text-xl md:text-lg md:px-4 md:py-2 md:-top-12 transition-opacity duration-200 ${selectedIndices.length > 0 ? 'opacity-100' : 'opacity-0'}`, children: currentWordDisplay }), _jsx("div", { className: `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600/90 text-white px-4 py-2 rounded-lg text-sm font-bold text-center transition-opacity duration-300 pointer-events-none z-30 w-48 ${feedbackMessage ? 'opacity-100' : 'opacity-0'}`, children: feedbackMessage }), _jsxs("div", { ref: containerRef, className: "relative bg-white/80 rounded-full shadow-xl select-none touch-none transition-all duration-300", style: { width: containerSize, height: containerSize }, children: [_jsx("svg", { className: "absolute top-0 left-0 w-full h-full pointer-events-none z-10", children: selectedIndices.length > 0 && (_jsx("polyline", { points: selectedIndices.map(i => {
+    return (_jsxs("div", { className: "relative flex flex-col items-center", children: [_jsx("div", { className: `absolute -top-14 bg-slate-800 text-white px-6 py-3 rounded-full font-bold text-xl md:text-lg md:px-4 md:py-2 md:-top-12 transition-opacity duration-200 ${selectedIndices.length > 0 ? 'opacity-100' : 'opacity-0'}`, children: currentWordDisplay }), _jsx("div", { className: `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600/90 text-white px-4 py-2 rounded-lg text-sm font-bold text-center transition-opacity duration-300 pointer-events-none z-30 w-48 ${feedbackMessage ? 'opacity-100' : 'opacity-0'}`, children: feedbackMessage }), _jsxs("div", { ref: containerRef, className: "relative word-wheel-shell select-none touch-none transition-all duration-300", style: { width: containerSize, height: containerSize }, children: [_jsx("svg", { className: "absolute top-0 left-0 w-full h-full pointer-events-none z-10", children: selectedIndices.length > 0 && (_jsx("polyline", { points: selectedIndices.map(i => {
                                 const pos = getLetterPosition(i, letters.length, radius, center, center);
                                 return `${pos.x},${pos.y}`;
                             }).join(' ') + (isDragging ? ` ${cursorPos.x},${cursorPos.y}` : ''), fill: "none", stroke: "#f59e0b", strokeWidth: isMobile ? "12" : "8", strokeLinecap: "round", strokeLinejoin: "round", className: "opacity-70" })) }), letters.map((item, index) => {
                         const pos = getLetterPosition(index, letters.length, radius, center, center);
                         const isSelected = selectedIndices.includes(index);
                         const isShaking = shakeIndices.has(index);
-                        return (_jsx("div", { id: `wheel-letter-${index}`, "data-index": index, className: `absolute ${letterSizeClass} rounded-full flex items-center justify-center font-bold shadow-md cursor-pointer transition-transform duration-100 z-20 
-                                ${isSelected ? 'bg-[#c0392b] text-white scale-110' : 'bg-white text-[#c0392b]'}
-                                ${isShaking ? 'animate-shake bg-red-600 text-white' : ''}
+                        return (_jsx("div", { id: `wheel-letter-${index}`, "data-index": index, className: `absolute ${letterSizeClass} word-wheel-letter flex items-center justify-center font-bold cursor-pointer transition-transform duration-150 z-20
+                                ${isSelected ? 'word-wheel-letter--selected scale-110' : ''}
+                                ${isShaking ? 'animate-shake word-wheel-letter--error' : ''}
                             `, style: {
                                 left: pos.x - letterOffsetPos,
                                 top: pos.y - letterOffsetPos,
                             }, onMouseDown: (e) => handleStart(e, index), onTouchStart: (e) => handleStart(e, index), children: item.char }, item.id));
-                    })] }), _jsx("button", { onClick: () => setLetters(shuffleArray(letters)), className: "mt-6 p-3 md:p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors", title: "Shuffle", children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-8 w-8 md:h-6 md:w-6 text-gray-600", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" }) }) })] }));
+                    })] }), _jsx("button", { onClick: () => setLetters(shuffleArray(letters)), className: "word-wheel-shuffle mt-6 md:mt-4 w-12 h-12 md:w-11 md:h-11 flex items-center justify-center", title: "Shuffle", children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-7 w-7 md:h-6 md:w-6 text-[#c0392b]", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" }) }) })] }));
 };
 export default WordWheel;

@@ -22,5 +22,9 @@
       ]
     },
     "noEmit": false
-  }
+  },
+  "exclude": [
+    "vite.config.ts",
+    "build/**"
+  ]
 }

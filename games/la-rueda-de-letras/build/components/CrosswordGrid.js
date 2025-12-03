@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
     const { words, gridWidth, gridHeight, gridOffsetX, gridOffsetY } = gameState;
     // Build the grid map for rendering
@@ -25,9 +25,9 @@ const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
         const cellId = `cell-${absX}-${absY}`;
         const cellData = gridMap.get(key);
         // Responsive sizing:
-        // Mobile: w-11 h-11 (44px)
-        // Desktop (md): w-10 h-10 (40px)
-        const sizeClasses = "w-11 h-11 md:w-10 md:h-10";
+        // Mobile: w-12 h-12 (48px)
+        // Desktop (md): w-14 h-14 (56px)
+        const sizeClasses = "w-12 h-12 md:w-14 md:h-14";
         if (!cellData) {
             return _jsx("div", { className: `${sizeClasses} pointer-events-none opacity-0` }, key);
         }
@@ -56,16 +56,35 @@ const CrosswordGrid = ({ gameState, solvedWords, lastSolvedIds }) => {
             .filter(w => w.x === absX && w.y === absY)
             .map(w => w.idx)
             .join('/');
+        const baseCellStyle = {
+            borderRadius: '8px',
+            transition: 'all 0.3s ease',
+            border: '1px solid rgba(226, 232, 240, 0.85)'
+        };
+        const unrevealedStyle = {
+            background: 'rgba(255, 255, 255, 0.7)',
+            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.05)',
+            color: 'transparent'
+        };
+        const revealedStyle = {
+            background: '#ffffff',
+            boxShadow: 'none',
+            filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12))',
+            color: '#0f172a',
+            fontFamily: '"Baloo 2", "Poppins", "Inter", sans-serif'
+        };
         return (_jsxs("div", { id: cellId, className: `
-                    relative ${sizeClasses} flex items-center justify-center 
-                    text-2xl md:text-xl font-bold uppercase rounded-md shadow-sm border border-slate-300
-                    ${isRevealed ? 'bg-green-500 text-white border-green-600' : 'bg-white text-transparent'}
-                    transition-colors duration-300
-                `, children: [startNumbers && (_jsx("span", { className: "absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.55rem] leading-none text-slate-500 font-bold z-10", children: startNumbers })), _jsx("span", { className: isRevealed ? 'animate-flip' : '', style: { animationDelay: isRevealed ? animationDelay : '0s' }, children: isRevealed ? cellData.char : '' })] }, key));
+                    relative ${sizeClasses} flex items-center justify-center
+                    text-2xl md:text-xl font-semibold uppercase
+                `, style: {
+                ...baseCellStyle,
+                ...(isRevealed ? revealedStyle : unrevealedStyle)
+            }, children: [startNumbers && (_jsx("span", { className: "absolute top-0.5 left-0.5 text-[0.6rem] md:text-[0.7rem] leading-none text-slate-500 font-bold z-10", children: startNumbers })), _jsx("span", { className: isRevealed ? 'animate-flip' : '', style: { animationDelay: isRevealed ? animationDelay : '0s' }, children: isRevealed ? cellData.char : '' })] }, key));
     };
-    return (_jsx("div", { className: "grid gap-1 p-2 bg-transparent rounded-lg overflow-auto max-w-full max-h-[60vh]", style: {
+    return (_jsx("div", { className: "grid gap-1.5 md:gap-2 p-3 bg-transparent rounded-lg overflow-auto max-w-full max-h-[70vh]", style: {
             gridTemplateColumns: `repeat(${gridWidth}, min-content)`,
-            gridTemplateRows: `repeat(${gridHeight}, min-content)`
+            gridTemplateRows: `repeat(${gridHeight}, min-content)`,
+            maxWidth: 'min(96vw, 1100px)'
         }, children: Array.from({ length: gridHeight }).map((_, y) => (Array.from({ length: gridWidth }).map((_, x) => renderCell(x, y)))) }));
 };
 export default CrosswordGrid;

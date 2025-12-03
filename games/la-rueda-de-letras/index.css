@@ -19,6 +19,8 @@ body {
     background: #ffffff;
     border-radius: 50%;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+    isolation: isolate;
 }
 
 .word-wheel-letter {
@@ -27,14 +29,15 @@ body {
     border: 1px solid #E2E8F0;
     box-shadow: 0 4px 0 #E2E8F0;
     color: var(--primary-color);
-    font-weight: 700;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
     transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
 }
 
 .word-wheel-letter:hover,
 .word-wheel-letter:active {
     transform: translateY(4px);
-    box-shadow: 0 1px 0 #E2E8F0;
+    box-shadow: 0 2px 0 #E2E8F0;
 }
 
 .word-wheel-letter--selected {

@@ -1317,9 +1317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         rowTiles.forEach(tile => {
             tile.classList.add('win');
-            tile.style.backgroundColor = 'var(--color-win-background)';
             tile.style.color = 'var(--color-win-text)';
-            tile.style.borderColor = 'var(--color-win-text)';
         });
     }
 

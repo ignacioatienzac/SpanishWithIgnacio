@@ -651,6 +651,12 @@ let solvedWords = new Set();
 let guessStack = [];
 let wheelOrder = [];
 let showClues = false;
+let linePath = null;
+let dragState = { active: false };
+
+const WHEEL_CENTER = 120;
+const WHEEL_RADIUS = 90;
+const LETTER_SIZE = 56;
 
 function wordId(w) {
     return `${w.dir}-${w.x}-${w.y}-${w.wordObj.palabra}`;
@@ -714,48 +720,128 @@ function renderWheel() {
         const indices = letters.map((_, i) => i);
         wheelOrder = shuffleArray(indices);
     }
-    const radius = 90;
-    const center = 120;
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 240 240');
+    svg.classList.add('wheel-lines');
+    linePath = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    linePath.setAttribute('fill', 'none');
+    linePath.setAttribute('stroke', 'var(--primary)');
+    linePath.setAttribute('stroke-width', '6');
+    linePath.setAttribute('stroke-linecap', 'round');
+    linePath.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(linePath);
+    wheelEl.appendChild(svg);
 
     wheelOrder.forEach((originalIndex, idx) => {
         const angle = (idx / letters.length) * Math.PI * 2;
-        const x = center + radius * Math.cos(angle) - 32;
-        const y = center + radius * Math.sin(angle) - 32;
+        const x = WHEEL_CENTER + WHEEL_RADIUS * Math.cos(angle) - LETTER_SIZE / 2;
+        const y = WHEEL_CENTER + WHEEL_RADIUS * Math.sin(angle) - LETTER_SIZE / 2;
         const btn = document.createElement('div');
         btn.className = 'letter';
         btn.style.left = `${x}px`;
         btn.style.top = `${y}px`;
         btn.dataset.index = originalIndex;
         btn.textContent = letters[originalIndex].toUpperCase();
-        if (countUsage(originalIndex) >= 1) btn.style.opacity = 0.45;
+        const isSelected = guessStack.some(item => item.index === originalIndex);
+        if (countUsage(originalIndex) >= 1 && !isSelected) btn.style.opacity = 0.45;
+        if (isSelected) {
+            btn.classList.add('selected');
+        }
+        btn.addEventListener('pointerdown', (event) => startDrag(event, originalIndex));
+        btn.addEventListener('pointerenter', () => continueDrag(originalIndex));
         btn.addEventListener('click', () => handleLetterClick(originalIndex));
         wheelEl.appendChild(btn);
     });
+
+    drawConnectionLine();
 }
 
 function countUsage(index) {
     return guessStack.filter(item => item.index === index).length;
 }
 
-function handleLetterClick(index) {
-    if (!gameState) return;
+function addLetterToGuess(index) {
+    if (!gameState) return false;
     const letter = gameState.baseWordNormalized[index];
     const maxAllowed = gameState.baseWordNormalized.split('').filter(l => l === letter).length;
-    if (countUsage(index) >= 1) return; // each instance once
-    if (guessStack.filter(item => item.char === letter).length >= maxAllowed) return;
+    if (countUsage(index) >= 1) return false; // each instance once
+    if (guessStack.filter(item => item.char === letter).length >= maxAllowed) return false;
     guessStack.push({ index, char: letter });
     updateGuess();
+    return true;
+}
+
+function handleLetterClick(index) {
+    if (dragState.active) return;
+    addLetterToGuess(index);
+}
+
+function startDrag(event, index) {
+    if (!gameState) return;
+    dragState = { active: true };
+    guessStack = [];
+    addLetterToGuess(index);
+    event.preventDefault();
+}
+
+function continueDrag(index) {
+    if (!dragState.active) return;
+    addLetterToGuess(index);
 }
 
 function updateGuess() {
     guessEl.textContent = guessStack.map(l => l.char.toUpperCase()).join('') || '\u00a0';
     feedbackEl.textContent = '';
-    renderWheel();
+    if (dragState.active) {
+        updateLetterHighlights();
+        drawConnectionLine();
+    } else {
+        renderWheel();
+    }
+}
+
+function getLetterCenter(index) {
+    const el = wheelEl.querySelector(`.letter[data-index="${index}"]`);
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const wheelRect = wheelEl.getBoundingClientRect();
+    return {
+        x: rect.left - wheelRect.left + rect.width / 2,
+        y: rect.top - wheelRect.top + rect.height / 2,
+    };
+}
+
+function drawConnectionLine() {
+    if (!linePath) return;
+    const points = guessStack.map(item => getLetterCenter(item.index)).filter(Boolean);
+    if (!points.length) {
+        linePath.setAttribute('points', '');
+        return;
+    }
+    const str = points.map(p => `${p.x},${p.y}`).join(' ');
+    linePath.setAttribute('points', str);
+}
+
+function updateLetterHighlights() {
+    const selected = new Set(guessStack.map(item => item.index));
+    wheelEl.querySelectorAll('.letter').forEach(letterEl => {
+        const idx = Number(letterEl.dataset.index);
+        letterEl.classList.toggle('selected', selected.has(idx));
+        const dimmed = countUsage(idx) >= 1;
+        letterEl.style.opacity = dimmed && !selected.has(idx) ? 0.45 : 1;
+    });
 }
 
 function resetGuess() {
     guessStack = [];
     updateGuess();
+}
+
+function finishDrag() {
+    if (!dragState.active) return;
+    dragState.active = false;
+    submitGuess();
 }
 
 function findAvailableIndex(letter) {
@@ -884,6 +970,9 @@ backspaceBtn.addEventListener('click', () => {
 });
 
 submitBtn.addEventListener('click', submitGuess);
+
+document.addEventListener('pointerup', finishDrag);
+document.addEventListener('pointercancel', finishDrag);
 
 document.addEventListener('keydown', (e) => {
     if (!gameState) return;

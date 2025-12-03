@@ -168,14 +168,14 @@ button.ghost:hover { background: #e5e7eb; }
 }
 
 .letter {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     border: 2px solid var(--primary);
     background: #fff;
     color: var(--primary);
     font-weight: 900;
-    font-size: 24px;
+    font-size: 20px;
     display: grid;
     place-items: center;
     position: absolute;
@@ -184,6 +184,18 @@ button.ghost:hover { background: #e5e7eb; }
     box-shadow: 0 10px 20px rgba(192, 57, 43, 0.15);
 }
 .letter:hover { transform: scale(1.04); }
+.letter.selected {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary-dark);
+    box-shadow: 0 10px 24px rgba(192, 57, 43, 0.35);
+}
+
+.wheel-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
 
 .guess-display {
     width: 100%;
@@ -226,5 +238,5 @@ button.ghost:hover { background: #e5e7eb; }
     .game-layout { grid-template-columns: 1fr; }
     .crossword { justify-self: center; }
     .wheel { width: 210px; height: 210px; }
-    .letter { width: 56px; height: 56px; font-size: 20px; }
+    .letter { width: 52px; height: 52px; font-size: 18px; }
 }

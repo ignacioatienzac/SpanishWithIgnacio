@@ -9,24 +9,19 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [feedbackMessage, setFeedbackMessage] = useState(null);
     const [shakeIndices, setShakeIndices] = useState(new Set());
-    // Responsive sizing state
     const [containerSize, setContainerSize] = useState(240);
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef(null);
-    // Handle resizing logic
     useEffect(() => {
         const handleResize = () => {
-            const mobile = window.innerWidth < 768; // Tailwind 'md' breakpoint
+            const mobile = window.innerWidth < 768;
             setIsMobile(mobile);
-            // Mobile keeps generous sizing; desktop version is expanded for better visibility
             setContainerSize(mobile ? 360 : 340);
         };
-        // Initial set
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    // Initialize/Re-initialize when baseWord changes
     useEffect(() => {
         const chars = baseWord.toUpperCase().split('').map((char, index) => ({ char, id: index }));
         setLetters(shuffleArray(chars));
@@ -42,7 +37,7 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
         };
     };
     const handleStart = (e, index) => {
-        e.preventDefault(); // Prevent scroll
+        e.preventDefault();
         setIsDragging(true);
         setSelectedIndices([index]);
         setFeedbackMessage(null);
@@ -62,7 +57,6 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
                     setSelectedIndices(prev => [...prev, idx]);
                 }
                 else if (selectedIndices.length > 1 && idx === selectedIndices[selectedIndices.length - 2]) {
-                    // Backtrack
                     setSelectedIndices(prev => prev.slice(0, -1));
                 }
             }
@@ -82,12 +76,11 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
             setSelectedIndices([]);
         }
         else {
-            // Error effect
             playSound('incorrect');
             setFeedbackMessage("La palabra no está en el crucigrama");
             const newShakeSet = new Set(selectedIndices);
             setShakeIndices(newShakeSet);
-            onShake(); // Trigger global shake if needed (haptic?)
+            onShake();
             setTimeout(() => {
                 setSelectedIndices([]);
                 setShakeIndices(new Set());
@@ -95,7 +88,6 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
             }, 800);
         }
     };
-    // Global event listeners for drag outside the buttons
     useEffect(() => {
         const onMouseMove = (e) => {
             if (isDragging)
@@ -119,14 +111,11 @@ const WordWheel = ({ baseWord, onWordSubmit, onShake }) => {
             window.removeEventListener('touchend', onUp);
         };
     }, [isDragging, selectedIndices, letters]);
-    // Adjust radius based on container size and letter size offset
-    // Mobile letters are bigger, so we need more padding
     const letterOffset = isMobile ? 48 : 50;
     const radius = containerSize / 2 - letterOffset;
     const center = containerSize / 2;
-    // Dynamic styles for letters based on device size
     const letterSizeClass = isMobile ? 'w-14 h-14 text-2xl' : 'w-12 h-12 text-xl';
-    const letterOffsetPos = isMobile ? 28 : 24; // Half of width/height
+    const letterOffsetPos = isMobile ? 28 : 24;
     const currentWordDisplay = selectedIndices.map(i => letters[i].char).join('');
     return (_jsxs("div", { className: "relative flex flex-col items-center", children: [_jsx("div", { className: `absolute -top-14 bg-slate-800 text-white px-6 py-3 rounded-full font-bold text-xl md:text-lg md:px-4 md:py-2 md:-top-12 transition-opacity duration-200 ${selectedIndices.length > 0 ? 'opacity-100' : 'opacity-0'}`, children: currentWordDisplay }), _jsx("div", { className: `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600/90 text-white px-4 py-2 rounded-lg text-sm font-bold text-center transition-opacity duration-300 pointer-events-none z-30 w-48 ${feedbackMessage ? 'opacity-100' : 'opacity-0'}`, children: feedbackMessage }), _jsxs("div", { ref: containerRef, className: "relative word-wheel-shell select-none touch-none transition-all duration-300", style: { width: containerSize, height: containerSize }, children: [_jsx("svg", { className: "absolute top-0 left-0 w-full h-full pointer-events-none z-10", children: selectedIndices.length > 0 && (_jsx("polyline", { points: selectedIndices.map(i => {
                                 const pos = getLetterPosition(i, letters.length, radius, center, center);

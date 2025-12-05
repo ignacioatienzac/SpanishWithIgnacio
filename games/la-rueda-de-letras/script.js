@@ -657,6 +657,7 @@ const wheelEl = document.getElementById('wheel');
 const guessEl = document.getElementById('currentGuess');
 const feedbackEl = document.getElementById('feedback');
 const clueListEl = document.getElementById('clueList');
+const clueWrapperEl = document.getElementById('cluesWrapper');
 const victoryEl = document.getElementById('victory');
 const progressEl = document.getElementById('progressBadge');
 const puzzleTitleEl = document.getElementById('puzzleTitle');
@@ -678,8 +679,8 @@ let currentDateStr = '';
 let fallbackDateInput = null;
 
 const WHEEL_CENTER = 120;
-const WHEEL_RADIUS = 90;
-const LETTER_SIZE = 56;
+const WHEEL_RADIUS = 80;
+const LETTER_SIZE = 48;
 
 function wordId(w) {
     return `${w.dir}-${w.x}-${w.y}-${w.wordObj.palabra}`;
@@ -729,6 +730,8 @@ function renderGrid() {
                     badge.textContent = numbers[0];
                     cell.appendChild(badge);
                 }
+            } else {
+                cell.classList.add('inactive');
             }
             gridEl.appendChild(cell);
         }
@@ -920,8 +923,9 @@ function renderClues() {
         list.appendChild(item);
     });
     clueListEl.appendChild(list);
-    clueListEl.classList.toggle('hidden', !showClues);
-    toggleCluesBtn.textContent = showClues ? 'Ocultar pistas' : 'Mostrar pistas';
+    const isVisible = Boolean(showClues);
+    clueWrapperEl.classList.toggle('expanded', isVisible);
+    toggleCluesBtn.textContent = isVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {

@@ -729,6 +729,8 @@ function renderGrid() {
                     badge.textContent = numbers[0];
                     cell.appendChild(badge);
                 }
+            } else {
+                cell.classList.add('inactive');
             }
             gridEl.appendChild(cell);
         }

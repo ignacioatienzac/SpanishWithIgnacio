@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../../language-init.js"></script>
-    <title>La Rueda de Letras</title>
+    <title>Letter Loop</title>
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
@@ -77,8 +77,8 @@
     <main class="container">
         <section class="toolbar">
             <div class="date-control">
-                <label for="calendar-button">Selecciona un día</label>
-                <button id="calendar-button" class="calendar-button" title="Elige otro día" aria-label="Elige otro día">📅</button>
+                <label for="calendar-button">Select a day</label>
+                <button id="calendar-button" class="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
             </div>
         </section>
 
@@ -86,25 +86,25 @@
             <div class="grid-card">
                 <div class="card-header">
                     <div>
-                        <p class="eyebrow">Crucigrama diario</p>
-                        <h2 id="puzzleTitle">Juego del día</h2>
+                        <p class="eyebrow">Daily crossword</p>
+                        <h2 id="puzzleTitle">Puzzle of the day</h2>
                     </div>
                     <div class="badge" id="progressBadge">0 / 0</div>
                 </div>
                 <div id="grid" class="crossword"></div>
-                <div id="victory" class="victory hidden">¡Felicidades! Has completado el crucigrama 🎉</div>
+                <div id="victory" class="victory hidden">Congratulations! You solved the crossword 🎉</div>
             </div>
 
             <div class="sidebar">
                 <div class="wheel-card">
-                    <p class="eyebrow">Rueda de letras</p>
-                    <h3>Arma palabras</h3>
+                    <p class="eyebrow">Letter wheel</p>
+                    <h3>Build words</h3>
                     <div id="wheel" class="wheel"></div>
                     <div class="guess-display" id="currentGuess">&nbsp;</div>
                     <div class="wheel-actions">
-                        <button id="shuffle">Mezclar</button>
-                        <button id="backspace" class="ghost">Borrar</button>
-                        <button id="submit">Comprobar</button>
+                        <button id="shuffle">Shuffle</button>
+                        <button id="backspace" class="ghost">Delete</button>
+                        <button id="submit">Check</button>
                     </div>
                     <p id="feedback" class="feedback"></p>
                 </div>
@@ -113,8 +113,8 @@
                     <div class="card-header">
                         <div class="clue-header">
                             <div class="clue-actions">
-                                <button id="toggleClues" class="ghost">Mostrar pistas 👀</button>
-                                <button id="revealBase" class="ghost">Pista palabra base</button>
+                                <button id="toggleClues" class="ghost">Show clues 👀</button>
+                                <button id="revealBase" class="ghost">Base word hint</button>
                             </div>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
         <div class="site-footer__content">
             <div class="site-footer__section site-footer__section--contact">
                 <p class="site-footer__contact">
-                    <span class="site-footer__contact--desktop">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</span>
+                    <span class="site-footer__contact--desktop">For collaborations or to report bugs, email me at <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</span>
                     <span class="site-footer__contact--mobile">Contact:<br><a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a></span>
                 </p>
             </div>

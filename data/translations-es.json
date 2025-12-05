@@ -78,7 +78,26 @@
     "Upper-Intermediate": "Intermedio alto",
     "Advanced": "Avanzado",
     "Proficient": "Competente",
-    "Available soon": "Disponible pronto"
+    "Available soon": "Disponible pronto",
+    "Letter Loop": "La rueda de letras",
+    "Select a day": "Selecciona un día",
+    "Choose another day": "Elige otro día",
+    "Daily crossword": "Crucigrama diario",
+    "Puzzle of the day": "Juego del día",
+    "Congratulations! You solved the crossword 🎉": "¡Felicidades! Has completado el crucigrama 🎉",
+    "Letter wheel": "Rueda de letras",
+    "Build words": "Arma palabras",
+    "Shuffle": "Mezclar",
+    "Delete": "Borrar",
+    "Check": "Comprobar",
+    "Show clues 👀": "Mostrar pistas 👀",
+    "Hide clues 🙈": "Ocultar pistas 🙈",
+    "Base word hint": "Pista palabra base",
+    "Well done! Word found.": "¡Bien hecho! Palabra encontrada.",
+    "That word is not in the crossword.": "Esa palabra no está en el crucigrama.",
+    "Could not generate the crossword.": "No se pudo generar el crucigrama.",
+    "For collaborations or to report bugs, email me at spanishwithignacio@gmail.com.": "Para colaboraciones o reportar errores, escríbeme a spanishwithignacio@gmail.com.",
+    "Contact:": "Contacto:"
   },
   "titleTranslations": {
     "Spanish with Ignacio - Home": "Spanish with Ignacio - Inicio",
@@ -90,9 +109,11 @@
     "Spanish with Ignacio - Students A1 Grammar": "Spanish with Ignacio - Estudiantes A1 Gramática",
     "Spanish with Ignacio - Students A1 Vocabulary": "Spanish with Ignacio - Estudiantes A1 Vocabulario",
     "Spanish with Ignacio - Professions": "Spanish with Ignacio - Profesiones",
-    "Guess the Word - Game": "Adivina la palabra - Juego"
+    "Guess the Word - Game": "Adivina la palabra - Juego",
+    "Letter Loop": "La rueda de letras"
   },
   "htmlTranslations": {
-    "Learn to swap people or things for pronouns like <em>lo</em> and <em>la</em> so you can speak in a short, clear way.": "Aprende a sustituir personas o cosas por pronombres como <em>lo</em> y <em>la</em> para hablar de forma breve y clara."
+    "Learn to swap people or things for pronouns like <em>lo</em> and <em>la</em> so you can speak in a short, clear way.": "Aprende a sustituir personas o cosas por pronombres como <em>lo</em> y <em>la</em> para hablar de forma breve y clara.",
+    "<span class=\"site-footer__contact--desktop\">For collaborations or to report bugs, email me at <a class=\"site-footer__contact-link\" href=\"mailto:spanishwithignacio@gmail.com\">spanishwithignacio@gmail.com</a>.</span>\n                    <span class=\"site-footer__contact--mobile\">Contact:<br><a class=\"site-footer__contact-link\" href=\"mailto:spanishwithignacio@gmail.com\">spanishwithignacio@gmail.com</a></span>": "<span class=\"site-footer__contact--desktop\">Para colaboraciones o reportar errores, escríbeme a <a class=\"site-footer__contact-link\" href=\"mailto:spanishwithignacio@gmail.com\">spanishwithignacio@gmail.com</a>.</span>\n                    <span class=\"site-footer__contact--mobile\">Contacto:<br><a class=\"site-footer__contact-link\" href=\"mailto:spanishwithignacio@gmail.com\">spanishwithignacio@gmail.com</a></span>"
   }
 }

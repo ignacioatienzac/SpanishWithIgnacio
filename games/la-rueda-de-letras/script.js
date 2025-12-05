@@ -677,10 +677,100 @@ let linePath = null;
 let dragState = { active: false };
 let currentDateStr = '';
 let fallbackDateInput = null;
+let shakeTimeout = null;
+let successTimeout = null;
+
+let audioCtx = null;
+let confettiLoaded = false;
 
 const WHEEL_CENTER = 120;
 const WHEEL_RADIUS = 80;
 const LETTER_SIZE = 48;
+
+function getAudioContext() {
+    if (audioCtx) return audioCtx;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (typeof Ctx === 'function') {
+        audioCtx = new Ctx();
+    }
+    return audioCtx;
+}
+
+function playTone({ frequency, duration, type = 'sine', volume = 0.2 }) {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+
+    const now = ctx.currentTime;
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    oscillator.connect(gain).connect(ctx.destination);
+    oscillator.start(now);
+    oscillator.stop(now + duration);
+}
+
+function playErrorSound() {
+    playTone({ frequency: 220, duration: 0.12, type: 'sawtooth', volume: 0.25 });
+    setTimeout(() => playTone({ frequency: 180, duration: 0.12, type: 'square', volume: 0.2 }), 50);
+}
+
+function playSuccessSound() {
+    playTone({ frequency: 520, duration: 0.15, type: 'triangle', volume: 0.22 });
+    setTimeout(() => playTone({ frequency: 660, duration: 0.18, type: 'sine', volume: 0.18 }), 80);
+}
+
+function playPopSound() {
+    playTone({ frequency: 420, duration: 0.08, type: 'sine', volume: 0.15 });
+}
+
+async function triggerConfetti() {
+    const fireConfetti = () => {
+        if (typeof confetti === 'function') {
+            confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+        }
+    };
+
+    if (typeof confetti === 'function') {
+        fireConfetti();
+        playSuccessSound();
+        return;
+    }
+
+    if (!confettiLoaded) {
+        try {
+            const module = await import('https://cdn.skypack.dev/canvas-confetti');
+            const confettiFn = module.default || module;
+            if (typeof confettiFn === 'function') {
+                window.confetti = confettiFn;
+                confettiLoaded = true;
+                fireConfetti();
+                playSuccessSound();
+                return;
+            }
+        } catch (err) {
+            console.warn('No se pudo cargar canvas-confetti', err);
+        }
+    }
+
+    playSuccessSound();
+}
+
+function animateElement(el, className, duration) {
+    if (!el) return;
+    el.classList.remove(className);
+    // Force reflow so the animation can restart
+    void el.offsetWidth;
+    el.classList.add(className);
+    if (duration) {
+        setTimeout(() => el.classList.remove(className), duration);
+    }
+}
 
 function wordId(w) {
     return `${w.dir}-${w.x}-${w.y}-${w.wordObj.palabra}`;
@@ -787,6 +877,12 @@ function countUsage(index) {
     return guessStack.filter(item => item.index === index).length;
 }
 
+function animateLetterSelection(index) {
+    const letterEl = wheelEl.querySelector(`.letter[data-index="${index}"]`);
+    animateElement(letterEl, 'pop', 200);
+    playPopSound();
+}
+
 function addLetterToGuess(index) {
     if (!gameState) return false;
     const letter = gameState.baseWordNormalized[index];
@@ -794,6 +890,7 @@ function addLetterToGuess(index) {
     if (countUsage(index) >= 1) return false; // each instance once
     if (guessStack.filter(item => item.char === letter).length >= maxAllowed) return false;
     guessStack.push({ index, char: letter });
+    animateLetterSelection(index);
     updateGuess();
     return true;
 }
@@ -818,13 +915,38 @@ function continueDrag(index) {
 
 function updateGuess() {
     guessEl.textContent = guessStack.map(l => l.char.toUpperCase()).join('') || '\u00a0';
-    feedbackEl.textContent = '';
     if (dragState.active) {
         updateLetterHighlights();
         drawConnectionLine();
     } else {
         renderWheel();
     }
+}
+
+function handleErrorFeedback() {
+    if (shakeTimeout) clearTimeout(shakeTimeout);
+    guessEl.classList.add('is-error');
+    animateElement(guessEl, 'shake', 400);
+    playErrorSound();
+
+    shakeTimeout = setTimeout(() => {
+        guessEl.classList.remove('is-error');
+        resetGuess();
+        renderWheel();
+    }, 400);
+}
+
+function handleSuccessFeedback(newSolved) {
+    if (successTimeout) clearTimeout(successTimeout);
+    animateElement(guessEl, 'success-pulse', 600);
+    triggerConfetti();
+
+    successTimeout = setTimeout(() => {
+        guessEl.classList.remove('success-pulse');
+        solvedWords = newSolved;
+        resetGuess();
+        renderAll();
+    }, 600);
 }
 
 function getLetterCenter(index) {
@@ -895,15 +1017,14 @@ function submitGuess() {
     });
 
     if (found) {
-        solvedWords = newSolved;
         feedbackEl.textContent = '¡Bien hecho! Palabra encontrada.';
         feedbackEl.style.color = 'var(--success)';
+        handleSuccessFeedback(newSolved);
     } else {
         feedbackEl.textContent = 'Esa palabra no está en el crucigrama.';
         feedbackEl.style.color = 'var(--primary)';
+        handleErrorFeedback();
     }
-    resetGuess();
-    renderAll();
 }
 
 function renderClues() {

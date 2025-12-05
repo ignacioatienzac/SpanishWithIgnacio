@@ -120,6 +120,7 @@ button.ghost:hover { background: #e5e7eb; }
     margin: 20px 0 32px;
 }
 
+
 .grid-card, .wheel-card, .clues-card {
     background: var(--surface-white);
     border: 1px solid var(--border);
@@ -127,6 +128,7 @@ button.ghost:hover { background: #e5e7eb; }
     padding: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
+.clues-card { display: flex; flex-direction: column; gap: 10px; }
 
 .grid-card { display: flex; flex-direction: column; gap: 12px; }
 .sidebar { display: flex; flex-direction: column; gap: 14px; }

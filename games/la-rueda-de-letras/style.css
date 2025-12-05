@@ -130,87 +130,12 @@ button.ghost:hover { background: #e5e7eb; }
 }
 .clues-card { display: flex; flex-direction: column; gap: 10px; }
 
-.panel-container { display: flex; flex-direction: column; }
-.sidebar h1,
-.sidebar h2,
-.sidebar h3,
-.sidebar .label-text,
-.sidebar > span {
-    display: none !important;
-}
-
-.sidebar button,
-.sidebar .action-button {
-    display: flex !important;
-}
-
-.action-button {
-    flex: 1;
-    background: var(--surface-white);
-    color: var(--text);
-    border: 1px solid #e2e8f0;
-    padding: 10px 12px;
-    border-radius: 12px;
-    font-weight: 800;
-    box-shadow: 0 4px 0 #E2E8F0;
-    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease;
-    justify-content: center;
-    align-items: center;
-}
-
-.action-button:hover { transform: translateY(-1px); }
-.action-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 0 0 #E2E8F0;
-}
-
-.action-button.primary {
-    background: var(--primary-color);
-    color: #fff;
-    border-color: var(--primary-dark);
-    box-shadow: 0 4px 0 #a64232;
-}
-
-.action-button.primary:hover { background: var(--primary-dark); }
-
-.action-button.secondary {
-    background: #f8fafc;
-    color: var(--text);
-}
-
-.buttons-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 0;
-    margin-bottom: 1rem;
-    gap: 10px;
-    flex-wrap: nowrap;
-    position: sticky;
-    top: 0;
-    background: var(--surface-white);
-    z-index: 1;
-    padding-bottom: 6px;
-}
-.hints-content { display: flex; flex-direction: column; gap: 10px; }
-
 .grid-card { display: flex; flex-direction: column; gap: 12px; }
 .sidebar { display: flex; flex-direction: column; gap: 14px; }
 
 .card-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.clue-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-    position: sticky;
-    top: 0;
-    background: var(--surface-white);
-    z-index: 1;
-    padding-bottom: 6px;
-}
+.clue-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; flex-wrap: wrap; }
+.clue-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .eyebrow { text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; color: var(--muted); margin: 0 0 6px; font-weight: 700; }
 .badge { background: #fef2f2; color: var(--primary); padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; border: 1px solid #fde5e5; }
 
@@ -354,11 +279,14 @@ button.ghost:hover { background: #e5e7eb; }
 .clues-wrapper {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease-out;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+    opacity: 0;
 }
 
-.clues-wrapper.visible {
-    max-height: 500px;
+.clues-wrapper.expanded {
+    max-height: 360px;
+    opacity: 1;
+    margin-top: 8px;
 }
 
 .clues {

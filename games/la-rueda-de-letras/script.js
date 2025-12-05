@@ -908,9 +908,7 @@ function submitGuess() {
 
 function renderClues() {
     if (!gameState) return;
-    const list = clueListEl;
-    if (!list) return;
-    list.innerHTML = '';
+    clueListEl.innerHTML = '';
     const fragment = document.createDocumentFragment();
     gameState.words.forEach((w, idx) => {
         const item = document.createElement('div');
@@ -924,9 +922,10 @@ function renderClues() {
         item.appendChild(right);
         fragment.appendChild(item);
     });
-    list.appendChild(fragment);
-    clueWrapperEl.classList.toggle('visible', cluesVisible);
-    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
+    clueListEl.appendChild(list);
+    const isVisible = Boolean(showClues);
+    clueWrapperEl.classList.toggle('expanded', isVisible);
+    toggleCluesBtn.textContent = isVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {

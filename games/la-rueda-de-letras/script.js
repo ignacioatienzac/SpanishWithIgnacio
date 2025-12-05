@@ -657,6 +657,7 @@ const wheelEl = document.getElementById('wheel');
 const guessEl = document.getElementById('currentGuess');
 const feedbackEl = document.getElementById('feedback');
 const clueListEl = document.getElementById('clueList');
+const clueWrapperEl = document.getElementById('cluesWrapper');
 const victoryEl = document.getElementById('victory');
 const progressEl = document.getElementById('progressBadge');
 const puzzleTitleEl = document.getElementById('puzzleTitle');
@@ -671,15 +672,15 @@ let gameState = null;
 let solvedWords = new Set();
 let guessStack = [];
 let wheelOrder = [];
-let showClues = false;
+let cluesVisible = false;
 let linePath = null;
 let dragState = { active: false };
 let currentDateStr = '';
 let fallbackDateInput = null;
 
 const WHEEL_CENTER = 120;
-const WHEEL_RADIUS = 90;
-const LETTER_SIZE = 56;
+const WHEEL_RADIUS = 80;
+const LETTER_SIZE = 48;
 
 function wordId(w) {
     return `${w.dir}-${w.x}-${w.y}-${w.wordObj.palabra}`;
@@ -729,6 +730,8 @@ function renderGrid() {
                     badge.textContent = numbers[0];
                     cell.appendChild(badge);
                 }
+            } else {
+                cell.classList.add('inactive');
             }
             gridEl.appendChild(cell);
         }
@@ -905,8 +908,10 @@ function submitGuess() {
 
 function renderClues() {
     if (!gameState) return;
-    clueListEl.innerHTML = '';
-    const list = document.createElement('div');
+    const list = clueListEl;
+    if (!list) return;
+    list.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     gameState.words.forEach((w, idx) => {
         const item = document.createElement('div');
         item.className = 'clue';
@@ -917,11 +922,11 @@ function renderClues() {
         right.textContent = `${w.normalized.length} letras`;
         item.appendChild(left);
         item.appendChild(right);
-        list.appendChild(item);
+        fragment.appendChild(item);
     });
-    clueListEl.appendChild(list);
-    clueListEl.classList.toggle('hidden', !showClues);
-    toggleCluesBtn.textContent = showClues ? 'Ocultar pistas' : 'Mostrar pistas';
+    list.appendChild(fragment);
+    clueWrapperEl.classList.toggle('visible', cluesVisible);
+    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {
@@ -1041,8 +1046,9 @@ function shuffleWheel() {
 revealBtn.addEventListener('click', revealBaseWord);
 
 toggleCluesBtn.addEventListener('click', () => {
-    showClues = !showClues;
-    renderClues();
+    cluesVisible = !cluesVisible;
+    clueWrapperEl.classList.toggle('visible', cluesVisible);
+    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 });
 
 shuffleBtn.addEventListener('click', shuffleWheel);

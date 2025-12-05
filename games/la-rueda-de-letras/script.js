@@ -949,6 +949,16 @@ function startDrag(event, index) {
 
 function continueDrag(index) {
     if (!dragState.active) return;
+    const stackLength = guessStack.length;
+    const secondLast = guessStack[stackLength - 2];
+    const isBacktracking = secondLast && secondLast.index === index;
+
+    if (isBacktracking) {
+        guessStack.pop();
+        updateGuess();
+        return;
+    }
+
     addLetterToGuess(index);
 }
 

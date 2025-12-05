@@ -922,10 +922,9 @@ function renderClues() {
         item.appendChild(right);
         fragment.appendChild(item);
     });
-    clueListEl.appendChild(list);
-    const isVisible = Boolean(showClues);
-    clueWrapperEl.classList.toggle('expanded', isVisible);
-    toggleCluesBtn.textContent = isVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
+    clueListEl.appendChild(fragment);
+    clueWrapperEl.classList.toggle('expanded', cluesVisible);
+    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {
@@ -1046,7 +1045,7 @@ revealBtn.addEventListener('click', revealBaseWord);
 
 toggleCluesBtn.addEventListener('click', () => {
     cluesVisible = !cluesVisible;
-    clueWrapperEl.classList.toggle('visible', cluesVisible);
+    clueWrapperEl.classList.toggle('expanded', cluesVisible);
     toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 });
 

@@ -909,7 +909,7 @@ function submitGuess() {
 function renderClues() {
     if (!gameState) return;
     clueListEl.innerHTML = '';
-    const list = document.createElement('div');
+    const fragment = document.createDocumentFragment();
     gameState.words.forEach((w, idx) => {
         const item = document.createElement('div');
         item.className = 'clue';
@@ -920,7 +920,7 @@ function renderClues() {
         right.textContent = `${w.normalized.length} letras`;
         item.appendChild(left);
         item.appendChild(right);
-        list.appendChild(item);
+        fragment.appendChild(item);
     });
     clueListEl.appendChild(list);
     const isVisible = Boolean(showClues);

@@ -807,12 +807,17 @@ function renderGrid() {
             const key = `${absX},${absY}`;
             const cell = document.createElement('div');
             cell.className = 'cell';
+            cell.dataset.x = absX;
+            cell.dataset.y = absY;
             if (map.has(key)) {
                 const info = map.get(key);
                 const solved = info.words.some(id => solvedWords.has(id));
                 cell.classList.add('used');
                 if (solved) cell.classList.add('solved');
-                cell.textContent = solved ? info.char : '';
+                const letter = document.createElement('span');
+                letter.className = 'cell-letter';
+                letter.textContent = solved ? info.char : '';
+                cell.appendChild(letter);
                 const numbers = Array.from(info.numbers).sort((a, b) => a - b);
                 if (numbers.length) {
                     const badge = document.createElement('span');
@@ -877,6 +882,40 @@ function countUsage(index) {
     return guessStack.filter(item => item.index === index).length;
 }
 
+function getCellElement(x, y) {
+    return gridEl.querySelector(`.cell[data-x="${x}"][data-y="${y}"] .cell-letter`);
+}
+
+function animateWordReveal(words) {
+    if (!words || !words.length) return;
+    const baseDelay = 140;
+    const wordDelay = 200;
+
+    words.forEach((word, wordIdx) => {
+        const letters = word.normalized.toUpperCase().split('');
+        letters.forEach((char, i) => {
+            const x = word.dir === 'H' ? word.x + i : word.x;
+            const y = word.dir === 'V' ? word.y + i : word.y;
+            const letterEl = getCellElement(x, y);
+            if (!letterEl) return;
+            letterEl.textContent = char;
+            letterEl.style.opacity = '0';
+            letterEl.style.transform = 'translateY(6px) scale(0.95)';
+            letterEl.classList.remove('revealing');
+            void letterEl.offsetWidth;
+            const delay = wordIdx * wordDelay + i * baseDelay;
+            setTimeout(() => {
+                letterEl.classList.add('revealing');
+                setTimeout(() => {
+                    letterEl.classList.remove('revealing');
+                    letterEl.style.opacity = '';
+                    letterEl.style.transform = '';
+                }, 400);
+            }, delay);
+        });
+    });
+}
+
 function animateLetterSelection(index) {
     const letterEl = wheelEl.querySelector(`.letter[data-index="${index}"]`);
     animateElement(letterEl, 'pop', 200);
@@ -936,16 +975,19 @@ function handleErrorFeedback() {
     }, 400);
 }
 
-function handleSuccessFeedback(newSolved) {
+function handleSuccessFeedback(newSolved, newlyFoundWords = []) {
     if (successTimeout) clearTimeout(successTimeout);
     animateElement(guessEl, 'success-pulse', 600);
     triggerConfetti();
 
     successTimeout = setTimeout(() => {
         guessEl.classList.remove('success-pulse');
+        const previouslySolved = new Set(solvedWords);
         solvedWords = newSolved;
         resetGuess();
         renderAll();
+        const wordsToAnimate = newlyFoundWords.filter(w => !previouslySolved.has(wordId(w)));
+        animateWordReveal(wordsToAnimate);
     }, 600);
 }
 
@@ -1008,10 +1050,15 @@ function submitGuess() {
     if (!attempt) return;
     let found = false;
     const newSolved = new Set(solvedWords);
+    const newlyFoundWords = [];
 
     gameState.words.forEach(w => {
         if (w.normalized === attempt) {
-            newSolved.add(wordId(w));
+            const id = wordId(w);
+            if (!newSolved.has(id)) {
+                newlyFoundWords.push(w);
+            }
+            newSolved.add(id);
             found = true;
         }
     });
@@ -1019,7 +1066,7 @@ function submitGuess() {
     if (found) {
         feedbackEl.textContent = '¡Bien hecho! Palabra encontrada.';
         feedbackEl.style.color = 'var(--success)';
-        handleSuccessFeedback(newSolved);
+        handleSuccessFeedback(newSolved, newlyFoundWords);
     } else {
         feedbackEl.textContent = 'Esa palabra no está en el crucigrama.';
         feedbackEl.style.color = 'var(--primary)';

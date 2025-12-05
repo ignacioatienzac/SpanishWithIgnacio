@@ -181,16 +181,18 @@ button.ghost:hover { background: #e5e7eb; }
     height: 240px;
     border-radius: 50%;
     margin: 10px auto 14px;
-    background: radial-gradient(circle at 30% 30%, #fdecec, #fff6f4 60%, #ffffff);
+    background: var(--surface-white);
     position: relative;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 
 .letter {
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    border: 2px solid var(--primary);
-    background: #fff;
+    border: 1px solid #e2e8f0;
+    background: var(--surface-white);
     color: var(--primary);
     font-weight: 900;
     font-size: 20px;
@@ -198,15 +200,19 @@ button.ghost:hover { background: #e5e7eb; }
     place-items: center;
     position: absolute;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: 0 10px 20px rgba(192, 57, 43, 0.15);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: 0 4px 0 #E2E8F0;
 }
-.letter:hover { transform: scale(1.04); }
+.letter:hover { transform: translateY(-1px); }
+.letter:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #E2E8F0;
+}
 .letter.selected {
     background: var(--primary);
     color: #fff;
     border-color: var(--primary-dark);
-    box-shadow: 0 10px 24px rgba(192, 57, 43, 0.35);
+    box-shadow: 0 4px 0 #a64232;
 }
 
 .wheel-lines {
@@ -230,6 +236,30 @@ button.ghost:hover { background: #e5e7eb; }
 }
 
 .wheel-actions { display: flex; gap: 8px; justify-content: space-between; margin-top: 10px; }
+.wheel-actions button {
+    flex: 1;
+    background: var(--surface-white);
+    color: var(--text);
+    border: 1px solid #e2e8f0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    box-shadow: 0 4px 0 #E2E8F0;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.wheel-actions button:hover { transform: translateY(-1px); }
+.wheel-actions button:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #E2E8F0;
+}
+#shuffle, #submit {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-dark);
+    box-shadow: 0 4px 0 #a64232;
+}
+#shuffle:hover, #submit:hover { background: var(--primary-dark); }
+#backspace { background: #f8fafc; color: var(--text); }
 .feedback { min-height: 22px; font-weight: 700; color: var(--primary); margin: 6px 0 0; }
 
 .clues {

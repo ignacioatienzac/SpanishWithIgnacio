@@ -657,6 +657,7 @@ const wheelEl = document.getElementById('wheel');
 const guessEl = document.getElementById('currentGuess');
 const feedbackEl = document.getElementById('feedback');
 const clueListEl = document.getElementById('clueList');
+const clueWrapperEl = document.getElementById('cluesWrapper');
 const victoryEl = document.getElementById('victory');
 const progressEl = document.getElementById('progressBadge');
 const puzzleTitleEl = document.getElementById('puzzleTitle');
@@ -922,8 +923,9 @@ function renderClues() {
         list.appendChild(item);
     });
     clueListEl.appendChild(list);
-    clueListEl.classList.toggle('hidden', !showClues);
-    toggleCluesBtn.textContent = showClues ? 'Ocultar pistas' : 'Mostrar pistas';
+    const isVisible = Boolean(showClues);
+    clueWrapperEl.classList.toggle('expanded', isVisible);
+    toggleCluesBtn.textContent = isVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {

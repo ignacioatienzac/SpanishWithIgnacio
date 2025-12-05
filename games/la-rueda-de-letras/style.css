@@ -132,6 +132,8 @@ button.ghost:hover { background: #e5e7eb; }
 .sidebar { display: flex; flex-direction: column; gap: 14px; }
 
 .card-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.clue-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; flex-wrap: wrap; }
+.clue-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .eyebrow { text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; color: var(--muted); margin: 0 0 6px; font-weight: 700; }
 .badge { background: #fef2f2; color: var(--primary); padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; border: 1px solid #fde5e5; }
 
@@ -271,6 +273,19 @@ button.ghost:hover { background: #e5e7eb; }
 #shuffle:hover, #submit:hover { background: var(--primary-dark); }
 #backspace { background: #f8fafc; color: var(--text); }
 .feedback { min-height: 22px; font-weight: 700; color: var(--primary); margin: 6px 0 0; }
+
+.clues-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+    opacity: 0;
+}
+
+.clues-wrapper.expanded {
+    max-height: 360px;
+    opacity: 1;
+    margin-top: 8px;
+}
 
 .clues {
     display: grid;

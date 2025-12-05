@@ -672,7 +672,7 @@ let gameState = null;
 let solvedWords = new Set();
 let guessStack = [];
 let wheelOrder = [];
-let showClues = false;
+let cluesVisible = false;
 let linePath = null;
 let dragState = { active: false };
 let currentDateStr = '';
@@ -1045,8 +1045,9 @@ function shuffleWheel() {
 revealBtn.addEventListener('click', revealBaseWord);
 
 toggleCluesBtn.addEventListener('click', () => {
-    showClues = !showClues;
-    renderClues();
+    cluesVisible = !cluesVisible;
+    clueWrapperEl.classList.toggle('visible', cluesVisible);
+    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 });
 
 shuffleBtn.addEventListener('click', shuffleWheel);

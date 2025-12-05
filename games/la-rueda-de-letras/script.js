@@ -922,9 +922,10 @@ function renderClues() {
         item.appendChild(right);
         fragment.appendChild(item);
     });
-    clueListEl.appendChild(fragment);
-    clueWrapperEl.classList.toggle('visible', cluesVisible);
-    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
+    clueListEl.appendChild(list);
+    const isVisible = Boolean(showClues);
+    clueWrapperEl.classList.toggle('expanded', isVisible);
+    toggleCluesBtn.textContent = isVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
 }
 
 function updateProgress() {

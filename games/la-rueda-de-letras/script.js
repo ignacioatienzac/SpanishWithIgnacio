@@ -1001,6 +1001,65 @@ function handleSuccessFeedback(newSolved, newlyFoundWords = []) {
     }, 600);
 }
 
+function getLanguage() {
+    return document.documentElement.lang === 'es' ? 'es' : 'en';
+}
+
+const UI_COPY = {
+    en: {
+        successFeedback: 'Well done! Word found.',
+        errorFeedback: 'That word is not in the crossword.',
+        showClues: 'Show clues 👀',
+        hideClues: 'Hide clues 🙈',
+        letters: (count) => `${count} letters`,
+        fallbackDateLabel: 'Choose another day',
+        crosswordError: 'Could not generate the crossword.',
+        puzzleTitle: (date) => `Puzzle for ${date.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}`,
+        victoryMessage: 'Congratulations! You solved the crossword 🎉',
+    },
+    es: {
+        successFeedback: '¡Bien hecho! Palabra encontrada.',
+        errorFeedback: 'Esa palabra no está en el crucigrama.',
+        showClues: 'Mostrar pistas 👀',
+        hideClues: 'Ocultar pistas 🙈',
+        letters: (count) => `${count} letras`,
+        fallbackDateLabel: 'Elige otro día',
+        crosswordError: 'No se pudo generar el crucigrama.',
+        puzzleTitle: (date) => `Juego del ${date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`,
+        victoryMessage: '¡Felicidades! Has completado el crucigrama 🎉',
+    },
+};
+
+function getCopy(key) {
+    const lang = getLanguage();
+    return UI_COPY[lang][key];
+}
+
+function formatPuzzleTitle(dateStr) {
+    const date = new Date(dateStr);
+    return getCopy('puzzleTitle')(date);
+}
+
+function formatLetters(count) {
+    return getCopy('letters')(count);
+}
+
+function refreshFeedbackLanguage() {
+    const text = feedbackEl.textContent.trim();
+    const lang = getLanguage();
+    if (text === UI_COPY.en.successFeedback || text === UI_COPY.es.successFeedback) {
+        feedbackEl.textContent = UI_COPY[lang].successFeedback;
+    } else if (text === UI_COPY.en.errorFeedback || text === UI_COPY.es.errorFeedback) {
+        feedbackEl.textContent = UI_COPY[lang].errorFeedback;
+    }
+}
+
+function ensureVictoryMessageLanguage() {
+    if (victoryEl) {
+        victoryEl.textContent = getCopy('victoryMessage');
+    }
+}
+
 function getLetterCenter(index) {
     const el = wheelEl.querySelector(`.letter[data-index="${index}"]`);
     if (!el) return null;
@@ -1074,11 +1133,11 @@ function submitGuess() {
     });
 
     if (found) {
-        feedbackEl.textContent = '¡Bien hecho! Palabra encontrada.';
+        feedbackEl.textContent = getCopy('successFeedback');
         feedbackEl.style.color = 'var(--success)';
         handleSuccessFeedback(newSolved, newlyFoundWords);
     } else {
-        feedbackEl.textContent = 'Esa palabra no está en el crucigrama.';
+        feedbackEl.textContent = getCopy('errorFeedback');
         feedbackEl.style.color = 'var(--primary)';
         handleErrorFeedback();
     }
@@ -1095,20 +1154,21 @@ function renderClues() {
         const left = document.createElement('div');
         left.innerHTML = `<span class="index">${idx + 1}</span> ${w.wordObj.traduccion_ingles}`;
         const right = document.createElement('div');
-        right.textContent = `${w.normalized.length} letras`;
+        right.textContent = formatLetters(w.normalized.length);
         item.appendChild(left);
         item.appendChild(right);
         fragment.appendChild(item);
     });
     clueListEl.appendChild(fragment);
     clueWrapperEl.classList.toggle('expanded', cluesVisible);
-    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
+    toggleCluesBtn.textContent = cluesVisible ? getCopy('hideClues') : getCopy('showClues');
 }
 
 function updateProgress() {
     if (!gameState) return;
     progressEl.textContent = `${solvedWords.size} / ${gameState.words.length}`;
     const allSolved = solvedWords.size === gameState.words.length;
+    ensureVictoryMessageLanguage();
     victoryEl.classList.toggle('hidden', !allSolved);
 }
 
@@ -1121,6 +1181,10 @@ function renderAll() {
 
 function setupCalendar() {
     if (!calendarButton) return;
+
+    const calendarLabel = getCopy('fallbackDateLabel');
+    calendarButton.title = calendarLabel;
+    calendarButton.setAttribute('aria-label', calendarLabel);
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -1159,7 +1223,7 @@ function setupCalendar() {
     fallbackDateInput.min = normalizeDate(sixtyDaysAgo);
     fallbackDateInput.max = normalizeDate(today);
     fallbackDateInput.value = currentDateStr;
-    fallbackDateInput.setAttribute('aria-label', calendarButton.getAttribute('title') || 'Elige otro día');
+    fallbackDateInput.setAttribute('aria-label', calendarButton.getAttribute('title') || getCopy('fallbackDateLabel'));
 
     fallbackDateInput.style.position = 'absolute';
     fallbackDateInput.style.opacity = '0';
@@ -1198,10 +1262,10 @@ function loadPuzzle(dateStr) {
     guessStack = [];
     wheelOrder = [];
     if (!state) {
-        gridEl.innerHTML = '<p>No se pudo generar el crucigrama.</p>';
+        gridEl.innerHTML = `<p>${getCopy('crosswordError')}</p>`;
         return;
     }
-    puzzleTitleEl.textContent = `Juego del ${new Date(dateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`;
+    puzzleTitleEl.textContent = formatPuzzleTitle(dateStr);
     renderAll();
 }
 
@@ -1224,7 +1288,7 @@ revealBtn.addEventListener('click', revealBaseWord);
 toggleCluesBtn.addEventListener('click', () => {
     cluesVisible = !cluesVisible;
     clueWrapperEl.classList.toggle('expanded', cluesVisible);
-    toggleCluesBtn.textContent = cluesVisible ? 'Ocultar pistas 🙈' : 'Mostrar pistas 👀';
+    toggleCluesBtn.textContent = cluesVisible ? getCopy('hideClues') : getCopy('showClues');
 });
 
 shuffleBtn.addEventListener('click', shuffleWheel);
@@ -1257,3 +1321,22 @@ document.addEventListener('keydown', (e) => {
 currentDateStr = normalizeDate(new Date());
 setupCalendar();
 loadPuzzle(currentDateStr);
+
+const languageObserver = new MutationObserver((mutations) => {
+    if (mutations.some((mutation) => mutation.attributeName === 'lang')) {
+        ensureVictoryMessageLanguage();
+        refreshFeedbackLanguage();
+        const label = getCopy('fallbackDateLabel');
+        calendarButton.title = label;
+        calendarButton.setAttribute('aria-label', label);
+        if (fallbackDateInput) {
+            fallbackDateInput.setAttribute('aria-label', label);
+        }
+        if (gameState) {
+            puzzleTitleEl.textContent = formatPuzzleTitle(currentDateStr);
+            renderAll();
+        }
+    }
+});
+
+languageObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });

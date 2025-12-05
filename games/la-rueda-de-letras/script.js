@@ -678,8 +678,8 @@ let currentDateStr = '';
 let fallbackDateInput = null;
 
 const WHEEL_CENTER = 120;
-const WHEEL_RADIUS = 90;
-const LETTER_SIZE = 56;
+const WHEEL_RADIUS = 80;
+const LETTER_SIZE = 48;
 
 function wordId(w) {
     return `${w.dir}-${w.x}-${w.y}-${w.wordObj.palabra}`;
@@ -729,6 +729,8 @@ function renderGrid() {
                     badge.textContent = numbers[0];
                     cell.appendChild(badge);
                 }
+            } else {
+                cell.classList.add('inactive');
             }
             gridEl.appendChild(cell);
         }

@@ -347,7 +347,7 @@ button.ghost:hover { background: #e5e7eb; }
     justify-content: space-between;
     gap: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(226, 232, 240, 0.6);
-    font-weight: 500;
+    font-weight: 400;
 }
 .clue.solved {
     color: #166534;

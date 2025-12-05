@@ -138,9 +138,9 @@ button.ghost:hover { background: #e5e7eb; }
 .crossword {
     background: transparent;
     border-radius: 12px;
-    padding: 14px;
+    padding: 2rem;
     border: 1px solid var(--border);
-    min-height: 280px;
+    height: max-content;
     display: inline-grid;
     gap: 4px;
     justify-content: center;

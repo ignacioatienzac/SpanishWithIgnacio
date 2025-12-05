@@ -44,10 +44,6 @@
                 <label for="calendar-button">Selecciona un día</label>
                 <button id="calendar-button" class="calendar-button" title="Elige otro día" aria-label="Elige otro día">📅</button>
             </div>
-            <div class="actions">
-                <button id="revealBase" class="ghost">Pista palabra base</button>
-                <button id="toggleClues" class="ghost">Mostrar pistas</button>
-            </div>
         </section>
 
         <section class="game-layout">
@@ -77,12 +73,16 @@
                     <p id="feedback" class="feedback"></p>
                 </div>
 
-                <div class="clues-card">
-                    <div class="card-header">
-                        <p class="eyebrow">Pistas</p>
-                        <h3>Traducciones</h3>
+                <div class="clues-card panel-container">
+                    <div class="buttons-row">
+                        <button id="revealBase" class="ghost">Pista palabra base</button>
+                        <button id="toggleClues" class="ghost">Mostrar pistas 👀</button>
                     </div>
-                    <div id="clueList" class="clues hidden"></div>
+                    <div class="hints-content">
+                        <div id="cluesWrapper" class="clues-wrapper">
+                            <div id="clueList" class="clues"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

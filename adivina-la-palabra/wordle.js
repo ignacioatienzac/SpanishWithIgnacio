@@ -1316,8 +1316,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rowTiles = allTiles.slice(rowStart, rowStart + currentWordLength);
 
         rowTiles.forEach(tile => {
-            tile.classList.add('win');
-            tile.style.color = 'var(--color-win-text)';
+            tile.classList.remove('win');
+            tile.style.color = '#ffffff';
         });
     }
 

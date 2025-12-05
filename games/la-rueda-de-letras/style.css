@@ -270,6 +270,10 @@ button.ghost:hover { background: #e5e7eb; }
     letter-spacing: 2px;
     background: #f8fafc;
 }
+.guess-display.is-error {
+    color: var(--primary);
+    border-color: #fca5a5;
+}
 
 .wheel-actions { display: flex; gap: 8px; justify-content: space-between; margin-top: 10px; }
 .wheel-actions button {

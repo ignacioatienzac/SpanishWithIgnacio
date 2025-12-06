@@ -1,6 +1,13 @@
 /* --- Configuración Global y Fuentes --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+:root {
+    --accent-terracotta: #C04E38;
+    --selection-border: #E2E8F0;
+    --selection-text: #2D3748;
+    --selection-subtext: #A0AEC0;
+}
+
 html, body {
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -111,11 +118,11 @@ body {
 
 /* --- Pantalla de Selección --- */
 .selection-box {
-    background-color: white;
+    background-color: #ffffff;
     color: #333;
     padding: clamp(1.5rem, 2vw, 2rem);
-    border-radius: 0.75rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 20px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
     width: min(92vw, 960px);
     display: flex;
     flex-direction: column;
@@ -156,15 +163,44 @@ body {
     gap: 1rem;
 }
 
+.selection-panel .btn {
+    background-color: #ffffff;
+    border: 1px solid var(--selection-border);
+    color: var(--selection-text);
+    box-shadow: 0 4px 0 var(--selection-border);
+    transition: all 0.2s ease;
+}
+
+.selection-panel .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    background-color: #f8fafc;
+    color: var(--selection-subtext);
+    border-color: var(--selection-border);
+    box-shadow: none;
+}
+
+.selection-panel .btn:not(:disabled):hover {
+    background-color: var(--accent-terracotta);
+    border-color: var(--accent-terracotta);
+    color: #ffffff;
+    box-shadow: 0 4px 0 #9b3b2a;
+}
+
+.selection-panel .btn:not(:disabled):hover .btn-subtext,
+.selection-panel .btn.btn-selected .btn-subtext {
+    color: #ffffff;
+}
+
 .btn-title {
     display: block;
 }
 
 .btn-subtext {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    color: #4b5563;
+    color: var(--selection-subtext);
     margin-top: 0.15rem;
 }
 
@@ -224,10 +260,12 @@ body {
 }
 
 /* Estado seleccionado para botones de tense/type */
-.btn-selected {
-    background-color: #2563eb !important; /* blue-600 */
-    color: white !important;
-    transform: scale(1.05);
+.selection-panel .btn.btn-selected {
+    background-color: var(--accent-terracotta) !important;
+    border-color: var(--accent-terracotta) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 0 #9b3b2a;
+    transform: none;
 }
 
 .btn-start {

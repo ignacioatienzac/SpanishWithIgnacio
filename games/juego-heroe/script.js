@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const quickRestartCancelButton = document.getElementById('quick-restart-cancel');
 
     // Elementos de la pantalla de selección
+    const grammarSelectionDiv = document.getElementById('grammar-selection');
+    const grammarButtons = document.querySelectorAll('.btn-grammar');
     const tenseSelectionDiv = document.getElementById('tense-selection');
     const typeSelectionDiv = document.getElementById('type-selection');
     const tenseButtons = document.querySelectorAll('.btn-tense');
@@ -57,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedTense = null;
     let selectedVerbType = null;
     let selectedTenseLabel = '';
+    let selectedGrammar = null;
     let masterVerbos = []; // Aquí se cargarán los verbos del JSON
     let verbos = []; // Lista filtrada para la partida actual
     let preguntaActual = {};
@@ -403,6 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
         await cargarSprites();
         // Configura los listeners de la pantalla de selección
         setupSelectionListeners();
+        // Prepara el flujo inicial de selección
+        prepararPantallaSeleccion();
     }
 
     // Carga los verbos desde el archivo JSON
@@ -573,6 +578,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupSelectionListeners() {
+        // Listeners para botones de modo gramatical (solo Indicative activo)
+        grammarButtons.forEach(button => {
+            if (button.disabled) {
+                button.setAttribute('aria-disabled', 'true');
+            }
+
+            button.addEventListener('click', () => {
+                if (button.disabled) return;
+
+                selectedGrammar = button.dataset.grammar || 'indicative';
+                grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
+                button.classList.add('btn-selected');
+                grammarSelectionDiv.classList.add('hidden');
+                tenseSelectionDiv.classList.remove('hidden');
+                selectionOverlay.scrollTop = 0;
+            });
+        });
+
         // Listeners para botones de TIEMPO
         tenseButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -672,6 +695,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // 4. Iniciar el juego
             inicializarJuego();
         });
+    }
+
+    function prepararPantallaSeleccion() {
+        selectedGrammar = null;
+        grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        grammarSelectionDiv.classList.remove('hidden');
+        tenseSelectionDiv.classList.add('hidden');
+        typeSelectionDiv.classList.add('hidden');
+        modeSelectionDiv.classList.add('hidden');
+        difficultySelectionDiv.classList.add('hidden');
+        startButton.disabled = true;
+        selectionOverlay.scrollTop = 0;
     }
 
     // --- 5. LÓGICA DEL MINI-JUEGO ---
@@ -1425,10 +1460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         difficultyButtons.forEach(btn => btn.classList.remove('btn-selected'));
         modeButtons.forEach(btn => btn.classList.remove('btn-selected'));
 
-        typeSelectionDiv.classList.add('hidden');
-        modeSelectionDiv.classList.add('hidden');
-        difficultySelectionDiv.classList.add('hidden');
-        tenseSelectionDiv.classList.remove('hidden');
+        prepararPantallaSeleccion();
 
         startButton.disabled = true;
         if (choiceModeButton) {

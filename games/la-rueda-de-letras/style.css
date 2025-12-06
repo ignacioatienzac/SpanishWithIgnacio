@@ -349,6 +349,11 @@ button.ghost:hover { background: #e5e7eb; }
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(226, 232, 240, 0.6);
     font-weight: 400;
 }
+.clue,
+.clue div,
+.clue span {
+    font-weight: 400;
+}
 .clue.solved {
     color: #166534;
     background: linear-gradient(145deg, #f0fdf4, #dcfce7);
@@ -361,4 +366,10 @@ button.ghost:hover { background: #e5e7eb; }
     .crossword { justify-self: center; }
     .wheel { width: 210px; height: 210px; }
     .letter { width: 46px; height: 46px; font-size: 17px; }
+}
+
+footer .site-footer__contact,
+footer .site-footer__contact a,
+footer .site-footer__contact span {
+    font-weight: 400;
 }

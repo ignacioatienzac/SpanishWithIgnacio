@@ -1342,20 +1342,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.font = '24px Inter, sans-serif';
         ctx.textAlign = 'left';
         const vidasMaxCastillo = castillo ? castillo.vidasMax : vidas;
-        ctx.fillText(`🏰 Castillo: ${vidas}/${vidasMaxCastillo}`, 20, 40);
+        ctx.fillText(`🏰 Castle: ${vidas}/${vidasMaxCastillo}`, 20, 40);
 
         ctx.textAlign = 'center';
         const dificultadTexto = dificultadActual ? ` (${dificultadActual.label})` : '';
         const objetivoTexto = objetivoPuntuacion ? `${objetivoPuntuacion}` : '0';
-        ctx.fillText(`🎯 Meta${dificultadTexto}: ${objetivoTexto}`, canvas.width / 2, 40);
+        ctx.fillText(`🎯 Goal${dificultadTexto}: ${objetivoTexto}`, canvas.width / 2, 40);
 
         ctx.textAlign = 'right';
-        ctx.fillText(`Puntuación: ${puntuacion}`, canvas.width - 20, 40);
+        ctx.fillText(`Score: ${puntuacion}`, canvas.width - 20, 40);
 
         ctx.textAlign = 'center';
         ctx.font = '22px Inter, sans-serif';
         ctx.fillStyle = '#FFD700'; // Dorado
-        ctx.fillText(`🔥 Poder de Ataque: ${poderAtaque}`, canvas.width / 2, 72);
+        ctx.fillText(`🔥 Attack Power: ${poderAtaque}`, canvas.width / 2, 72);
     }
 
     // --- 9. FIN DEL JUEGO Y REINICIO ---

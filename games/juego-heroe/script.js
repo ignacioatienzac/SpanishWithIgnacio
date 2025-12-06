@@ -110,6 +110,60 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const PODER_ATAQUE_MINIMO = 1;
+    const LOCALIZED_COPY = {
+        writeModeRequired: {
+            en: 'Write Mode is required for irregular verbs.',
+            es: 'El modo escritura es obligatorio con verbos irregulares.'
+        },
+        selectDifficulty: {
+            en: 'Select a difficulty to get started.',
+            es: 'Selecciona una dificultad para comenzar.'
+        },
+        selectMode: {
+            en: 'Select a game mode to get started.',
+            es: 'Selecciona un modo de juego para comenzar.'
+        },
+        noVerbsFound: {
+            en: 'No verbs found for this combination.',
+            es: 'No hay verbos para esta combinación.'
+        },
+        errorLoadingVerbs: {
+            en: 'Error loading verbs. Refresh the page.',
+            es: 'Error al cargar los verbos. Refresca la página.'
+        },
+        correctAttack: {
+            en: 'CORRECT! +1 Attack Power',
+            es: '¡CORRECTO! +1 Poder de ataque'
+        },
+        tryAgain: {
+            en: 'Try again!',
+            es: '¡Inténtalo de nuevo!'
+        },
+        castleStands: {
+            en: 'The castle still stands!',
+            es: '¡El castillo sigue en pie!'
+        },
+        gameEnded: {
+            en: 'The game has ended.',
+            es: '¡El juego ha terminado!'
+        },
+        victoryTitle: {
+            en: 'VICTORY!',
+            es: '¡VICTORIA!'
+        },
+        victorySubtitle: {
+            en: 'You successfully defended the castle.',
+            es: 'Has defendido el castillo con éxito.'
+        },
+        defeatTitle: {
+            en: 'GAME OVER!',
+            es: '¡FIN DEL JUEGO!'
+        },
+        defeatSubtitle: {
+            en: 'The monsters have broken through your defenses.',
+            es: 'Los monstruos han superado tus defensas.'
+        }
+    };
     const CHOICE_MODE_VERBS = ['hablar', 'comer', 'vivir'];
     const CHOICE_MODE_GRID_SIZES = {
         facil: 6,
@@ -133,6 +187,23 @@ document.addEventListener('DOMContentLoaded', () => {
         '3': 'í',
         '4': 'ó',
         '5': 'ú'
+    };
+
+    const getCurrentLanguage = () => document.documentElement.lang === 'es' ? 'es' : 'en';
+
+    const getLocalizedString = key => {
+        const lang = getCurrentLanguage();
+        const entry = LOCALIZED_COPY[key];
+        if (!entry) return '';
+        return entry[lang] || entry.en || '';
+    };
+
+    const setLocalizedText = (element, key) => {
+        if (!element) return;
+        const localizedText = getLocalizedString(key);
+        if (localizedText) {
+            element.textContent = localizedText;
+        }
     };
 
     const ATTACK_VISUAL_TIERS = [
@@ -420,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
             masterVerbos = await response.json();
         } catch (error) {
             console.error("Error loading verb file:", error);
-            selectionErrorEl.textContent = "Error loading verbs. Refresh the page.";
+            selectionErrorEl.textContent = getLocalizedString('errorLoadingVerbs');
         }
     }
 
@@ -546,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (modeRestrictionMessage) {
             modeRestrictionMessage.textContent = requiereSoloEscritura
-                ? 'Write Mode is required for irregular verbs.'
+                ? getLocalizedString('writeModeRequired')
                 : '';
         }
 
@@ -669,11 +740,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Listener para el botón de INICIAR JUEGO
         startButton.addEventListener('click', () => {
             if (!selectedDifficulty) {
-                selectionErrorEl.textContent = 'Select a difficulty to get started.';
+                selectionErrorEl.textContent = getLocalizedString('selectDifficulty');
                 return;
             }
             if (!selectedMode) {
-                selectionErrorEl.textContent = 'Select a game mode to get started.';
+                selectionErrorEl.textContent = getLocalizedString('selectMode');
                 return;
             }
             // 1. Filtrar la base de datos de verbos
@@ -682,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. Comprobar si hay verbos
             if (verbos.length === 0) {
-                selectionErrorEl.textContent = 'No verbs found for this combination.';
+                selectionErrorEl.textContent = getLocalizedString('noVerbsFound');
                 return;
             }
 
@@ -760,12 +831,12 @@ document.addEventListener('DOMContentLoaded', () => {
             poderAtaqueMaximo = PODER_ATAQUE_MINIMO;
         }
         poderAtaqueMaximo = Math.max(poderAtaqueMaximo, poderAtaque);
-        updateFeedbackMessage('CORRECT! +1 Attack Power', 'text-success');
+        updateFeedbackMessage(getLocalizedString('correctAttack'), 'text-success');
     }
 
     function manejarRespuestaIncorrecta() {
         poderAtaque = Math.max(PODER_ATAQUE_MINIMO, poderAtaque - 1);
-        updateFeedbackMessage('Try again!', 'text-error');
+        updateFeedbackMessage(getLocalizedString('tryAgain'), 'text-error');
         setTimeout(() => {
             if (!gameOver) updateFeedbackMessage();
         }, 2000);
@@ -1372,17 +1443,17 @@ document.addEventListener('DOMContentLoaded', () => {
         finalScoreEl.textContent = puntuacion;
 
         if (resultado === 'victoria') {
-            gameOverTitleEl.textContent = 'VICTORY!';
-            gameOverSubtitleEl.textContent = 'You successfully defended the castle.';
+            setLocalizedText(gameOverTitleEl, 'victoryTitle');
+            setLocalizedText(gameOverSubtitleEl, 'victorySubtitle');
         } else {
-            gameOverTitleEl.textContent = 'GAME OVER!';
-            gameOverSubtitleEl.textContent = 'The monsters have broken through your defenses.';
+            setLocalizedText(gameOverTitleEl, 'defeatTitle');
+            setLocalizedText(gameOverSubtitleEl, 'defeatSubtitle');
         }
 
         gameOverOverlay.classList.remove('hidden');
         gameOverOverlay.style.display = 'flex'; // Asegurar que sea flex
         updateFeedbackMessage(
-            resultado === 'victoria' ? 'The castle still stands!' : 'The game has ended.',
+            resultado === 'victoria' ? getLocalizedString('castleStands') : getLocalizedString('gameEnded'),
             resultado === 'victoria' ? 'text-success' : 'text-error'
         );
     }
@@ -1396,7 +1467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const verbosFiltrados = obtenerVerbosFiltrados();
         if (!verbosFiltrados.length) {
             restablecerSeleccionInicial();
-            selectionErrorEl.textContent = 'No verbs found for this combination.';
+            selectionErrorEl.textContent = getLocalizedString('noVerbsFound');
             return;
         }
 

@@ -590,7 +590,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectedGrammar = button.dataset.grammar || 'indicative';
                 grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
                 button.classList.add('btn-selected');
-                grammarSelectionDiv.classList.add('hidden');
                 tenseSelectionDiv.classList.remove('hidden');
                 selectionOverlay.scrollTop = 0;
             });

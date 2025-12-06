@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 intermedio: 5
             },
             speedRange: { min: 0.4, max: 0.55 },
-            speedLabel: 'Lento',
+            speedLabel: 'Slow',
             points: 10
         },
         enemigo2: {
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 10
             },
             speedRange: { min: 0.6, max: 0.75 },
-            speedLabel: 'Medio-Lento',
+            speedLabel: 'Medium-Slow',
             points: 20
         },
         enemigo3: {
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 18
             },
             speedRange: { min: 0.45, max: 0.6 },
-            speedLabel: 'Lento',
+            speedLabel: 'Slow',
             points: 25
         },
         enemigo4: {
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 25
             },
             speedRange: { min: 0.9, max: 1.1 },
-            speedLabel: 'Media',
+            speedLabel: 'Medium',
             points: 40
         },
         enemigo5: {
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 40
             },
             speedRange: { min: 1.8, max: 2.2 },
-            speedLabel: 'Muy Rápido',
+            speedLabel: 'Very Fast',
             points: 45
         },
         enemigo6: {
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 65
             },
             speedRange: { min: 1.4, max: 1.7 },
-            speedLabel: 'Rápido',
+            speedLabel: 'Fast',
             points: 60
         }
     };
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const difficultySettings = {
         facil: {
-            label: 'Fácil',
+            label: 'Easy',
             castleLives: 10,
             targetScore: 1000,
             spawnRate: 3500,
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         intermedio: {
-            label: 'Intermedio',
+            label: 'Intermediate',
             castleLives: 5,
             targetScore: 2000,
             spawnRate: 3000,
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         dificil: {
-            label: 'Difícil',
+            label: 'Hard',
             castleLives: 3,
             targetScore: 5000,
             spawnRate: 2600,
@@ -419,8 +419,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             masterVerbos = await response.json();
         } catch (error) {
-            console.error("Error al cargar el archivo de verbos:", error);
-            selectionErrorEl.textContent = "Error al cargar los verbos. Refresca la página.";
+            console.error("Error loading verb file:", error);
+            selectionErrorEl.textContent = "Error loading verbs. Refresh the page.";
         }
     }
 
@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (modeRestrictionMessage) {
             modeRestrictionMessage.textContent = requiereSoloEscritura
-                ? 'Write Mode is required for irregular verbs / El modo escritura es obligatorio con verbos irregulares.'
+                ? 'Write Mode is required for irregular verbs.'
                 : '';
         }
 
@@ -669,11 +669,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Listener para el botón de INICIAR JUEGO
         startButton.addEventListener('click', () => {
             if (!selectedDifficulty) {
-                selectionErrorEl.textContent = 'Selecciona una dificultad para comenzar.';
+                selectionErrorEl.textContent = 'Select a difficulty to get started.';
                 return;
             }
             if (!selectedMode) {
-                selectionErrorEl.textContent = 'Selecciona un modo de juego para comenzar.';
+                selectionErrorEl.textContent = 'Select a game mode to get started.';
                 return;
             }
             // 1. Filtrar la base de datos de verbos
@@ -682,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. Comprobar si hay verbos
             if (verbos.length === 0) {
-                selectionErrorEl.textContent = 'No hay verbos para esta combinación.';
+                selectionErrorEl.textContent = 'No verbs found for this combination.';
                 return;
             }
 
@@ -760,12 +760,12 @@ document.addEventListener('DOMContentLoaded', () => {
             poderAtaqueMaximo = PODER_ATAQUE_MINIMO;
         }
         poderAtaqueMaximo = Math.max(poderAtaqueMaximo, poderAtaque);
-        updateFeedbackMessage('¡CORRECTO! +1 Poder de Ataque', 'text-success');
+        updateFeedbackMessage('CORRECT! +1 Attack Power', 'text-success');
     }
 
     function manejarRespuestaIncorrecta() {
         poderAtaque = Math.max(PODER_ATAQUE_MINIMO, poderAtaque - 1);
-        updateFeedbackMessage('¡Inténtalo de nuevo! / Try again!', 'text-error');
+        updateFeedbackMessage('Try again!', 'text-error');
         setTimeout(() => {
             if (!gameOver) updateFeedbackMessage();
         }, 2000);
@@ -910,11 +910,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         nivelSuelo = Math.max(0, canvas.height - margenInferiorTerreno - alturaTerreno);
-        dificultadActual = difficultySettings[selectedDifficulty];
-        if (!dificultadActual) {
-            console.error('No se encontró configuración para la dificultad seleccionada.');
+        const difficultyConfig = difficultySettings[selectedDifficulty];
+        if (!difficultyConfig) {
+            console.error('No configuration found for the selected difficulty.');
             return;
         }
+
+        const selectedDifficultyButton = document.querySelector(`.btn-difficulty[data-difficulty="${selectedDifficulty}"]`);
+        const difficultyLabel = selectedDifficultyButton?.textContent.trim() || difficultyConfig.label;
+        dificultadActual = { ...difficultyConfig, label: difficultyLabel };
 
         vidas = dificultadActual.castleLives;
         puntuacion = 0;
@@ -1368,17 +1372,17 @@ document.addEventListener('DOMContentLoaded', () => {
         finalScoreEl.textContent = puntuacion;
 
         if (resultado === 'victoria') {
-            gameOverTitleEl.textContent = '¡VICTORIA!';
-            gameOverSubtitleEl.textContent = 'Has defendido el castillo con éxito.';
+            gameOverTitleEl.textContent = 'VICTORY!';
+            gameOverSubtitleEl.textContent = 'You successfully defended the castle.';
         } else {
-            gameOverTitleEl.textContent = '¡FIN DEL JUEGO!';
-            gameOverSubtitleEl.textContent = 'Los monstruos han superado tus defensas.';
+            gameOverTitleEl.textContent = 'GAME OVER!';
+            gameOverSubtitleEl.textContent = 'The monsters have broken through your defenses.';
         }
 
         gameOverOverlay.classList.remove('hidden');
         gameOverOverlay.style.display = 'flex'; // Asegurar que sea flex
         updateFeedbackMessage(
-            resultado === 'victoria' ? '¡El castillo sigue en pie!' : '¡El juego ha terminado!',
+            resultado === 'victoria' ? 'The castle still stands!' : 'The game has ended.',
             resultado === 'victoria' ? 'text-success' : 'text-error'
         );
     }
@@ -1392,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const verbosFiltrados = obtenerVerbosFiltrados();
         if (!verbosFiltrados.length) {
             restablecerSeleccionInicial();
-            selectionErrorEl.textContent = 'No hay verbos para esta combinación.';
+            selectionErrorEl.textContent = 'No verbs found for this combination.';
             return;
         }
 

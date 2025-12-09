@@ -11,7 +11,10 @@ async function loadVocabulary() {
 }
 
 function normalize(str) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const enyePlaceholder = '__NY__';
+    const preserved = str.replace(/ñ/gi, enyePlaceholder);
+    const normalized = preserved.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    return normalized.replace(new RegExp(enyePlaceholder.toLowerCase(), 'g'), 'ñ');
 }
 
 function dateStringToSeed(dateStr) {

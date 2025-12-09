@@ -247,6 +247,25 @@ body.adventure-map-1-bg .game-container {
     align-items: flex-start;
 }
 
+.wordle-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 180px;
+    align-self: center;
+}
+
+.wordle-avatar img {
+    width: 78%;
+    height: auto;
+    transform: scaleX(-1);
+}
+
 .clue-panel-wrapper {
     width: 240px;
     display: flex;
@@ -358,6 +377,10 @@ body.adventure-map-1-bg .game-container {
     .game-main-area {
         flex-direction: column;
         align-items: center;
+    }
+
+    .wordle-avatar {
+        display: none;
     }
 
     .clue-panel-wrapper {

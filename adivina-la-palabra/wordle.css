@@ -261,8 +261,9 @@ body.adventure-map-1-bg .game-container {
 }
 
 .wordle-avatar img {
-    width: 78%;
-    height: auto;
+    width: 92%;
+    height: 92%;
+    object-fit: contain;
     transform: scaleX(-1);
 }
 

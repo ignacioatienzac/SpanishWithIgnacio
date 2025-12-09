@@ -35,6 +35,56 @@ document.addEventListener('DOMContentLoaded', () => {
         correct: '../images/right_answer.png',
         wrong: '../images/wrong_answer.png',
     };
+    const AVATAR_MESSAGES = {
+        initial: [
+            'How are we feeling today?',
+            'Hmm... which one is it?',
+            'No rush, just flow.',
+        ],
+        allGray: [
+            'Oof, nothing! Cold as ice.',
+            'Not a single one... time to switch tactics.',
+            "Wow... try completely different vowels.",
+            'Clean slate. Next try!',
+            "Not these letters' day today, haha.",
+        ],
+        correctSpot: [
+            'Nice! That one stays there.',
+            'Bingo! One down.',
+            "Look at that! It's taking shape.",
+            'That letter is key.',
+            'Boom! A green one.',
+            'Looking good, looking good...',
+        ],
+        misplaced: [
+            "It's there, but not there. Move it!",
+            'Close... switch the order.',
+            'That letter works, find its spot.',
+            'Warmer, warmer!',
+        ],
+        help: [
+            'Getting tricky? Get a clue!',
+            "Psst... I've got a little hint right here.",
+            "Don't overthink it, check the clue!",
+            'Sometimes a hint helps, huh?',
+            'Need a hand? Hit the button.',
+        ],
+        victory: [
+            "YES! That's it!",
+            'You are a legend!',
+            "Knew you'd get it!",
+            'Great game! On to the next one.',
+            'Amazing! Another round?',
+            'You are on fire today!',
+        ],
+        defeat: [
+            'Bummer... bad luck.',
+            'Not our day today, haha.',
+            "So close... we'll get it tomorrow!",
+            'No worries, this one was tough.',
+            "Good try! Don't give up.",
+        ],
+    };
 
 
     // --- SELECTORES DEL DOM ---
@@ -53,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructionsCloseButton = document.getElementById('instructions-close');
     const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
     const avatarImage = document.querySelector('.wordle-avatar img');
+    const avatarBubble = document.querySelector('.avatar-bubble');
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -88,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextHintIndex = 0;
     let clueUsedThisRow = false;
     let guessesMade = 0;
+    let hasOfferedHelp = false;
     let isAdventureMode = false;
     let adventureMapId = 1;
     let adventureLevelNumber = 1;
@@ -884,6 +936,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getRandomMessage(list = []) {
+        if (!Array.isArray(list) || list.length === 0) return '';
+        const index = Math.floor(Math.random() * list.length);
+        return list[index];
+    }
+
+    function setAvatarMessage(message) {
+        if (!avatarBubble) return;
+
+        if (!message) {
+            avatarBubble.textContent = '';
+            avatarBubble.classList.remove('is-visible');
+            avatarBubble.setAttribute('aria-hidden', 'true');
+            return;
+        }
+
+        avatarBubble.textContent = message;
+        avatarBubble.classList.add('is-visible');
+        avatarBubble.setAttribute('aria-hidden', 'false');
+    }
+
+    function showAvatarMessage(type, delay = 0) {
+        const message = getRandomMessage(AVATAR_MESSAGES[type]);
+        if (!message) return;
+
+        const renderMessage = () => setAvatarMessage(message);
+        if (delay > 0) {
+            window.setTimeout(renderMessage, delay);
+        } else {
+            renderMessage();
+        }
+    }
+
+    function handleFeedbackMessages(feedback, { willWin = false, willLose = false, animationTime = 0 } = {}) {
+        const delay = Math.max(0, animationTime - 200);
+
+        if (willWin) {
+            showAvatarMessage('victory', delay);
+            return;
+        }
+
+        if (willLose) {
+            showAvatarMessage('defeat', delay);
+            return;
+        }
+
+        const allGray = feedback.every(state => state === 'absent');
+        if (allGray) {
+            showAvatarMessage('allGray', delay);
+            return;
+        }
+
+        if (feedback.some(state => state === 'correct')) {
+            showAvatarMessage('correctSpot', delay);
+            return;
+        }
+
+        if (feedback.some(state => state === 'present')) {
+            showAvatarMessage('misplaced', delay);
+        }
+    }
+
     /**
      * Resetea el tablero y el teclado a su estado inicial
      */
@@ -935,8 +1049,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentColIndex = 0;
         isGameActive = false;
         clueUsedThisRow = false;
+        hasOfferedHelp = false;
 
         setAvatarState('thinking');
+        showAvatarMessage('initial');
 
         if (clueMessagesContainer) {
             clueMessagesContainer.innerHTML = '';
@@ -1213,6 +1329,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const willWin = guess === targetWord;
         const willLose = !willWin && currentRowIndex === MAX_TRIES - 1;
 
+        handleFeedbackMessages(feedback, { willWin, willLose, animationTime: totalAnimationTime });
+
         if (willWin || willLose) {
             const avatarReactionDelay = totalAnimationTime * 0.5;
             setTimeout(() => {
@@ -1359,6 +1477,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const hintsUnlocked = currentRowIndex >= TRIES_BEFORE_HINTS;
         const hintsRemaining = nextHintIndex < hintsForCurrentWord.length;
         const canUseClue = hintsUnlocked && hintsRemaining && isGameActive && !clueUsedThisRow;
+
+        if (hintsUnlocked && hintsRemaining && isGameActive && !hasOfferedHelp) {
+            hasOfferedHelp = true;
+            showAvatarMessage('help');
+        }
 
         clueButton.disabled = !canUseClue;
         clueButton.classList.toggle('active', canUseClue);

@@ -264,43 +264,42 @@ body.adventure-map-1-bg .game-container {
 
 .avatar-bubble {
     position: absolute;
-    top: -0.5rem;
     left: 50%;
-    transform: translate(-50%, -110%);
-    max-width: 240px;
-    padding: 0.75rem 1rem;
+    bottom: calc(100% + 15px);
+    transform: translate(-50%, 12px);
+    width: max-content;
+    max-width: 180px;
+    padding: 12px 16px;
     background: #ffffff;
-    border: 2px solid #1c7ed6;
     border-radius: 14px;
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
     color: #1b263b;
-    line-height: 1.35;
+    line-height: 1.4;
     opacity: 0;
     pointer-events: none;
-    z-index: 2;
+    z-index: 3;
     transition: opacity 0.25s ease, transform 0.25s ease;
+    word-break: break-word;
 }
 
 .avatar-bubble.is-visible {
     opacity: 1;
-    transform: translate(-50%, -120%);
+    transform: translate(-50%, 0);
 }
 
 .avatar-bubble::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    top: 100%;
     left: 50%;
-    width: 18px;
-    height: 18px;
-    background: #ffffff;
-    border: 2px solid #1c7ed6;
-    border-top: none;
-    border-left: none;
-    transform: translate(-50%, -50%) rotate(45deg);
-    box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.08);
+    transform: translateX(-50%);
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
 }
 
 .wordle-avatar img {

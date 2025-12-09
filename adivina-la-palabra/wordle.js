@@ -1210,6 +1210,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
         const totalAnimationTime = 800 + ((currentWordLength - 1) * 300); // 2000ms
+        const willWin = guess === targetWord;
+        const willLose = !willWin && currentRowIndex === MAX_TRIES - 1;
+
+        if (willWin || willLose) {
+            const avatarReactionDelay = totalAnimationTime * 0.5;
+            setTimeout(() => {
+                setAvatarState(willWin ? 'correct' : 'wrong');
+            }, avatarReactionDelay);
+        }
+
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
             

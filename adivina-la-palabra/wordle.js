@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_TRANSITION_END_KEY = 'wordleQuestTransitionEnd';
     const ADVENTURE_LAST_PLAYED_KEY = 'wordleQuestLastPlayedLevel';
     const ADVENTURE_TRANSITION_DURATION_MS = 700;
+    const AVATAR_IMAGES = {
+        thinking: '../images/thinking.png',
+        correct: '../images/right_answer.png',
+        wrong: '../images/wrong_answer.png',
+    };
 
 
     // --- SELECTORES DEL DOM ---
@@ -47,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
     const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
+    const avatarImage = document.querySelector('.wordle-avatar img');
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -868,6 +874,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateClueAvailability();
     }
 
+    function setAvatarState(state = 'thinking') {
+        if (!avatarImage) return;
+
+        const nextSrc = AVATAR_IMAGES[state] || AVATAR_IMAGES.thinking;
+
+        if (avatarImage.getAttribute('src') !== nextSrc) {
+            avatarImage.setAttribute('src', nextSrc);
+        }
+    }
+
     /**
      * Resetea el tablero y el teclado a su estado inicial
      */
@@ -919,6 +935,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentColIndex = 0;
         isGameActive = false;
         clueUsedThisRow = false;
+
+        setAvatarState('thinking');
 
         if (clueMessagesContainer) {
             clueMessagesContainer.innerHTML = '';
@@ -1234,6 +1252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             highlightWinningRow();
             stopInteraction();
             danceWin();
+            setAvatarState('correct');
             console.log("Game outcome: WIN");
             updateClueAvailability();
 
@@ -1249,6 +1268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Comprobar si era el último intento
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             stopInteraction();
+            setAvatarState('wrong');
 
             if (isAdventureMode) {
                 handleAdventureFailure();

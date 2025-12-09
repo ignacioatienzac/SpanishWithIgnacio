@@ -15,11 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const LEVEL_FILE_MAP = {
         A1: '../data/wordle-a1-palabras.json',
         A2: '../data/wordle-a2-palabras.json',
+        B1: '../data/wordle-b1-palabras.json',
     };
     const SUPPORTED_LEVELS = Object.keys(LEVEL_FILE_MAP);
     const HINT_FILE_MAP = {
         A1: './pistas-a1.json',
         A2: './pistas-a2.json',
+        B1: './pistas-b1.json',
     };
     const ADVENTURE_VOCAB_PATH = '../mapa-aventura/vocabulary-a1.json';
     const ADVENTURE_BOSS_KEY_PREFIX = 'wordleQuestAdventureBoss';

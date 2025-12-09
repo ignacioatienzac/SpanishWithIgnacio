@@ -258,12 +258,14 @@ body.adventure-map-1-bg .game-container {
     justify-content: center;
     flex: 0 0 180px;
     align-self: center;
+    overflow: hidden;
 }
 
 .wordle-avatar img {
-    width: 92%;
-    height: 92%;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
     transform: scaleX(-1);
 }
 

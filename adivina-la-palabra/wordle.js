@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MIN_WORD_LENGTH = 3;
     const MAX_WORD_LENGTH = 6;
     const TRIES_BEFORE_HINTS = 3;
+    const SOUND_STORAGE_KEY = 'wordleSoundMuted';
     
     // Simula que el usuario es premium (para probar el calendario)
     const IS_PREMIUM_USER = true;
@@ -88,6 +89,160 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
     };
 
+    class SoundManager {
+        constructor(toggleButton) {
+            this.audioContext = null;
+            this.masterGain = null;
+            this.isMuted = localStorage.getItem(SOUND_STORAGE_KEY) === 'true';
+            this.toggleButton = toggleButton;
+            this.unlockHandler = this.unlockAudioContext.bind(this);
+            this.unlockEvents = ['pointerdown', 'touchstart', 'keydown'];
+
+            this.registerUnlockEvents();
+            this.updateToggleUi();
+            if (this.toggleButton) {
+                this.toggleButton.addEventListener('click', () => this.toggleMute());
+            }
+        }
+
+        getContext() {
+            if (!this.audioContext) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                this.audioContext = new AudioCtx();
+            }
+            return this.audioContext;
+        }
+
+        getMasterGain() {
+            const ctx = this.getContext();
+            if (!this.masterGain) {
+                this.masterGain = ctx.createGain();
+                this.masterGain.connect(ctx.destination);
+            }
+
+            const targetGain = this.isMuted ? 0 : 1;
+            this.masterGain.gain.setTargetAtTime(targetGain, ctx.currentTime, 0.01);
+            return this.masterGain;
+        }
+
+        registerUnlockEvents() {
+            this.unlockEvents.forEach(eventName => {
+                document.addEventListener(eventName, this.unlockHandler, { passive: true });
+            });
+        }
+
+        unregisterUnlockEvents() {
+            this.unlockEvents.forEach(eventName => {
+                document.removeEventListener(eventName, this.unlockHandler, { passive: true });
+            });
+        }
+
+        unlockAudioContext() {
+            const ctx = this.getContext();
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+            this.unregisterUnlockEvents();
+        }
+
+        toggleMute() {
+            this.isMuted = !this.isMuted;
+            localStorage.setItem(SOUND_STORAGE_KEY, this.isMuted);
+            this.updateToggleUi();
+            if (this.masterGain) {
+                const ctx = this.masterGain.context;
+                this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 1, ctx.currentTime, 0.01);
+            }
+        }
+
+        updateToggleUi() {
+            if (!this.toggleButton) return;
+            this.toggleButton.textContent = this.isMuted ? '🔇' : '🔊';
+            this.toggleButton.setAttribute('aria-label', this.isMuted ? 'Enable game sound' : 'Mute game sound');
+            this.toggleButton.setAttribute('aria-pressed', String(this.isMuted));
+        }
+
+        playTypeSound({ lowerTone = false } = {}) {
+            if (this.isMuted) return;
+            const ctx = this.getContext();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            const startFreq = lowerTone ? 320 : 520;
+            const endFreq = lowerTone ? 160 : 260;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(startFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.08);
+
+            gain.gain.setValueAtTime(0.35, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+
+            osc.connect(gain);
+            gain.connect(this.getMasterGain());
+
+            osc.start(now);
+            osc.stop(now + 0.12);
+        }
+
+        playErrorSound() {
+            if (this.isMuted) return;
+            const ctx = this.getContext();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+            osc.connect(gain);
+            gain.connect(this.getMasterGain());
+
+            osc.start(now);
+            osc.stop(now + 0.4);
+        }
+
+        playWinSound() {
+            if (this.isMuted) return;
+            const ctx = this.getContext();
+            const now = ctx.currentTime;
+            const notes = [261.63, 329.63, 392.0];
+
+            notes.forEach((freq, index) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const delay = ctx.createDelay(0.3);
+                const feedback = ctx.createGain();
+                const wetGain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + index * 0.2);
+
+                gain.gain.setValueAtTime(0.3, now + index * 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.2 + 0.8);
+
+                feedback.gain.value = 0.25;
+                wetGain.gain.value = 0.25;
+
+                osc.connect(gain);
+                gain.connect(this.getMasterGain());
+
+                // simple echo/reverb tail
+                gain.connect(delay);
+                delay.connect(feedback);
+                feedback.connect(delay);
+                delay.connect(wetGain);
+                wetGain.connect(this.getMasterGain());
+
+                osc.start(now + index * 0.2);
+                osc.stop(now + index * 0.2 + 1.1);
+            });
+        }
+    }
+
 
     // --- SELECTORES DEL DOM ---
     const gameContainer = document.querySelector('.game-container');
@@ -97,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
+    const soundToggleButton = document.getElementById('sound-toggle');
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
     const adventureMapButton = document.getElementById('adventure-map-button');
@@ -109,10 +265,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
+
+    const soundManager = new SoundManager(soundToggleButton);
 
     clueButton.addEventListener('click', handleClueClick);
     instructionsButton.addEventListener('click', openInstructionsModal);
@@ -1314,6 +1472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.classList.add('filled');
             tile.dataset.letter = letter;
             currentColIndex++;
+            soundManager.playTypeSound();
         }
     }
 
@@ -1326,6 +1485,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.textContent = '';
             tile.classList.remove('filled');
             tile.removeAttribute('data-letter');
+            soundManager.playTypeSound({ lowerTone: true });
         }
     }
 
@@ -1335,6 +1495,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentColIndex < currentWordLength) {
             showToast('Missing letters');
             shakeRow();
+            soundManager.playErrorSound();
             return;
         }
 
@@ -1352,6 +1513,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!validationSet.has(guess)) {
             showToast('La palabra no está en el juego');
             shakeRow();
+            soundManager.playErrorSound();
             console.log(`Submit failed: Word "${guess}" not in validation list.`);
             return;
         }
@@ -1474,6 +1636,7 @@ document.addEventListener('DOMContentLoaded', () => {
             highlightWinningRow();
             stopInteraction();
             danceWin();
+            soundManager.playWinSound();
             setAvatarState('correct');
             console.log("Game outcome: WIN");
             updateClueAvailability();

@@ -462,6 +462,34 @@ body.adventure-map-1-bg .game-container {
     gap: 0.75rem;
 }
 
+.sound-toggle {
+    border: none;
+    background: #f4f6fb;
+    color: #1f2532;
+    font-size: 1.4rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    background-color: #e6ebf7;
+    outline: none;
+}
+
+.sound-toggle:active {
+    transform: translateY(1px);
+}
+
 .game-controls h2 {
     font-family: 'Oswald', sans-serif;
     color: var(--secondary-color);

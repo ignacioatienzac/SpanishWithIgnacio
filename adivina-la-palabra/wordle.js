@@ -205,6 +205,36 @@ document.addEventListener('DOMContentLoaded', () => {
             osc.stop(now + 0.4);
         }
 
+        playFlipSound() {
+            if (this.isMuted) return;
+            const ctx = this.getContext();
+            const now = ctx.currentTime;
+
+            const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < data.length; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.5;
+            }
+
+            const noiseSource = ctx.createBufferSource();
+            noiseSource.buffer = buffer;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(900, now);
+
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+            noiseSource.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.getMasterGain());
+
+            noiseSource.start(now);
+            noiseSource.stop(now + 0.05);
+        }
+
         playWinSound() {
             if (this.isMuted) return;
             const ctx = this.getContext();
@@ -239,6 +269,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 osc.start(now + index * 0.2);
                 osc.stop(now + index * 0.2 + 1.1);
+            });
+        }
+
+        playLoseSound() {
+            if (this.isMuted) return;
+            const ctx = this.getContext();
+            const now = ctx.currentTime;
+            const notes = [392.0, 329.63, 261.63, 196.0];
+
+            notes.forEach((freq, index) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + index * 0.22);
+
+                gain.gain.setValueAtTime(0.22, now + index * 0.22);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.22 + 0.35);
+
+                osc.connect(gain);
+                gain.connect(this.getMasterGain());
+
+                osc.start(now + index * 0.22);
+                osc.stop(now + index * 0.22 + 0.45);
             });
         }
     }
@@ -1566,6 +1620,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- LÓGICA PARA @keyframes ---
         const FLIP_ANIMATION_DURATION = 800;
+        const FLIP_DELAY = 300;
 
         rowTiles.forEach((tile, index) => {
             tile.dataset.letter = guessArray[index];
@@ -1574,14 +1629,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 tile.classList.add('flip');
                 tile.style.color = '#ffffff';
                 updateKeyboard(guessArray[index], feedback[index]);
+                soundManager.playFlipSound();
                 setTimeout(() => {
                     tile.style.color = '#ffffff';
                 }, FLIP_ANIMATION_DURATION);
-            }, index * 300); // Retardo escalonado
+            }, index * FLIP_DELAY); // Retardo escalonado
         });
 
-        // Duración (0.8s = 800ms) + último retardo (4 * 300ms = 1200ms)
-        const totalAnimationTime = 800 + ((currentWordLength - 1) * 300); // 2000ms
+        // Duración (0.8s = 800ms) + retardo por letra (p. ej., 5 * 300ms = 1500ms)
+        const totalAnimationTime = FLIP_ANIMATION_DURATION + (currentWordLength * FLIP_DELAY);
         const willWin = guess === targetWord;
         const willLose = !willWin && currentRowIndex === MAX_TRIES - 1;
 
@@ -1594,9 +1650,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }, avatarReactionDelay);
         }
 
+        const RESULT_BUFFER_MS = 120;
+
         setTimeout(() => {
             console.log("Flip animation complete, checking win/loss...");
-            
+
             // --- INICIO DE LA CORRECCIÓN ---
             const gameEnded = checkWinLoss(guess);
 
@@ -1608,7 +1666,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateClueAvailability();
             // --- FIN DE LA CORRECCIÓN ---
 
-        }, totalAnimationTime + 100);
+        }, totalAnimationTime + RESULT_BUFFER_MS);
     }
 
     function updateKeyboard(letter, status) {
@@ -1654,6 +1712,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentRowIndex === MAX_TRIES - 1) { // 5 es el último índice (0-5)
             stopInteraction();
             setAvatarState('wrong');
+
+            soundManager.playLoseSound();
 
             if (isAdventureMode) {
                 handleAdventureFailure();

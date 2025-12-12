@@ -260,6 +260,7 @@ body.adventure-map-1-bg .game-container {
     flex: 0 0 180px;
     align-self: center;
     overflow: visible;
+    transition: opacity 0.3s ease;
 }
 
 .avatar-bubble {
@@ -307,7 +308,18 @@ body.adventure-map-1-bg .game-container {
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    transform: scaleX(-1);
+    transform: translateY(0) scaleX(-1);
+    animation: breathing 3.5s ease-in-out infinite;
+}
+
+@keyframes breathing {
+    0%, 100% {
+        transform: translateY(0) scaleX(-1);
+    }
+
+    50% {
+        transform: translateY(-4px) scaleX(-1);
+    }
 }
 
 .clue-panel-wrapper {

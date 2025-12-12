@@ -454,8 +454,8 @@ body.adventure-map-1-bg .game-container {
 
 .game-header-wrapper {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: flex-start;
     width: 100%;
     margin-bottom: 20px;
 }
@@ -464,26 +464,6 @@ body.adventure-map-1-bg .game-container {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.change-level-btn {
-    background: transparent;
-    border: none;
-    color: #2d2d2d;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    padding: 8px 4px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    transition: opacity 0.2s ease;
-}
-
-.change-level-btn:hover,
-.change-level-btn:focus-visible {
-    opacity: 0.8;
-    outline: none;
 }
 
 .sound-toggle {

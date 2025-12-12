@@ -955,17 +955,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (avatarImage.getAttribute('src') === newImageUrl) return;
 
+        const container = avatarImage.closest('.wordle-avatar');
+        const currentSrc = avatarImage.getAttribute('src');
+
+        if (container && currentSrc) {
+            container.style.backgroundImage = `url(${currentSrc})`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+            container.style.backgroundRepeat = 'no-repeat';
+        }
+
         avatarImage.style.opacity = '0';
 
         if (avatarTransitionTimeout) {
             clearTimeout(avatarTransitionTimeout);
         }
 
-        avatarTransitionTimeout = window.setTimeout(() => {
-            avatarImage.setAttribute('src', newImageUrl);
-            avatarImage.style.opacity = '1';
+        const cleanupBackground = () => {
+            if (container) {
+                container.style.backgroundImage = '';
+                container.style.backgroundSize = '';
+                container.style.backgroundPosition = '';
+                container.style.backgroundRepeat = '';
+            }
             avatarTransitionTimeout = null;
-        }, 300);
+        };
+
+        const handleLoad = () => {
+            avatarImage.style.opacity = '1';
+            avatarImage.removeEventListener('load', handleLoad);
+            avatarImage.removeEventListener('error', handleError);
+            avatarTransitionTimeout = window.setTimeout(cleanupBackground, 600);
+        };
+
+        const handleError = () => {
+            avatarImage.removeEventListener('load', handleLoad);
+            avatarImage.removeEventListener('error', handleError);
+            cleanupBackground();
+        };
+
+        avatarImage.addEventListener('load', handleLoad);
+        avatarImage.addEventListener('error', handleError);
+        avatarImage.setAttribute('src', newImageUrl);
     }
 
     function getRandomMessage(list = []) {

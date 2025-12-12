@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_LAST_PLAYED_KEY = 'wordleQuestLastPlayedLevel';
     const ADVENTURE_TRANSITION_DURATION_MS = 700;
     const AVATAR_IMAGES = {
-        thinking: '../images/thinking.png',
-        correct: '../images/right_answer.png',
-        wrong: '../images/wrong_answer.png',
+        thinking: '../images/thinking.webp',
+        correct: '../images/right_answer.webp',
+        wrong: '../images/wrong_answer.webp',
     };
     const AVATAR_MESSAGES = {
         initial: [

@@ -306,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
-    const changeLevelButton = document.getElementById('change-level-button');
     const soundToggleButton = document.getElementById('sound-toggle');
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
@@ -320,16 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !changeLevelButton || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
 
     const soundManager = new SoundManager(soundToggleButton);
-
-    changeLevelButton.addEventListener('click', () => {
-        window.location.href = 'index.html';
-    });
 
     clueButton.addEventListener('click', handleClueClick);
     instructionsButton.addEventListener('click', openInstructionsModal);

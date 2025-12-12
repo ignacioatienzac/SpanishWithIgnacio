@@ -447,13 +447,19 @@ body.adventure-map-1-bg .game-container {
 }
 
 /* --- (NUEVO) Barra de Controles del Juego --- */
-.game-controls {
+.game-top-bar {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px; /* Pequeño padding lateral */
-    margin-bottom: -1rem; /* Acercarlo al tablero */
+    gap: 1rem;
+    margin-bottom: 20px;
+}
+
+.game-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
 }
 
 .game-controls__title-group {
@@ -463,32 +469,30 @@ body.adventure-map-1-bg .game-container {
 }
 
 .change-level-button {
-    border: 1px solid #d7dce7;
-    background: #f7f9fd;
-    color: #1f2532;
+    background: transparent;
+    border: none;
+    color: var(--secondary-color);
     font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    padding: 0.45rem 0.9rem;
-    border-radius: 999px;
+    font-weight: 700;
+    padding: 8px 4px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.change-level-button::before {
+    content: "←";
+    font-weight: inherit;
 }
 
 .change-level-button:hover,
 .change-level-button:focus-visible {
-    background: #eef3ff;
-    border-color: #c6d4ff;
-    color: #1b2b5a;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    background: #f0f0f0;
+    border-radius: 12px;
+    opacity: 0.8;
     outline: none;
-}
-
-.change-level-button:active {
-    transform: translateY(1px);
 }
 
 .game-controls__actions {

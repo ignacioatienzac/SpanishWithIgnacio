@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clueButton = document.querySelector('.clue-button');
     const clueMessagesContainer = document.querySelector('.clue-messages');
     const adventureMapButton = document.getElementById('adventure-map-button');
+    const chooseLevelButton = document.getElementById('choose-level-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
@@ -319,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButton) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
@@ -330,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     instructionsButton.addEventListener('click', openInstructionsModal);
     instructionsCloseButton.addEventListener('click', closeInstructionsModal);
     instructionsOverlay.addEventListener('click', closeInstructionsModal);
+    chooseLevelButton.addEventListener('click', handleChooseLevelNavigation);
     document.addEventListener('keydown', handleInstructionsKeydown);
     if (adventureMapButton) {
         adventureMapButton.addEventListener('click', handleAdventureMapReturn);
@@ -478,6 +480,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isAdventureMode || adventureMapId !== 1) return;
 
         startAdventureTransition(getAdventureMapUrl(1));
+    }
+
+    function handleChooseLevelNavigation() {
+        if (document.referrer) {
+            window.history.back();
+            return;
+        }
+
+        window.location.href = 'index.html';
     }
 
     function recordAdventureCompletion() {

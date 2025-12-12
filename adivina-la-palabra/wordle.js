@@ -355,7 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let loadedHintLevel = null;
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
-    let clueUsedThisRow = false;
     let guessesMade = 0;
     let hasOfferedHelp = false;
     let isAdventureMode = false;
@@ -712,8 +711,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!clueButton || clueButton.disabled) return;
         if (!clueMessagesContainer) return;
 
-        if (nextHintIndex >= hintsForCurrentWord.length) {
-            clueUsedThisRow = true;
+        const hintsAvailable = getAvailableHintsCount();
+        if (nextHintIndex >= hintsAvailable) {
             updateClueAvailability();
             return;
         }
@@ -721,7 +720,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const clueNumber = nextHintIndex + 1;
         const hintText = hintsForCurrentWord[nextHintIndex];
         nextHintIndex++;
-        clueUsedThisRow = true;
 
         const defaultMessage = clueMessagesContainer.querySelector('.clue-message-default');
         if (defaultMessage) {
@@ -1155,6 +1153,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateClueAvailability();
     }
 
+    function getAvailableHintsCount() {
+        const unlockedByAttempts = Math.max(0, Math.min(3, currentRowIndex - 2));
+        const cappedByHints = Math.min(unlockedByAttempts, hintsForCurrentWord.length);
+        return Math.max(0, cappedByHints);
+    }
+
     function setAvatarState(state = 'thinking') {
         if (!avatarImage) return;
 
@@ -1361,7 +1365,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRowIndex = 0;
         currentColIndex = 0;
         isGameActive = false;
-        clueUsedThisRow = false;
         hasOfferedHelp = false;
 
         setAvatarState('thinking');
@@ -1736,7 +1739,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Si no ha ganado ni perdido, el juego continúa
         currentRowIndex++;
         currentColIndex = 0;
-        clueUsedThisRow = false;
         updateClueAvailability();
         console.log(`Moving to next row: ${currentRowIndex}`);
         return false; // Juego NO terminado
@@ -1798,9 +1800,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateClueAvailability() {
         if (!clueButton) return;
 
-        const hintsUnlocked = currentRowIndex >= TRIES_BEFORE_HINTS;
-        const hintsRemaining = nextHintIndex < hintsForCurrentWord.length;
-        const canUseClue = hintsUnlocked && hintsRemaining && isGameActive && !clueUsedThisRow;
+        const hintsAvailable = getAvailableHintsCount();
+        const hintsUnlocked = hintsAvailable > 0;
+        const hintsRemaining = nextHintIndex < hintsAvailable;
+        const canUseClue = hintsUnlocked && hintsRemaining && isGameActive;
 
         clueButton.disabled = !canUseClue;
         clueButton.classList.toggle('active', canUseClue);

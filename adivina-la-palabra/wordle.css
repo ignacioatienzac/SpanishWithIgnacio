@@ -447,25 +447,31 @@ body.adventure-map-1-bg .game-container {
 }
 
 /* --- (NUEVO) Barra de Controles del Juego --- */
-.game-top-bar {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 20px;
-}
 
-.game-controls {
+.game-top-row {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.game-top-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .game-controls__title-group {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex: 1;
+    min-width: 160px;
 }
 
 .change-level-button {
@@ -493,12 +499,6 @@ body.adventure-map-1-bg .game-container {
     border-radius: 12px;
     opacity: 0.8;
     outline: none;
-}
-
-.game-controls__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
 }
 
 .sound-toggle {
@@ -529,7 +529,7 @@ body.adventure-map-1-bg .game-container {
     transform: translateY(1px);
 }
 
-.game-controls h2 {
+#game-level-title {
     font-family: 'Oswald', sans-serif;
     color: var(--secondary-color);
     font-size: 2rem;

@@ -438,7 +438,7 @@ body.adventure-map-1-bg .game-container {
     transform: translateY(-1px);
 }
 
-.choose-level-button {
+.game-action-button {
     width: 100%;
     padding: 0.85rem 1rem;
     border: none;
@@ -446,19 +446,31 @@ body.adventure-map-1-bg .game-container {
     font-family: 'Inter', sans-serif;
     font-size: 1.05rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #1d8cf8, #3358f4);
-    color: #ffffff;
+    background: #e6e6e6;
+    color: #1f2532;
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.choose-level-button:hover,
-.choose-level-button:focus-visible {
+.game-action-button:hover:not(:disabled),
+.game-action-button:focus-visible:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 12px 22px rgba(0, 0, 0, 0.16);
     outline: none;
-    background: linear-gradient(135deg, #1669c8, #274ac7);
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+.game-action-button:disabled {
+    background: #d8d8d8;
+    color: #6b7280;
+    cursor: not-allowed;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.choose-level-button + .try-again-button {
+    margin-top: 0.75rem;
 }
 
 @media (max-width: 900px) {

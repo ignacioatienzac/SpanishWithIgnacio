@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clueMessagesContainer = document.querySelector('.clue-messages');
     const adventureMapButton = document.getElementById('adventure-map-button');
     const chooseLevelButton = document.getElementById('choose-level-button');
+    const tryAgainButton = document.getElementById('try-again-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
@@ -320,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButton) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButton || !tryAgainButton) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
@@ -332,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     instructionsCloseButton.addEventListener('click', closeInstructionsModal);
     instructionsOverlay.addEventListener('click', closeInstructionsModal);
     chooseLevelButton.addEventListener('click', handleChooseLevelNavigation);
+    tryAgainButton.addEventListener('click', handleTryAgainClick);
     document.addEventListener('keydown', handleInstructionsKeydown);
     if (adventureMapButton) {
         adventureMapButton.addEventListener('click', handleAdventureMapReturn);
@@ -489,6 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         window.location.href = 'index.html';
+    }
+
+    function handleTryAgainClick() {
+        if (tryAgainButton.disabled) return;
+
+        restartCurrentDailyGame();
     }
 
     function recordAdventureCompletion() {
@@ -676,6 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isGameActive = true;
         startInteraction();
         updateClueAvailability();
+        setTryAgainAvailability(false);
     }
 
     async function loadAdventureGame() {
@@ -706,6 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resetBoard(currentWordLength);
         const hintsReady = await ensureHintData();
         prepareHintsForWord(targetWord, hintsReady);
+        setTryAgainAvailability(false);
 
         isGameActive = true;
         startInteraction();
@@ -928,6 +938,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function setTryAgainAvailability(isEnabled) {
+        if (!tryAgainButton) return;
+        tryAgainButton.disabled = !isEnabled;
+    }
+
+    function restartCurrentDailyGame() {
+        guessesMade = 0;
+        resetBoard(currentWordLength);
+        prepareHintsForWord(targetWord, hintDataLoaded);
+        isGameActive = true;
+        startInteraction();
+        updateClueAvailability();
+        setTryAgainAvailability(false);
+    }
+
     /**
      * Carga las listas de palabras y prepara el juego para una fecha específica
      */
@@ -955,6 +980,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resetBoard(currentWordLength);
         const hintsReady = await ensureHintData();
         prepareHintsForWord(targetWord, hintsReady);
+        setTryAgainAvailability(false);
 
         console.log(`Word for ${date.toDateString()}: ${targetWord}`);
 
@@ -1719,6 +1745,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setAvatarState('correct');
             console.log("Game outcome: WIN");
             updateClueAvailability();
+            setTryAgainAvailability(false);
 
             if (isAdventureMode) {
                 handleAdventureWin();
@@ -1743,6 +1770,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showToast('Want to try again?', 5000);
             console.log("Game outcome: LOSS");
+            setTryAgainAvailability(true);
             updateClueAvailability();
             return true; // Juego terminado
         }

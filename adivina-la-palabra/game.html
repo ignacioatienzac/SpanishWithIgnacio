@@ -55,7 +55,12 @@
                     <div class="toast-container"></div>
 
                     <div class="game-controls">
-                        <h2 id="game-level-title">Level A1</h2>
+                        <div class="game-controls__title-group">
+                            <button id="change-level-button" class="change-level-button" type="button" aria-label="Change level">
+                                ← Change Level
+                            </button>
+                            <h2 id="game-level-title">Level A1</h2>
+                        </div>
                         <div class="game-controls__actions">
                             <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Toggle game sound" aria-pressed="false">🔊</button>
                             <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">

@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         thinking: '../images/thinking.webp',
         correct: '../images/right_answer.webp',
         wrong: '../images/wrong_answer.webp',
+        error: '../images/wrong_answer.webp',
     };
     const AVATAR_MESSAGES = {
         initial: [
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
     const avatarImage = document.querySelector('.wordle-avatar img');
     const avatarBubble = document.querySelector('.avatar-bubble');
+    let avatarTransitionTimeout = null;
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -118,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adventureMapButton) {
         adventureMapButton.addEventListener('click', handleAdventureMapReturn);
     }
+
+    preloadAvatarImages();
 
     // --- ESTADO DEL JUEGO ---
     const answerListsByLength = new Map();
@@ -148,6 +152,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeAdventureEntry = null;
     let adventureModal = null;
     let adventureTransition = null;
+
+    function preloadAvatarImages() {
+        if (!avatarImage) return;
+
+        Object.entries(AVATAR_IMAGES)
+            .filter(([state]) => state !== 'thinking')
+            .forEach(([, src]) => {
+                const img = new Image();
+                img.src = src;
+            });
+    }
 
     function sanitizeWordForHints(word) {
         if (typeof word !== 'string') return '';
@@ -930,10 +945,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!avatarImage) return;
 
         const nextSrc = AVATAR_IMAGES[state] || AVATAR_IMAGES.thinking;
+        updateAvatar(nextSrc);
+    }
 
-        if (avatarImage.getAttribute('src') !== nextSrc) {
-            avatarImage.setAttribute('src', nextSrc);
+    function updateAvatar(newImageUrl) {
+        if (!avatarImage || !newImageUrl) return;
+
+        if (avatarImage.getAttribute('src') === newImageUrl) return;
+
+        avatarImage.style.opacity = '0';
+
+        if (avatarTransitionTimeout) {
+            clearTimeout(avatarTransitionTimeout);
         }
+
+        avatarTransitionTimeout = window.setTimeout(() => {
+            avatarImage.setAttribute('src', newImageUrl);
+            avatarImage.style.opacity = '1';
+            avatarTransitionTimeout = null;
+        }, 300);
     }
 
     function getRandomMessage(list = []) {

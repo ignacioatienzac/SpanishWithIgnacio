@@ -450,34 +450,26 @@ body.adventure-map-1-bg .game-container {
 
 .game-top-row {
     width: 100%;
+}
+
+.game-header-wrapper {
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
     margin-bottom: 20px;
 }
 
-.game-top-bar {
-    flex: 1;
+.game-info-group {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.game-controls__title-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex: 1;
-    min-width: 160px;
-}
-
-.change-level-button {
+.change-level-btn {
     background: transparent;
     border: none;
-    color: var(--secondary-color);
+    color: #2d2d2d;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     padding: 8px 4px;
@@ -485,18 +477,11 @@ body.adventure-map-1-bg .game-container {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    transition: opacity 0.2s ease, background-color 0.2s ease;
+    transition: opacity 0.2s ease;
 }
 
-.change-level-button::before {
-    content: "←";
-    font-weight: inherit;
-}
-
-.change-level-button:hover,
-.change-level-button:focus-visible {
-    background: #f0f0f0;
-    border-radius: 12px;
+.change-level-btn:hover,
+.change-level-btn:focus-visible {
     opacity: 0.8;
     outline: none;
 }

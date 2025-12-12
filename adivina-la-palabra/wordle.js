@@ -1277,30 +1277,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleFeedbackMessages(feedback, { willWin = false, willLose = false, animationTime = 0 } = {}) {
         const delay = Math.max(0, animationTime - 200);
+        const attemptNumber = currentRowIndex + 1;
+        let finalMessage = '';
 
         if (willWin) {
-            showAvatarMessage('victory', delay);
-            return;
+            finalMessage = getRandomMessage(AVATAR_MESSAGES.victory);
+        } else if (willLose) {
+            finalMessage = getRandomMessage(AVATAR_MESSAGES.defeat);
+        } else if (attemptNumber === TRIES_BEFORE_HINTS && !hasOfferedHelp) {
+            finalMessage = 'Try using a hint!';
+            hasOfferedHelp = true;
+        } else {
+            const allGray = feedback.every(state => state === 'absent');
+
+            if (allGray) {
+                finalMessage = getRandomMessage(AVATAR_MESSAGES.allGray);
+            } else if (feedback.some(state => state === 'correct')) {
+                finalMessage = getRandomMessage(AVATAR_MESSAGES.correctSpot);
+            } else if (feedback.some(state => state === 'present')) {
+                finalMessage = getRandomMessage(AVATAR_MESSAGES.misplaced);
+            } else {
+                finalMessage = getRandomMessage(AVATAR_MESSAGES.initial);
+            }
         }
 
-        if (willLose) {
-            showAvatarMessage('defeat', delay);
-            return;
-        }
+        if (!finalMessage) return;
 
-        const allGray = feedback.every(state => state === 'absent');
-        if (allGray) {
-            showAvatarMessage('allGray', delay);
-            return;
-        }
-
-        if (feedback.some(state => state === 'correct')) {
-            showAvatarMessage('correctSpot', delay);
-            return;
-        }
-
-        if (feedback.some(state => state === 'present')) {
-            showAvatarMessage('misplaced', delay);
+        const renderMessage = () => setAvatarMessage(finalMessage);
+        if (delay > 0) {
+            window.setTimeout(renderMessage, delay);
+        } else {
+            renderMessage();
         }
     }
 
@@ -1794,11 +1801,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const hintsUnlocked = currentRowIndex >= TRIES_BEFORE_HINTS;
         const hintsRemaining = nextHintIndex < hintsForCurrentWord.length;
         const canUseClue = hintsUnlocked && hintsRemaining && isGameActive && !clueUsedThisRow;
-
-        if (hintsUnlocked && hintsRemaining && isGameActive && !hasOfferedHelp) {
-            hasOfferedHelp = true;
-            showAvatarMessage('help');
-        }
 
         clueButton.disabled = !canUseClue;
         clueButton.classList.toggle('active', canUseClue);

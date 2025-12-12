@@ -1154,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getAvailableHintsCount() {
-        const unlockedByAttempts = Math.max(0, Math.min(3, currentRowIndex - 2));
+        const unlockedByAttempts = Math.max(0, Math.min(3, guessesMade - 2));
         const cappedByHints = Math.min(unlockedByAttempts, hintsForCurrentWord.length);
         return Math.max(0, cappedByHints);
     }

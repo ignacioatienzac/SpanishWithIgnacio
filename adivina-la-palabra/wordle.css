@@ -323,8 +323,16 @@ body.adventure-map-1-bg .game-container {
     }
 }
 
-.clue-panel-wrapper {
+.clue-column {
     width: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.clue-panel-wrapper {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -430,6 +438,29 @@ body.adventure-map-1-bg .game-container {
     transform: translateY(-1px);
 }
 
+.choose-level-button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1d8cf8, #3358f4);
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.choose-level-button:hover,
+.choose-level-button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.16);
+    outline: none;
+    background: linear-gradient(135deg, #1669c8, #274ac7);
+}
+
 @media (max-width: 900px) {
     .game-main-area {
         flex-direction: column;
@@ -438,6 +469,11 @@ body.adventure-map-1-bg .game-container {
 
     .wordle-avatar {
         display: none;
+    }
+
+    .clue-column {
+        width: 100%;
+        max-width: 360px;
     }
 
     .clue-panel-wrapper {
@@ -455,15 +491,24 @@ body.adventure-map-1-bg .game-container {
 .game-header-wrapper {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
     margin-bottom: 20px;
+    gap: 1rem;
 }
 
 .game-info-group {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.game-controls-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .sound-toggle {

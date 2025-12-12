@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ADVENTURE_TRANSITION_END_KEY = 'wordleQuestTransitionEnd';
     const ADVENTURE_LAST_PLAYED_KEY = 'wordleQuestLastPlayedLevel';
     const ADVENTURE_TRANSITION_DURATION_MS = 700;
+    const AVATAR_TYPING_DELAY_MS = 35;
     const AVATAR_IMAGES = {
         thinking: '../images/thinking.webp',
         correct: '../images/right_answer.webp',
@@ -106,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarImage = document.querySelector('.wordle-avatar img');
     const avatarBubble = document.querySelector('.avatar-bubble');
     let avatarTransitionTimeout = null;
+    let avatarTypingTimeouts = [];
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -976,15 +978,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!avatarBubble) return;
 
         if (!message) {
+            clearAvatarTyping();
             avatarBubble.textContent = '';
             avatarBubble.classList.remove('is-visible');
             avatarBubble.setAttribute('aria-hidden', 'true');
             return;
         }
 
-        avatarBubble.textContent = message;
+        typeMessageWithEffect(avatarBubble, message, AVATAR_TYPING_DELAY_MS);
         avatarBubble.classList.add('is-visible');
         avatarBubble.setAttribute('aria-hidden', 'false');
+    }
+
+    function clearAvatarTyping() {
+        avatarTypingTimeouts.forEach(timeoutId => window.clearTimeout(timeoutId));
+        avatarTypingTimeouts = [];
+    }
+
+    function typeMessageWithEffect(element, message, delay = 30) {
+        if (!element) return;
+
+        clearAvatarTyping();
+
+        const content = typeof message === 'string' ? message : String(message ?? '');
+        const characters = Array.from(content);
+
+        element.textContent = '';
+
+        characters.forEach((char, index) => {
+            const timeoutId = window.setTimeout(() => {
+                element.textContent += char;
+            }, delay * index);
+
+            avatarTypingTimeouts.push(timeoutId);
+        });
+
+        const finalTimeoutId = window.setTimeout(() => {
+            avatarTypingTimeouts = [];
+        }, delay * characters.length);
+
+        avatarTypingTimeouts.push(finalTimeoutId);
     }
 
     function showAvatarMessage(type, delay = 0) {

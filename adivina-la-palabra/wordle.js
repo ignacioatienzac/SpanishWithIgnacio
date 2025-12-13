@@ -1212,10 +1212,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentSrc = avatarImage.getAttribute('src');
 
         if (container && currentSrc) {
-            container.style.backgroundImage = `url(${currentSrc})`;
-            container.style.backgroundSize = 'cover';
-            container.style.backgroundPosition = 'center';
-            container.style.backgroundRepeat = 'no-repeat';
+            container.classList.add('has-transition-bg');
+            container.style.setProperty('--avatar-transition-image', `url(${currentSrc})`);
         }
 
         avatarImage.style.opacity = '0';
@@ -1226,10 +1224,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cleanupBackground = () => {
             if (container) {
-                container.style.backgroundImage = '';
-                container.style.backgroundSize = '';
-                container.style.backgroundPosition = '';
-                container.style.backgroundRepeat = '';
+                container.classList.remove('has-transition-bg');
+                container.style.removeProperty('--avatar-transition-image');
             }
             avatarTransitionTimeout = null;
         };

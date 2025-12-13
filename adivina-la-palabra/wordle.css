@@ -263,6 +263,25 @@ body.adventure-map-1-bg .game-container {
     transition: opacity 0.3s ease;
 }
 
+.wordle-avatar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transform: scaleX(-1);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.wordle-avatar.has-transition-bg::before {
+    background-image: var(--avatar-transition-image);
+    opacity: 1;
+}
+
 .avatar-bubble {
     position: absolute;
     left: 50%;
@@ -304,6 +323,8 @@ body.adventure-map-1-bg .game-container {
 }
 
 .wordle-avatar img {
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     object-fit: cover;

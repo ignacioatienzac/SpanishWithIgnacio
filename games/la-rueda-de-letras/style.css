@@ -185,12 +185,12 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    background: var(--card);
+    background: transparent;
     margin-top: 18px;
     padding: 14px 16px;
-    border: 1px solid var(--border);
+    border: none;
     border-radius: 12px;
-    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.04);
+    box-shadow: none;
 }
 
 .toolbar-left {
@@ -371,7 +371,14 @@ button.ghost:hover { background: #e5e7eb; }
 }
 .clues-card { display: flex; flex-direction: column; gap: 10px; }
 
-.grid-card { display: flex; flex-direction: column; gap: 12px; }
+.grid-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
 .sidebar { display: flex; flex-direction: column; gap: 14px; }
 
 .card-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
@@ -382,10 +389,11 @@ button.ghost:hover { background: #e5e7eb; }
 .badge { background: #fef2f2; color: var(--primary); padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; border: 1px solid #fde5e5; }
 
 .crossword {
-    background: transparent;
-    border-radius: 12px;
+    background: #ffffff;
+    border-radius: 16px;
     padding: 2rem;
     border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     height: max-content;
     display: inline-grid;
     gap: 4px;

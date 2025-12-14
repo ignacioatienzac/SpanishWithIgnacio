@@ -330,6 +330,12 @@ function translateElement(element, language, translations) {
     }
 }
 
+function emitLanguageChange(language) {
+    window.dispatchEvent(new CustomEvent('swi:languagechange', {
+        detail: { language }
+    }));
+}
+
 async function applyLanguage(language) {
     const normalizedLang = language === 'es' ? 'es' : 'en';
     const isSameLanguage = document.documentElement.lang === normalizedLang;
@@ -338,6 +344,7 @@ async function applyLanguage(language) {
         updateLanguageButtons(normalizedLang);
         currentLanguage = normalizedLang;
         renderAllAccountMenus();
+        emitLanguageChange(normalizedLang);
         return;
     }
     document.documentElement.lang = normalizedLang;
@@ -370,6 +377,7 @@ async function applyLanguage(language) {
         updateLanguageButtons(normalizedLang);
         renderAllAccountMenus();
         localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLang);
+        emitLanguageChange(normalizedLang);
     } finally {
         document.documentElement.removeAttribute('data-lang-initializing');
     }

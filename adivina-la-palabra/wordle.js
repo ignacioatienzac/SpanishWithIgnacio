@@ -1668,6 +1668,9 @@ document.addEventListener('DOMContentLoaded', () => {
         rowTiles.forEach((tile, index) => {
             tile.dataset.letter = guessArray[index];
             setTimeout(() => {
+                // Asegurar que la animación de volteo siempre se reinicie
+                tile.classList.remove('flip');
+                void tile.offsetWidth;
                 tile.classList.add(feedback[index]);
                 tile.classList.add('flip');
                 tile.style.color = '#ffffff';

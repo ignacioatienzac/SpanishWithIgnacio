@@ -134,6 +134,9 @@ body {
 .avatar-placement {
     align-self: flex-start;
     margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .toolbar-avatar {
@@ -173,10 +176,7 @@ body {
 }
 
 .avatar-bubble {
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 10px);
-    transform: translate(-50%, 12px);
+    position: relative;
     width: max-content;
     max-width: 180px;
     padding: 10px 12px;
@@ -188,6 +188,7 @@ body {
     font-weight: 700;
     color: #1b263b;
     line-height: 1.4;
+    margin-left: 15px;
     opacity: 0;
     pointer-events: none;
     z-index: 3;
@@ -197,18 +198,19 @@ body {
 
 .avatar-bubble.is-visible {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: none;
 }
 
 .avatar-bubble::after {
     content: '';
     position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px 10px 0 10px;
-    border-style: solid;
-    border-color: #ffffff transparent transparent transparent;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #ffffff;
+    border-left: 0;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
 }
 

@@ -2,7 +2,7 @@ let vocabulary = null;
 
 async function loadVocabulary() {
     if (vocabulary) return vocabulary;
-    const response = await fetch('vocabulaio-a1.json');
+    const response = await fetch('vocabulario_a1.json');
     if (!response.ok) {
         throw new Error('No se pudo cargar el vocabulario.');
     }
@@ -781,7 +781,7 @@ function renderClues() {
         item.className = 'clue';
         if (solvedWords.has(wordId(w))) item.classList.add('solved');
         const left = document.createElement('div');
-        left.innerHTML = `<span class="index">${idx + 1}</span> ${w.wordObj.traduccion_ingles}`;
+        left.innerHTML = `<span class="index">${idx + 1}</span> ${w.wordObj.pistas}`;
         const right = document.createElement('div');
         right.textContent = formatLetters(w.normalized.length);
         item.appendChild(left);

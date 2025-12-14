@@ -38,54 +38,198 @@ document.addEventListener('DOMContentLoaded', () => {
         wrong: '../images/wrong_answer.webp',
         error: '../images/wrong_answer.webp',
     };
-    const AVATAR_MESSAGES = {
+
+    const AVATAR_TRANSLATIONS = {
+        'avatar.initial.positive': {
+            en: 'How are we feeling today?',
+            es: '¿Cómo nos sentimos hoy?',
+        },
+        'avatar.initial.thinking': {
+            en: 'Hmm... which one is it?',
+            es: 'Hmm... ¿cuál será?',
+        },
+        'avatar.initial.relaxed': {
+            en: 'No rush, just flow.',
+            es: 'Sin prisa, con flow.',
+        },
+        'avatar.allGray.cold': {
+            en: 'Oof, nothing! Cold as ice.',
+            es: 'Uf, nada. ¡Frío como el hielo!',
+        },
+        'avatar.allGray.switch': {
+            en: 'Not a single one... time to switch tactics.',
+            es: 'Ni una sola... toca cambiar de táctica.',
+        },
+        'avatar.allGray.vowels': {
+            en: "Wow... try completely different vowels.",
+            es: 'Wow... prueba con vocales totalmente distintas.',
+        },
+        'avatar.allGray.cleanSlate': {
+            en: 'Clean slate. Next try!',
+            es: 'Borrón y cuenta nueva. ¡Siguiente intento!',
+        },
+        'avatar.allGray.badDay': {
+            en: "Not these letters' day today, haha.",
+            es: 'Hoy no era el día de esas letras, jaja.',
+        },
+        'avatar.correctSpot.stays': {
+            en: 'Nice! That one stays there.',
+            es: '¡Bien! Esa se queda ahí.',
+        },
+        'avatar.correctSpot.bingo': {
+            en: 'Bingo! One down.',
+            es: '¡Bingo! Una menos.',
+        },
+        'avatar.correctSpot.shape': {
+            en: "Look at that! It's taking shape.",
+            es: '¡Mira! Ya va tomando forma.',
+        },
+        'avatar.correctSpot.key': {
+            en: 'That letter is key.',
+            es: 'Esa letra es clave.',
+        },
+        'avatar.correctSpot.green': {
+            en: 'Boom! A green one.',
+            es: '¡Boom! Una verde.',
+        },
+        'avatar.correctSpot.good': {
+            en: 'Looking good, looking good...',
+            es: 'Se ve bien, se ve bien...',
+        },
+        'avatar.misplaced.move': {
+            en: "It's there, but not there. Move it!",
+            es: 'Está, pero no ahí. ¡Muévela!',
+        },
+        'avatar.misplaced.order': {
+            en: 'Close... switch the order.',
+            es: 'Cerca... cambia el orden.',
+        },
+        'avatar.misplaced.findSpot': {
+            en: 'That letter works, find its spot.',
+            es: 'Esa letra sirve, busca su lugar.',
+        },
+        'avatar.misplaced.warmer': {
+            en: 'Warmer, warmer!',
+            es: '¡Más caliente, más caliente!',
+        },
+        'avatar.help.tricky': {
+            en: 'Getting tricky? Get a clue!',
+            es: '¿Se complica? ¡Pide una pista!',
+        },
+        'avatar.help.hintOffer': {
+            en: "Psst... I've got a little hint right here.",
+            es: 'Psst... tengo una pista por aquí.',
+        },
+        'avatar.help.checkClue': {
+            en: "Don't overthink it, check the clue!",
+            es: 'No le des tantas vueltas, ¡mira la pista!',
+        },
+        'avatar.help.hintHelps': {
+            en: 'Sometimes a hint helps, huh?',
+            es: 'A veces una pista ayuda, ¿eh?',
+        },
+        'avatar.help.needHand': {
+            en: 'Need a hand? Hit the button.',
+            es: '¿Necesitas ayuda? Pulsa el botón.',
+        },
+        'avatar.victory.yes': {
+            en: "YES! That's it!",
+            es: '¡SÍ! ¡Esa es!',
+        },
+        'avatar.victory.legend': {
+            en: 'You are a legend!',
+            es: '¡Eres una leyenda!',
+        },
+        'avatar.victory.knewIt': {
+            en: "Knew you'd get it!",
+            es: '¡Sabía que la sacarías!',
+        },
+        'avatar.victory.next': {
+            en: 'Great game! On to the next one.',
+            es: '¡Gran partida! Vamos a la siguiente.',
+        },
+        'avatar.victory.amazing': {
+            en: 'Amazing! Another round?',
+            es: '¡Increíble! ¿Otra ronda?',
+        },
+        'avatar.victory.onFire': {
+            en: 'You are on fire today!',
+            es: '¡Estás en llamas hoy!',
+        },
+        'avatar.defeat.bummer': {
+            en: 'Bummer... bad luck.',
+            es: 'Vaya... mala suerte.',
+        },
+        'avatar.defeat.notOurDay': {
+            en: 'Not our day today, haha.',
+            es: 'Hoy no era nuestro día, jaja.',
+        },
+        'avatar.defeat.close': {
+            en: "So close... we'll get it tomorrow!",
+            es: 'Cerquita... ¡mañana la tenemos!',
+        },
+        'avatar.defeat.noWorries': {
+            en: 'No worries, this one was tough.',
+            es: 'No pasa nada, esta estaba difícil.',
+        },
+        'avatar.defeat.goodTry': {
+            en: "Good try! Don't give up.",
+            es: 'Buen intento, no te rindas.',
+        },
+        'avatar.help.prompt': {
+            en: 'Try using a hint!',
+            es: '¡Prueba una pista!',
+        },
+    };
+
+    const AVATAR_MESSAGE_KEYS = {
         initial: [
-            'How are we feeling today?',
-            'Hmm... which one is it?',
-            'No rush, just flow.',
+            'avatar.initial.positive',
+            'avatar.initial.thinking',
+            'avatar.initial.relaxed',
         ],
         allGray: [
-            'Oof, nothing! Cold as ice.',
-            'Not a single one... time to switch tactics.',
-            "Wow... try completely different vowels.",
-            'Clean slate. Next try!',
-            "Not these letters' day today, haha.",
+            'avatar.allGray.cold',
+            'avatar.allGray.switch',
+            'avatar.allGray.vowels',
+            'avatar.allGray.cleanSlate',
+            'avatar.allGray.badDay',
         ],
         correctSpot: [
-            'Nice! That one stays there.',
-            'Bingo! One down.',
-            "Look at that! It's taking shape.",
-            'That letter is key.',
-            'Boom! A green one.',
-            'Looking good, looking good...',
+            'avatar.correctSpot.stays',
+            'avatar.correctSpot.bingo',
+            'avatar.correctSpot.shape',
+            'avatar.correctSpot.key',
+            'avatar.correctSpot.green',
+            'avatar.correctSpot.good',
         ],
         misplaced: [
-            "It's there, but not there. Move it!",
-            'Close... switch the order.',
-            'That letter works, find its spot.',
-            'Warmer, warmer!',
+            'avatar.misplaced.move',
+            'avatar.misplaced.order',
+            'avatar.misplaced.findSpot',
+            'avatar.misplaced.warmer',
         ],
         help: [
-            'Getting tricky? Get a clue!',
-            "Psst... I've got a little hint right here.",
-            "Don't overthink it, check the clue!",
-            'Sometimes a hint helps, huh?',
-            'Need a hand? Hit the button.',
+            'avatar.help.tricky',
+            'avatar.help.hintOffer',
+            'avatar.help.checkClue',
+            'avatar.help.hintHelps',
+            'avatar.help.needHand',
         ],
         victory: [
-            "YES! That's it!",
-            'You are a legend!',
-            "Knew you'd get it!",
-            'Great game! On to the next one.',
-            'Amazing! Another round?',
-            'You are on fire today!',
+            'avatar.victory.yes',
+            'avatar.victory.legend',
+            'avatar.victory.knewIt',
+            'avatar.victory.next',
+            'avatar.victory.amazing',
+            'avatar.victory.onFire',
         ],
         defeat: [
-            'Bummer... bad luck.',
-            'Not our day today, haha.',
-            "So close... we'll get it tomorrow!",
-            'No worries, this one was tough.',
-            "Good try! Don't give up.",
+            'avatar.defeat.bummer',
+            'avatar.defeat.notOurDay',
+            'avatar.defeat.close',
+            'avatar.defeat.noWorries',
+            'avatar.defeat.goodTry',
         ],
     };
 
@@ -320,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarBubble = document.querySelector('.avatar-bubble');
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
+    let currentAvatarMessageKey = null;
 
     if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButton || !tryAgainButton) {
         console.error("Error: Could not find all essential game elements in the HTML.");
@@ -1196,6 +1341,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.max(0, cappedByHints);
     }
 
+    function getCurrentLanguage() {
+        return document.documentElement.lang === 'es' ? 'es' : 'en';
+    }
+
+    function translateAvatarMessage(messageKey) {
+        const language = getCurrentLanguage();
+        const translationEntry = AVATAR_TRANSLATIONS[messageKey];
+
+        if (!translationEntry) return messageKey;
+
+        return translationEntry[language] || translationEntry.en || messageKey;
+    }
+
     function setAvatarState(state = 'thinking') {
         if (!avatarImage) return;
 
@@ -1248,24 +1406,28 @@ document.addEventListener('DOMContentLoaded', () => {
         avatarImage.setAttribute('src', newImageUrl);
     }
 
-    function getRandomMessage(list = []) {
+    function getRandomMessageKey(list = []) {
         if (!Array.isArray(list) || list.length === 0) return '';
         const index = Math.floor(Math.random() * list.length);
         return list[index];
     }
 
-    function setAvatarMessage(message) {
+    function setAvatarMessage(messageKey) {
         if (!avatarBubble) return;
 
-        if (!message) {
+        if (!messageKey) {
             clearAvatarTyping();
             avatarBubble.textContent = '';
             avatarBubble.classList.remove('is-visible');
             avatarBubble.setAttribute('aria-hidden', 'true');
+            currentAvatarMessageKey = null;
             return;
         }
 
-        typeMessageWithEffect(avatarBubble, message, AVATAR_TYPING_DELAY_MS);
+        currentAvatarMessageKey = messageKey;
+        const translatedMessage = translateAvatarMessage(messageKey);
+
+        typeMessageWithEffect(avatarBubble, translatedMessage, AVATAR_TYPING_DELAY_MS);
         avatarBubble.classList.add('is-visible');
         avatarBubble.setAttribute('aria-hidden', 'false');
     }
@@ -1301,10 +1463,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showAvatarMessage(type, delay = 0) {
-        const message = getRandomMessage(AVATAR_MESSAGES[type]);
-        if (!message) return;
+        const messageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS[type]);
+        if (!messageKey) return;
 
-        const renderMessage = () => setAvatarMessage(message);
+        const renderMessage = () => setAvatarMessage(messageKey);
         if (delay > 0) {
             window.setTimeout(renderMessage, delay);
         } else {
@@ -1315,38 +1477,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFeedbackMessages(feedback, { willWin = false, willLose = false, animationTime = 0 } = {}) {
         const delay = Math.max(0, animationTime - 200);
         const attemptNumber = currentRowIndex + 1;
-        let finalMessage = '';
+        let finalMessageKey = '';
 
         if (willWin) {
-            finalMessage = getRandomMessage(AVATAR_MESSAGES.victory);
+            finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.victory);
         } else if (willLose) {
-            finalMessage = getRandomMessage(AVATAR_MESSAGES.defeat);
+            finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.defeat);
         } else if (attemptNumber === TRIES_BEFORE_HINTS && !hasOfferedHelp) {
-            finalMessage = 'Try using a hint!';
+            finalMessageKey = 'avatar.help.prompt';
             hasOfferedHelp = true;
         } else {
             const allGray = feedback.every(state => state === 'absent');
 
             if (allGray) {
-                finalMessage = getRandomMessage(AVATAR_MESSAGES.allGray);
+                finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.allGray);
             } else if (feedback.some(state => state === 'correct')) {
-                finalMessage = getRandomMessage(AVATAR_MESSAGES.correctSpot);
+                finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.correctSpot);
             } else if (feedback.some(state => state === 'present')) {
-                finalMessage = getRandomMessage(AVATAR_MESSAGES.misplaced);
+                finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.misplaced);
             } else {
-                finalMessage = getRandomMessage(AVATAR_MESSAGES.initial);
+                finalMessageKey = getRandomMessageKey(AVATAR_MESSAGE_KEYS.initial);
             }
         }
 
-        if (!finalMessage) return;
+        if (!finalMessageKey) return;
 
-        const renderMessage = () => setAvatarMessage(finalMessage);
+        const renderMessage = () => setAvatarMessage(finalMessageKey);
         if (delay > 0) {
             window.setTimeout(renderMessage, delay);
         } else {
             renderMessage();
         }
     }
+
+    window.addEventListener('swi:languagechange', () => {
+        if (!currentAvatarMessageKey) return;
+        setAvatarMessage(currentAvatarMessageKey);
+    });
 
     /**
      * Resetea el tablero y el teclado a su estado inicial

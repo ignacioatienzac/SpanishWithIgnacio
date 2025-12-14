@@ -201,6 +201,13 @@ body {
     min-width: 0;
 }
 
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+}
+
 .date-control {
     display: flex;
     align-items: center;

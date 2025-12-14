@@ -297,7 +297,7 @@ const shuffleBtn = document.getElementById('shuffle');
 const backspaceBtn = document.getElementById('backspace');
 const submitBtn = document.getElementById('submit');
 const avatarContainer = document.querySelector('.toolbar-avatar');
-const avatarBubbleEl = avatarContainer ? avatarContainer.querySelector('.avatar-bubble') : null;
+const avatarBubbleEl = document.querySelector('.avatar-bubble');
 const avatarImageEl = avatarContainer ? avatarContainer.querySelector('img') : null;
 
 let gameState = null;

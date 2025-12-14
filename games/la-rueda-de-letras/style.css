@@ -108,6 +108,16 @@ body {
     background-color: rgba(0, 0, 0, 0.04);
 }
 
+.toolbar-title {
+    margin-left: auto;
+    text-align: right;
+}
+
+.toolbar-title h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
 label {
     font-weight: 600;
     color: var(--muted);
@@ -156,6 +166,7 @@ button.ghost:hover { background: #e5e7eb; }
 .sidebar { display: flex; flex-direction: column; gap: 14px; }
 
 .card-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.card-header--compact { justify-content: flex-end; }
 .clue-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; flex-wrap: wrap; }
 .clue-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .eyebrow { text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; color: var(--muted); margin: 0 0 6px; font-weight: 700; }

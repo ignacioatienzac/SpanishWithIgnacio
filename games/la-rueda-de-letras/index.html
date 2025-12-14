@@ -76,18 +76,16 @@
     <main class="container">
         <section class="toolbar">
             <div class="date-control">
-                <label for="calendar-button">Select a day</label>
                 <button id="calendar-button" class="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
+            </div>
+            <div class="toolbar-title">
+                <h2 id="puzzleTitle">Puzzle of the day</h2>
             </div>
         </section>
 
         <section class="game-layout">
             <div class="grid-card">
-                <div class="card-header">
-                    <div>
-                        <p class="eyebrow">Daily crossword</p>
-                        <h2 id="puzzleTitle">Puzzle of the day</h2>
-                    </div>
+                <div class="card-header card-header--compact">
                     <div class="badge" id="progressBadge">0 / 0</div>
                 </div>
                 <div id="grid" class="crossword"></div>

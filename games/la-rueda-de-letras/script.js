@@ -296,6 +296,9 @@ const toggleCluesBtn = document.getElementById('toggleClues');
 const shuffleBtn = document.getElementById('shuffle');
 const backspaceBtn = document.getElementById('backspace');
 const submitBtn = document.getElementById('submit');
+const avatarContainer = document.querySelector('.toolbar-avatar');
+const avatarBubbleEl = avatarContainer ? avatarContainer.querySelector('.avatar-bubble') : null;
+const avatarImageEl = avatarContainer ? avatarContainer.querySelector('img') : null;
 
 let gameState = null;
 let solvedWords = new Set();
@@ -308,6 +311,9 @@ let currentDateStr = '';
 let fallbackDateInput = null;
 let shakeTimeout = null;
 let successTimeout = null;
+let avatarTypingTimeouts = [];
+let lastAvatarMessageKey = null;
+let lastAvatarContext = '';
 
 let audioCtx = null;
 let confettiLoaded = false;
@@ -606,6 +612,7 @@ function handleErrorFeedback() {
     guessEl.classList.add('is-error');
     animateElement(guessEl, 'shake', 400);
     playErrorSound();
+    showAvatarMessage('error');
 
     shakeTimeout = setTimeout(() => {
         guessEl.classList.remove('is-error');
@@ -616,6 +623,7 @@ function handleErrorFeedback() {
 
 function handleSuccessFeedback(newSolved, newlyFoundWords = []) {
     if (successTimeout) clearTimeout(successTimeout);
+    showAvatarMessage('success');
     animateElement(guessEl, 'success-pulse', 600);
     triggerConfetti();
 
@@ -659,6 +667,29 @@ const UI_COPY = {
     },
 };
 
+const AVATAR_COPY = {
+    en: {
+        intro: 'Ready to loop through today’s puzzle?',
+        puzzle: (title) => `Working on ${title}.`,
+        success: ['Great find!', 'That word fits perfectly!'],
+        error: ['That word is not in the crossword.', 'Give those letters another spin.'],
+    },
+    es: {
+        intro: '¿Listo para girar con el puzzle de hoy?',
+        puzzle: (title) => `Resolviendo ${title}.`,
+        success: ['¡Bien encontrado!', 'Esa palabra encaja perfecto.'],
+        error: ['Esa palabra no aparece en el crucigrama.', 'Prueba otra combinación de letras.'],
+    },
+};
+
+const AVATAR_IMAGES = {
+    thinking: '../../images/thinking.webp',
+    correct: '../../images/right_answer.webp',
+    wrong: '../../images/wrong_answer.webp',
+};
+
+const AVATAR_TYPING_DELAY_MS = 35;
+
 function getCopy(key) {
     const lang = getLanguage();
     return UI_COPY[lang][key];
@@ -687,6 +718,90 @@ function ensureVictoryMessageLanguage() {
     if (victoryEl) {
         victoryEl.textContent = getCopy('victoryMessage');
     }
+}
+
+function getAvatarMessage(key, context = '') {
+    const lang = getLanguage();
+    const copy = AVATAR_COPY[lang]?.[key];
+    if (!copy) return '';
+    if (typeof copy === 'function') return copy(context);
+    if (Array.isArray(copy)) return getRandomElement(copy);
+    return copy;
+}
+
+function swapAvatarImage(state) {
+    if (!avatarImageEl || !avatarContainer) return;
+    const nextSrc = AVATAR_IMAGES[state] || AVATAR_IMAGES.thinking;
+    const currentSrc = avatarImageEl.getAttribute('src');
+    if (currentSrc === nextSrc) return;
+
+    avatarContainer.classList.remove('has-transition-bg');
+    if (currentSrc) {
+        avatarContainer.style.setProperty('--avatar-transition-image', `url(${currentSrc})`);
+        avatarContainer.classList.add('has-transition-bg');
+    }
+
+    avatarImageEl.style.opacity = '0';
+
+    const cleanupTransition = () => {
+        avatarImageEl.style.opacity = '1';
+        avatarContainer.classList.remove('has-transition-bg');
+        avatarContainer.style.removeProperty('--avatar-transition-image');
+    };
+
+    const handleLoad = () => {
+        cleanupTransition();
+        avatarImageEl.removeEventListener('load', handleLoad);
+        avatarImageEl.removeEventListener('error', handleError);
+    };
+
+    const handleError = () => {
+        cleanupTransition();
+        avatarImageEl.removeEventListener('load', handleLoad);
+        avatarImageEl.removeEventListener('error', handleError);
+    };
+
+    avatarImageEl.addEventListener('load', handleLoad);
+    avatarImageEl.addEventListener('error', handleError);
+    avatarImageEl.setAttribute('src', nextSrc);
+}
+
+function clearAvatarMessageTyping() {
+    avatarTypingTimeouts.forEach((id) => window.clearTimeout(id));
+    avatarTypingTimeouts = [];
+}
+
+function typeAvatarMessage(message) {
+    if (!avatarBubbleEl) return;
+    clearAvatarMessageTyping();
+    avatarBubbleEl.textContent = '';
+    const chars = Array.from(message);
+    chars.forEach((char, index) => {
+        const timeoutId = window.setTimeout(() => {
+            avatarBubbleEl.textContent += char;
+        }, index * AVATAR_TYPING_DELAY_MS);
+        avatarTypingTimeouts.push(timeoutId);
+    });
+}
+
+function showAvatarMessage(key, context = '') {
+    if (!avatarBubbleEl || !avatarImageEl) return;
+    const message = getAvatarMessage(key, context);
+    if (!message) return;
+
+    lastAvatarMessageKey = key;
+    lastAvatarContext = context;
+    const state = key === 'success' ? 'correct' : key === 'error' ? 'wrong' : 'thinking';
+    swapAvatarImage(state);
+
+    avatarBubbleEl.classList.add('is-visible');
+    avatarBubbleEl.setAttribute('aria-hidden', 'false');
+    typeAvatarMessage(message);
+}
+
+function refreshAvatarLanguage() {
+    if (!lastAvatarMessageKey) return;
+    showAvatarMessage(lastAvatarMessageKey, lastAvatarContext);
 }
 
 function getLetterCenter(index) {
@@ -904,6 +1019,7 @@ async function loadPuzzle(dateStr) {
         return;
     }
     puzzleTitleEl.textContent = formatPuzzleTitle(dateStr);
+    showAvatarMessage('puzzle', puzzleTitleEl.textContent);
     renderAll();
 }
 
@@ -959,6 +1075,7 @@ document.addEventListener('keydown', (e) => {
 async function initGame() {
     currentDateStr = normalizeDate(new Date());
     setupCalendar();
+    showAvatarMessage('intro');
     await loadPuzzle(currentDateStr);
 }
 
@@ -978,6 +1095,7 @@ const languageObserver = new MutationObserver((mutations) => {
             puzzleTitleEl.textContent = formatPuzzleTitle(currentDateStr);
             renderAll();
         }
+        refreshAvatarLanguage();
     }
 });
 

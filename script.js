@@ -127,7 +127,9 @@ function getTranslatableElements() {
             return true;
         }
 
-        return !collection.some(other => other !== element && other.contains(element));
+        const hasTranslatableChild = collection.some(other => other !== element && element.contains(other));
+
+        return !hasTranslatableChild;
     });
     return translatableElementsCache;
 }

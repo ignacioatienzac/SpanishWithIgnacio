@@ -1,7 +1,7 @@
 {
   "textTranslations": {
     "Home": "Inicio",
-    "Students": "Estudiantes",
+    "Resources": "Recursos",
     "Teachers": "Profesores",
     "Games": "Juegos",
     "Guess the word": "Adivina la palabra",
@@ -206,13 +206,13 @@
   },
   "titleTranslations": {
     "Spanish with Ignacio - Home": "Spanish with Ignacio - Inicio",
-    "Spanish with Ignacio - Students": "Spanish with Ignacio - Estudiantes",
+    "Spanish with Ignacio - Resources": "Spanish with Ignacio - Recursos",
     "Spanish with Ignacio - Teachers": "Spanish with Ignacio - Profesores",
     "Spanish with Ignacio - Games": "Spanish with Ignacio - Juegos",
     "Adivina la Palabra - Spanish with Ignacio": "Adivina la Palabra - Spanish with Ignacio",
     "Spanish with Ignacio - Adventure mode": "Spanish with Ignacio - Modo aventura",
-    "Spanish with Ignacio - Students A1 Grammar": "Spanish with Ignacio - Estudiantes A1 Gramática",
-    "Spanish with Ignacio - Students A1 Vocabulary": "Spanish with Ignacio - Estudiantes A1 Vocabulario",
+    "Spanish with Ignacio - Resources A1 Grammar": "Spanish with Ignacio - Recursos A1 Gramática",
+    "Spanish with Ignacio - Resources A1 Vocabulary": "Spanish with Ignacio - Recursos A1 Vocabulario",
     "Spanish with Ignacio - Professions": "Spanish with Ignacio - Profesiones",
     "Guess the Word - Game": "Adivina la palabra - Juego",
     "Letter Loop": "La rueda de letras"

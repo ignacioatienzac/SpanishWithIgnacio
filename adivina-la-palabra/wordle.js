@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const IS_PREMIUM_USER = true;
 
     const LEVEL_FILE_MAP = {
-        A1: '../data/wordle-a1-palabras.json',
-        A2: '../data/wordle-a2-palabras.json',
-        B1: '../data/wordle-b1-palabras.json',
+        A1: '../data/vocabulario_a1.json',
+        A2: '../data/vocabulario_a2.json',
+        B1: '../data/vocabulario_b1.json',
     };
     const SUPPORTED_LEVELS = Object.keys(LEVEL_FILE_MAP);
     const HINT_FILE_MAP = {

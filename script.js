@@ -62,6 +62,7 @@ const translatableSelectors = [
     'h3',
     'h4',
     'p',
+    'li',
     'a',
     'button',
     '.page-hero__subtitle',

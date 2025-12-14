@@ -75,11 +75,17 @@
 
     <main class="container">
         <section class="toolbar">
-            <div class="date-control">
-                <button id="calendar-button" class="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
+            <div class="toolbar-left">
+                <div class="date-control">
+                    <button id="calendar-button" class="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
+                </div>
+                <div class="toolbar-title">
+                    <h2 id="puzzleTitle">Puzzle of the day</h2>
+                </div>
             </div>
-            <div class="toolbar-title">
-                <h2 id="puzzleTitle">Puzzle of the day</h2>
+            <div class="toolbar-avatar wordle-avatar">
+                <div class="avatar-bubble" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
+                <img src="../../images/thinking.webp" alt="">
             </div>
         </section>
 

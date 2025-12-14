@@ -291,7 +291,6 @@ const victoryEl = document.getElementById('victory');
 const progressEl = document.getElementById('progressBadge');
 const puzzleTitleEl = document.getElementById('puzzleTitle');
 const calendarButton = document.getElementById('calendar-button');
-const revealBtn = document.getElementById('revealBase');
 const toggleCluesBtn = document.getElementById('toggleClues');
 const shuffleBtn = document.getElementById('shuffle');
 const backspaceBtn = document.getElementById('backspace');
@@ -1023,21 +1022,12 @@ async function loadPuzzle(dateStr) {
     renderAll();
 }
 
-function revealBaseWord() {
-    if (!gameState) return;
-    const base = gameState.words[0];
-    solvedWords.add(wordId(base));
-    renderAll();
-}
-
 function shuffleWheel() {
     if (!gameState) return;
     const indices = gameState.baseWordNormalized.split('').map((_, i) => i);
     wheelOrder = shuffleArray(indices);
     renderWheel();
 }
-
-revealBtn.addEventListener('click', revealBaseWord);
 
 toggleCluesBtn.addEventListener('click', () => {
     cluesVisible = !cluesVisible;

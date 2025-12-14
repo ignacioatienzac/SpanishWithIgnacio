@@ -233,6 +233,37 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
     };
 
+    const CLUE_UI_TEXT = {
+        buttonActive: {
+            en: 'GET A CLUE',
+            es: 'PIDE UNA PISTA',
+        },
+        lockedMessage: {
+            en: 'try more words to activate clues',
+            es: 'prueba más palabras para activar las pistas',
+        },
+        promptMessage: {
+            en: 'Press "{button}" to see hint {hintNumber}.',
+            es: 'Pulsa "{button}" para ver la pista {hintNumber}.',
+        },
+        clueLabel: {
+            en: 'Clue {hintNumber}: {hintText}',
+            es: 'Pista {hintNumber}: {hintText}',
+        },
+    };
+
+    function getCurrentLanguage() {
+        return document.documentElement.lang === 'es' ? 'es' : 'en';
+    }
+
+    function formatClueText(key, replacements = {}) {
+        const language = getCurrentLanguage();
+        const template = CLUE_UI_TEXT[key]?.[language] || CLUE_UI_TEXT[key]?.en || '';
+        return template.replace(/\{(\w+)\}/g, (match, token) => (
+            Object.prototype.hasOwnProperty.call(replacements, token) ? replacements[token] : match
+        ));
+    }
+
     class SoundManager {
         constructor(toggleButton) {
             this.audioContext = null;
@@ -894,7 +925,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hintMessage = document.createElement('p');
         hintMessage.classList.add('clue-message');
-        hintMessage.textContent = `Clue ${clueNumber}: ${hintText}`;
+        hintMessage.dataset.hintNumber = String(clueNumber);
+        hintMessage.dataset.hintText = hintText;
+        hintMessage.textContent = formatClueText('clueLabel', {
+            hintNumber: clueNumber,
+            hintText,
+        });
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
@@ -1511,8 +1547,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('swi:languagechange', () => {
-        if (!currentAvatarMessageKey) return;
-        setAvatarMessage(currentAvatarMessageKey);
+        updateClueAvailability();
+        translateClueMessagesForLanguage();
+
+        if (currentAvatarMessageKey) {
+            setAvatarMessage(currentAvatarMessageKey);
+        }
     });
 
     /**
@@ -2012,7 +2052,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         clueButton.disabled = !canUseClue;
         clueButton.classList.toggle('active', canUseClue);
-        clueButton.textContent = canUseClue ? 'GET A CLUE' : (hintsUnlocked ? 'GET A CLUE' : 'try more words to activate clues');
+        const activeLabel = formatClueText('buttonActive');
+        const lockedLabel = formatClueText('lockedMessage');
+        clueButton.textContent = hintsUnlocked ? activeLabel : lockedLabel;
 
         if (!clueMessagesContainer) return;
 
@@ -2020,14 +2062,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!hintsUnlocked) {
             if (existingDefault) {
-                existingDefault.textContent = 'try more words to activate clues';
+                existingDefault.textContent = lockedLabel;
                 existingDefault.dataset.state = 'locked';
             } else {
                 clueMessagesContainer.innerHTML = '';
                 const lockedMessage = document.createElement('p');
                 lockedMessage.classList.add('clue-message', 'clue-message-default');
                 lockedMessage.dataset.state = 'locked';
-                lockedMessage.textContent = 'try more words to activate clues';
+                lockedMessage.textContent = lockedLabel;
                 clueMessagesContainer.appendChild(lockedMessage);
             }
             return;
@@ -2040,7 +2082,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const promptText = `Press "GET A CLUE" to see hint ${nextHintIndex + 1}.`;
+        const promptText = formatClueText('promptMessage', {
+            button: activeLabel,
+            hintNumber: nextHintIndex + 1,
+        });
         if (existingDefault) {
             existingDefault.textContent = promptText;
             existingDefault.dataset.state = 'unlocked';
@@ -2051,6 +2096,20 @@ document.addEventListener('DOMContentLoaded', () => {
             defaultMessage.textContent = promptText;
             clueMessagesContainer.appendChild(defaultMessage);
         }
+    }
+
+    function translateClueMessagesForLanguage() {
+        if (!clueMessagesContainer) return;
+
+        clueMessagesContainer.querySelectorAll('.clue-message:not(.clue-message-default)').forEach(message => {
+            const hintNumber = Number(message.dataset.hintNumber) || message.dataset.hintNumber || '';
+            const hintText = message.dataset.hintText || message.textContent || '';
+
+            message.textContent = formatClueText('clueLabel', {
+                hintNumber,
+                hintText,
+            });
+        });
     }
 
     function danceWin() {

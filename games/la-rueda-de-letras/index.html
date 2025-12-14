@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../../language-init.js"></script>
+    <link rel="preload" as="image" href="../../images/thinking.webp">
+    <link rel="preload" as="font" href="../../fonts/Aston%20Script.ttf" type="font/ttf" crossorigin>
+    <script src="../../language-init.js" defer></script>
     <title>Letter Loop</title>
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../style.css">
@@ -12,10 +14,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
     <script src="../../script.js" defer></script>
 </head>
 <body>
+    <div id="app">
+        <div class="skeleton-screen" aria-hidden="true">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-toolbar"></div>
+            <div class="skeleton-layout">
+                <div class="skeleton-grid">
+                    <div class="skeleton-grid-cells"></div>
+                    <div class="skeleton-avatar"></div>
+                </div>
+                <div class="skeleton-sidebar">
+                    <div class="skeleton-wheel"></div>
+                    <div class="skeleton-actions">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="skeleton-clues"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-shell">
     <header class="main-header">
         <div class="header-container">
             <div class="logo">
@@ -155,7 +177,14 @@
             </div>
         </div>
     </footer>
+        </div>
+    </div>
 
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('app-loaded');
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

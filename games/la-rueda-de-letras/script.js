@@ -419,13 +419,37 @@ function buildGridMap(state) {
             const y = w.dir === 'V' ? w.y + i : w.y;
             const key = `${x},${y}`;
             if (!map.has(key)) {
-                map.set(key, { char: w.normalized[i].toUpperCase(), words: [], numbers: new Set() });
+                map.set(key, { char: w.normalized[i].toUpperCase(), words: [], numbers: new Set(), horizontalWordId: null, verticalWordId: null });
             }
-            map.get(key).words.push(wordId(w));
-            if (i === 0) map.get(key).numbers.add(idx + 1);
+            const cellInfo = map.get(key);
+            cellInfo.words.push(wordId(w));
+            if (w.dir === 'H') cellInfo.horizontalWordId = wordId(w);
+            if (w.dir === 'V') cellInfo.verticalWordId = wordId(w);
+            if (i === 0) cellInfo.numbers.add(idx + 1);
         }
     });
     return map;
+}
+
+function applyBoundaryClasses(cell, x, y, map) {
+    const current = map.get(`${x},${y}`);
+    if (!current) return;
+
+    const right = map.get(`${x + 1},${y}`);
+    if (right && current.char && right.char) {
+        const sharesHorizontalWord = current.horizontalWordId && right.horizontalWordId && current.horizontalWordId === right.horizontalWordId;
+        if (!sharesHorizontalWord) {
+            cell.classList.add('boundary-right');
+        }
+    }
+
+    const bottom = map.get(`${x},${y + 1}`);
+    if (bottom && current.char && bottom.char) {
+        const sharesVerticalWord = current.verticalWordId && bottom.verticalWordId && current.verticalWordId === bottom.verticalWordId;
+        if (!sharesVerticalWord) {
+            cell.classList.add('boundary-bottom');
+        }
+    }
 }
 
 function renderGrid() {
@@ -459,6 +483,7 @@ function renderGrid() {
                     badge.textContent = numbers[0];
                     cell.appendChild(badge);
                 }
+                applyBoundaryClasses(cell, absX, absY, map);
             } else {
                 cell.classList.add('inactive');
             }

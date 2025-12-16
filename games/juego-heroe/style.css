@@ -205,8 +205,8 @@ body {
 }
 
 .btn-grammar {
-    text-align: left;
-    align-items: flex-start;
+    text-align: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;

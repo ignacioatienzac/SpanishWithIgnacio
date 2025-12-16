@@ -5,6 +5,12 @@ const LEVEL_CONFIG = {
     a2: {
         vocabFile: 'vocabulario_a2.json',
     },
+    b1: {
+        vocabFile: 'vocabulario_b1.json',
+    },
+    b2: {
+        vocabFile: 'vocabulario_b2.json',
+    },
 };
 
 let vocabularyCache = {};

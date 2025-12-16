@@ -128,10 +128,9 @@
             <div id="minigame-container">
                 <div class="write-mode-layout">
                     <div class="write-mode-instructions">
-                        <div class="choice-info-card write-mode-info-card">
-                            <h3>The power of verbs!</h3>
-                            <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
-                        </div>
+                        <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
+                            ℹ️ Instructions
+                        </button>
                         <div class="key-instructions">
                             <span class="key-equation">
                                 <span class="keycap">1</span>
@@ -197,12 +196,6 @@
                         <div class="choice-grid-panel">
                             <div id="choice-grid" class="choice-grid"></div>
                         </div>
-                        <div class="choice-info-panel">
-                            <div class="choice-info-card">
-                                <h3>The power of verbs!</h3>
-                                <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
-                            </div>
-                        </div>
                         <div class="choice-side-panel">
                             <div class="challenge-container" aria-live="polite">
                                 <div class="challenge-part">
@@ -242,6 +235,21 @@
             </div>
         </div>
     </main>
+
+    <div class="instructions-modal" id="instructions-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="instructions-title">
+        <div class="instructions-modal__overlay" data-close="true"></div>
+        <div class="instructions-modal__content" role="document">
+            <button type="button" class="instructions-modal__close" id="instructions-close" aria-label="Close instructions">✕</button>
+            <h3 id="instructions-title">How to play</h3>
+            <p>Pick your grammar path, choose a tense, select the verb type, and decide if you want to type answers or pick from options.</p>
+            <ul>
+                <li>Write Mode: Type the correct conjugation and press <strong>Check</strong>. Use the number keys 1-5 to quickly add accented vowels (á, é, í, ó, ú).</li>
+                <li>Choice Mode: Select the correct conjugation from the grid to attack the monsters.</li>
+                <li>Protect the castle—each correct answer increases your attack power, while mistakes cost lives.</li>
+            </ul>
+            <p class="instructions-modal__note">You can switch modes and difficulties from the start screen. Focus on accuracy to strengthen your hero!</p>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <div class="site-footer__content">

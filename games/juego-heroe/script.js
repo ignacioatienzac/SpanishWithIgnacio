@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const quickRestartSameButton = document.getElementById('quick-restart-same');
     const quickRestartDifferentButton = document.getElementById('quick-restart-different');
     const quickRestartCancelButton = document.getElementById('quick-restart-cancel');
+    const instructionsButtons = document.querySelectorAll('.instructions-button');
+    const instructionsModal = document.getElementById('instructions-modal');
+    const instructionsCloseButton = document.getElementById('instructions-close');
+    const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
 
     // Elementos de la pantalla de selección
     const grammarSelectionDiv = document.getElementById('grammar-selection');
@@ -88,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dificultadActual;
     let choiceCells = [];
     let lastFocusedElementBeforeModal = null;
+    let lastInstructionsTrigger = null;
 
     function updateFeedbackMessage(text = '', className = '') {
         if (messageEl) {
@@ -205,6 +210,34 @@ document.addEventListener('DOMContentLoaded', () => {
             element.textContent = localizedText;
         }
     };
+
+    function openInstructionsModal(event) {
+        if (!instructionsModal) return;
+        lastInstructionsTrigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : null;
+        instructionsModal.classList.add('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'false');
+        window.setTimeout(() => {
+            if (instructionsCloseButton) {
+                instructionsCloseButton.focus();
+            }
+        }, 0);
+    }
+
+    function closeInstructionsModal() {
+        if (!instructionsModal) return;
+        instructionsModal.classList.remove('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'true');
+        if (lastInstructionsTrigger && typeof lastInstructionsTrigger.focus === 'function') {
+            lastInstructionsTrigger.focus();
+        }
+    }
+
+    function handleInstructionsKeydown(event) {
+        if (event.key === 'Escape' && instructionsModal && instructionsModal.classList.contains('is-visible')) {
+            event.preventDefault();
+            closeInstructionsModal();
+        }
+    }
 
     const ATTACK_VISUAL_TIERS = [
         {
@@ -957,6 +990,15 @@ document.addEventListener('DOMContentLoaded', () => {
             comprobarRespuesta();
         }
     });
+
+    if (instructionsModal && instructionsCloseButton && instructionsOverlay && instructionsButtons.length) {
+        instructionsButtons.forEach(button => {
+            button.addEventListener('click', openInstructionsModal);
+        });
+        instructionsCloseButton.addEventListener('click', closeInstructionsModal);
+        instructionsOverlay.addEventListener('click', closeInstructionsModal);
+        document.addEventListener('keydown', handleInstructionsKeydown);
+    }
 
     // --- 6. LÓGICA DEL JUEGO PRINCIPAL ---
 

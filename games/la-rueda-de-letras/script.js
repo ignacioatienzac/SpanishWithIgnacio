@@ -1,13 +1,29 @@
-let vocabulary = null;
+const LEVEL_CONFIG = {
+    a1: {
+        vocabFile: 'vocabulario_a1.json',
+    },
+    a2: {
+        vocabFile: 'vocabulario_a2.json',
+    },
+};
+
+let vocabularyCache = {};
+const levelFromUrl = new URLSearchParams(window.location.search).get('level');
+const activeLevel = Object.prototype.hasOwnProperty.call(LEVEL_CONFIG, (levelFromUrl || '').toLowerCase())
+    ? levelFromUrl.toLowerCase()
+    : 'a1';
 
 async function loadVocabulary() {
-    if (vocabulary) return vocabulary;
-    const response = await fetch('vocabulario_a1.json');
+    if (vocabularyCache[activeLevel]) return vocabularyCache[activeLevel];
+    const vocabFile = LEVEL_CONFIG[activeLevel].vocabFile;
+    
+    const response = await fetch(vocabFile);
     if (!response.ok) {
         throw new Error('No se pudo cargar el vocabulario.');
     }
-    vocabulary = await response.json();
-    return vocabulary;
+    const data = await response.json();
+    vocabularyCache[activeLevel] = data;
+    return data;
 }
 
 function normalize(str) {

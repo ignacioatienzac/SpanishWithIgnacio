@@ -72,6 +72,8 @@ const translatableSelectors = [
     '.teachers-card h3',
     '.game-card__title',
     '.game-card__description',
+    '.btn-title',
+    '.btn-subtext',
     '.mode-card__header',
     '.mode-card__body p',
     '.mode-card__cta',

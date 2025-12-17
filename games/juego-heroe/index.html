@@ -126,92 +126,103 @@
 
             <!-- 2. ZONA DEL MINI-JUEGO (ABAJO) -->
             <div id="minigame-container">
-                <div class="write-mode-layout">
-                    <div class="write-mode-instructions">
-                        <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
-                            ℹ️ Instructions
-                        </button>
-                        <div class="key-instructions">
-                            <span class="key-equation">
-                                <span class="keycap">1</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">á</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">2</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">é</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">3</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">í</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">4</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">ó</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">5</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">ú</span>
-                            </span>
+                <div class="interaction-wrapper">
+                    <div class="game-controls-area">
+                        <div class="write-mode-layout">
+                            <div class="write-mode-instructions">
+                                <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
+                                    ℹ️ Instructions
+                                </button>
+                                <div class="key-instructions">
+                                    <span class="key-equation">
+                                        <span class="keycap">1</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">á</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">2</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">é</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">3</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">í</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">4</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">ó</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">5</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">ú</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div id="write-mode-container" class="minigame-mode">
+                                <!-- Pregunta del mini-juego -->
+                                <div class="write-mode-display">
+                                    <div class="challenge-container write-mode-challenge" aria-live="polite">
+                                        <div class="challenge-part">
+                                            <span id="verb" class="challenge-text">...</span>
+                                            <div class="underline-box verb-underline"></div>
+                                        </div>
+                                        <div class="challenge-part">
+                                            <span id="pronoun" class="challenge-text">...</span>
+                                            <div class="underline-box pronoun-underline"></div>
+                                        </div>
+                                    </div>
+                                    <div class="write-tense-display" aria-hidden="true">
+                                        <span id="tense" class="write-tense-pill">...</span>
+                                    </div>
+                                </div>
+
+                                <!-- Respuesta del jugador -->
+                                <div class="answer-group">
+                                    <input type="text" id="answer-input" placeholder="Your answer...">
+                                    <button id="submit-answer" class="btn btn-submit">
+                                        Check
+                                    </button>
+                                </div>
+
+                                <!-- Mensaje de feedback -->
+                                <div id="minigame-message"></div>
+                            </div>
+                        </div>
+
+                        <div id="choice-mode-container" class="minigame-mode hidden">
+                            <div class="choice-layout">
+                                <div class="choice-grid-panel">
+                                    <div id="choice-grid" class="choice-grid"></div>
+                                </div>
+                                <div class="choice-side-panel">
+                                    <div class="challenge-container" aria-live="polite">
+                                        <div class="challenge-part">
+                                            <span id="challenge-verb" class="challenge-text">...</span>
+                                            <div class="underline-box verb-underline"></div>
+                                        </div>
+                                        <div class="challenge-part">
+                                            <span id="challenge-pronoun" class="challenge-text">...</span>
+                                            <div class="underline-box pronoun-underline"></div>
+                                        </div>
+                                    </div>
+                                    <button id="quick-restart-button" class="quick-restart-button" type="button">
+                                        <span>Start again</span>
+                                    </button>
+                                    <div id="choice-mode-message" class="choice-mode-message" aria-live="polite"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="write-mode-container" class="minigame-mode">
-                        <!-- Pregunta del mini-juego -->
-                        <div class="write-mode-display">
-                            <div class="challenge-container write-mode-challenge" aria-live="polite">
-                                <div class="challenge-part">
-                                    <span id="verb" class="challenge-text">...</span>
-                                    <div class="underline-box verb-underline"></div>
-                                </div>
-                                <div class="challenge-part">
-                                    <span id="pronoun" class="challenge-text">...</span>
-                                    <div class="underline-box pronoun-underline"></div>
-                                </div>
-                            </div>
-                            <div class="write-tense-display" aria-hidden="true">
-                                <span id="tense" class="write-tense-pill">...</span>
-                            </div>
+                    <div class="avatar-container" aria-hidden="true">
+                        <div class="avatar-bubble" data-i18n-es="¡Listo para ayudarte! Practiquemos." data-i18n-en="Ready to help! Let's practice.">
+                            Ready to help! Let's practice.
                         </div>
-
-                        <!-- Respuesta del jugador -->
-                        <div class="answer-group">
-                            <input type="text" id="answer-input" placeholder="Your answer...">
-                            <button id="submit-answer" class="btn btn-submit">
-                                Check
-                            </button>
-                        </div>
-
-                        <!-- Mensaje de feedback -->
-                        <div id="minigame-message"></div>
-                    </div>
-                </div>
-
-                <div id="choice-mode-container" class="minigame-mode hidden">
-                    <div class="choice-layout">
-                        <div class="choice-grid-panel">
-                            <div id="choice-grid" class="choice-grid"></div>
-                        </div>
-                        <div class="choice-side-panel">
-                            <div class="challenge-container" aria-live="polite">
-                                <div class="challenge-part">
-                                    <span id="challenge-verb" class="challenge-text">...</span>
-                                    <div class="underline-box verb-underline"></div>
-                                </div>
-                                <div class="challenge-part">
-                                    <span id="challenge-pronoun" class="challenge-text">...</span>
-                                    <div class="underline-box pronoun-underline"></div>
-                                </div>
-                            </div>
-                            <button id="quick-restart-button" class="quick-restart-button" type="button">
-                                <span>Start again</span>
-                            </button>
-                            <div id="choice-mode-message" class="choice-mode-message" aria-live="polite"></div>
-                        </div>
+                        <img src="../../images/thinking.webp" alt="Avatar assistant" loading="lazy">
                     </div>
                 </div>
 

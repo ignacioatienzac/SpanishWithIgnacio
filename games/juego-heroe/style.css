@@ -74,10 +74,115 @@ body {
     box-sizing: border-box;
 }
 
-.minigame-mode {
+.interaction-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    box-sizing: border-box;
+}
+
+.game-controls-area {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    align-items: flex-start;
+    margin-right: 20px;
+    min-width: 0;
+    text-align: left;
+}
+
+.avatar-container {
+    flex: 0 0 auto;
+    width: 180px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 2;
+}
+
+.avatar-bubble {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    font-family: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1b263b;
+    text-align: center;
+    max-width: 220px;
+    width: 100%;
+    position: relative;
+    line-height: 1.4;
+}
+
+.avatar-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+}
+
+.avatar-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+    .avatar-container {
+        width: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .interaction-wrapper {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .game-controls-area {
+        margin-right: 0;
+        width: 100%;
+        align-items: stretch;
+        order: 2;
+    }
+
+    .avatar-container {
+        align-self: center;
+        order: 1;
+    }
+}
+
+@media (max-width: 540px) {
+    .avatar-container {
+        width: 140px;
+    }
+
+    .avatar-bubble {
+        max-width: 190px;
+    }
+}
+
+.minigame-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 1rem;
     width: 100%;
 }
@@ -311,9 +416,10 @@ body {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
     gap: clamp(1rem, 3vw, 2.5rem);
+    min-width: 0;
 }
 
 .write-mode-layout .write-mode-instructions,
@@ -324,11 +430,12 @@ body {
 .write-mode-instructions {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
     max-width: 640px;
     margin-top: 0.25rem;
     width: 100%;
+    text-align: left;
 }
 
 .instructions-button {
@@ -363,12 +470,14 @@ body {
 #write-mode-container {
     width: 100%;
     max-width: 720px;
+    min-width: 0;
 }
 
 @media (max-width: 768px) {
     .write-mode-layout {
         flex-direction: column;
         align-items: center;
+        gap: 1.25rem;
     }
 
     .write-mode-layout .write-mode-instructions,
@@ -434,7 +543,7 @@ body {
 .key-instructions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem;
 }
 
@@ -485,6 +594,10 @@ body {
 .answer-group {
     display: flex;
     gap: 0.5rem;
+    width: 100%;
+    align-items: stretch;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 #write-mode-container {
@@ -497,6 +610,10 @@ body {
     border-radius: 0.5rem;
     font-size: 1rem;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    flex: 1 1 0;
+    min-width: 160px;
+    width: auto;
+    max-width: 100%;
 }
 #answer-input:focus {
     outline: none;
@@ -508,6 +625,7 @@ body {
     background-color: #16a34a; /* green-600 */
     color: white;
     width: auto;
+    flex-shrink: 0;
 }
 .btn-submit:hover {
     background-color: #15803d; /* green-700 */
@@ -517,12 +635,13 @@ body {
 .choice-layout {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: clamp(0.85rem, 2vw, 1.25rem);
     width: 100%;
-    max-width: 1150px;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: stretch;
+    max-width: 100%;
+    margin: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-width: 0;
 }
 
 #choice-mode-container .choice-layout {
@@ -535,20 +654,20 @@ body {
     flex: 1 1 320px;
     min-width: 240px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
+    justify-content: flex-start;
 }
 
 .choice-grid-panel { order: 2; }
 .choice-info-panel {
     order: 1;
-    justify-content: center;
+    justify-content: flex-start;
 }
 .choice-side-panel { order: 3; }
 
 @media (max-width: 1024px) {
     .choice-layout {
-        justify-content: center;
+        justify-content: flex-start;
     }
 
     #choice-mode-container .choice-layout {
@@ -562,13 +681,14 @@ body {
 
 .choice-grid {
     display: grid;
-    gap: 1rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
     width: 100%;
     max-width: none;
+    align-items: stretch;
 }
 
 .choice-grid--compact {
-    gap: 0.75rem;
+    gap: clamp(0.6rem, 1.25vw, 0.75rem);
 }
 
 .choice-cell {
@@ -648,8 +768,8 @@ body {
 .choice-side-panel {
     flex-direction: column;
     gap: 1.25rem;
-    text-align: center;
-    align-items: center;
+    text-align: left;
+    align-items: flex-start;
     justify-content: flex-start;
     align-self: flex-start;
     padding-top: clamp(0.25rem, 1.2vw, 1.25rem);
@@ -661,7 +781,7 @@ body {
 
 .challenge-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-end;
     gap: clamp(1rem, 4vw, 2.5rem);
     flex-wrap: wrap;
@@ -710,7 +830,7 @@ body {
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    text-align: center;
+    text-align: left;
     width: 100%;
 }
 
@@ -721,7 +841,7 @@ body {
 }
 
 .quick-restart-button {
-    margin: 1.25rem auto 0;
+    margin: 1.25rem 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;

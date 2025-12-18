@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
     const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
+    const pauseButton = document.getElementById('pause-button');
+    const pauseOverlay = document.getElementById('pause-overlay');
+    const resumeButton = document.getElementById('resume-button');
 
     // Elementos de la pantalla de selección
     const grammarSelectionDiv = document.getElementById('grammar-selection');
@@ -87,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let margenInferiorTerreno;
     let nivelSuelo;
     let gameLoopId; // Para poder detener el bucle del juego
+    let isPaused = false;
+    let pauseTimestamp = null;
     let castillo;
     let objetivoPuntuacion;
     let dificultadActual;
@@ -104,6 +109,66 @@ document.addEventListener('DOMContentLoaded', () => {
             choiceModeMessageEl.className = className
                 ? `choice-mode-message ${className}`
                 : 'choice-mode-message';
+        }
+    }
+
+    function clearPauseState() {
+        isPaused = false;
+        pauseTimestamp = null;
+        if (pauseOverlay) {
+            pauseOverlay.classList.add('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'false');
+        }
+    }
+
+    function pauseGame() {
+        if ((appContainer && appContainer.classList.contains('hidden')) || gameOver) {
+            return;
+        }
+
+        if (!isPaused) {
+            isPaused = true;
+            pauseTimestamp = performance.now();
+        }
+
+        if (pauseOverlay) {
+            pauseOverlay.classList.remove('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'true');
+        }
+    }
+
+    function resumeGame() {
+        if (!isPaused) {
+            return;
+        }
+
+        if (!pauseTimestamp) {
+            pauseTimestamp = performance.now();
+        }
+
+        isPaused = false;
+
+        if (pauseOverlay) {
+            pauseOverlay.classList.add('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'false');
+        }
+
+        if (answerInput) {
+            answerInput.focus();
+        }
+    }
+
+    function togglePause() {
+        if (isPaused) {
+            resumeGame();
+        } else {
+            pauseGame();
         }
     }
 
@@ -993,11 +1058,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (instructionsModal && instructionsCloseButton && instructionsOverlay && instructionsButtons.length) {
         instructionsButtons.forEach(button => {
-            button.addEventListener('click', openInstructionsModal);
+            button.addEventListener('click', (event) => {
+                pauseGame();
+                openInstructionsModal(event);
+            });
         });
         instructionsCloseButton.addEventListener('click', closeInstructionsModal);
         instructionsOverlay.addEventListener('click', closeInstructionsModal);
         document.addEventListener('keydown', handleInstructionsKeydown);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            pauseGame();
+        }
+    });
+
+    if (pauseButton) {
+        pauseButton.addEventListener('click', togglePause);
+    }
+
+    if (resumeButton) {
+        resumeButton.addEventListener('click', resumeGame);
     }
 
     // --- 6. LÓGICA DEL JUEGO PRINCIPAL ---
@@ -1006,6 +1088,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ajustar tamaño del canvas
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+
+        clearPauseState();
 
         // Resetear estado
         // Ajustar el terreno para que quede justo encima de la franja inferior del mini-juego
@@ -1101,6 +1185,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameOver) {
             cancelAnimationFrame(gameLoopId);
             return;
+        }
+
+        if (isPaused) {
+            gameLoopId = requestAnimationFrame(gameLoop);
+            return;
+        }
+
+        if (pauseTimestamp !== null) {
+            const pausedDuration = timestamp - pauseTimestamp;
+            if (typeof ultimoSpawn === 'number') {
+                ultimoSpawn += pausedDuration;
+            }
+            if (heroe && typeof heroe.ultimoDisparo === 'number') {
+                heroe.ultimoDisparo += pausedDuration;
+            }
+            pauseTimestamp = null;
         }
 
         actualizar(timestamp);
@@ -1482,6 +1582,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameOver = true;
         cancelAnimationFrame(gameLoopId); // Detener el bucle
+        clearPauseState();
         finalScoreEl.textContent = puntuacion;
 
         if (resultado === 'victoria') {
@@ -1505,6 +1606,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(gameLoopId);
             gameLoopId = null;
         }
+
+        clearPauseState();
 
         const verbosFiltrados = obtenerVerbosFiltrados();
         if (!verbosFiltrados.length) {
@@ -1530,6 +1633,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(gameLoopId);
             gameLoopId = null;
         }
+
+        clearPauseState();
 
         gameOver = false;
         monstruos = [];
@@ -1595,6 +1700,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reiniciar el juego
     restartButton.addEventListener('click', () => {
+        pauseGame();
         restablecerSeleccionInicial();
     });
 
@@ -1659,6 +1765,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (quickRestartButtons.length) {
         quickRestartButtons.forEach(button => {
             button.addEventListener('click', () => {
+                pauseGame();
                 if (!selectedMode || !selectedDifficulty || !selectedVerbType || !selectedTense) {
                     restablecerSeleccionInicial();
                     return;

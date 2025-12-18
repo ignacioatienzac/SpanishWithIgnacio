@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverOverlay = document.getElementById('game-over-overlay');
     const finalScoreEl = document.getElementById('final-score');
     const restartButton = document.getElementById('restart-button');
-    const quickRestartButton = document.getElementById('quick-restart-button');
+    const quickRestartButtons = document.querySelectorAll('.quick-restart-button');
     const quickRestartModal = document.getElementById('quick-restart-modal');
     const quickRestartSameButton = document.getElementById('quick-restart-same');
     const quickRestartDifferentButton = document.getElementById('quick-restart-different');
@@ -1656,14 +1656,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (quickRestartButton) {
-        quickRestartButton.addEventListener('click', () => {
-            if (!selectedMode || !selectedDifficulty || !selectedVerbType || !selectedTense) {
-                restablecerSeleccionInicial();
-                return;
-            }
+    if (quickRestartButtons.length) {
+        quickRestartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (!selectedMode || !selectedDifficulty || !selectedVerbType || !selectedTense) {
+                    restablecerSeleccionInicial();
+                    return;
+                }
 
-            abrirModalReinicioRapido();
+                abrirModalReinicioRapido();
+            });
         });
     }
 

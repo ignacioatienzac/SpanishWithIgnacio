@@ -137,25 +137,24 @@ function getTranslatableElements() {
 }
 
 function createAccountMenuWrapper(isMobile) {
-    const element = document.createElement(isMobile ? 'div' : 'li');
+    const element = document.createElement('div');
     element.className = `account-menu account-menu--${isMobile ? 'mobile' : 'desktop'}`;
     element.dataset.accountMenu = isMobile ? 'mobile' : 'desktop';
     return element;
 }
 
 function ensureAccountMenuSlots() {
-    const headerContainer = document.querySelector('.header-container');
-    const navList = document.querySelector('.main-nav ul');
+    const secondarySection = document.querySelector('.main-nav__section--secondary');
+    if (!secondarySection) return;
 
-    if (headerContainer && !headerContainer.querySelector('[data-account-menu="mobile"]')) {
+    if (!secondarySection.querySelector('[data-account-menu="mobile"]')) {
         const mobileMenu = createAccountMenuWrapper(true);
-        const menuToggle = headerContainer.querySelector('.menu-toggle');
-        headerContainer.insertBefore(mobileMenu, menuToggle || headerContainer.lastElementChild?.nextSibling || null);
+        secondarySection.insertBefore(mobileMenu, secondarySection.firstChild);
     }
 
-    if (navList && !navList.querySelector('[data-account-menu="desktop"]')) {
+    if (!secondarySection.querySelector('[data-account-menu="desktop"]')) {
         const desktopMenu = createAccountMenuWrapper(false);
-        navList.appendChild(desktopMenu);
+        secondarySection.appendChild(desktopMenu);
     }
 }
 
@@ -460,18 +459,17 @@ function createLanguageSwitcher(isMobile) {
 }
 
 function ensureLanguageSwitchers() {
-    const headerContainer = document.querySelector('.header-container');
-    const navList = document.querySelector('.main-nav ul');
-    const menuToggle = document.querySelector('.menu-toggle');
+    const secondarySection = document.querySelector('.main-nav__section--secondary');
+    if (!secondarySection) return;
 
-    if (headerContainer && menuToggle && !headerContainer.querySelector('.language-switcher--mobile')) {
+    if (!secondarySection.querySelector('.language-switcher--mobile')) {
         const mobileSwitcher = createLanguageSwitcher(true);
-        headerContainer.insertBefore(mobileSwitcher, menuToggle);
+        secondarySection.appendChild(mobileSwitcher);
     }
 
-    if (navList && !navList.querySelector('.language-switcher--desktop')) {
+    if (!secondarySection.querySelector('.language-switcher--desktop')) {
         const desktopSwitcher = createLanguageSwitcher(false);
-        navList.appendChild(desktopSwitcher);
+        secondarySection.appendChild(desktopSwitcher);
     }
 }
 

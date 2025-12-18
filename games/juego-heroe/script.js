@@ -953,7 +953,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function manejarSeleccionChoice(cellData) {
-        if (gameOver || selectedMode !== 'choice') return;
+        if (gameOver || selectedMode !== 'choice' || isPaused) return;
         if (!cellData || !cellData.question || !preguntaActual || !preguntaActual.answer) return;
 
         if (
@@ -971,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function comprobarRespuesta() {
-        if (gameOver || selectedMode !== 'write') return; // No hacer nada si el juego terminó
+        if (gameOver || selectedMode !== 'write' || isPaused) return; // No hacer nada si el juego terminó
 
         const respuestaUsuario = answerInput.value.trim().toLowerCase();
         if (respuestaUsuario === preguntaActual.answer) {
@@ -1567,7 +1567,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillText(`🎯 Goal${dificultadTexto}: ${objetivoTexto}`, canvas.width / 2, 40);
 
         ctx.textAlign = 'right';
-        ctx.fillText(`Score: ${puntuacion}`, canvas.width - 20, 40);
+        const pauseButtonOffset = pauseButton ? pauseButton.offsetWidth + 36 : 20;
+        const scoreX = Math.max(20, canvas.width - pauseButtonOffset);
+        ctx.fillText(`Score: ${puntuacion}`, scoreX, 40);
 
         ctx.textAlign = 'center';
         ctx.font = '22px Inter, sans-serif';

@@ -112,7 +112,19 @@
         <div id="app-container" class="hidden">
             <!-- 1. ZONA DEL JUEGO (ARRIBA) -->
             <div id="game-container">
+                <button id="pause-button" class="pause-button" type="button" aria-pressed="false">
+                    ⏸️ Pause
+                </button>
                 <canvas id="game-canvas"></canvas>
+                <div id="pause-overlay" class="overlay hidden" aria-live="polite">
+                    <div class="pause-overlay__content">
+                        <h2 data-i18n-es="Juego Pausado" data-i18n-en="Game Paused">Game Paused</h2>
+                        <p class="pause-overlay__message" data-i18n-es="El juego está en pausa. Puedes reanudar cuando estés listo." data-i18n-en="The game is paused. Resume whenever you're ready.">The game is paused. Resume whenever you're ready.</p>
+                        <button id="resume-button" class="btn btn-resume" type="button" data-i18n-es="Continuar" data-i18n-en="Continue">
+                            Continue
+                        </button>
+                    </div>
+                </div>
                 <!-- Overlay de Game Over -->
                 <div id="game-over-overlay" class="overlay hidden">
                     <h1 class="game-over-title">GAME OVER!</h1>

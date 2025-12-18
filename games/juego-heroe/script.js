@@ -240,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         intermedio: 8,
         dificil: 8
     };
+    const DEFAULT_VERB_MODE = 'indicativo';
     const CHOICE_MODE_COLUMNS = {
         facil: 2,
         intermedio: 2,
@@ -267,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!entry) return '';
         return entry[lang] || entry.en || '';
     };
+    const obtenerModoVerbo = verbo => (verbo.mode || DEFAULT_VERB_MODE).toLowerCase();
 
     const setLocalizedText = (element, key) => {
         if (!element) return;
@@ -726,12 +728,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function mostrarTiemposSegunModo(grammarMode) {
+        selectedTense = null;
+        selectedTenseLabel = '';
+        tenseButtons.forEach(btn => {
+            const buttonGrammar = btn.dataset.grammar || DEFAULT_VERB_MODE;
+            const esVisible = buttonGrammar === grammarMode;
+            btn.classList.remove('btn-selected');
+            btn.classList.toggle('hidden', !esVisible);
+            btn.disabled = !esVisible;
+            if (!esVisible) {
+                btn.setAttribute('aria-disabled', 'true');
+            } else {
+                btn.removeAttribute('aria-disabled');
+            }
+        });
+
+        selectedVerbType = null;
+        selectedMode = null;
+        selectedDifficulty = null;
+        typeButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        modeButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        difficultyButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        typeSelectionDiv.classList.add('hidden');
+        modeSelectionDiv.classList.add('hidden');
+        difficultySelectionDiv.classList.add('hidden');
+        if (choiceModeButton) {
+            choiceModeButton.disabled = false;
+            choiceModeButton.removeAttribute('aria-disabled');
+        }
+        if (writeModeButton) {
+            writeModeButton.disabled = false;
+        }
+        if (modeRestrictionMessage) {
+            modeRestrictionMessage.textContent = '';
+        }
+        startButton.disabled = true;
+        selectionErrorEl.textContent = '';
+        actualizarEstadoBotonInicio();
+    }
+
     function obtenerVerbosFiltrados() {
         if (!selectedTense) {
             return [];
         }
 
-        let filtrados = masterVerbos.filter(v => v.tense === selectedTense);
+        const modoObjetivo = (selectedGrammar || DEFAULT_VERB_MODE).toLowerCase();
+        let filtrados = masterVerbos.filter(
+            v => v.tense === selectedTense && obtenerModoVerbo(v) === modoObjetivo
+        );
 
         if (selectedVerbType === 'regular') {
             filtrados = filtrados.filter(v => v.regular === true);
@@ -747,7 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupSelectionListeners() {
-        // Listeners para botones de modo gramatical (solo Indicative activo)
+        // Listeners para botones de modo gramatical
         grammarButtons.forEach(button => {
             if (button.disabled) {
                 button.setAttribute('aria-disabled', 'true');
@@ -756,10 +801,11 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 if (button.disabled) return;
 
-                selectedGrammar = button.dataset.grammar || 'indicative';
+                selectedGrammar = button.dataset.grammar || DEFAULT_VERB_MODE;
                 grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
                 button.classList.add('btn-selected');
                 tenseSelectionDiv.classList.remove('hidden');
+                mostrarTiemposSegunModo(selectedGrammar);
                 selectionOverlay.scrollTop = 0;
             });
         });
@@ -868,6 +914,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function prepararPantallaSeleccion() {
         selectedGrammar = null;
         grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        mostrarTiemposSegunModo(DEFAULT_VERB_MODE);
         grammarSelectionDiv.classList.remove('hidden');
         tenseSelectionDiv.classList.add('hidden');
         typeSelectionDiv.classList.add('hidden');

@@ -44,7 +44,7 @@
                     <div id="grammar-selection" class="selection-panel">
                         <h1 class="selection-title">Choose grammar mode</h1>
                         <div class="selection-buttons">
-                            <button class="btn btn-grammar" data-grammar="indicative">
+                            <button class="btn btn-grammar" data-grammar="indicativo">
                                 <span class="btn-title">Indicative</span>
                                 <span class="btn-subtext">From level A1</span>
                             </button>
@@ -52,7 +52,7 @@
                                 <span class="btn-title">Imperative</span>
                                 <span class="btn-subtext">From level A2</span>
                             </button>
-                            <button class="btn btn-grammar" disabled aria-disabled="true">
+                            <button class="btn btn-grammar" data-grammar="subjuntivo">
                                 <span class="btn-title">Subjunctive</span>
                                 <span class="btn-subtext">From level B1</span>
                             </button>
@@ -62,11 +62,16 @@
                     <div id="tense-selection" class="selection-panel hidden">
                         <h1 class="selection-title">Choose your tense</h1>
                         <div class="selection-buttons">
-                            <button data-tense="presente" class="btn btn-tense">Present Tense</button>
-                            <button data-tense="presente continuo" data-label="Present Continuous" class="btn btn-tense">Present Continuous</button>
-                            <button data-tense="pretérito perfecto" data-label="Present Perfect" class="btn btn-tense">Present Perfect</button>
-                            <button data-tense="indefinido" class="btn btn-tense">Indefinite Tense</button>
-                            <button data-tense="imperfecto" class="btn btn-tense">Imperfect Tense</button>
+                            <button data-tense="presente" data-grammar="indicativo" class="btn btn-tense">Present Tense</button>
+                            <button data-tense="presente continuo" data-label="Present Continuous" data-grammar="indicativo" class="btn btn-tense">Present Continuous</button>
+                            <button data-tense="pretérito perfecto" data-label="Present Perfect" data-grammar="indicativo" class="btn btn-tense">Present Perfect</button>
+                            <button data-tense="indefinido" data-grammar="indicativo" class="btn btn-tense">Indefinite Tense</button>
+                            <button data-tense="imperfecto" data-grammar="indicativo" class="btn btn-tense">Imperfect Tense</button>
+                            <button data-tense="futuro simple" data-grammar="indicativo" class="btn btn-tense">Simple Future</button>
+                            <button data-tense="condicional simple" data-grammar="indicativo" class="btn btn-tense">Simple Conditional</button>
+                            <button data-tense="pretérito pluscuamperfecto" data-label="Pluperfect" data-grammar="indicativo" class="btn btn-tense">Pluperfect</button>
+                            <button data-tense="presente" data-label="Present Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Present Subjunctive</button>
+                            <button data-tense="imperfecto" data-label="Imperfect Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Imperfect Subjunctive</button>
                         </div>
                     </div>
 

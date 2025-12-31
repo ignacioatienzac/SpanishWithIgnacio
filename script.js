@@ -548,6 +548,8 @@ function setupNavigationToggle() {
         menuToggle.addEventListener('click', () => {
             const isOpen = mainNav.classList.toggle('open');
             menuToggle.setAttribute('aria-expanded', isOpen);
+            menuToggle.classList.toggle('is-open', isOpen);
+            menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
         });
 
         mainNav.querySelectorAll('a').forEach(link => {
@@ -555,6 +557,7 @@ function setupNavigationToggle() {
                 if (mainNav.classList.contains('open') && window.innerWidth <= 768) {
                     mainNav.classList.remove('open');
                     menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.classList.remove('is-open');
                 }
             });
         });

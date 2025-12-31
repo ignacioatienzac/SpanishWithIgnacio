@@ -495,13 +495,14 @@ html[data-lang-initializing="true"] body {
 
     .menu-toggle {
         display: flex;
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
+        position: relative;
+        top: auto;
+        right: auto;
         transform: none;
-        margin-left: 0.25rem;
+        margin-left: auto;
         order: 2;
         z-index: 1101;
+        align-self: center;
     }
 
     .menu-toggle.is-open .menu-toggle__bar:nth-child(1) {

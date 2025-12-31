@@ -975,7 +975,7 @@ html[data-lang-initializing="true"] body {
         align-items: center;
         justify-content: center;
         text-align: center;
-        gap: 14px;
+        gap: 0;
     }
 
     .site-footer__section {
@@ -993,7 +993,7 @@ html[data-lang-initializing="true"] body {
     .site-footer__section--social {
         justify-content: center;
         gap: 20px;
-        margin-top: 8px;
+        margin-top: 0;
     }
 
     .site-footer__contact {
@@ -1008,7 +1008,7 @@ html[data-lang-initializing="true"] body {
 
     .site-footer__contact--mobile {
         display: block;
-        margin-bottom: 6px;
+        margin-bottom: 0;
     }
 
     .site-footer__contact-link {

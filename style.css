@@ -590,6 +590,11 @@ html[data-lang-initializing="true"] body {
         box-sizing: border-box;
     }
 
+    .main-nav ul li a,
+    .main-nav__list li a {
+        font-size: 0.95rem;
+    }
+
     .main-nav ul li:first-child a,
     .main-nav__list li:first-child a {
         background-color: var(--primary-color);

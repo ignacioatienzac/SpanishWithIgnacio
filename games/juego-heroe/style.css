@@ -570,6 +570,20 @@ body {
     }
 }
 
+@media (min-width: 769px) {
+    .write-mode-layout {
+        align-items: flex-start;
+    }
+
+    .write-restart-wrapper {
+        display: none;
+    }
+
+    .write-restart-desktop {
+        display: flex;
+    }
+}
+
 .write-mode-instructions p {
     margin: 0;
     font-size: 0.95rem;
@@ -724,6 +738,16 @@ body {
 
 .write-restart-wrapper .quick-restart-button {
     margin-top: 15px;
+}
+
+.write-restart-desktop {
+    display: none;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.write-restart-desktop .quick-restart-button {
+    margin-top: 0.5rem;
 }
 
 

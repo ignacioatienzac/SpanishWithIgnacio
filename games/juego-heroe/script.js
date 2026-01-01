@@ -937,7 +937,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function cargarPreguntaWriteMode() {
         // Selecciona un verbo aleatorio de la lista filtrada 'verbos'
         if (!verbos.length) return;
-        preguntaActual = verbos[Math.floor(Math.random() * verbos.length)];
+        const verboSeleccionado = verbos[Math.floor(Math.random() * verbos.length)];
+        const respuestas = Array.isArray(verboSeleccionado.answer)
+            ? verboSeleccionado.answer
+            : [verboSeleccionado.answer];
+
+        preguntaActual = {
+            ...verboSeleccionado,
+            answerOptions: respuestas.map(respuesta => respuesta?.toLowerCase?.() || ''),
+            displayAnswer: respuestas[0]
+        };
 
         verbEl.textContent = preguntaActual.verb || '...';
         // Mostrar el nombre del tiempo verbal seleccionado por el usuario
@@ -995,17 +1004,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const dato = verbos[Math.floor(Math.random() * verbos.length)];
-        cellData.question = { ...dato };
-        cellData.element.textContent = cellData.question.answer;
+        const respuestas = Array.isArray(dato.answer) ? dato.answer : [dato.answer];
+        const respuestaMostrada = respuestas[Math.floor(Math.random() * respuestas.length)];
+        cellData.question = {
+            ...dato,
+            answerOptions: respuestas.map(respuesta => respuesta?.toLowerCase?.() || ''),
+            displayAnswer: respuestaMostrada
+        };
+        cellData.element.textContent = respuestaMostrada;
     }
 
     function manejarSeleccionChoice(cellData) {
         if (gameOver || selectedMode !== 'choice' || isPaused) return;
-        if (!cellData || !cellData.question || !preguntaActual || !preguntaActual.answer) return;
+        if (!cellData || !cellData.question || !preguntaActual || !preguntaActual.displayAnswer) return;
 
         if (
             cellData.question.verb === preguntaActual.verb &&
-            cellData.question.answer === preguntaActual.answer
+            cellData.question.pronoun === preguntaActual.pronoun &&
+            cellData.question.displayAnswer === preguntaActual.displayAnswer
         ) {
             manejarRespuestaCorrecta();
             setTimeout(() => {
@@ -1021,7 +1037,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameOver || selectedMode !== 'write' || isPaused) return; // No hacer nada si el juego terminó
 
         const respuestaUsuario = answerInput.value.trim().toLowerCase();
-        if (respuestaUsuario === preguntaActual.answer) {
+        const respuestasValidas = preguntaActual.answerOptions || [];
+        if (respuestasValidas.includes(respuestaUsuario)) {
             manejarRespuestaCorrecta();
             // Cargar la siguiente pregunta después de un breve retraso
             setTimeout(cargarPregunta, 500);

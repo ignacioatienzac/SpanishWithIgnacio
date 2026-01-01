@@ -27,11 +27,52 @@
                 <span class="menu-toggle__bar"></span>
             </button>
             <nav class="main-nav" id="primary-navigation">
-                <ul>
-                    <li><a href="../../index.html">Home</a></li>
-                    <li><a href="../../students/index.html">Resources</a></li>
-                    <li><a href="../index.html" class="active">Games</a></li>
-                </ul>
+                <div class="main-nav__panel">
+                    <ul class="main-nav__list main-nav__list--primary">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../students/index.html">Resources</a></li>
+                        <li><a href="../index.html" class="active">Games</a></li>
+                    </ul>
+                    <hr class="main-nav__divider" aria-hidden="true">
+                    <div class="main-nav__section main-nav__section--secondary">
+                        <div class="account-menu account-menu--mobile" data-account-menu="mobile"></div>
+                        <div class="language-switcher language-switcher--mobile">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="account-menu account-menu--desktop" data-account-menu="desktop"></div>
+                        <div class="language-switcher language-switcher--desktop">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>

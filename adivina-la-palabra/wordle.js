@@ -1134,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLevel = requestedLevel;
         }
 
-        updateLevelTitle(`Level ${currentLevel}`, currentLevel, currentLevel);
+        updateLevelTitle(currentLevel, currentLevel, currentLevel);
 
         setupCalendar();
         loadGameForDate(new Date());

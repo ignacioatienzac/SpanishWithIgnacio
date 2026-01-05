@@ -527,17 +527,18 @@ body.adventure-map-1-bg .game-container {
     padding: 0.55rem 1rem;
     font-size: 0.95rem;
     box-shadow: none;
-    background: #f5f5f7;
-    color: #2d2d2d;
-    border: 1px solid #e0e0e0;
+    background: rgba(46, 125, 50, 0.18);
+    color: #1f5e24;
+    border: 1px solid rgba(46, 125, 50, 0.35);
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
 }
 
 .choose-level-button--top:hover,
 .choose-level-button--top:focus-visible {
-    background: #eeeeee;
-    color: #9a3f34;
+    background: #2e7d32;
+    color: #ffffff;
+    border-color: #2e7d32;
     box-shadow: none;
     transform: none;
 }
@@ -745,10 +746,30 @@ body.adventure-map-1-bg .game-container {
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
     gap: 0.35rem;
+    background: rgba(31, 59, 112, 0.16);
+    border-color: rgba(31, 59, 112, 0.35);
+    color: #1f3b70;
+}
+
+.instructions-button:hover,
+.instructions-button:focus-visible {
+    background: #1f3b70;
+    color: #ffffff;
+    border-color: #1f3b70;
 }
 
 .top-clue-button {
     font-size: 1.25rem;
+    background: rgba(242, 194, 0, 0.25);
+    border-color: rgba(242, 194, 0, 0.55);
+    color: #8a6b00;
+}
+
+.top-clue-button:hover,
+.top-clue-button:focus-visible {
+    background: #f2c200;
+    color: #1f1f1f;
+    border-color: #f2c200;
 }
 
 .top-clue-button:disabled {
@@ -758,6 +779,16 @@ body.adventure-map-1-bg .game-container {
 #calendar-button {
     font-size: 1.25rem;
     padding: 0;
+    background: rgba(194, 80, 66, 0.2);
+    border-color: rgba(194, 80, 66, 0.45);
+    color: #9a3f34;
+}
+
+#calendar-button:hover,
+#calendar-button:focus-visible {
+    background: #C25042;
+    color: #ffffff;
+    border-color: #C25042;
 }
 
 .instructions-modal {

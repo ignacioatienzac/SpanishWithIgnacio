@@ -524,9 +524,22 @@ body.adventure-map-1-bg .game-container {
 
 .choose-level-button--top {
     width: auto;
-    padding: 0.55rem 0.9rem;
+    padding: 0.55rem 1rem;
     font-size: 0.95rem;
-    box-shadow: 0 6px 0 #9A3F34, 0 10px 16px rgba(0, 0, 0, 0.14);
+    box-shadow: none;
+    background: #f5f5f7;
+    color: #2d2d2d;
+    border: 1px solid #e0e0e0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.choose-level-button--top:hover,
+.choose-level-button--top:focus-visible {
+    background: #eeeeee;
+    color: #9a3f34;
+    box-shadow: none;
+    transform: none;
 }
 
 .clue-storage {
@@ -576,13 +589,17 @@ body.adventure-map-1-bg .game-container {
 
 .game-top-row {
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .game-header-wrapper {
     display: flex;
     align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    width: var(--grid-width, 320px);
+    max-width: 100%;
+    margin: 0 auto 30px;
     column-gap: 1rem;
     text-align: left;
     flex-wrap: nowrap;
@@ -590,6 +607,8 @@ body.adventure-map-1-bg .game-container {
 }
 
 .level-indicator-container {
+    display: flex;
+    align-items: center;
     justify-self: start;
     margin-right: auto;
 }
@@ -604,7 +623,7 @@ body.adventure-map-1-bg .game-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: nowrap;
 }
 
@@ -612,39 +631,96 @@ body.adventure-map-1-bg .game-container {
     display: inline-flex;
 }
 
-.sound-toggle {
-    border: none;
-    background: #f4f6fb;
-    color: #1f2532;
-    font-size: 1.4rem;
+.game-control-button {
+    border: 1px solid #e0e0e0;
+    background: #f5f5f7;
+    color: #2d2d2d;
+    font-size: 1.25rem;
     width: 44px;
     height: 44px;
-    border-radius: 50%;
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-shadow: none;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    padding: 0.5rem;
 }
 
-.sound-toggle:hover,
-.sound-toggle:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    background-color: #e6ebf7;
+.game-control-button:hover,
+.game-control-button:focus-visible {
+    background-color: #eeeeee;
+    color: #9a3f34;
     outline: none;
 }
 
-.sound-toggle:active {
+.game-control-button:active {
     transform: translateY(1px);
 }
 
+.game-control-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.game-control-button--text {
+    min-width: 72px;
+    padding: 0 14px;
+    width: auto;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    justify-content: center;
+}
+
 #game-level-title {
-    font-family: 'Oswald', sans-serif;
-    color: var(--secondary-color);
-    font-size: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
     margin: 0;
+}
+
+.level-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #f4f6fb;
+    color: #1f2532;
+    letter-spacing: 0.25px;
+    gap: 8px;
+}
+
+.level-badge--a1 {
+    background-color: var(--color-a1);
+    color: #ffffff;
+}
+
+.level-badge--a2 {
+    background-color: var(--color-a2);
+    color: #ffffff;
+}
+
+.level-badge--b1 {
+    background-color: var(--color-b1);
+    color: #ffffff;
+}
+
+.level-badge--b2 {
+    background-color: var(--color-b2);
+    color: #ffffff;
+}
+
+.level-badge--c1 {
+    background-color: var(--color-c1);
+    color: #ffffff;
+}
+
+.level-badge--c2 {
+    background-color: var(--color-c2);
+    color: #ffffff;
 }
 
 .level-title-short {
@@ -660,77 +736,28 @@ body.adventure-map-1-bg .game-container {
     display: inline-block;
 }
 
+.sound-toggle {
+    font-size: 1.25rem;
+}
+
 .instructions-button {
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #1d8cf8, #3358f4);
-    color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
     font-weight: 700;
-    padding: 0.55rem 0.85rem;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.95rem;
-    white-space: nowrap;
-}
-
-.instructions-button:hover,
-.instructions-button:focus {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(51, 88, 244, 0.35);
-    outline: none;
-}
-
-.instructions-button:focus-visible {
-    outline: 3px solid rgba(51, 88, 244, 0.6);
-    outline-offset: 3px;
+    font-family: 'Montserrat', sans-serif;
+    gap: 0.35rem;
 }
 
 .top-clue-button {
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ffd447, #ffb347);
-    color: #1f2532;
     font-size: 1.25rem;
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 6px 14px rgba(255, 179, 71, 0.35);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-
-.top-clue-button:hover,
-.top-clue-button:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(255, 179, 71, 0.45);
-    filter: brightness(1.05);
-    outline: none;
 }
 
 .top-clue-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
+    opacity: 0.45;
 }
 
 #calendar-button {
-    background: none;
-    border: none;
-    font-size: 2.5rem; /* Tamaño del emoji */
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-
-#calendar-button:hover {
-    background-color: rgba(0,0,0,0.05);
+    font-size: 1.25rem;
+    padding: 0;
 }
 
 .instructions-modal {
@@ -1236,6 +1263,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
         flex: 1;
         display: flex;
         flex-direction: column;
+        --mobile-tile-size: clamp(44px, calc((100vw - 40px) / var(--word-length, 5)), 62px);
     }
 
     .game-main-area {
@@ -1247,13 +1275,15 @@ body.adventure-sliding > *:not(.adventure-transition) {
     }
 
     .game-controls-group {
-        gap: 6px;
+        gap: 12px;
     }
 
     .game-header-wrapper {
-        margin-bottom: 4px;
+        margin-bottom: 30px;
         gap: 0.75rem;
         justify-content: space-between;
+        width: min(100%, calc(var(--mobile-tile-size) * var(--word-length, 5)));
+        max-width: none;
     }
 
     #game-level-title {
@@ -1289,8 +1319,10 @@ body.adventure-sliding > *:not(.adventure-transition) {
     }
 
     #calendar-button {
-        font-size: 1.9rem;
-        padding: 0.35rem 0.4rem;
+        font-size: 1.1rem;
+        padding: 0.35rem;
+        width: 38px;
+        height: 38px;
     }
 
     .wordle-main {

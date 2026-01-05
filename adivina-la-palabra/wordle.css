@@ -1138,13 +1138,27 @@ body.adventure-sliding > *:not(.adventure-transition) {
 }
 
 @media (max-width: 600px) {
+    body {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
     .game-container {
         touch-action: manipulation;
         gap: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .game-main-area {
         gap: 1.25rem;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
     }
 
     .game-controls-group {
@@ -1194,11 +1208,22 @@ body.adventure-sliding > *:not(.adventure-transition) {
         padding: 0.35rem 0.4rem;
     }
 
+    .wordle-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        padding: 10px 0;
+    }
+
     .game-board-area {
         width: 100%;
         flex: 1 1 auto;
         justify-content: space-between;
         gap: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .game-grid {
@@ -1211,6 +1236,8 @@ body.adventure-sliding > *:not(.adventure-transition) {
         grid-auto-rows: var(--mobile-tile-size);
         justify-content: center;
         margin: 0 auto;
+        column-gap: 8px;
+        row-gap: 5px;
     }
 
     .grid-tile {
@@ -1222,8 +1249,12 @@ body.adventure-sliding > *:not(.adventure-transition) {
     }
 
     .keyboard-container {
-        padding: 6px 0;
+        width: 100vw;
         max-width: none;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        padding: 5px;
+        box-sizing: border-box;
     }
 
     .game-keyboard {
@@ -1233,6 +1264,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
     .keyboard-row {
         display: flex;
         gap: 4px;
+        width: 100%;
     }
 
     .keyboard-key {

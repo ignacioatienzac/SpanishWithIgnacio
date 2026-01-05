@@ -1,10 +1,11 @@
 /* Estilos para la página de inicio del Wordle */
 
 .wordle-main {
-    padding: 2rem;
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
 }
 
 .game-page .wordle-main {
@@ -195,7 +196,7 @@
 body.game-page {
     height: 100dvh;
     min-height: 100dvh;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -245,7 +246,7 @@ body.adventure-map-1-bg {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.25rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -571,11 +572,13 @@ body.adventure-map-1-bg .game-container {
 
 .game-header-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
-    margin-bottom: 20px;
-    gap: 1rem;
+    margin-bottom: 10px;
+    gap: 0.75rem;
+    text-align: center;
 }
 
 .game-info-group {
@@ -587,7 +590,7 @@ body.adventure-map-1-bg .game-container {
 .game-controls-group {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
 }

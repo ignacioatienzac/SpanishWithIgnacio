@@ -540,7 +540,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('choose-level-button'),
         document.getElementById('mobile-choose-level-button'),
     ].filter(Boolean);
-    const tryAgainButton = document.getElementById('try-again-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
@@ -555,7 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let avatarTypingTimeouts = [];
     let currentAvatarMessageKey = null;
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButtons.length || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButtons.length || !tryAgainButton || !clueModal || !clueModalMessages || !clueModalCloseButton || !clueModalOverlay) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButtons.length || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButtons.length || !clueModal || !clueModalMessages || !clueModalCloseButton || !clueModalOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
@@ -571,7 +570,10 @@ document.addEventListener('DOMContentLoaded', () => {
     chooseLevelButtons.forEach(button => {
         button.addEventListener('click', handleChooseLevelNavigation);
     });
-    tryAgainButton.addEventListener('click', handleTryAgainClick);
+    const tryAgainButton = document.getElementById('try-again-button');
+    if (tryAgainButton) {
+        tryAgainButton.addEventListener('click', handleTryAgainClick);
+    }
     document.addEventListener('keydown', handleInstructionsKeydown);
     clueModalCloseButton.addEventListener('click', closeClueModal);
     clueModalOverlay.addEventListener('click', closeClueModal);
@@ -979,6 +981,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hintsAvailable = getAvailableHintsCount();
         if (nextHintIndex >= hintsAvailable) {
             updateClueAvailability();
+            openClueModal();
             return;
         }
 
@@ -1002,10 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
-
-        if (isMobileLayout()) {
-            openClueModal();
-        }
+        openClueModal();
     }
 
     function openInstructionsModal() {
@@ -1213,6 +1213,13 @@ document.addEventListener('DOMContentLoaded', () => {
         startInteraction();
         updateClueAvailability();
         setTryAgainAvailability(false);
+    }
+
+    function promptTryAgain() {
+        const wantsRetry = window.confirm('Try again?');
+        if (wantsRetry) {
+            restartCurrentDailyGame();
+        }
     }
 
     /**
@@ -2055,10 +2062,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return true;
             }
 
-            showToast('Want to try again?', 5000);
             console.log("Game outcome: LOSS");
-            setTryAgainAvailability(true);
             updateClueAvailability();
+            promptTryAgain();
             return true; // Juego terminado
         }
 
@@ -2133,11 +2139,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const activeLabel = formatClueText('buttonActive');
         const lockedLabel = formatClueText('lockedMessage');
+        const ariaLabel = hintsUnlocked ? activeLabel : lockedLabel;
 
         clueButtons.forEach(button => {
             button.disabled = !canUseClue;
             button.classList.toggle('active', canUseClue);
-            button.textContent = hintsUnlocked ? activeLabel : lockedLabel;
+            button.textContent = button.dataset.iconOnly === 'true'
+                ? '💡'
+                : hintsUnlocked
+                    ? activeLabel
+                    : lockedLabel;
+            button.setAttribute('aria-label', ariaLabel);
         });
 
         if (!clueMessagesContainer) return;

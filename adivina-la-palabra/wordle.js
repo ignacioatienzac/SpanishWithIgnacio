@@ -532,13 +532,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundToggleButton = document.getElementById('sound-toggle');
     const clueButtons = [
         document.getElementById('clue-button'),
-        document.getElementById('mobile-clue-button'),
     ].filter(Boolean);
     const clueMessagesContainer = document.querySelector('.clue-messages');
     const adventureMapButton = document.getElementById('adventure-map-button');
     const chooseLevelButtons = [
         document.getElementById('choose-level-button'),
-        document.getElementById('mobile-choose-level-button'),
     ].filter(Boolean);
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');

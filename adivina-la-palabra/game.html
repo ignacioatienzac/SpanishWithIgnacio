@@ -22,7 +22,7 @@
 
     <script src="wordle.js" defer></script>
 </head>
-<body>
+<body class="game-page">
 
     <header class="main-header">
         <div class="header-container">
@@ -96,11 +96,13 @@
 
                     <div class="game-top-row">
                         <div class="game-header-wrapper">
-                            <h2 id="game-level-title">
-                                <span class="level-title-full" id="level-title-full">Level A1</span>
-                                <span class="level-title-short" id="level-title-short" aria-hidden="true">A1</span>
-                            </h2>
-                            <div class="game-controls-group">
+                            <div class="level-indicator-container">
+                                <h2 id="game-level-title">
+                                    <span class="level-title-full" id="level-title-full">Level A1</span>
+                                    <span class="level-title-short" id="level-title-short" aria-hidden="true">A1</span>
+                                </h2>
+                            </div>
+                            <div class="game-controls-group top-icons-row">
                                 <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Toggle game sound" aria-pressed="false">🔊</button>
                                 <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
                                     <span class="instructions-icon" aria-hidden="true">ℹ️</span>
@@ -134,7 +136,7 @@
                         </div>
                     </div>
 
-                    <div class="mobile-actions-row">
+                    <div class="mobile-actions-row action-buttons-container">
                         <button id="mobile-clue-button" class="clue-button mobile-clue-button" type="button" aria-haspopup="dialog" aria-controls="clue-modal">Get a clue!</button>
                         <button id="mobile-choose-level-button" class="game-action-button choose-level-button mobile-choose-level-button" type="button">Choose level</button>
                     </div>

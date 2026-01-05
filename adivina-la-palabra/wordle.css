@@ -7,6 +7,11 @@
     text-align: center;
 }
 
+.game-page .wordle-main {
+    flex: 1;
+    flex-direction: column;
+}
+
 .game-intro {
     max-width: 800px;
     display: flex;
@@ -185,6 +190,18 @@
     --tile-border-active: #86888a; /* Borde gris medio */
     --text-color-light: #ffffff;
     --text-color-dark: #000000;
+}
+
+body.game-page {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+body.game-page footer {
+    display: none !important;
 }
 
 body.adventure-map-1-bg {
@@ -1102,6 +1119,23 @@ body.adventure-sliding > *:not(.adventure-transition) {
     gap: 0.75rem;
 }
 
+.action-buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    width: 95%;
+    margin: 5px auto;
+}
+
+.action-buttons-container button {
+    flex: 1;
+    padding: 10px 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
 .mobile-actions-row .clue-button,
 .mobile-actions-row .choose-level-button {
     flex: 1 1 0;
@@ -1138,11 +1172,20 @@ body.adventure-sliding > *:not(.adventure-transition) {
 }
 
 @media (max-width: 600px) {
-    body {
+    .game-page {
         height: 100dvh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+    }
+
+    .level-indicator-container {
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .top-icons-row {
+        margin-bottom: 10px !important;
     }
 
     .game-container {
@@ -1299,6 +1342,26 @@ body.adventure-sliding > *:not(.adventure-transition) {
     .mobile-actions-row .clue-button {
         font-size: 0.95rem;
         padding: 0.75rem 0.5rem;
+    }
+}
+
+@media (max-height: 750px) {
+    .game-page .game-grid {
+        --mobile-tile-size: clamp(38px, calc((100vw - 40px) / var(--word-length, 5)), 50px);
+    }
+
+    .game-page .grid-tile {
+        max-height: 45px;
+        max-width: 45px;
+        font-size: 1.5rem;
+    }
+
+    .game-page .keyboard-container {
+        padding: 2px;
+    }
+
+    .game-page .keyboard-key {
+        min-height: 40px;
     }
 }
 

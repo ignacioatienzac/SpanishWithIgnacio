@@ -1190,18 +1190,18 @@ body.adventure-sliding > *:not(.adventure-transition) {
 
     .game-container {
         touch-action: manipulation;
-        gap: 1.25rem;
+        gap: 1rem;
         flex: 1;
         display: flex;
         flex-direction: column;
     }
 
     .game-main-area {
-        gap: 1.25rem;
+        gap: 1rem;
         flex: 1;
         flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: flex-start;
     }
 
     .game-controls-group {
@@ -1209,7 +1209,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
     }
 
     .game-header-wrapper {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         gap: 0.5rem;
         flex-wrap: nowrap;
     }
@@ -1262,8 +1262,8 @@ body.adventure-sliding > *:not(.adventure-transition) {
     .game-board-area {
         width: 100%;
         flex: 1 1 auto;
-        justify-content: space-between;
-        gap: 0.75rem;
+        justify-content: flex-start;
+        gap: 0.7rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1279,8 +1279,8 @@ body.adventure-sliding > *:not(.adventure-transition) {
         grid-auto-rows: var(--mobile-tile-size);
         justify-content: center;
         margin: 0 auto;
-        column-gap: 8px;
-        row-gap: 5px;
+        column-gap: 5px;
+        row-gap: 4px;
     }
 
     .grid-tile {
@@ -1296,23 +1296,23 @@ body.adventure-sliding > *:not(.adventure-transition) {
         max-width: none;
         margin-left: calc(-50vw + 50%);
         margin-right: calc(-50vw + 50%);
-        padding: 5px;
+        padding: 4px;
         box-sizing: border-box;
     }
 
     .game-keyboard {
-        gap: 6px;
+        gap: 5px;
     }
 
     .keyboard-row {
         display: flex;
-        gap: 4px;
+        gap: 3px;
         width: 100%;
     }
 
     .keyboard-key {
         flex: 1;
-        min-height: 44px;
+        min-height: 42px;
         height: auto;
         margin: 0;
         touch-action: manipulation;
@@ -1341,7 +1341,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
     .mobile-actions-row .choose-level-button,
     .mobile-actions-row .clue-button {
         font-size: 0.95rem;
-        padding: 0.75rem 0.5rem;
+        padding: 0.65rem 0.5rem;
     }
 }
 

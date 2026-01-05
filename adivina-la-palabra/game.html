@@ -104,10 +104,11 @@
                             </div>
                             <div class="game-controls-group top-icons-row">
                                 <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Toggle game sound" aria-pressed="false">🔊</button>
-                                <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
+                                <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal" aria-label="Instructions">
                                     <span class="instructions-icon" aria-hidden="true">ℹ️</span>
-                                    <span class="instructions-label">Instructions</span>
                                 </button>
+                                <button id="clue-button" class="top-clue-button desktop-only-control" type="button" aria-haspopup="dialog" aria-controls="clue-modal" aria-label="Get a clue" data-icon-only="true">💡</button>
+                                <button id="choose-level-button" class="game-action-button choose-level-button choose-level-button--top desktop-only-control" type="button">Level</button>
                                 <button id="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
                             </div>
                         </div>
@@ -146,20 +147,10 @@
                     <div class="avatar-bubble" aria-live="polite" aria-atomic="true"></div>
                     <img src="../images/thinking.webp" alt="">
                 </div>
+            </div>
 
-                <div class="clue-column">
-                    <div class="clue-panel-wrapper">
-                        <aside class="clue-panel">
-                            <button id="clue-button" class="clue-button" type="button" disabled>Get a clue!</button>
-                            <div class="clue-messages" aria-live="polite"></div>
-                        </aside>
-                        <button id="adventure-map-button" class="adventure-map-button" type="button" aria-hidden="true" disabled>
-                            Volver al mapa 1
-                        </button>
-                    </div>
-                    <button id="choose-level-button" class="game-action-button choose-level-button choose-level-button--sidebar" type="button">Choose level</button>
-                    <button id="try-again-button" class="game-action-button try-again-button" type="button" disabled>Try again</button>
-                </div>
+            <div class="clue-storage" aria-hidden="true">
+                <div class="clue-messages"></div>
             </div>
 
         </section>

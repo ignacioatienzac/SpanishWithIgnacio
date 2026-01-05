@@ -270,7 +270,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.matchMedia('(max-width: 600px)').matches;
     }
 
-    function updateLevelTitle(fullLabel, shortLabel) {
+    const LEVEL_BADGE_CLASSES = [
+        'level-badge--a1',
+        'level-badge--a2',
+        'level-badge--b1',
+        'level-badge--b2',
+        'level-badge--c1',
+        'level-badge--c2',
+    ];
+
+    function applyLevelBadge(levelKey) {
+        if (!levelTitle) return;
+
+        levelTitle.classList.add('level-badge');
+        LEVEL_BADGE_CLASSES.forEach(levelClass => levelTitle.classList.remove(levelClass));
+
+        const normalizedKey = typeof levelKey === 'string' ? levelKey.toLowerCase() : '';
+        const badgeClass = normalizedKey ? `level-badge--${normalizedKey}` : '';
+
+        if (LEVEL_BADGE_CLASSES.includes(badgeClass)) {
+            levelTitle.classList.add(badgeClass);
+        }
+    }
+
+    function updateLevelTitle(fullLabel, shortLabel, levelKey) {
         if (levelTitleFull) {
             levelTitleFull.textContent = fullLabel;
         }
@@ -278,6 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (levelTitleShort) {
             levelTitleShort.textContent = shortLabel || fullLabel;
         }
+
+        applyLevelBadge(levelKey || shortLabel || fullLabel);
     }
 
     function syncClueModalMessages() {
@@ -1080,6 +1105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateLevelTitle(
                 `Mapa ${adventureMapId} · Nivel ${adventureLevelNumber}`,
                 `M${adventureMapId} · ${adventureLevelNumber}`,
+                currentLevel,
             );
 
             if (calendarButton) {
@@ -1108,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLevel = requestedLevel;
         }
 
-        updateLevelTitle(`Level ${currentLevel}`, currentLevel);
+        updateLevelTitle(`Level ${currentLevel}`, currentLevel, currentLevel);
 
         setupCalendar();
         loadGameForDate(new Date());
@@ -1668,6 +1694,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = wordLength * tileWidth + (wordLength - 1) * gap;
         grid.style.setProperty('--grid-width', `${width}px`);
         grid.style.setProperty('--grid-height', `380px`);
+
+        if (gameContainer) {
+            gameContainer.style.setProperty('--grid-width', `${width}px`);
+            gameContainer.style.setProperty('--word-length', wordLength);
+        }
     }
 
     function resetBoard(wordLength = currentWordLength) {

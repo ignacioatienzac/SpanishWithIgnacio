@@ -241,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
             es: 'PIDE UNA PISTA',
         },
         lockedMessage: {
-            en: 'try more words to activate clues',
-            es: 'prueba más palabras para activar las pistas',
+            en: 'clues',
+            es: 'pistas',
         },
         promptMessage: {
             en: 'Press "{button}" to see hint {hintNumber}.',

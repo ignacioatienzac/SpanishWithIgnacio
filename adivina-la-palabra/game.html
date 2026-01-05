@@ -96,11 +96,15 @@
 
                     <div class="game-top-row">
                         <div class="game-header-wrapper">
-                            <h2 id="game-level-title">Level A1</h2>
+                            <h2 id="game-level-title">
+                                <span class="level-title-full" id="level-title-full">Level A1</span>
+                                <span class="level-title-short" id="level-title-short" aria-hidden="true">A1</span>
+                            </h2>
                             <div class="game-controls-group">
                                 <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Toggle game sound" aria-pressed="false">🔊</button>
                                 <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
-                                    ℹ️ Instructions
+                                    <span class="instructions-icon" aria-hidden="true">ℹ️</span>
+                                    <span class="instructions-label">Instructions</span>
                                 </button>
                                 <button id="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
                             </div>
@@ -129,6 +133,11 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="mobile-actions-row">
+                        <button id="mobile-clue-button" class="clue-button mobile-clue-button" type="button" aria-haspopup="dialog" aria-controls="clue-modal">Get a clue!</button>
+                        <button id="mobile-choose-level-button" class="game-action-button choose-level-button mobile-choose-level-button" type="button">Choose level</button>
+                    </div>
                 </div>
 
                 <div class="wordle-avatar" aria-hidden="true">
@@ -139,14 +148,14 @@
                 <div class="clue-column">
                     <div class="clue-panel-wrapper">
                         <aside class="clue-panel">
-                            <button class="clue-button" type="button" disabled>Get a clue!</button>
+                            <button id="clue-button" class="clue-button" type="button" disabled>Get a clue!</button>
                             <div class="clue-messages" aria-live="polite"></div>
                         </aside>
                         <button id="adventure-map-button" class="adventure-map-button" type="button" aria-hidden="true" disabled>
                             Volver al mapa 1
                         </button>
                     </div>
-                    <button id="choose-level-button" class="game-action-button choose-level-button" type="button">Choose level</button>
+                    <button id="choose-level-button" class="game-action-button choose-level-button choose-level-button--sidebar" type="button">Choose level</button>
                     <button id="try-again-button" class="game-action-button try-again-button" type="button" disabled>Try again</button>
                 </div>
             </div>
@@ -167,6 +176,15 @@
             </ul>
             <p class="instructions-modal__note">Hints unlock after your third attempt. When the “Get a clue!” button becomes active, press it to reveal them.</p>
             <p>Have fun and keep practicing your Spanish vocabulary!</p>
+        </div>
+    </div>
+
+    <div class="clue-modal" id="clue-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="clue-modal-title">
+        <div class="clue-modal__overlay" data-close="true"></div>
+        <div class="clue-modal__content" role="document">
+            <button type="button" class="clue-modal__close" id="clue-modal-close" aria-label="Cerrar pistas">✕</button>
+            <h3 id="clue-modal-title">Pistas</h3>
+            <div class="clue-modal__messages" id="clue-modal-messages" aria-live="polite"></div>
         </div>
     </div>
 

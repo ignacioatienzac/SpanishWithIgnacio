@@ -266,6 +266,50 @@ document.addEventListener('DOMContentLoaded', () => {
         ));
     }
 
+    function isMobileLayout() {
+        return window.matchMedia('(max-width: 600px)').matches;
+    }
+
+    function updateLevelTitle(fullLabel, shortLabel) {
+        if (levelTitleFull) {
+            levelTitleFull.textContent = fullLabel;
+        }
+
+        if (levelTitleShort) {
+            levelTitleShort.textContent = shortLabel || fullLabel;
+        }
+    }
+
+    function syncClueModalMessages() {
+        if (!clueModalMessages || !clueMessagesContainer) return;
+
+        clueModalMessages.innerHTML = '';
+        clueMessagesContainer.querySelectorAll('.clue-message').forEach(message => {
+            clueModalMessages.appendChild(message.cloneNode(true));
+        });
+    }
+
+    function openClueModal() {
+        if (!clueModal) return;
+        syncClueModalMessages();
+        clueModal.classList.add('is-visible');
+        clueModal.setAttribute('aria-hidden', 'false');
+        window.setTimeout(() => {
+            if (clueModalCloseButton) {
+                clueModalCloseButton.focus();
+            }
+        }, 0);
+    }
+
+    function closeClueModal() {
+        if (!clueModal) return;
+        clueModal.classList.remove('is-visible');
+        clueModal.setAttribute('aria-hidden', 'true');
+        if (lastClueTrigger) {
+            lastClueTrigger.focus();
+        }
+    }
+
     class SoundManager {
         constructor(toggleButton) {
             this.audioContext = null;
@@ -483,36 +527,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer = document.querySelector('.toast-container');
     const calendarButton = document.getElementById('calendar-button');
     const levelTitle = document.getElementById('game-level-title');
+    const levelTitleFull = document.getElementById('level-title-full');
+    const levelTitleShort = document.getElementById('level-title-short');
     const soundToggleButton = document.getElementById('sound-toggle');
-    const clueButton = document.querySelector('.clue-button');
+    const clueButtons = [
+        document.getElementById('clue-button'),
+        document.getElementById('mobile-clue-button'),
+    ].filter(Boolean);
     const clueMessagesContainer = document.querySelector('.clue-messages');
     const adventureMapButton = document.getElementById('adventure-map-button');
-    const chooseLevelButton = document.getElementById('choose-level-button');
+    const chooseLevelButtons = [
+        document.getElementById('choose-level-button'),
+        document.getElementById('mobile-choose-level-button'),
+    ].filter(Boolean);
     const tryAgainButton = document.getElementById('try-again-button');
     const instructionsButton = document.getElementById('instructions-button');
     const instructionsModal = document.getElementById('instructions-modal');
     const instructionsCloseButton = document.getElementById('instructions-close');
     const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
+    const clueModal = document.getElementById('clue-modal');
+    const clueModalMessages = document.getElementById('clue-modal-messages');
+    const clueModalCloseButton = document.getElementById('clue-modal-close');
+    const clueModalOverlay = clueModal ? clueModal.querySelector('.clue-modal__overlay') : null;
     const avatarImage = document.querySelector('.wordle-avatar img');
     const avatarBubble = document.querySelector('.avatar-bubble');
     let avatarTransitionTimeout = null;
     let avatarTypingTimeouts = [];
     let currentAvatarMessageKey = null;
 
-    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButton || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButton || !tryAgainButton) {
+    if (!gameContainer || !grid || !keyboardKeys.length || !toastContainer || !calendarButton || !levelTitle || !soundToggleButton || !clueButtons.length || !clueMessagesContainer || !instructionsButton || !instructionsModal || !instructionsCloseButton || !instructionsOverlay || !chooseLevelButtons.length || !tryAgainButton || !clueModal || !clueModalMessages || !clueModalCloseButton || !clueModalOverlay) {
         console.error("Error: Could not find all essential game elements in the HTML.");
         return;
     }
 
     const soundManager = new SoundManager(soundToggleButton);
 
-    clueButton.addEventListener('click', handleClueClick);
+    clueButtons.forEach(button => {
+        button.addEventListener('click', handleClueClick);
+    });
     instructionsButton.addEventListener('click', openInstructionsModal);
     instructionsCloseButton.addEventListener('click', closeInstructionsModal);
     instructionsOverlay.addEventListener('click', closeInstructionsModal);
-    chooseLevelButton.addEventListener('click', handleChooseLevelNavigation);
+    chooseLevelButtons.forEach(button => {
+        button.addEventListener('click', handleChooseLevelNavigation);
+    });
     tryAgainButton.addEventListener('click', handleTryAgainClick);
     document.addEventListener('keydown', handleInstructionsKeydown);
+    clueModalCloseButton.addEventListener('click', closeClueModal);
+    clueModalOverlay.addEventListener('click', closeClueModal);
     if (adventureMapButton) {
         adventureMapButton.addEventListener('click', handleAdventureMapReturn);
     }
@@ -538,6 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let hintsForCurrentWord = [];
     let nextHintIndex = 0;
     let guessesMade = 0;
+    let lastClueTrigger = null;
     let hasOfferedHelp = false;
     let isAdventureMode = false;
     let adventureMapId = 1;
@@ -904,11 +967,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (clueMessagesContainer) {
             clueMessagesContainer.innerHTML = '';
         }
+        syncClueModalMessages();
     }
 
-    function handleClueClick() {
-        if (!clueButton || clueButton.disabled) return;
-        if (!clueMessagesContainer) return;
+    function handleClueClick(event) {
+        const trigger = event?.currentTarget;
+        if (!clueButtons.length || !clueMessagesContainer) return;
+        if (trigger?.disabled) return;
+        lastClueTrigger = trigger || lastClueTrigger;
 
         const hintsAvailable = getAvailableHintsCount();
         if (nextHintIndex >= hintsAvailable) {
@@ -936,6 +1002,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clueMessagesContainer.appendChild(hintMessage);
 
         updateClueAvailability();
+
+        if (isMobileLayout()) {
+            openClueModal();
+        }
     }
 
     function openInstructionsModal() {
@@ -962,6 +1032,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === 'Escape' && instructionsModal && instructionsModal.classList.contains('is-visible')) {
             event.preventDefault();
             closeInstructionsModal();
+            return;
+        }
+
+        if (event.key === 'Escape' && clueModal && clueModal.classList.contains('is-visible')) {
+            event.preventDefault();
+            closeClueModal();
         }
     }
 
@@ -1003,7 +1079,10 @@ document.addEventListener('DOMContentLoaded', () => {
             loadBossProgress();
 
             currentLevel = 'A1';
-            levelTitle.textContent = `Mapa ${adventureMapId} · Nivel ${adventureLevelNumber}`;
+            updateLevelTitle(
+                `Mapa ${adventureMapId} · Nivel ${adventureLevelNumber}`,
+                `M${adventureMapId} · ${adventureLevelNumber}`,
+            );
 
             if (calendarButton) {
                 calendarButton.style.display = 'none';
@@ -1031,7 +1110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLevel = requestedLevel;
         }
 
-        levelTitle.textContent = `Level ${currentLevel}`;
+        updateLevelTitle(`Level ${currentLevel}`, currentLevel);
 
         setupCalendar();
         loadGameForDate(new Date());
@@ -2045,18 +2124,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateClueAvailability() {
-        if (!clueButton) return;
+        if (!clueButtons.length) return;
 
         const hintsAvailable = getAvailableHintsCount();
         const hintsUnlocked = hintsAvailable > 0;
         const hintsRemaining = nextHintIndex < hintsAvailable;
         const canUseClue = hintsUnlocked && hintsRemaining && isGameActive;
 
-        clueButton.disabled = !canUseClue;
-        clueButton.classList.toggle('active', canUseClue);
         const activeLabel = formatClueText('buttonActive');
         const lockedLabel = formatClueText('lockedMessage');
-        clueButton.textContent = hintsUnlocked ? activeLabel : lockedLabel;
+
+        clueButtons.forEach(button => {
+            button.disabled = !canUseClue;
+            button.classList.toggle('active', canUseClue);
+            button.textContent = hintsUnlocked ? activeLabel : lockedLabel;
+        });
 
         if (!clueMessagesContainer) return;
 
@@ -2074,6 +2156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lockedMessage.textContent = lockedLabel;
                 clueMessagesContainer.appendChild(lockedMessage);
             }
+            syncClueModalMessages();
             return;
         }
 
@@ -2081,6 +2164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (existingDefault) {
                 existingDefault.remove();
             }
+            syncClueModalMessages();
             return;
         }
 
@@ -2098,6 +2182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             defaultMessage.textContent = promptText;
             clueMessagesContainer.appendChild(defaultMessage);
         }
+        syncClueModalMessages();
     }
 
     function translateClueMessagesForLanguage() {
@@ -2112,6 +2197,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hintText,
             });
         });
+        syncClueModalMessages();
     }
 
     function danceWin() {

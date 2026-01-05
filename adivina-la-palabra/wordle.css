@@ -949,24 +949,36 @@ body.adventure-sliding > *:not(.adventure-transition) {
 
 
 /* --- Teclado Virtual --- */
+.keyboard-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+}
+
 .game-keyboard {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
-    max-width: 500px;
 }
 
 .keyboard-row {
     display: flex;
     justify-content: center;
     gap: 6px;
+    width: 100%;
 }
 
 .keyboard-key {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     font-size: 0.9rem;
+    min-height: 48px;
     height: 58px;
     flex: 1;
     padding: 0 8px;
@@ -980,16 +992,25 @@ body.adventure-sliding > *:not(.adventure-transition) {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s ease;
+    user-select: none;
+    touch-action: manipulation;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .keyboard-key:hover {
     background-color: #c4c7c9;
 }
 
+.keyboard-key:active {
+    background-color: #bbb;
+    transform: scale(0.95);
+}
+
 .keyboard-key.large {
     flex: 1.5;
     font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .keyboard-key.correct { background-color: var(--color-correct); color: #ffffff; }
@@ -1021,18 +1042,47 @@ body.adventure-sliding > *:not(.adventure-transition) {
         touch-action: manipulation;
     }
 
+    .game-board-area {
+        width: 100%;
+        flex: 1 1 auto;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .game-grid {
+        width: calc(13vw * var(--word-length, 5));
+        max-width: calc(60px * var(--word-length, 5));
+        height: auto;
+        grid-template-columns: repeat(var(--word-length, 5), minmax(0, 13vw));
+        grid-template-rows: repeat(var(--max-tries, 6), 13vw);
+        grid-auto-rows: 13vw;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .grid-tile {
+        width: 13vw;
+        max-width: 60px;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .keyboard-container {
+        padding: 10px 8px;
+    }
+
     .game-keyboard {
         gap: 8px;
     }
 
     .keyboard-row {
         display: flex;
-        gap: 8px;
+        gap: 4px;
     }
 
     .keyboard-key {
         flex: 1;
-        min-height: 58px;
+        min-height: 48px;
         height: auto;
         margin: 0;
         touch-action: manipulation;
@@ -1040,6 +1090,12 @@ body.adventure-sliding > *:not(.adventure-transition) {
 
     .keyboard-key.large {
         flex: 1.5;
+    }
+
+    .clue-panel {
+        padding: 10px;
+        margin: 5px 0;
+        font-size: 0.9rem;
     }
 }
 

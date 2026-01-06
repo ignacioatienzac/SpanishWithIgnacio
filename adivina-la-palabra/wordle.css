@@ -527,18 +527,18 @@ body.adventure-map-1-bg .game-container {
     padding: 0.55rem 1rem;
     font-size: 0.95rem;
     box-shadow: none;
-    background: rgba(46, 125, 50, 0.18);
-    color: #1f5e24;
-    border: 1px solid rgba(46, 125, 50, 0.35);
+    background: rgba(27, 94, 32, 0.25);
+    color: #000000;
+    border: 1px solid rgba(27, 94, 32, 0.45);
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
 }
 
 .choose-level-button--top:hover,
 .choose-level-button--top:focus-visible {
-    background: #2e7d32;
+    background: #1b5e20;
     color: #ffffff;
-    border-color: #2e7d32;
+    border-color: #1b5e20;
     box-shadow: none;
     transform: none;
 }
@@ -646,10 +646,13 @@ body.adventure-map-1-bg .game-container {
     font-size: 1.25rem;
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
     cursor: pointer;
     box-shadow: none;
     transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
@@ -1356,6 +1359,8 @@ body.adventure-sliding > *:not(.adventure-transition) {
         padding: 0.35rem;
         width: 38px;
         height: 38px;
+        min-width: 38px;
+        min-height: 38px;
     }
 
     .wordle-main {

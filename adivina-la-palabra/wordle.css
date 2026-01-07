@@ -8,6 +8,10 @@
     overflow: hidden;
 }
 
+.main-container {
+    max-height: 100vh;
+}
+
 .game-page .wordle-main {
     flex: 1;
     flex-direction: column;
@@ -199,6 +203,44 @@ body.game-page {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+@media (pointer: fine) and (min-width: 1024px) {
+    :not(:fullscreen) body,
+    :not(:fullscreen) .main-container {
+        overflow-y: auto !important;
+        scrollbar-width: thin;
+    }
+
+    :not(:fullscreen) body::-webkit-scrollbar,
+    :not(:fullscreen) .main-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    :not(:fullscreen) body::-webkit-scrollbar-thumb,
+    :not(:fullscreen) .main-container::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 999px;
+    }
+
+    :not(:fullscreen) body::-webkit-scrollbar-track,
+    :not(:fullscreen) .main-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+    html,
+    body {
+        overflow: hidden !important;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+:fullscreen body {
+    overflow: hidden !important;
 }
 
 body.game-page footer {

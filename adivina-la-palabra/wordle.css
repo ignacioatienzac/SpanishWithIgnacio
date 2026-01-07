@@ -176,6 +176,34 @@
     box-shadow: 0 8px 15px rgba(0,0,0,0.2);
 }
 
+@media (max-width: 640px) {
+    .game-intro .page-hero__title {
+        display: none;
+    }
+
+    .level-selector {
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .level-button {
+        width: calc(50% - 0.5rem);
+        min-height: 140px;
+        padding: 1rem 0.5rem;
+        border-radius: 18px;
+        border-width: 3px;
+    }
+
+    .level-button .level-code {
+        font-size: 2rem;
+    }
+
+    .level-button .level-spanish,
+    .level-button .level-english {
+        font-size: 0.9rem;
+    }
+}
+
 /* Colores de los botones por nivel */
 :root {
     --color-a1: #3498db;

@@ -596,7 +596,7 @@ body.adventure-map-1-bg .game-container {
 
 .game-header-wrapper {
     display: flex;
-    width: var(--grid-width, 320px);
+    width: min(100%, var(--grid-width, 320px));
     max-width: 100%;
     margin: 0 auto;
     justify-content: center;
@@ -1093,7 +1093,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
     grid-template-columns: repeat(var(--word-length, 5), 1fr);
     grid-template-rows: repeat(var(--max-tries, 6), 1fr);
     gap: 5px;
-    width: var(--grid-width, 320px);
+    width: min(100%, var(--grid-width, 320px));
     height: var(--grid-height, 380px);
     perspective: 1000px;
 }
@@ -1281,7 +1281,7 @@ body.adventure-sliding > *:not(.adventure-transition) {
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px) and (hover: none) and (pointer: coarse) {
     .game-page {
         height: 100dvh;
         display: flex;
@@ -1441,6 +1441,39 @@ body.adventure-sliding > *:not(.adventure-transition) {
         display: none;
     }
 
+}
+
+@media (max-width: 900px) and (hover: hover) and (pointer: fine) {
+    .game-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+    }
+
+    .game-header-wrapper,
+    .game-grid {
+        max-width: 100%;
+    }
+
+    .keyboard-container {
+        max-width: 100%;
+        padding: 8px;
+    }
+
+    .keyboard-row {
+        gap: 5px;
+    }
+
+    .keyboard-key {
+        height: clamp(44px, 6vw, 58px);
+        min-height: 44px;
+        font-size: clamp(0.78rem, 1.4vw, 0.9rem);
+        margin: 0 2px;
+    }
+
+    .keyboard-key.large {
+        font-size: clamp(0.72rem, 1.2vw, 0.8rem);
+    }
 }
 
 @media (max-height: 750px) {

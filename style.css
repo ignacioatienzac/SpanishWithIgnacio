@@ -681,9 +681,7 @@ html[data-lang-initializing="true"] body {
     }
 
     .account-menu--mobile {
-        display: flex;
-        width: 100%;
-        justify-content: center;
+        display: none;
     }
 
     .account-menu--mobile .account-menu__button {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../../language-init.js"></script>
-    <title>Nivel 1: Bahía de las Vocales</title>
+    <title>Nivel 2: Bosque de Sílabas</title>
     <link rel="icon" type="image/png" href="../../images/favicon.png">
     <link rel="stylesheet" href="../../style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <style>
         body {
             margin: 0;
-            background-color: #2b3e50; /* Mismo azul océano */
+            background-color: #243443;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
@@ -44,10 +44,9 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             border-radius: 20px;
             overflow: hidden;
-            background: radial-gradient(circle, #4a69bd 0%, #2b3e50 100%);
+            background: radial-gradient(circle, #395776 0%, #243443 100%);
         }
 
-        /* Botón de volver */
         .back-btn {
             position: absolute;
             top: 20px;
@@ -65,38 +64,32 @@
         }
         .back-btn:hover { transform: scale(1.05); }
 
-        /* SVG Ajustado */
         svg {
             width: 100%;
             height: 100%;
-            /* El drop-shadow da sensación de isla flotante */
-            filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.4)); 
+            filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.4));
         }
 
-        /* Terreno */
         .land-mass {
-            fill: #eebb99;
+            fill: #e7c091;
             stroke: #8d6e63;
-            stroke-width: 1px; /* Más fino porque estamos "zoomeados" */
+            stroke-width: 1px;
             stroke-linejoin: round;
         }
 
-        /* Elementos decorativos del terreno (montañas, árboles simples) */
         .decoration {
-            fill: #cd8c5c; /* Un tono más oscuro de tierra */
-            opacity: 0.4;
+            fill: #c48957;
+            opacity: 0.5;
             pointer-events: none;
         }
 
-        /* Elementos de escenario */
         .tree-canopy {
-            fill: #62b36f;
+            fill: #6abf8a;
             stroke: #3f7c47;
             stroke-width: 1px;
         }
-        .tree-trunk {
-            fill: #8d6e63;
-        }
+        .tree-trunk { fill: #8d6e63; }
+
         .lake {
             fill: #5dade2;
             stroke: #2980b9;
@@ -104,7 +97,6 @@
             opacity: 0.85;
         }
 
-        /* El camino */
         .path-connector {
             fill: none;
             stroke: #fff;
@@ -114,7 +106,6 @@
             pointer-events: none;
         }
 
-        /* --- NODOS DE NIVEL --- */
         .level-node {
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -126,7 +117,7 @@
             fill: #ffd86b;
             stroke: #c47a1c;
             stroke-width: 2px;
-            r: 7; /* Radio del círculo */
+            r: 7;
             filter: drop-shadow(0 2px 0 #8a4d0f) drop-shadow(0 3px 6px rgba(0,0,0,0.35));
         }
 
@@ -139,22 +130,18 @@
             pointer-events: none;
         }
 
-        /* ESTADOS DE LOS NIVELES */
-        
-        /* 1. Completado (Verde) */
         .level-node.completed .level-circle {
             fill: #64e38a;
             stroke: #1f7f43;
         }
         .level-node.completed .level-number { fill: white; }
 
-        /* 2. Actual / Disponible (Amarillo pulsante) */
         .level-node.current .level-circle {
             fill: #ffef7a;
             stroke: #f5a623;
             stroke-width: 3px;
         }
-        .level-node.current { 
+        .level-node.current {
             animation: pulse 2s infinite;
         }
 
@@ -162,7 +149,6 @@
             animation: unlockGrow 0.9s ease-out, unlockPulse 0.6s ease-out 0.9s 1;
         }
 
-        /* 3. Bloqueado (Gris) */
         .level-node.locked {
             cursor: not-allowed;
             opacity: 0.7;
@@ -172,17 +158,15 @@
             stroke: #7f8c8d;
         }
 
-        /* 4. Jefe Final (Nivel 10) */
         .level-node.boss .level-circle {
-            r: 11; /* Más grande */
+            r: 11;
             fill: #ff7f7f;
             stroke: #c0392b;
         }
         .level-node.boss .level-number { font-size: 9px; fill: white; }
 
-        /* Efecto Hover */
         .level-node:not(.locked):hover {
-            transform: scale(1.5); /* Crece bastante */
+            transform: scale(1.5);
         }
 
         @keyframes pulse {
@@ -203,19 +187,14 @@
             100% { transform: scale(1); }
         }
 
-        .hero-character {
-            transition: transform 0.3s ease;
-        }
+        .hero-character { transition: transform 0.3s ease; }
 
         .hero-token {
             transition: x 1s ease-in-out, y 1s ease-in-out;
             pointer-events: none;
         }
 
-        .hero-token--no-transition {
-            transition: none !important;
-        }
-
+        .hero-token--no-transition { transition: none !important; }
     </style>
 </head>
 <body>
@@ -284,131 +263,104 @@
 
     <main>
         <div id="level-map-container">
-        
+
         <a href="../index.html" class="back-btn">← Volver al mapa principal</a>
 
-        <!-- 
-            VIEWBOX MAGIA:
-            El viewBox original era "0 0 1000 700".
-            El País 1 está aproximadamente entre X:50-250 y Y:450-650.
-            Ajustamos el viewBox para hacer "zoom" en esa zona: "30 440 240 240".
-            Esto hace que el país ocupe todo el contenedor.
-        -->
-        <svg viewBox="30 440 240 240" xmlns="http://www.w3.org/2000/svg">
-            
-            <!-- La Tierra (Mismo path que el archivo anterior) -->
-            <path class="land-mass" d="M 50 600 L 200 650 L 250 500 L 150 450 L 50 500 Z" />
+        <svg viewBox="185 440 250 240" xmlns="http://www.w3.org/2000/svg">
 
-            <!-- Decoración simple: Unos triángulos como montañas/árboles integrados -->
-            <path class="decoration" d="M 80 580 L 90 560 L 100 580 Z" />
-            <path class="decoration" d="M 180 600 L 190 580 L 200 600 Z" />
-            <path class="decoration" d="M 140 480 L 150 460 L 160 480 Z" />
+            <path class="land-mass" d="M 200 650 L 400 620 L 380 450 L 250 500 Z" />
 
-            <!-- Árboles y lagos simples -->
+            <path class="decoration" d="M 230 540 L 240 520 L 250 540 Z" />
+            <path class="decoration" d="M 330 590 L 340 565 L 350 590 Z" />
+            <path class="decoration" d="M 360 525 L 372 500 L 384 525 Z" />
+
             <g class="tree">
-                <rect class="tree-trunk" x="110" y="610" width="6" height="10" />
-                <circle class="tree-canopy" cx="113" cy="606" r="8" />
-                <circle class="tree-canopy" cx="118" cy="608" r="7" />
+                <rect class="tree-trunk" x="232" y="548" width="6" height="9" />
+                <circle class="tree-canopy" cx="235" cy="545" r="8" />
+                <circle class="tree-canopy" cx="241" cy="547" r="7" />
             </g>
             <g class="tree">
-                <rect class="tree-trunk" x="205" y="545" width="6" height="10" />
-                <circle class="tree-canopy" cx="208" cy="541" r="8" />
-                <circle class="tree-canopy" cx="213" cy="543" r="7" />
+                <rect class="tree-trunk" x="316" y="583" width="6" height="9" />
+                <circle class="tree-canopy" cx="319" cy="580" r="8" />
+                <circle class="tree-canopy" cx="325" cy="582" r="7" />
             </g>
             <g class="tree">
-                <rect class="tree-trunk" x="155" y="520" width="6" height="9" />
-                <circle class="tree-canopy" cx="158" cy="516" r="7" />
-                <circle class="tree-canopy" cx="163" cy="518" r="6" />
+                <rect class="tree-trunk" x="350" y="520" width="6" height="9" />
+                <circle class="tree-canopy" cx="353" cy="517" r="8" />
+                <circle class="tree-canopy" cx="359" cy="519" r="7" />
             </g>
 
-            <ellipse class="lake" cx="95" cy="500" rx="12" ry="7" />
+            <ellipse class="lake" cx="275" cy="555" rx="10" ry="6" />
 
-            <!-- CONECTOR DE CAMINO (Dashed Line) -->
-            <!-- Conecta las coordenadas de los 10 puntos -->
             <path class="path-connector" d="
-                M 82 520
-                L 112 550
-                L 92 590
-                L 142 610
-                L 192 620
-                L 212 570
-                L 232 520
-                L 202 490
-                L 162 470
-                L 132 480
+                M 230 560
+                L 240 590
+                L 270 610
+                L 310 600
+                L 340 570
+                L 360 540
+                L 340 500
+                L 310 480
+                L 270 505
+                L 290 530
             " />
 
-            <!-- 
-                NIVELES (PUNTOS)
-                Coordenadas calculadas para estar dentro de la forma.
-            -->
-
-            <!-- Nivel 1: Disponible al iniciar -->
-            <text x="82" y="510" class="level-number">1</text>
-            <g class="level-node current" data-level="1" onclick="selectLevel(1, 'Inicio del Viaje')">
-                <circle cx="82" cy="520" r="6" class="level-circle" />
+            <text x="230" y="550" class="level-number">1</text>
+            <g class="level-node current" data-level="1" onclick="selectLevel(1, 'MADRE')">
+                <circle cx="230" cy="560" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 2: Bloqueado inicialmente -->
-            <text x="112" y="540" class="level-number">2</text>
-            <g class="level-node locked" data-level="2" onclick="selectLevel(2, 'El Sendero Bajo')">
-                <circle cx="112" cy="550" r="6" class="level-circle" />
+            <text x="240" y="580" class="level-number">2</text>
+            <g class="level-node locked" data-level="2" onclick="selectLevel(2, 'PADRE')">
+                <circle cx="240" cy="590" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 3: Bloqueado inicialmente -->
-            <text x="92" y="580" class="level-number">3</text>
-            <g class="level-node locked" data-level="3" onclick="selectLevel(3, 'Cruce de Vientos')">
-                <circle cx="92" cy="590" r="6" class="level-circle" />
+            <text x="270" y="600" class="level-number">3</text>
+            <g class="level-node locked" data-level="3" onclick="selectLevel(3, 'AMIGO')">
+                <circle cx="270" cy="610" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 4: Bloqueado -->
-            <text x="142" y="600" class="level-number">4</text>
-            <g class="level-node locked" data-level="4" onclick="selectLevel(4, 'Cueva Oscura')">
-                <circle cx="142" cy="610" r="6" class="level-circle" />
+            <text x="310" y="590" class="level-number">4</text>
+            <g class="level-node locked" data-level="4" onclick="selectLevel(4, 'LIBRO')">
+                <circle cx="310" cy="600" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 5 -->
-            <text x="192" y="610" class="level-number">5</text>
-            <g class="level-node locked" data-level="5" onclick="selectLevel(5, 'Mirador Sur')">
-                <circle cx="192" cy="620" r="6" class="level-circle" />
+            <text x="340" y="560" class="level-number">5</text>
+            <g class="level-node locked" data-level="5" onclick="selectLevel(5, 'PELO')">
+                <circle cx="340" cy="570" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 6 -->
-            <text x="212" y="560" class="level-number">6</text>
-            <g class="level-node locked" data-level="6" onclick="selectLevel(6, 'El Puente')">
-                <circle cx="212" cy="570" r="6" class="level-circle" />
+            <text x="360" y="530" class="level-number">6</text>
+            <g class="level-node locked" data-level="6" onclick="selectLevel(6, 'ROJO')">
+                <circle cx="360" cy="540" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 7 -->
-            <text x="232" y="510" class="level-number">7</text>
-            <g class="level-node locked" data-level="7" onclick="selectLevel(7, 'Paso Estrecho')">
-                <circle cx="232" cy="520" r="6" class="level-circle" />
+            <text x="340" y="490" class="level-number">7</text>
+            <g class="level-node locked" data-level="7" onclick="selectLevel(7, 'AZUL')">
+                <circle cx="340" cy="500" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 8 -->
-            <text x="202" y="480" class="level-number">8</text>
-            <g class="level-node locked" data-level="8" onclick="selectLevel(8, 'Lago Escondido')">
-                <circle cx="202" cy="490" r="6" class="level-circle" />
+            <text x="310" y="470" class="level-number">8</text>
+            <g class="level-node locked" data-level="8" onclick="selectLevel(8, 'ALTO')">
+                <circle cx="310" cy="480" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 9 -->
-            <text x="162" y="460" class="level-number">9</text>
-            <g class="level-node locked" data-level="9" onclick="selectLevel(9, 'Ante la Puerta')">
-                <circle cx="162" cy="470" r="6" class="level-circle" />
+            <text x="270" y="495" class="level-number">9</text>
+            <g class="level-node locked" data-level="9" onclick="selectLevel(9, 'COMER')">
+                <circle cx="270" cy="505" r="6" class="level-circle" />
             </g>
 
-            <!-- Nivel 10: JEFE -->
-            <text x="132" y="470" class="level-number">10</text>
-            <g class="level-node locked boss" data-level="10" onclick="selectLevel(10, 'GUARDIÁN DE LA BAHÍA')">
-                <circle cx="132" cy="480" r="10" class="level-circle" />
+            <text x="290" y="520" class="level-number">10</text>
+            <g class="level-node locked boss" data-level="10" onclick="selectLevel(10, 'PERDON')">
+                <circle cx="290" cy="530" r="10" class="level-circle" />
             </g>
 
             <image
                 id="hero-token"
                 class="hero-character hero-token"
                 href="../personajes/Protagonista-1.png"
-                x="82"
-                y="580"
+                x="230"
+                y="600"
                 width="20"
                 height="20"
             />
@@ -525,122 +477,76 @@
 
             const cx = Number(circle.getAttribute('cx'));
             const cy = Number(circle.getAttribute('cy'));
-            const offsetX = Number(hero.getAttribute('width')) / 2;
-            const offsetY = Number(hero.getAttribute('height')) / 2;
-            const verticalLift = 10;
 
-            hero.setAttribute('x', cx - offsetX);
-            hero.setAttribute('y', cy - offsetY - verticalLift);
-            heroCurrentLevel = Number(node.dataset.level) || heroCurrentLevel;
+            hero.setAttribute('x', cx - 10);
+            hero.setAttribute('y', cy - 30);
         }
 
         function moveHeroToLevel(levelNumber) {
-            const node = getLevelNodeByNumber(levelNumber);
-            moveHeroToNode(node);
-        }
-
-        function buildTravelPath(startLevel, targetLevel) {
-            if (!Number.isFinite(startLevel) || !Number.isFinite(targetLevel) || startLevel === targetLevel) {
-                return [];
-            }
-
-            const step = startLevel < targetLevel ? 1 : -1;
-            const path = [];
-
-            for (let level = startLevel + step; step > 0 ? level <= targetLevel : level >= targetLevel; level += step) {
-                path.push(level);
-            }
-
-            return path;
-        }
-
-        async function travelHeroToLevel(targetLevel) {
-            const startingLevel = heroCurrentLevel || getCurrentLevelNumber() || 1;
-            const path = buildTravelPath(startingLevel, targetLevel);
-
-            if (!path.length) {
-                moveHeroToLevel(targetLevel);
-                return;
-            }
-
-            for (const level of path) {
-                moveHeroToLevel(level);
-                await wait(700);
-            }
+            const targetNode = getLevelNodeByNumber(levelNumber);
+            moveHeroToNode(targetNode);
         }
 
         function persistLevelProgress(levelNumber) {
-            localStorage.setItem(LEVEL_STORAGE_KEY, String(levelNumber));
+            localStorage.setItem(LEVEL_STORAGE_KEY, levelNumber);
         }
 
         function persistLastPlayedLevel(levelNumber) {
-            localStorage.setItem(LAST_PLAYED_STORAGE_KEY, String(levelNumber));
+            localStorage.setItem(LAST_PLAYED_STORAGE_KEY, levelNumber);
         }
 
-        function applyLevelProgress(targetCurrentLevel, options = {}) {
+        function persistTransitionEnd(time) {
+            localStorage.setItem(TRANSITION_END_STORAGE_KEY, time);
+        }
+
+        function applyLevelProgress(unlockUpToLevel, options = {}) {
             const nodes = Array.from(document.querySelectorAll('.level-node'));
+            const heroLevelOverride = options.heroLevelOverride;
 
             nodes.forEach(node => {
                 const level = Number(node.dataset.level);
-                node.classList.remove('completed', 'current', 'locked');
 
-                if (level < targetCurrentLevel) {
+                if (level < unlockUpToLevel) {
+                    node.classList.remove('locked');
                     node.classList.add('completed');
-                } else if (level === targetCurrentLevel) {
+                } else if (level === unlockUpToLevel) {
+                    node.classList.remove('locked', 'completed');
                     node.classList.add('current');
                 } else {
                     node.classList.add('locked');
+                    node.classList.remove('completed', 'current');
                 }
             });
 
-            const maxLevel = nodes.length ? Math.max(...nodes.map(node => Number(node.dataset.level))) : 10;
-            const heroTargetLevel = Number.isFinite(options.heroLevelOverride)
-                ? Math.min(Math.max(options.heroLevelOverride, 1), maxLevel)
-                : targetCurrentLevel;
-            const currentNode = getLevelNodeByNumber(heroTargetLevel);
-            moveHeroToNode(currentNode);
-            currentSelectedLevel = targetCurrentLevel;
+            const heroTargetLevel = heroLevelOverride || unlockUpToLevel;
+            moveHeroToLevel(heroTargetLevel);
         }
 
-        function animateReturnFromGame(targetLevel, lastCompletedLevel) {
-            const storedCompletion = Number(localStorage.getItem(LAST_COMPLETED_STORAGE_KEY));
-            const completionLevel = Number.isFinite(lastCompletedLevel)
-                ? lastCompletedLevel
-                : (!Number.isNaN(storedCompletion) ? storedCompletion : null);
-            const shouldAnimateUnlock = Number.isFinite(completionLevel) && targetLevel === completionLevel + 1;
+        async function travelHeroToLevel(levelNumber) {
+            const hero = document.getElementById('hero-token');
+            const targetNode = getLevelNodeByNumber(levelNumber);
+            if (!hero || !targetNode) return;
 
-            if (!Number.isNaN(storedCompletion)) {
-                localStorage.removeItem(LAST_COMPLETED_STORAGE_KEY);
-            }
+            hero.classList.remove('hero-token--no-transition');
+            moveHeroToNode(targetNode);
+            heroCurrentLevel = levelNumber;
 
-            if (!shouldAnimateUnlock) return;
+            await wait(ADVENTURE_TRANSITION_DURATION_MS);
+        }
 
-            const targetNode = getLevelNodeByNumber(targetLevel);
-            const previousNode = getLevelNodeByNumber(targetLevel - 1);
-            const storedTransitionEnd = Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY));
-            const remainingTransitionDelay = Number.isNaN(storedTransitionEnd)
-                ? ADVENTURE_TRANSITION_DURATION_MS
-                : Math.max(0, storedTransitionEnd - Date.now());
+        function animateReturnFromGame(currentLevel, lastCompletedLevel) {
+            const hasTransitionData = Number.isFinite(Number(localStorage.getItem(TRANSITION_END_STORAGE_KEY)));
+            if (!hasTransitionData) return;
 
-            if (!Number.isNaN(storedTransitionEnd)) {
-                localStorage.removeItem(TRANSITION_END_STORAGE_KEY);
-            }
+            const hero = document.getElementById('hero-token');
+            if (!hero) return;
 
-            if (previousNode) {
-                previousNode.classList.remove('current');
-                previousNode.classList.add('completed');
-                moveHeroToNode(previousNode);
-            }
+            hero.classList.add('hero-token--no-transition');
+            moveHeroToLevel(lastCompletedLevel || currentLevel);
 
-            if (targetNode) {
-                targetNode.classList.remove('completed', 'current');
-                targetNode.classList.add('locked');
-            }
-
-            setTimeout(() => {
-                playUnlockEffect(targetNode)
-                    .then(() => applyLevelProgress(targetLevel));
-            }, remainingTransitionDelay);
+            requestAnimationFrame(() => {
+                hero.classList.remove('hero-token--no-transition');
+            });
         }
 
         function loadSavedProgress() {
@@ -757,7 +663,7 @@
             await travelHeroToLevel(currentSelectedLevel);
 
             persistLastPlayedLevel(currentSelectedLevel);
-            const url = `../../adivina-la-palabra/game.html?mode=adventure&map=1&level=${currentSelectedLevel}`;
+            const url = `../../adivina-la-palabra/game.html?mode=adventure&map=2&level=${currentSelectedLevel}`;
             window.location.href = url;
         }
 

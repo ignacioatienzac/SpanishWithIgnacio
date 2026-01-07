@@ -164,6 +164,14 @@
     background: linear-gradient(135deg, #475569 0%, #0f172a 100%);
 }
 
+.game-card--forest {
+    background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+}
+
+.game-card--midnight {
+    background: linear-gradient(135deg, #334155 0%, #0b1120 100%);
+}
+
 .games-message {
     margin: 3rem auto 0;
     max-width: 640px;
@@ -178,6 +186,14 @@
 
 .games-message.is-visible {
     opacity: 1;
+}
+
+.game-card--hidden {
+    display: none;
+}
+
+.account-menu {
+    display: none;
 }
 
 @media (min-width: 992px) {

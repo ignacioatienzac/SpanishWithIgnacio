@@ -27,13 +27,52 @@
                 <span class="menu-toggle__bar"></span>
             </button>
             <nav class="main-nav" id="primary-navigation">
-                <ul>
-                    <li><a href="../../index.html">Home</a></li>
-                    <li><a href="../../students/index.html">Students</a></li>
-                    <li><a href="../../profesores/index.html">Teachers</a></li>
-                    <li><a href="../index.html" class="active">Games</a></li>
-                    <li><a href="../../adivina-la-palabra/index.html">Guess the word</a></li>
-                </ul>
+                <div class="main-nav__panel">
+                    <ul class="main-nav__list main-nav__list--primary">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../students/index.html">Resources</a></li>
+                        <li><a href="../index.html" class="active">Games</a></li>
+                    </ul>
+                    <hr class="main-nav__divider" aria-hidden="true">
+                    <div class="main-nav__section main-nav__section--secondary">
+                        <div class="account-menu account-menu--mobile" data-account-menu="mobile"></div>
+                        <div class="language-switcher language-switcher--mobile">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="account-menu account-menu--desktop" data-account-menu="desktop"></div>
+                        <div class="language-switcher language-switcher--desktop">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -43,15 +82,41 @@
         <div id="selection-overlay" class="overlay">
             <div class="selection-box">
                 <div class="selection-steps">
+                    <div id="grammar-selection" class="selection-panel">
+                        <h1 class="selection-title">Choose grammar mode</h1>
+                        <div class="selection-buttons">
+                            <button class="btn btn-grammar" data-grammar="indicativo">
+                                <span class="btn-title">Indicative</span>
+                                <span class="btn-subtext">From level A1</span>
+                            </button>
+                            <button class="btn btn-grammar" data-grammar="imperativo">
+                                <span class="btn-title">Imperative</span>
+                                <span class="btn-subtext">From level A2</span>
+                            </button>
+                            <button class="btn btn-grammar" data-grammar="subjuntivo">
+                                <span class="btn-title">Subjunctive</span>
+                                <span class="btn-subtext">From level B1</span>
+                            </button>
+                        </div>
+                    </div>
                     <!-- Paso 1: Elegir Tiempo -->
-                    <div id="tense-selection" class="selection-panel">
+                    <div id="tense-selection" class="selection-panel hidden">
                         <h1 class="selection-title">Choose your tense</h1>
                         <div class="selection-buttons">
-                            <button data-tense="presente" class="btn btn-tense">Present Tense</button>
-                            <button data-tense="presente continuo" data-label="Present Continuous" class="btn btn-tense">Present Continuous</button>
-                            <button data-tense="pretérito perfecto" data-label="Present Perfect" class="btn btn-tense">Present Perfect</button>
-                            <button data-tense="indefinido" class="btn btn-tense">Indefinite Tense</button>
-                            <button data-tense="imperfecto" class="btn btn-tense">Imperfect Tense</button>
+                            <button data-tense="presente" data-grammar="indicativo" class="btn btn-tense">Present Tense</button>
+                            <button data-tense="presente continuo" data-label="Present Continuous" data-grammar="indicativo" class="btn btn-tense">Present Continuous</button>
+                            <button data-tense="pretérito perfecto" data-label="Present Perfect" data-grammar="indicativo" class="btn btn-tense">Present Perfect</button>
+                            <button data-tense="indefinido" data-grammar="indicativo" class="btn btn-tense">Indefinite Tense</button>
+                            <button data-tense="imperfecto" data-grammar="indicativo" class="btn btn-tense">Imperfect Tense</button>
+                            <button data-tense="futuro simple" data-grammar="indicativo" class="btn btn-tense">Simple Future</button>
+                            <button data-tense="condicional simple" data-grammar="indicativo" class="btn btn-tense">Simple Conditional</button>
+                            <button data-tense="pretérito pluscuamperfecto" data-label="Pluperfect" data-grammar="indicativo" class="btn btn-tense">Pluperfect</button>
+                            <button data-tense="presente" data-label="Present Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Present Subjunctive</button>
+                            <button data-tense="imperfecto" data-label="Imperfect Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Imperfect Subjunctive</button>
+                            <button data-tense="pretérito perfecto" data-label="Present Perfect Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Present Perfect Subjunctive</button>
+                            <button data-tense="pretérito pluscuamperfecto" data-label="Pluperfect Subjunctive" data-grammar="subjuntivo" class="btn btn-tense">Pluperfect Subjunctive</button>
+                            <button data-tense="afirmativo" data-label="Affirmative Imperative" data-grammar="imperativo" class="btn btn-tense">Affirmative Imperative</button>
+                            <button data-tense="negativo" data-label="Negative Imperative" data-grammar="imperativo" class="btn btn-tense">Negative Imperative</button>
                         </div>
                     </div>
 
@@ -97,7 +162,19 @@
         <div id="app-container" class="hidden">
             <!-- 1. ZONA DEL JUEGO (ARRIBA) -->
             <div id="game-container">
+                <button id="pause-button" class="pause-button" type="button" aria-pressed="false">
+                    ⏸️ Pause
+                </button>
                 <canvas id="game-canvas"></canvas>
+                <div id="pause-overlay" class="overlay hidden" aria-live="polite">
+                    <div class="pause-overlay__content">
+                        <h2 data-i18n-es="Juego Pausado" data-i18n-en="Game Paused">Game Paused</h2>
+                        <p class="pause-overlay__message" data-i18n-es="El juego está en pausa. Puedes reanudar cuando estés listo." data-i18n-en="The game is paused. Resume whenever you're ready.">The game is paused. Resume whenever you're ready.</p>
+                        <button id="resume-button" class="btn btn-resume" type="button" data-i18n-es="Continuar" data-i18n-en="Continue">
+                            Continue
+                        </button>
+                    </div>
+                </div>
                 <!-- Overlay de Game Over -->
                 <div id="game-over-overlay" class="overlay hidden">
                     <h1 class="game-over-title">GAME OVER!</h1>
@@ -111,99 +188,107 @@
 
             <!-- 2. ZONA DEL MINI-JUEGO (ABAJO) -->
             <div id="minigame-container">
-                <div class="write-mode-layout">
-                    <div class="write-mode-instructions">
-                        <div class="choice-info-card write-mode-info-card">
-                            <h3>The power of verbs!</h3>
-                            <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
+                <div class="interaction-wrapper">
+                    <div class="game-controls-area">
+                        <div class="write-mode-layout">
+                            <div class="write-mode-instructions">
+                                <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
+                                    ℹ️ Instructions
+                                </button>
+                                <div class="key-instructions">
+                                    <span class="key-equation">
+                                        <span class="keycap">1</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">á</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">2</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">é</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">3</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">í</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">4</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">ó</span>
+                                    </span>
+                                    <span class="key-equation">
+                                        <span class="keycap">5</span>
+                                        <span class="key-symbol">=</span>
+                                        <span class="keycap">ú</span>
+                                    </span>
+                                </div>
+                                <div class="write-restart-wrapper">
+                                    <button id="write-quick-restart-button" class="quick-restart-button" type="button">
+                                        <span>Start again</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="write-mode-container" class="minigame-mode">
+                                <!-- Pregunta del mini-juego -->
+                                <div class="write-mode-display">
+                                    <div class="challenge-container write-mode-challenge" aria-live="polite">
+                                        <div class="challenge-part">
+                                            <span id="verb" class="challenge-text">...</span>
+                                            <div class="underline-box verb-underline"></div>
+                                        </div>
+                                        <div class="challenge-part">
+                                            <span id="pronoun" class="challenge-text">...</span>
+                                            <div class="underline-box pronoun-underline"></div>
+                                        </div>
+                                    </div>
+                                    <div class="write-tense-display" aria-hidden="true">
+                                        <span id="tense" class="write-tense-pill">...</span>
+                                    </div>
+                                </div>
+
+                                <!-- Respuesta del jugador -->
+                                <div class="answer-group">
+                                    <input type="text" id="answer-input" placeholder="Your answer...">
+                                    <button id="submit-answer" class="btn btn-submit">
+                                        Check
+                                    </button>
+                                </div>
+                                <!-- Mensaje de feedback -->
+                                <div id="minigame-message"></div>
+                            </div>
                         </div>
-                        <div class="key-instructions">
-                            <span class="key-equation">
-                                <span class="keycap">1</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">á</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">2</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">é</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">3</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">í</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">4</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">ó</span>
-                            </span>
-                            <span class="key-equation">
-                                <span class="keycap">5</span>
-                                <span class="key-symbol">=</span>
-                                <span class="keycap">ú</span>
-                            </span>
+
+                        <div id="choice-mode-container" class="minigame-mode hidden">
+                            <div class="choice-layout">
+                                <div class="choice-grid-panel">
+                                    <div id="choice-grid" class="choice-grid"></div>
+                                </div>
+                                <div class="choice-side-panel">
+                                    <div class="challenge-container" aria-live="polite">
+                                        <div class="challenge-part">
+                                            <span id="challenge-verb" class="challenge-text">...</span>
+                                            <div class="underline-box verb-underline"></div>
+                                        </div>
+                                        <div class="challenge-part">
+                                            <span id="challenge-pronoun" class="challenge-text">...</span>
+                                            <div class="underline-box pronoun-underline"></div>
+                                        </div>
+                                    </div>
+                                    <button id="quick-restart-button" class="quick-restart-button" type="button">
+                                        <span>Start again</span>
+                                    </button>
+                                    <div id="choice-mode-message" class="choice-mode-message" aria-live="polite"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="write-mode-container" class="minigame-mode">
-                        <!-- Pregunta del mini-juego -->
-                        <div class="write-mode-display">
-                            <div class="challenge-container write-mode-challenge" aria-live="polite">
-                                <div class="challenge-part">
-                                    <span id="verb" class="challenge-text">...</span>
-                                    <div class="underline-box verb-underline"></div>
-                                </div>
-                                <div class="challenge-part">
-                                    <span id="pronoun" class="challenge-text">...</span>
-                                    <div class="underline-box pronoun-underline"></div>
-                                </div>
-                            </div>
-                            <div class="write-tense-display" aria-hidden="true">
-                                <span id="tense" class="write-tense-pill">...</span>
-                            </div>
+                    <div class="avatar-container" aria-hidden="true">
+                        <div class="avatar-bubble" data-i18n-es="¡Listo para ayudarte! Practiquemos." data-i18n-en="Ready to help! Let's practice.">
+                            Ready to help! Let's practice.
                         </div>
-
-                        <!-- Respuesta del jugador -->
-                        <div class="answer-group">
-                            <input type="text" id="answer-input" placeholder="Your answer...">
-                            <button id="submit-answer" class="btn btn-submit">
-                                Check
-                            </button>
-                        </div>
-
-                        <!-- Mensaje de feedback -->
-                        <div id="minigame-message"></div>
-                    </div>
-                </div>
-
-                <div id="choice-mode-container" class="minigame-mode hidden">
-                    <div class="choice-layout">
-                        <div class="choice-grid-panel">
-                            <div id="choice-grid" class="choice-grid"></div>
-                        </div>
-                        <div class="choice-info-panel">
-                            <div class="choice-info-card">
-                                <h3>The power of verbs!</h3>
-                                <p>Conjugate the verbs correctly and help the hero defeat the monsters.</p>
-                            </div>
-                        </div>
-                        <div class="choice-side-panel">
-                            <div class="challenge-container" aria-live="polite">
-                                <div class="challenge-part">
-                                    <span id="challenge-verb" class="challenge-text">...</span>
-                                    <div class="underline-box verb-underline"></div>
-                                </div>
-                                <div class="challenge-part">
-                                    <span id="challenge-pronoun" class="challenge-text">...</span>
-                                    <div class="underline-box pronoun-underline"></div>
-                                </div>
-                            </div>
-                            <button id="quick-restart-button" class="quick-restart-button" type="button">
-                                <span>Start again</span>
-                            </button>
-                            <div id="choice-mode-message" class="choice-mode-message" aria-live="polite"></div>
-                        </div>
+                        <img src="../../images/thinking.webp" alt="Avatar assistant" loading="lazy">
                     </div>
                 </div>
 
@@ -228,10 +313,25 @@
         </div>
     </main>
 
+    <div class="instructions-modal" id="instructions-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="instructions-title">
+        <div class="instructions-modal__overlay" data-close="true"></div>
+        <div class="instructions-modal__content" role="document">
+            <button type="button" class="instructions-modal__close" id="instructions-close" aria-label="Close instructions">✕</button>
+            <h3 id="instructions-title">How to play</h3>
+            <p>Pick your grammar path, choose a tense, select the verb type, and decide if you want to type answers or pick from options.</p>
+            <ul>
+                <li>Write Mode: Type the correct conjugation and press <strong>Check</strong>. Use the number keys 1-5 to quickly add accented vowels (á, é, í, ó, ú).</li>
+                <li>Choice Mode: Select the correct conjugation from the grid to attack the monsters.</li>
+                <li>Protect the castle—each correct answer increases your attack power, while mistakes cost lives.</li>
+            </ul>
+            <p class="instructions-modal__note">You can switch modes and difficulties from the start screen. Focus on accuracy to strengthen your hero!</p>
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="site-footer__content">
             <div class="site-footer__section site-footer__section--contact">
-                <p class="site-footer__contact">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</p>
+                <p class="site-footer__contact">For collaborations or to report bugs, email me at <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</p>
             </div>
             <div class="site-footer__section site-footer__section--brand">
                 <p class="site-footer__brand">Spanish with Ignacio</p>

@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../language-init.js"></script>
-    <title>Spanish with Ignacio - Games</title>
+    <title>Rueda de letras - Spanish with Ignacio</title>
     <link rel="icon" type="image/png" href="../images/favicon.png">
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../adivina-la-palabra/wordle.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <script src="../script.js" defer></script>
-    <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -78,66 +77,44 @@
         </div>
     </header>
 
-    <main>
-        <section class="page-hero games-hero">
+    <main class="wordle-main">
+        <section class="page-hero game-intro">
             <div class="page-hero__container">
-                <h1 class="page-hero__title">Interactive games</h1>
-                <p class="page-hero__subtitle">Practice your Spanish with digital activities designed for each level.</p>
+                <h1 class="page-hero__title" data-i18n-es="Selecciona tu nivel">Select your level</h1>
             </div>
-        </section>
 
-        <section class="games-showcase">
-            <div class="games-grid" role="list">
-                <a class="game-card game-card--guess game-card--active" href="../adivina-la-palabra/daily-puzzle.html" role="listitem">
-                    <div class="game-card__image" aria-hidden="true">
-                        <img src="../images/Wordle.png" alt="">
-                    </div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="Adivina la palabra">Guess the Word</h2>
-                        <p class="game-card__description" data-i18n-es="Rétate con un juego tipo Wordle para ampliar tu vocabulario de español nivel a nivel.">Challenge yourself with a Wordle-style game to grow your Spanish vocabulary level by level.</p>
-                    </div>
-                </a>
-                <a class="game-card game-card--teal game-card--active" href="juego-heroe/index.html" role="listitem">
-                    <div class="game-card__image game-card__image--hero" aria-hidden="true">
-                        <img src="juego-heroe/images/Enemigo 3.png" alt="">
-                    </div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="¡El poder de los verbos!">The power of verbs!</h2>
-                        <p class="game-card__description" data-i18n-es="Defiende el reino conjugando verbos en español y fortalece a tu héroe con cada respuesta correcta.">Defend the kingdom by conjugating Spanish verbs and power up your hero with every correct answer.</p>
-                    </div>
-                </a>
-                <a class="game-card game-card--violet game-card--active" href="rueda-de-letras.html" role="listitem">
-                    <div class="game-card__image" aria-hidden="true">
-                        <img src="../images/letter-loop.png" alt="">
-                    </div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="La rueda de letras">Letter loop</h2>
-                        <p class="game-card__description" data-i18n-es="Encuentra palabras combinando letras que aparecen en un círculo, al estilo del juego Wordscapes.">Find words by combining letters arranged in a circle, inspired by the Wordscapes-style puzzles.</p>
-                    </div>
-                </a>
-                <a class="game-card game-card--slate game-card--disabled game-card--hidden" href="#" data-state="disabled" data-message="This game will be available soon." data-message-es="Este juego estará disponible pronto." role="listitem">
-                    <div class="game-card__image" aria-hidden="true"></div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="La batalla de crucigramas">Crossword battle</h2>
-                        <p class="game-card__description" data-i18n-es="Compite estilo Scrabble: completa una cuadrícula con 5 letras por turno y gana más puntos que el sistema.">Compete in a Scrabble-style showdown: fill a grid with 5 letters per turn and outscore the system.</p>
-                    </div>
-                </a>
-                <a class="game-card game-card--forest game-card--active game-card--hidden" href="../adivina-la-palabra/adventure-mode.html" role="listitem">
-                    <div class="game-card__image" aria-hidden="true"></div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="Modo aventura">Adventure mode</h2>
-                        <p class="game-card__description" data-i18n-es="Embárcate en misiones interactivas para poner a prueba tu español con retos dinámicos y progresivos.">Embark on interactive missions to test your Spanish with dynamic, progressive challenges.</p>
-                    </div>
-                </a>
-                <a class="game-card game-card--midnight game-card--disabled game-card--hidden" href="#" data-state="disabled" data-message="This game will be available soon." data-message-es="Este juego estará disponible pronto." role="listitem">
-                    <div class="game-card__image" aria-hidden="true"></div>
-                    <div class="game-card__info">
-                        <h2 class="game-card__title" data-i18n-es="Próximamente">Coming soon</h2>
-                        <p class="game-card__description" data-i18n-es=""></p>
-                    </div>
-                </a>
+            <div class="level-selector">
+                <button class="level-button level-a1" data-level="A1" type="button">
+                    <span class="level-code">A1</span>
+                    <span class="level-spanish" data-i18n-es="Principiante">Beginner</span>
+                    <span class="level-english" data-i18n-es="Principiante">Beginner</span>
+                </button>
+                <button class="level-button level-a2" data-level="A2" type="button">
+                    <span class="level-code">A2</span>
+                    <span class="level-spanish" data-i18n-es="Elemental">Elementary</span>
+                    <span class="level-english" data-i18n-es="Elemental">Elementary</span>
+                </button>
+                <button class="level-button level-b1" data-level="B1" type="button">
+                    <span class="level-code">B1</span>
+                    <span class="level-spanish" data-i18n-es="Intermedio">Intermediate</span>
+                    <span class="level-english" data-i18n-es="Intermedio">Intermediate</span>
+                </button>
+                <button class="level-button level-b2" data-level="B2" type="button">
+                    <span class="level-code">B2</span>
+                    <span class="level-spanish" data-i18n-es="Intermedio alto">Upper intermediate</span>
+                    <span class="level-english" data-i18n-es="Intermedio alto">Upper intermediate</span>
+                </button>
+                <button class="level-button level-c1" data-level="C1" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C1</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
+                <button class="level-button level-c2" data-level="C2" type="button" disabled aria-disabled="true" title="Available soon">
+                    <span class="level-code">C2</span>
+                    <span class="level-spanish" data-i18n-es="Próximamente">Coming soon</span>
+                    <span class="level-english" data-i18n-es="Próximamente">Coming soon</span>
+                </button>
             </div>
-            <p class="games-message" data-role="games-message" aria-live="polite"></p>
         </section>
     </main>
 
@@ -165,6 +142,23 @@
             </div>
         </div>
     </footer>
+
+    <script src="../script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const levelButtons = document.querySelectorAll('.level-button');
+
+            levelButtons.forEach(button => {
+                const level = (button.dataset.level || '').toLowerCase();
+                if (!level) return;
+
+                button.addEventListener('click', () => {
+                    const levelQuery = level === 'a1' ? '' : `?level=${level}`;
+                    window.location.href = `./la-rueda-de-letras/index.html${levelQuery}`;
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

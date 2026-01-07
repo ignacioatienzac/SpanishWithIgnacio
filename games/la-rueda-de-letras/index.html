@@ -3,17 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="language-init.js"></script>
-    <title data-i18n-es="Spanish with Ignacio - Inicio">Spanish with Ignacio - Home</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preload" as="image" href="../../images/thinking.webp">
+    <link rel="preload" as="font" href="../../fonts/Aston%20Script.ttf" type="font/ttf" crossorigin>
+    <script src="../../language-init.js" defer></script>
+    <title>Letter Loop</title>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+    <script src="../../script.js" defer></script>
 </head>
 <body>
+    <div id="app">
+        <div class="skeleton-screen" aria-hidden="true">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-toolbar"></div>
+            <div class="skeleton-layout">
+                <div class="skeleton-grid">
+                    <div class="skeleton-grid-cells"></div>
+                    <div class="skeleton-avatar"></div>
+                </div>
+                <div class="skeleton-sidebar">
+                    <div class="skeleton-wheel"></div>
+                    <div class="skeleton-actions">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="skeleton-clues"></div>
+                </div>
+            </div>
+        </div>
 
+        <div class="app-shell">
     <header class="main-header">
         <div class="header-container">
             <div class="logo">
@@ -28,9 +52,9 @@
             <nav class="main-nav" id="primary-navigation">
                 <div class="main-nav__panel">
                     <ul class="main-nav__list main-nav__list--primary">
-                        <li><a href="#" class="active" data-i18n-es="Inicio">Home</a></li>
-                        <li><a href="students/index.html" data-i18n-es="Recursos">Resources</a></li>
-                        <li><a href="games/index.html" data-i18n-es="Juegos">Games</a></li>
+                        <li><a href="../../index.html" data-i18n-es="Inicio">Home</a></li>
+                        <li><a href="../../students/index.html" data-i18n-es="Recursos">Resources</a></li>
+                        <li><a href="../index.html" class="active" data-i18n-es="Juegos">Games</a></li>
                     </ul>
                     <hr class="main-nav__divider" aria-hidden="true">
                     <div class="main-nav__section main-nav__section--secondary">
@@ -76,26 +100,67 @@
         </div>
     </header>
 
-    <main>
-        <section class="hero-section">
-            <div class="hero-container">
-                <div class="hero-image-container">
-                    <img src="images/profile-picture.webp" alt="A profile picture of Ignacio, your Spanish teacher.">
+    <main class="container">
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="date-control">
+                    <button id="calendar-button" class="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
                 </div>
-                <div class="hero-text-container">
-                    <h2 data-i18n-es="¡Aprende español con Spanish With Ignacio!">Learn Spanish with Spanish With Ignacio!</h2>
+                <div class="toolbar-title">
+                    <h2 id="puzzleTitle">Puzzle of the day</h2>
                 </div>
+            </div>
+            <div class="toolbar-right">
+                <div class="badge" id="progressBadge">0 / 0</div>
             </div>
         </section>
 
+        <section class="game-layout">
+                <div class="grid-card">
+                <div id="grid" class="crossword"></div>
+                <div class="avatar-placement">
+                    <div class="toolbar-avatar wordle-avatar">
+                        <img src="../../images/thinking.webp" alt="">
+                    </div>
+                    <div class="avatar-bubble" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
+                </div>
+                <div id="victory" class="victory hidden">Congratulations! You solved the crossword 🎉</div>
+            </div>
+
+            <div class="sidebar">
+                <div class="wheel-card">
+                    <div id="wheel" class="wheel"></div>
+                    <div class="guess-display" id="currentGuess">&nbsp;</div>
+                    <div class="wheel-actions">
+                        <button id="shuffle">Shuffle</button>
+                        <button id="backspace" class="ghost">Delete</button>
+                        <button id="submit">Check</button>
+                    </div>
+                    <p id="feedback" class="feedback"></p>
+                </div>
+
+                <div class="clues-card">
+                    <div class="card-header">
+                        <div class="clue-header">
+                            <div class="clue-actions">
+                                <button id="toggleClues" class="ghost">Show clues 👀</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cluesWrapper" class="clues-wrapper">
+                        <div id="clueList" class="clues"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="site-footer">
         <div class="site-footer__content">
             <div class="site-footer__section site-footer__section--contact">
                 <p class="site-footer__contact">
-                    <span class="site-footer__contact--desktop">Para colaboraciones o reportar errores, escríbeme a <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</span>
-                    <span class="site-footer__contact--mobile"><a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a></span>
+                    <span class="site-footer__contact--desktop">For collaborations or to report bugs, email me at <a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a>.</span>
+                    <span class="site-footer__contact--mobile">Contact:<br><a class="site-footer__contact-link" href="mailto:spanishwithignacio@gmail.com">spanishwithignacio@gmail.com</a></span>
                 </p>
             </div>
             <div class="site-footer__section site-footer__section--brand">
@@ -103,20 +168,28 @@
             </div>
             <div class="site-footer__section site-footer__section--social" aria-label="Redes sociales">
                 <a class="site-footer__social-link" href="https://www.instagram.com/spanishwithignacio/" target="_blank" rel="noopener noreferrer">
-                    <img src="images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
+                    <img src="../../images/instagram_logo.png" alt="Instagram" class="site-footer__social-icon">
                 </a>
                 <a class="site-footer__social-link" href="https://www.youtube.com/@SpanishwithIgnacio" target="_blank" rel="noopener noreferrer">
-                    <img src="images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
+                    <img src="../../images/youtube_logo.png" alt="YouTube" class="site-footer__social-icon">
                 </a>
                 <a class="site-footer__social-link" href="https://www.facebook.com/people/Spanish-With-Ignacio/61560429119394/" target="_blank" rel="noopener noreferrer">
-                    <img src="images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
+                    <img src="../../images/facebook_logo.png" alt="Facebook" class="site-footer__social-icon">
                 </a>
                 <a class="site-footer__social-link" href="https://www.threads.com/@spanishwithignacio?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener noreferrer">
-                    <img src="images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
+                    <img src="../../images/threads_logo.png" alt="Threads" class="site-footer__social-icon">
                 </a>
             </div>
         </div>
     </footer>
+        </div>
+    </div>
 
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('app-loaded');
+        });
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>

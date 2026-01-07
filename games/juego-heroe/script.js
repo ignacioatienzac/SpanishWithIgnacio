@@ -28,13 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverOverlay = document.getElementById('game-over-overlay');
     const finalScoreEl = document.getElementById('final-score');
     const restartButton = document.getElementById('restart-button');
-    const quickRestartButton = document.getElementById('quick-restart-button');
+    const quickRestartButtons = document.querySelectorAll('.quick-restart-button');
     const quickRestartModal = document.getElementById('quick-restart-modal');
     const quickRestartSameButton = document.getElementById('quick-restart-same');
     const quickRestartDifferentButton = document.getElementById('quick-restart-different');
     const quickRestartCancelButton = document.getElementById('quick-restart-cancel');
+    const instructionsButtons = document.querySelectorAll('.instructions-button');
+    const instructionsModal = document.getElementById('instructions-modal');
+    const instructionsCloseButton = document.getElementById('instructions-close');
+    const instructionsOverlay = instructionsModal ? instructionsModal.querySelector('.instructions-modal__overlay') : null;
+    const pauseButton = document.getElementById('pause-button');
+    const pauseOverlay = document.getElementById('pause-overlay');
+    const resumeButton = document.getElementById('resume-button');
 
     // Elementos de la pantalla de selección
+    const grammarSelectionDiv = document.getElementById('grammar-selection');
+    const grammarButtons = document.querySelectorAll('.btn-grammar');
     const tenseSelectionDiv = document.getElementById('tense-selection');
     const typeSelectionDiv = document.getElementById('type-selection');
     const tenseButtons = document.querySelectorAll('.btn-tense');
@@ -57,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedTense = null;
     let selectedVerbType = null;
     let selectedTenseLabel = '';
+    let selectedGrammar = null;
     let masterVerbos = []; // Aquí se cargarán los verbos del JSON
     let verbos = []; // Lista filtrada para la partida actual
     let preguntaActual = {};
@@ -80,11 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let margenInferiorTerreno;
     let nivelSuelo;
     let gameLoopId; // Para poder detener el bucle del juego
+    let isPaused = false;
+    let pauseTimestamp = null;
     let castillo;
     let objetivoPuntuacion;
     let dificultadActual;
     let choiceCells = [];
     let lastFocusedElementBeforeModal = null;
+    let lastInstructionsTrigger = null;
 
     function updateFeedbackMessage(text = '', className = '') {
         if (messageEl) {
@@ -99,6 +112,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function clearPauseState() {
+        isPaused = false;
+        pauseTimestamp = null;
+        if (pauseOverlay) {
+            pauseOverlay.classList.add('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'false');
+        }
+    }
+
+    function pauseGame() {
+        if ((appContainer && appContainer.classList.contains('hidden')) || gameOver) {
+            return;
+        }
+
+        if (!isPaused) {
+            isPaused = true;
+            pauseTimestamp = performance.now();
+        }
+
+        if (pauseOverlay) {
+            pauseOverlay.classList.remove('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'true');
+        }
+    }
+
+    function resumeGame() {
+        if (!isPaused) {
+            return;
+        }
+
+        if (!pauseTimestamp) {
+            pauseTimestamp = performance.now();
+        }
+
+        isPaused = false;
+
+        if (pauseOverlay) {
+            pauseOverlay.classList.add('hidden');
+        }
+        if (pauseButton) {
+            pauseButton.setAttribute('aria-pressed', 'false');
+        }
+
+        if (answerInput) {
+            answerInput.focus();
+        }
+    }
+
+    function togglePause() {
+        if (isPaused) {
+            resumeGame();
+        } else {
+            pauseGame();
+        }
+    }
+
     // --- 3. FUNCIÓN PRINCIPAL DE INICIO ---
 
     const spritePaths = {
@@ -107,12 +180,67 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const PODER_ATAQUE_MINIMO = 1;
+    const LOCALIZED_COPY = {
+        writeModeRequired: {
+            en: 'Write Mode is required for irregular verbs.',
+            es: 'El modo escritura es obligatorio con verbos irregulares.'
+        },
+        selectDifficulty: {
+            en: 'Select a difficulty to get started.',
+            es: 'Selecciona una dificultad para comenzar.'
+        },
+        selectMode: {
+            en: 'Select a game mode to get started.',
+            es: 'Selecciona un modo de juego para comenzar.'
+        },
+        noVerbsFound: {
+            en: 'No verbs found for this combination.',
+            es: 'No hay verbos para esta combinación.'
+        },
+        errorLoadingVerbs: {
+            en: 'Error loading verbs. Refresh the page.',
+            es: 'Error al cargar los verbos. Refresca la página.'
+        },
+        correctAttack: {
+            en: 'CORRECT! +1 Attack Power',
+            es: '¡CORRECTO! +1 Poder de ataque'
+        },
+        tryAgain: {
+            en: 'Try again!',
+            es: '¡Inténtalo de nuevo!'
+        },
+        castleStands: {
+            en: 'The castle still stands!',
+            es: '¡El castillo sigue en pie!'
+        },
+        gameEnded: {
+            en: 'The game has ended.',
+            es: '¡El juego ha terminado!'
+        },
+        victoryTitle: {
+            en: 'VICTORY!',
+            es: '¡VICTORIA!'
+        },
+        victorySubtitle: {
+            en: 'You successfully defended the castle.',
+            es: 'Has defendido el castillo con éxito.'
+        },
+        defeatTitle: {
+            en: 'GAME OVER!',
+            es: '¡FIN DEL JUEGO!'
+        },
+        defeatSubtitle: {
+            en: 'The monsters have broken through your defenses.',
+            es: 'Los monstruos han superado tus defensas.'
+        }
+    };
     const CHOICE_MODE_VERBS = ['hablar', 'comer', 'vivir'];
     const CHOICE_MODE_GRID_SIZES = {
         facil: 6,
         intermedio: 8,
         dificil: 8
     };
+    const DEFAULT_VERB_MODE = 'indicativo';
     const CHOICE_MODE_COLUMNS = {
         facil: 2,
         intermedio: 2,
@@ -131,6 +259,52 @@ document.addEventListener('DOMContentLoaded', () => {
         '4': 'ó',
         '5': 'ú'
     };
+
+    const getCurrentLanguage = () => document.documentElement.lang === 'es' ? 'es' : 'en';
+
+    const getLocalizedString = key => {
+        const lang = getCurrentLanguage();
+        const entry = LOCALIZED_COPY[key];
+        if (!entry) return '';
+        return entry[lang] || entry.en || '';
+    };
+    const obtenerModoVerbo = verbo => (verbo.mode || DEFAULT_VERB_MODE).toLowerCase();
+
+    const setLocalizedText = (element, key) => {
+        if (!element) return;
+        const localizedText = getLocalizedString(key);
+        if (localizedText) {
+            element.textContent = localizedText;
+        }
+    };
+
+    function openInstructionsModal(event) {
+        if (!instructionsModal) return;
+        lastInstructionsTrigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : null;
+        instructionsModal.classList.add('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'false');
+        window.setTimeout(() => {
+            if (instructionsCloseButton) {
+                instructionsCloseButton.focus();
+            }
+        }, 0);
+    }
+
+    function closeInstructionsModal() {
+        if (!instructionsModal) return;
+        instructionsModal.classList.remove('is-visible');
+        instructionsModal.setAttribute('aria-hidden', 'true');
+        if (lastInstructionsTrigger && typeof lastInstructionsTrigger.focus === 'function') {
+            lastInstructionsTrigger.focus();
+        }
+    }
+
+    function handleInstructionsKeydown(event) {
+        if (event.key === 'Escape' && instructionsModal && instructionsModal.classList.contains('is-visible')) {
+            event.preventDefault();
+            closeInstructionsModal();
+        }
+    }
 
     const ATTACK_VISUAL_TIERS = [
         {
@@ -242,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 intermedio: 5
             },
             speedRange: { min: 0.4, max: 0.55 },
-            speedLabel: 'Lento',
+            speedLabel: 'Slow',
             points: 10
         },
         enemigo2: {
@@ -256,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 10
             },
             speedRange: { min: 0.6, max: 0.75 },
-            speedLabel: 'Medio-Lento',
+            speedLabel: 'Medium-Slow',
             points: 20
         },
         enemigo3: {
@@ -270,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 18
             },
             speedRange: { min: 0.45, max: 0.6 },
-            speedLabel: 'Lento',
+            speedLabel: 'Slow',
             points: 25
         },
         enemigo4: {
@@ -284,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 25
             },
             speedRange: { min: 0.9, max: 1.1 },
-            speedLabel: 'Media',
+            speedLabel: 'Medium',
             points: 40
         },
         enemigo5: {
@@ -297,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 40
             },
             speedRange: { min: 1.8, max: 2.2 },
-            speedLabel: 'Muy Rápido',
+            speedLabel: 'Very Fast',
             points: 45
         },
         enemigo6: {
@@ -309,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dificil: 65
             },
             speedRange: { min: 1.4, max: 1.7 },
-            speedLabel: 'Rápido',
+            speedLabel: 'Fast',
             points: 60
         }
     };
@@ -359,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const difficultySettings = {
         facil: {
-            label: 'Fácil',
+            label: 'Easy',
             castleLives: 10,
             targetScore: 1000,
             spawnRate: 3500,
@@ -370,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         intermedio: {
-            label: 'Intermedio',
+            label: 'Intermediate',
             castleLives: 5,
             targetScore: 2000,
             spawnRate: 3000,
@@ -384,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         dificil: {
-            label: 'Difícil',
+            label: 'Hard',
             castleLives: 3,
             targetScore: 5000,
             spawnRate: 2600,
@@ -403,6 +577,8 @@ document.addEventListener('DOMContentLoaded', () => {
         await cargarSprites();
         // Configura los listeners de la pantalla de selección
         setupSelectionListeners();
+        // Prepara el flujo inicial de selección
+        prepararPantallaSeleccion();
     }
 
     // Carga los verbos desde el archivo JSON
@@ -414,8 +590,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             masterVerbos = await response.json();
         } catch (error) {
-            console.error("Error al cargar el archivo de verbos:", error);
-            selectionErrorEl.textContent = "Error al cargar los verbos. Refresca la página.";
+            console.error("Error loading verb file:", error);
+            selectionErrorEl.textContent = getLocalizedString('errorLoadingVerbs');
         }
     }
 
@@ -541,7 +717,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (modeRestrictionMessage) {
             modeRestrictionMessage.textContent = requiereSoloEscritura
-                ? 'Write Mode is required for irregular verbs / El modo escritura es obligatorio con verbos irregulares.'
+                ? getLocalizedString('writeModeRequired')
                 : '';
         }
 
@@ -552,12 +728,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function mostrarTiemposSegunModo(grammarMode) {
+        selectedTense = null;
+        selectedTenseLabel = '';
+        tenseButtons.forEach(btn => {
+            const buttonGrammar = btn.dataset.grammar || DEFAULT_VERB_MODE;
+            const esVisible = buttonGrammar === grammarMode;
+            btn.classList.remove('btn-selected');
+            btn.classList.toggle('hidden', !esVisible);
+            btn.disabled = !esVisible;
+            if (!esVisible) {
+                btn.setAttribute('aria-disabled', 'true');
+            } else {
+                btn.removeAttribute('aria-disabled');
+            }
+        });
+
+        selectedVerbType = null;
+        selectedMode = null;
+        selectedDifficulty = null;
+        typeButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        modeButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        difficultyButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        typeSelectionDiv.classList.add('hidden');
+        modeSelectionDiv.classList.add('hidden');
+        difficultySelectionDiv.classList.add('hidden');
+        if (choiceModeButton) {
+            choiceModeButton.disabled = false;
+            choiceModeButton.removeAttribute('aria-disabled');
+        }
+        if (writeModeButton) {
+            writeModeButton.disabled = false;
+        }
+        if (modeRestrictionMessage) {
+            modeRestrictionMessage.textContent = '';
+        }
+        startButton.disabled = true;
+        selectionErrorEl.textContent = '';
+        actualizarEstadoBotonInicio();
+    }
+
     function obtenerVerbosFiltrados() {
         if (!selectedTense) {
             return [];
         }
 
-        let filtrados = masterVerbos.filter(v => v.tense === selectedTense);
+        const modoObjetivo = (selectedGrammar || DEFAULT_VERB_MODE).toLowerCase();
+        let filtrados = masterVerbos.filter(
+            v => v.tense === selectedTense && obtenerModoVerbo(v) === modoObjetivo
+        );
 
         if (selectedVerbType === 'regular') {
             filtrados = filtrados.filter(v => v.regular === true);
@@ -573,6 +792,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupSelectionListeners() {
+        // Listeners para botones de modo gramatical
+        grammarButtons.forEach(button => {
+            if (button.disabled) {
+                button.setAttribute('aria-disabled', 'true');
+            }
+
+            button.addEventListener('click', () => {
+                if (button.disabled) return;
+
+                selectedGrammar = button.dataset.grammar || DEFAULT_VERB_MODE;
+                grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
+                button.classList.add('btn-selected');
+                tenseSelectionDiv.classList.remove('hidden');
+                mostrarTiemposSegunModo(selectedGrammar);
+                selectionOverlay.scrollTop = 0;
+            });
+        });
+
         // Listeners para botones de TIEMPO
         tenseButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -647,11 +884,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Listener para el botón de INICIAR JUEGO
         startButton.addEventListener('click', () => {
             if (!selectedDifficulty) {
-                selectionErrorEl.textContent = 'Selecciona una dificultad para comenzar.';
+                selectionErrorEl.textContent = getLocalizedString('selectDifficulty');
                 return;
             }
             if (!selectedMode) {
-                selectionErrorEl.textContent = 'Selecciona un modo de juego para comenzar.';
+                selectionErrorEl.textContent = getLocalizedString('selectMode');
                 return;
             }
             // 1. Filtrar la base de datos de verbos
@@ -660,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. Comprobar si hay verbos
             if (verbos.length === 0) {
-                selectionErrorEl.textContent = 'No hay verbos para esta combinación.';
+                selectionErrorEl.textContent = getLocalizedString('noVerbsFound');
                 return;
             }
 
@@ -672,6 +909,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // 4. Iniciar el juego
             inicializarJuego();
         });
+    }
+
+    function prepararPantallaSeleccion() {
+        selectedGrammar = null;
+        grammarButtons.forEach(btn => btn.classList.remove('btn-selected'));
+        mostrarTiemposSegunModo(DEFAULT_VERB_MODE);
+        grammarSelectionDiv.classList.remove('hidden');
+        tenseSelectionDiv.classList.add('hidden');
+        typeSelectionDiv.classList.add('hidden');
+        modeSelectionDiv.classList.add('hidden');
+        difficultySelectionDiv.classList.add('hidden');
+        startButton.disabled = true;
+        selectionOverlay.scrollTop = 0;
     }
 
     // --- 5. LÓGICA DEL MINI-JUEGO ---
@@ -687,7 +937,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function cargarPreguntaWriteMode() {
         // Selecciona un verbo aleatorio de la lista filtrada 'verbos'
         if (!verbos.length) return;
-        preguntaActual = verbos[Math.floor(Math.random() * verbos.length)];
+        const verboSeleccionado = verbos[Math.floor(Math.random() * verbos.length)];
+        const respuestas = Array.isArray(verboSeleccionado.answer)
+            ? verboSeleccionado.answer
+            : [verboSeleccionado.answer];
+
+        preguntaActual = {
+            ...verboSeleccionado,
+            answerOptions: respuestas.map(respuesta => respuesta?.toLowerCase?.() || ''),
+            displayAnswer: respuestas[0]
+        };
 
         verbEl.textContent = preguntaActual.verb || '...';
         // Mostrar el nombre del tiempo verbal seleccionado por el usuario
@@ -726,12 +985,12 @@ document.addEventListener('DOMContentLoaded', () => {
             poderAtaqueMaximo = PODER_ATAQUE_MINIMO;
         }
         poderAtaqueMaximo = Math.max(poderAtaqueMaximo, poderAtaque);
-        updateFeedbackMessage('¡CORRECTO! +1 Poder de Ataque', 'text-success');
+        updateFeedbackMessage(getLocalizedString('correctAttack'), 'text-success');
     }
 
     function manejarRespuestaIncorrecta() {
         poderAtaque = Math.max(PODER_ATAQUE_MINIMO, poderAtaque - 1);
-        updateFeedbackMessage('¡Inténtalo de nuevo! / Try again!', 'text-error');
+        updateFeedbackMessage(getLocalizedString('tryAgain'), 'text-error');
         setTimeout(() => {
             if (!gameOver) updateFeedbackMessage();
         }, 2000);
@@ -745,17 +1004,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const dato = verbos[Math.floor(Math.random() * verbos.length)];
-        cellData.question = { ...dato };
-        cellData.element.textContent = cellData.question.answer;
+        const respuestas = Array.isArray(dato.answer) ? dato.answer : [dato.answer];
+        const respuestaMostrada = respuestas[Math.floor(Math.random() * respuestas.length)];
+        cellData.question = {
+            ...dato,
+            answerOptions: respuestas.map(respuesta => respuesta?.toLowerCase?.() || ''),
+            displayAnswer: respuestaMostrada
+        };
+        cellData.element.textContent = respuestaMostrada;
     }
 
     function manejarSeleccionChoice(cellData) {
-        if (gameOver || selectedMode !== 'choice') return;
-        if (!cellData || !cellData.question || !preguntaActual || !preguntaActual.answer) return;
+        if (gameOver || selectedMode !== 'choice' || isPaused) return;
+        if (!cellData || !cellData.question || !preguntaActual || !preguntaActual.displayAnswer) return;
 
         if (
             cellData.question.verb === preguntaActual.verb &&
-            cellData.question.answer === preguntaActual.answer
+            cellData.question.pronoun === preguntaActual.pronoun &&
+            cellData.question.displayAnswer === preguntaActual.displayAnswer
         ) {
             manejarRespuestaCorrecta();
             setTimeout(() => {
@@ -768,10 +1034,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function comprobarRespuesta() {
-        if (gameOver || selectedMode !== 'write') return; // No hacer nada si el juego terminó
+        if (gameOver || selectedMode !== 'write' || isPaused) return; // No hacer nada si el juego terminó
 
         const respuestaUsuario = answerInput.value.trim().toLowerCase();
-        if (respuestaUsuario === preguntaActual.answer) {
+        const respuestasValidas = preguntaActual.answerOptions || [];
+        if (respuestasValidas.includes(respuestaUsuario)) {
             manejarRespuestaCorrecta();
             // Cargar la siguiente pregunta después de un breve retraso
             setTimeout(cargarPregunta, 500);
@@ -853,12 +1120,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    if (instructionsModal && instructionsCloseButton && instructionsOverlay && instructionsButtons.length) {
+        instructionsButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                pauseGame();
+                openInstructionsModal(event);
+            });
+        });
+        instructionsCloseButton.addEventListener('click', closeInstructionsModal);
+        instructionsOverlay.addEventListener('click', closeInstructionsModal);
+        document.addEventListener('keydown', handleInstructionsKeydown);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            pauseGame();
+        }
+    });
+
+    if (pauseButton) {
+        pauseButton.addEventListener('click', togglePause);
+    }
+
+    if (resumeButton) {
+        resumeButton.addEventListener('click', resumeGame);
+    }
+
     // --- 6. LÓGICA DEL JUEGO PRINCIPAL ---
 
     function inicializarJuego() {
         // Ajustar tamaño del canvas
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+
+        clearPauseState();
 
         // Resetear estado
         // Ajustar el terreno para que quede justo encima de la franja inferior del mini-juego
@@ -876,11 +1171,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         nivelSuelo = Math.max(0, canvas.height - margenInferiorTerreno - alturaTerreno);
-        dificultadActual = difficultySettings[selectedDifficulty];
-        if (!dificultadActual) {
-            console.error('No se encontró configuración para la dificultad seleccionada.');
+        const difficultyConfig = difficultySettings[selectedDifficulty];
+        if (!difficultyConfig) {
+            console.error('No configuration found for the selected difficulty.');
             return;
         }
+
+        const selectedDifficultyButton = document.querySelector(`.btn-difficulty[data-difficulty="${selectedDifficulty}"]`);
+        const difficultyLabel = selectedDifficultyButton?.textContent.trim() || difficultyConfig.label;
+        dificultadActual = { ...difficultyConfig, label: difficultyLabel };
 
         vidas = dificultadActual.castleLives;
         puntuacion = 0;
@@ -950,6 +1249,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameOver) {
             cancelAnimationFrame(gameLoopId);
             return;
+        }
+
+        if (isPaused) {
+            gameLoopId = requestAnimationFrame(gameLoop);
+            return;
+        }
+
+        if (pauseTimestamp !== null) {
+            const pausedDuration = timestamp - pauseTimestamp;
+            if (typeof ultimoSpawn === 'number') {
+                ultimoSpawn += pausedDuration;
+            }
+            if (heroe && typeof heroe.ultimoDisparo === 'number') {
+                heroe.ultimoDisparo += pausedDuration;
+            }
+            pauseTimestamp = null;
         }
 
         actualizar(timestamp);
@@ -1308,20 +1623,22 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.font = '24px Inter, sans-serif';
         ctx.textAlign = 'left';
         const vidasMaxCastillo = castillo ? castillo.vidasMax : vidas;
-        ctx.fillText(`🏰 Castillo: ${vidas}/${vidasMaxCastillo}`, 20, 40);
+        ctx.fillText(`🏰 Castle: ${vidas}/${vidasMaxCastillo}`, 20, 40);
 
         ctx.textAlign = 'center';
         const dificultadTexto = dificultadActual ? ` (${dificultadActual.label})` : '';
         const objetivoTexto = objetivoPuntuacion ? `${objetivoPuntuacion}` : '0';
-        ctx.fillText(`🎯 Meta${dificultadTexto}: ${objetivoTexto}`, canvas.width / 2, 40);
+        ctx.fillText(`🎯 Goal${dificultadTexto}: ${objetivoTexto}`, canvas.width / 2, 40);
 
         ctx.textAlign = 'right';
-        ctx.fillText(`Puntuación: ${puntuacion}`, canvas.width - 20, 40);
+        const pauseButtonOffset = pauseButton ? pauseButton.offsetWidth + 36 : 20;
+        const scoreX = Math.max(20, canvas.width - pauseButtonOffset);
+        ctx.fillText(`Score: ${puntuacion}`, scoreX, 40);
 
         ctx.textAlign = 'center';
         ctx.font = '22px Inter, sans-serif';
         ctx.fillStyle = '#FFD700'; // Dorado
-        ctx.fillText(`🔥 Poder de Ataque: ${poderAtaque}`, canvas.width / 2, 72);
+        ctx.fillText(`🔥 Attack Power: ${poderAtaque}`, canvas.width / 2, 72);
     }
 
     // --- 9. FIN DEL JUEGO Y REINICIO ---
@@ -1331,20 +1648,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameOver = true;
         cancelAnimationFrame(gameLoopId); // Detener el bucle
+        clearPauseState();
         finalScoreEl.textContent = puntuacion;
 
         if (resultado === 'victoria') {
-            gameOverTitleEl.textContent = '¡VICTORIA!';
-            gameOverSubtitleEl.textContent = 'Has defendido el castillo con éxito.';
+            setLocalizedText(gameOverTitleEl, 'victoryTitle');
+            setLocalizedText(gameOverSubtitleEl, 'victorySubtitle');
         } else {
-            gameOverTitleEl.textContent = '¡FIN DEL JUEGO!';
-            gameOverSubtitleEl.textContent = 'Los monstruos han superado tus defensas.';
+            setLocalizedText(gameOverTitleEl, 'defeatTitle');
+            setLocalizedText(gameOverSubtitleEl, 'defeatSubtitle');
         }
 
         gameOverOverlay.classList.remove('hidden');
         gameOverOverlay.style.display = 'flex'; // Asegurar que sea flex
         updateFeedbackMessage(
-            resultado === 'victoria' ? '¡El castillo sigue en pie!' : '¡El juego ha terminado!',
+            resultado === 'victoria' ? getLocalizedString('castleStands') : getLocalizedString('gameEnded'),
             resultado === 'victoria' ? 'text-success' : 'text-error'
         );
     }
@@ -1355,10 +1673,12 @@ document.addEventListener('DOMContentLoaded', () => {
             gameLoopId = null;
         }
 
+        clearPauseState();
+
         const verbosFiltrados = obtenerVerbosFiltrados();
         if (!verbosFiltrados.length) {
             restablecerSeleccionInicial();
-            selectionErrorEl.textContent = 'No hay verbos para esta combinación.';
+            selectionErrorEl.textContent = getLocalizedString('noVerbsFound');
             return;
         }
 
@@ -1379,6 +1699,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(gameLoopId);
             gameLoopId = null;
         }
+
+        clearPauseState();
 
         gameOver = false;
         monstruos = [];
@@ -1425,10 +1747,7 @@ document.addEventListener('DOMContentLoaded', () => {
         difficultyButtons.forEach(btn => btn.classList.remove('btn-selected'));
         modeButtons.forEach(btn => btn.classList.remove('btn-selected'));
 
-        typeSelectionDiv.classList.add('hidden');
-        modeSelectionDiv.classList.add('hidden');
-        difficultySelectionDiv.classList.add('hidden');
-        tenseSelectionDiv.classList.remove('hidden');
+        prepararPantallaSeleccion();
 
         startButton.disabled = true;
         if (choiceModeButton) {
@@ -1447,6 +1766,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reiniciar el juego
     restartButton.addEventListener('click', () => {
+        pauseGame();
         restablecerSeleccionInicial();
     });
 
@@ -1508,14 +1828,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (quickRestartButton) {
-        quickRestartButton.addEventListener('click', () => {
-            if (!selectedMode || !selectedDifficulty || !selectedVerbType || !selectedTense) {
-                restablecerSeleccionInicial();
-                return;
-            }
+    if (quickRestartButtons.length) {
+        quickRestartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                pauseGame();
+                if (!selectedMode || !selectedDifficulty || !selectedVerbType || !selectedTense) {
+                    restablecerSeleccionInicial();
+                    return;
+                }
 
-            abrirModalReinicioRapido();
+                abrirModalReinicioRapido();
+            });
         });
     }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <script src="../language-init.js"></script>
+    <script src="../language-init.js" defer></script>
     <title>Guess the Word - Game</title>
     <link rel="icon" type="image/png" href="../images/favicon.png">
     <link rel="stylesheet" href="../style.css">
@@ -16,13 +16,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@400;700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 
     <script src="../script.js" defer></script>
 
     <script src="wordle.js" defer></script>
 </head>
-<body>
+<body class="game-page">
 
     <header class="main-header">
         <div class="header-container">
@@ -36,18 +36,57 @@
                 <span class="menu-toggle__bar"></span>
             </button>
             <nav class="main-nav" id="primary-navigation">
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../students/index.html">Students</a></li>
-                    <li><a href="../profesores/index.html">Teachers</a></li>
-                    <li><a href="../games/index.html">Games</a></li>
-                    <li><a href="index.html" class="active">Guess the word</a></li>
-                </ul>
+                <div class="main-nav__panel">
+                    <ul class="main-nav__list main-nav__list--primary">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../students/index.html">Resources</a></li>
+                        <li><a href="../games/index.html">Games</a></li>
+                    </ul>
+                    <hr class="main-nav__divider" aria-hidden="true">
+                    <div class="main-nav__section main-nav__section--secondary">
+                        <div class="account-menu account-menu--mobile" data-account-menu="mobile"></div>
+                        <div class="language-switcher language-switcher--mobile">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="account-menu account-menu--desktop" data-account-menu="desktop"></div>
+                        <div class="language-switcher language-switcher--desktop">
+                            <button class="language-switcher__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-language-toggle>
+                                <span class="language-switcher__flag" aria-hidden="true">🇪🇸</span>
+                                <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+                                <span class="language-switcher__sr-label">Español</span>
+                            </button>
+                            <div class="language-switcher__menu" role="listbox" aria-hidden="true">
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="es" aria-label="Español">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇪🇸</span>
+                                    <span class="language-switcher__sr-label">Español</span>
+                                </button>
+                                <button class="language-switcher__option" type="button" role="option" aria-selected="false" data-language-option="en" aria-label="English">
+                                    <span class="language-switcher__option-flag" aria-hidden="true">🇬🇧</span>
+                                    <span class="language-switcher__sr-label">English</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
 
-    <main class="wordle-main">
+    <main class="wordle-main main-container">
 
         <section class="game-container">
 
@@ -55,13 +94,25 @@
                 <div class="game-board-area">
                     <div class="toast-container"></div>
 
-                    <div class="game-controls">
-                        <h2 id="game-level-title">Level A1</h2>
-                        <div class="game-controls__actions">
-                            <button id="instructions-button" class="instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal">
-                                ℹ️ Instructions
-                            </button>
-                            <button id="calendar-button" title="Choose another day" aria-label="Choose another day">📅</button>
+                    <div class="game-top-row">
+                        <div class="game-header-wrapper game-controls-bar">
+                            <div class="control-bar">
+                                <div class="game-controls-group top-icons-row">
+                                    <div class="level-indicator-container">
+                                        <h2 id="game-level-title" class="level-badge level-badge--a1">
+                                            <span class="level-title-full" id="level-title-full">A1</span>
+                                            <span class="level-title-short" id="level-title-short" aria-hidden="true">A1</span>
+                                        </h2>
+                                    </div>
+                                    <button id="sound-toggle" class="game-control-button sound-toggle" type="button" aria-label="Toggle game sound" aria-pressed="false">🔊</button>
+                                    <button id="instructions-button" class="game-control-button instructions-button" type="button" aria-haspopup="dialog" aria-controls="instructions-modal" aria-label="Instructions">
+                                        <span class="instructions-icon" aria-hidden="true">ℹ️</span>
+                                    </button>
+                                    <button id="clue-button" class="game-control-button top-clue-button desktop-only-control" type="button" aria-haspopup="dialog" aria-controls="clue-modal" aria-label="Get a clue" data-icon-only="true">💡</button>
+                                    <button id="choose-level-button" class="game-control-button game-action-button choose-level-button choose-level-button--top desktop-only-control game-control-button--text" type="button">Level</button>
+                                    <button id="calendar-button" class="game-control-button" title="Choose another day" aria-label="Choose another day">📅</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -74,28 +125,29 @@
                         <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div> <div class="grid-tile"></div>
                     </div>
 
-                    <div class="game-keyboard">
-                        <div class="keyboard-row">
-                            <button class="keyboard-key" data-key="Q">Q</button> <button class="keyboard-key" data-key="W">W</button> <button class="keyboard-key" data-key="E">E</button> <button class="keyboard-key" data-key="R">R</button> <button class="keyboard-key" data-key="T">T</button> <button class="keyboard-key" data-key="Y">Y</button> <button class="keyboard-key" data-key="U">U</button> <button class="keyboard-key" data-key="I">I</button> <button class="keyboard-key" data-key="O">O</button> <button class="keyboard-key" data-key="P">P</button>
-                        </div>
-                        <div class="keyboard-row">
-                            <button class="keyboard-key" data-key="A">A</button> <button class="keyboard-key" data-key="S">S</button> <button class="keyboard-key" data-key="D">D</button> <button class="keyboard-key" data-key="F">F</button> <button class="keyboard-key" data-key="G">G</button> <button class="keyboard-key" data-key="H">H</button> <button class="keyboard-key" data-key="J">J</button> <button class="keyboard-key" data-key="K">K</button> <button class="keyboard-key" data-key="L">L</button> <button class="keyboard-key" data-key="Ñ">Ñ</button>
-                        </div>
-                        <div class="keyboard-row">
-                            <button class="keyboard-key large" data-key="ENTER">ENTER</button> <button class="keyboard-key" data-key="Z">Z</button> <button class="keyboard-key" data-key="X">X</button> <button class="keyboard-key" data-key="C">C</button> <button class="keyboard-key" data-key="V">V</button> <button class="keyboard-key" data-key="B">B</button> <button class="keyboard-key" data-key="N">N</button> <button class="keyboard-key" data-key="M">M</button> <button class="keyboard-key large" data-key="BACKSPACE">⌫</button>
+                    <div class="keyboard-container">
+                        <div class="game-keyboard">
+                            <div class="keyboard-row">
+                                <button class="keyboard-key" data-key="Q">Q</button> <button class="keyboard-key" data-key="W">W</button> <button class="keyboard-key" data-key="E">E</button> <button class="keyboard-key" data-key="R">R</button> <button class="keyboard-key" data-key="T">T</button> <button class="keyboard-key" data-key="Y">Y</button> <button class="keyboard-key" data-key="U">U</button> <button class="keyboard-key" data-key="I">I</button> <button class="keyboard-key" data-key="O">O</button> <button class="keyboard-key" data-key="P">P</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="keyboard-key" data-key="A">A</button> <button class="keyboard-key" data-key="S">S</button> <button class="keyboard-key" data-key="D">D</button> <button class="keyboard-key" data-key="F">F</button> <button class="keyboard-key" data-key="G">G</button> <button class="keyboard-key" data-key="H">H</button> <button class="keyboard-key" data-key="J">J</button> <button class="keyboard-key" data-key="K">K</button> <button class="keyboard-key" data-key="L">L</button> <button class="keyboard-key" data-key="Ñ">Ñ</button>
+                            </div>
+                            <div class="keyboard-row">
+                                <button class="keyboard-key large" data-key="ENTER">ENTER</button> <button class="keyboard-key" data-key="Z">Z</button> <button class="keyboard-key" data-key="X">X</button> <button class="keyboard-key" data-key="C">C</button> <button class="keyboard-key" data-key="V">V</button> <button class="keyboard-key" data-key="B">B</button> <button class="keyboard-key" data-key="N">N</button> <button class="keyboard-key" data-key="M">M</button> <button class="keyboard-key large" data-key="BACKSPACE">⌫</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="clue-panel-wrapper">
-                    <aside class="clue-panel">
-                        <button class="clue-button" type="button" disabled>Get a clue!</button>
-                        <div class="clue-messages" aria-live="polite"></div>
-                    </aside>
-                    <button id="adventure-map-button" class="adventure-map-button" type="button" aria-hidden="true" disabled>
-                        Volver al mapa 1
-                    </button>
+                <div class="wordle-avatar" aria-hidden="true">
+                    <div class="avatar-bubble" aria-live="polite" aria-atomic="true"></div>
+                    <img src="../images/thinking.webp" alt="">
                 </div>
+            </div>
+
+            <div class="clue-storage" aria-hidden="true">
+                <div class="clue-messages"></div>
             </div>
 
         </section>
@@ -114,6 +166,15 @@
             </ul>
             <p class="instructions-modal__note">Hints unlock after your third attempt. When the “Get a clue!” button becomes active, press it to reveal them.</p>
             <p>Have fun and keep practicing your Spanish vocabulary!</p>
+        </div>
+    </div>
+
+    <div class="clue-modal" id="clue-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="clue-modal-title">
+        <div class="clue-modal__overlay" data-close="true"></div>
+        <div class="clue-modal__content" role="document">
+            <button type="button" class="clue-modal__close" id="clue-modal-close" aria-label="Cerrar pistas">✕</button>
+            <h3 id="clue-modal-title">Pistas</h3>
+            <div class="clue-modal__messages" id="clue-modal-messages" aria-live="polite"></div>
         </div>
     </div>
 

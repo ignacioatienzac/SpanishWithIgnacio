@@ -1325,6 +1325,14 @@ body.adventure-sliding > *:not(.adventure-transition) {
 }
 
 @media (max-width: 600px) and (hover: none) and (pointer: coarse) {
+    .main-container {
+        max-height: none;
+    }
+
+    .wordle-main {
+        overflow: visible;
+    }
+
     .game-page {
         height: 100dvh;
         display: flex;

@@ -660,6 +660,7 @@ body.adventure-map-1-bg .game-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
 }
 
 .game-info-group {
@@ -1329,11 +1330,6 @@ body.adventure-sliding > *:not(.adventure-transition) {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-    }
-
-    .level-indicator-container {
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
     }
 
     .game-container {

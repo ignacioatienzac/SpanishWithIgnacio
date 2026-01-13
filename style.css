@@ -462,6 +462,81 @@ html[data-lang-initializing="true"] body {
     line-height: 1.2;
 }
 
+/* Intro + Social Sections */
+.intro-section,
+.social-section {
+    padding: 2.5rem 2rem;
+}
+
+.intro-section__container,
+.social-section__container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 12px 24px rgba(44, 62, 80, 0.08);
+}
+
+.intro-section__container h3,
+.social-section__container h3 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.intro-section__container p,
+.social-section__container p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.intro-section__container {
+    text-align: center;
+}
+
+.social-section__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.social-section__content {
+    flex: 1 1 320px;
+}
+
+.social-section__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    flex: 1 1 280px;
+}
+
+.social-section__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.6rem;
+    border-radius: 999px;
+    background: var(--primary-color);
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 14px rgba(192, 57, 43, 0.2);
+}
+
+.social-section__link:hover,
+.social-section__link:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(192, 57, 43, 0.28);
+}
+
 @media (max-width: 768px) {
     .header-container {
         align-items: center;
@@ -719,6 +794,27 @@ html[data-lang-initializing="true"] body {
         line-height: 1.2;
         word-break: break-word;
         overflow-wrap: break-word;
+    }
+
+    .intro-section__container,
+    .social-section__container {
+        padding: 2rem;
+        border-radius: 20px;
+    }
+
+    .intro-section__container h3,
+    .social-section__container h3 {
+        font-size: 1.75rem;
+    }
+
+    .intro-section__container p,
+    .social-section__container p {
+        font-size: 1rem;
+    }
+
+    .social-section__container {
+        justify-content: center;
+        text-align: center;
     }
 }
 
